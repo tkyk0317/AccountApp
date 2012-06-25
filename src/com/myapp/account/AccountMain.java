@@ -1,6 +1,9 @@
 package com.myapp.account;
 
+import android.content.Intent;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener; 
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -12,7 +15,10 @@ import android.graphics.Color;
 import android.view.Gravity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.ImageButton;
 import com.myapp.account.DatabaseHelper;
+import com.myapp.account.TitleArea;
+import com.myapp.account.AddAccount;
 
 public class AccountMain extends Activity
 {
@@ -29,8 +35,9 @@ public class AccountMain extends Activity
         setContentView(R.layout.main);
         // initialize.
         init();
+        registEvent();
         // title area/info area appear.
-        mTitleArea.appear();
+        mTitleArea.appear(this);
         mInfoArea.appear();
     }
     /**
@@ -39,36 +46,22 @@ public class AccountMain extends Activity
      * @return void
      */
     private void init() {
-        mTitleArea = new TitleArea();
+        mTitleArea = new TitleArea(this);
         mInfoArea = new InfoArea();
     }
     /**
-     * @brief TitleArea Class
+     * @brief Rejist Event on Display Item
      */
-    private class TitleArea
-    {
-        private DatabaseHelper mDbHelper;
-        private SQLiteDatabase mDatabase;
-        /**
-         * @brief constractor
-         */
-        TitleArea() {
-            mDbHelper = new DatabaseHelper(getApplicationContext());
-            mDatabase = mDbHelper.getReadableDatabase();
-        }
-        /**
-         * @brief appear the title area
-         * @param none
-         * @return void
-         */
-        public void appear() {
-            // display current date
-            TextView date_title = (TextView) findViewById(R.id.date_title);
-            Time time = new Time("Asia/Tokyo");
-            time.setToNow();
-            String date = time.year + "/" + (time.month+1) + "/" + time.monthDay ;
-            date_title.setText(date);
-        }
+    private void registEvent () {
+        ImageButton btn = (ImageButton) findViewById(R.id.add_btn);
+        btn.setOnClickListener(
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent( AccountMain.this, AddAccount.class);
+                    startActivity(intent);
+                }
+            });
     }
     /**
      * @brief InfoArea Class
@@ -91,7 +84,8 @@ public class AccountMain extends Activity
          */
         public void appear() {
             // get info from database.
-            Cursor cur = mDatabase.query("AccountTable", null , null, null, null, null, null);
+            Cursor cur = mDatabase.query("AccountTable", null , null,
+                                         null, null, null, null);
             TableLayout item_table = (TableLayout) findViewById(R.id.item_table);
             // item loop.
             while( cur.moveToNext() ){
