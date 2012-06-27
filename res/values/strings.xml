@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">家計簿</string>
+    <string name="money_unit">円</string>
     <string name="add_btn_label">追加</string>
     <string name="sum_title_label">集計</string>
     <string name="income_label">収入</string>
@@ -9,4 +10,6 @@
     <string name="money_label">金額</string>
     <string name="memo_label">メモ</string>
     <string name="regist_btn_label">登録</string>
+    <string name="regist_category_label">登録項目</string>
+    <string name="regist_msg">家計簿の登録が完了しました</string>
 </resources>
