@@ -1,14 +1,12 @@
 package com.myapp.account;
 
+import java.util.*;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener; 
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.LinearLayout;
-import android.text.format.Time;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -18,7 +16,7 @@ import android.widget.TableRow;
 import android.widget.ImageButton;
 import com.myapp.account.DatabaseHelper;
 import com.myapp.account.TitleArea;
-import com.myapp.account.AddAccount;
+import com.myapp.account.AccountAdd;
 
 public class AccountMain extends Activity
 {
@@ -58,10 +56,16 @@ public class AccountMain extends Activity
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent( AccountMain.this, AddAccount.class);
-                    startActivity(intent);
+                    moveToAccountRegist();
                 }
             });
+    }
+    /**
+     * @brief Move to AccountRegist Display
+     */
+    private void moveToAccountRegist() {
+        Intent intent = new Intent( AccountMain.this, AccountAdd.class);
+        startActivity(intent);
     }
     /**
      * @brief InfoArea Class
@@ -98,7 +102,8 @@ public class AccountMain extends Activity
                 if( cur_master.moveToFirst() ) {
                     account_item.setText( cur_master.getString(0) );
                 }
-                String money = cur.getString(2) + "円";
+                String money = cur.getString(2) +
+                    getText(R.string.money_unit).toString();
                 account_money.setText( money );
                 account_money.setTextSize(18);
                 account_item.setTextSize(18);
@@ -111,6 +116,72 @@ public class AccountMain extends Activity
                 item_table.addView(row);
             }
         }
+    }
+    /**
+     * Account Class
+     */
+    private class Account
+    {
+        private List<AccountItem> mAccountList;
+        private DatabaseHelper mDbHelper;
+        private SQLiteDatabase mDatabase;
+        Account () {
+            mAccountList = new ArrayList<AccountItem>();
+            mDbHelper = new DatabaseHelper(getApplicationContext());
+            mDatabase = mDbHelper.getReadableDatabase();
+            getDataFromDB();
+        }
+        /**
+         * @brief 
+         */
+        private void getDataFromDB() {
+            Cursor cur = mDatabase.rawQuery("select _id from AccountTable;",null);
+            while (cur.moveToNext() ) {
+                mAccountList.add( new AccountItem(cur.getInt(0)) );
+            }
+        }
+        /**
+         * @brief get AccountList (String)
+         */
+        public List<AccountItem> getAccountList() {
+            return mAccountList;
+        }
+    }
+    /**
+     * AccountItem Class
+     */
+    private class AccountItem
+    {
+        private int mId;
+        private int mCategoryId;
+        private int mMoney;
+        private String mMemo;
+        private DatabaseHelper mDbHelper;
+        private SQLiteDatabase mDatabase;
+//        private Date mDate;
+        AccountItem(int id) {
+            mDbHelper = new DatabaseHelper(getApplicationContext());
+            mDatabase = mDbHelper.getReadableDatabase();
+            mId = id;
+            getDataFromDB();
+        }
+        /**
+         * @brief get data from database
+         */
+        private void getDataFromDB() {
+            Cursor cur =
+                mDatabase.rawQuery("select * from AccountTable where id = "+ String.valueOf(mId) + ";", null);
+            if( cur.moveToFirst() ) {
+                mCategoryId = cur.getInt(1);
+                mMoney = cur.getInt(2);
+                mMemo = cur.getString(3);
+            }
+        }
+        public int getId() { return mId; }
+        public int getCategoryId() { return mCategoryId; }
+        public int getMoney() { return mMoney; }
+        public String getMemo() { return mMemo; }
+//        public Date getDate() { return mDate; }
     }
 }
 
