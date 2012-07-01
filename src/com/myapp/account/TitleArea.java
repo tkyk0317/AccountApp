@@ -1,9 +1,9 @@
 package com.myapp.account;
 
+import java.util.Calendar;
 import android.app.Activity;
 import android.widget.TextView;
 import android.content.Context;
-import android.text.format.Time;
 import com.myapp.account.DatabaseHelper;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -30,9 +30,11 @@ public class TitleArea
     public void appear(Activity act) {
         // display current date
         TextView date_title = (TextView) act.findViewById(R.id.date_title);
-        Time time = new Time("Asia/Tokyo");
-        time.setToNow();
-        String date = time.year + "/" + (time.month+1) + "/" + time.monthDay ;
+        final Calendar calendar = Calendar.getInstance();
+        final int year = calendar.get(Calendar.YEAR);
+        final int month = calendar.get(Calendar.MONTH);
+        final int day = calendar.get(Calendar.DAY_OF_MONTH);
+        String date = year + "/" + (month+1) + "/" + day ;
         date_title.setText(date);
     }
 }
