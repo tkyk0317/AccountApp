@@ -6,8 +6,8 @@
     >
   <TextView
       android:id="@+id/date_title"
-      android:layout_width="wrap_content" 
-      android:layout_height="wrap_content" 
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
       android:text=""
       android:textSize="30sp"
       />
@@ -36,10 +36,11 @@
         android:text="@string/category_label"
         />
     <EditText
-        android:text="" 
+        android:text=""
         android:id="@+id/category_value"
         android:layout_height="wrap_content"
         android:textSize="20sp"
+        android:focusable="false"
         android:inputType="none"
         android:layout_width="0dip"
         android:layout_weight="2"
@@ -66,11 +67,13 @@
         android:text="@string/money_label"
         />
     <EditText
-        android:text="" 
+        android:text=""
         android:id="@+id/money_value"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:inputType="none"
+        android:maxLength="9"
+        android:inputType="number"
+        android:digits="0123456789"
         android:layout_width="0dip"
         android:layout_weight="2"
         />
@@ -96,9 +99,9 @@
         android:text="@string/memo_label"
         />
     <EditText
-        android:text="" 
+        android:text=""
         android:id="@+id/memo_value"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:textSize="20sp"
         android:inputType="text"
         android:layout_width="0dip"
