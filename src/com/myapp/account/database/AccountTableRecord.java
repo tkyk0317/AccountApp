@@ -4,26 +4,36 @@ import java.util.*;
 import java.text.DateFormat;
 import android.database.Cursor;
 
-//=====================================.
-// AccountTableRecordクラス.
+/**
+ * Account Table Record Class.
+ */
 public class AccountTableRecord {
+
+    // Database Index Enum.
+    private enum DatabaseIndex {
+        ID(0), CATEGORY_ID(1), MONEY(2), MEMO(3), UPDATE_DATE(4), INSERT_DATE(5);
+
+       private final int index;
+
+       private DatabaseIndex(int index) { this.index = index; }
+       public int getIndex() { return this.index; }
+    }
 
     private int id;
     private int category_id;
     private int money;
     private String memo;
-    private String date;
-
-    // Constractor.
-    public AccountTableRecord() {}
+    private String update_date;
+    private String insert_date;
 
     // Setter.
     public void set(Cursor cursor) {
-        id = cursor.getInt(0);
-        category_id = cursor.getInt(1);
-        money = cursor.getInt(2);
-        memo = cursor.getString(3);
-        date = cursor.getString(4);
+        id = cursor.getInt(DatabaseIndex.ID.getIndex());
+        category_id = cursor.getInt(DatabaseIndex.CATEGORY_ID.getIndex());
+        money = cursor.getInt(DatabaseIndex.MONEY.getIndex());
+        memo = cursor.getString(DatabaseIndex.MEMO.getIndex());
+        update_date = cursor.getString(DatabaseIndex.UPDATE_DATE.getIndex());
+        insert_date = cursor.getString(DatabaseIndex.INSERT_DATE.getIndex());
     }
     public void setCategoryId(int id) { category_id = id; }
     public void setMoney(int money) { this.money = money; }
@@ -34,5 +44,6 @@ public class AccountTableRecord {
     public int getCategoryId() { return category_id; }
     public int getMoney() { return money; }
     public String getMemo() { return memo; }
-    public String getDate() { return date; }
+    public String getUpdateDate() { return update_date; }
+    public String getInsertDate() { return insert_date; }
 }

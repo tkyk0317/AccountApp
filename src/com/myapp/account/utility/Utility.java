@@ -9,6 +9,9 @@ import java.text.*;
 public class Utility {
 
     public static final String DATE_FORMAT = "yyyy/MM/dd";
+    public static final int DATE_YEAR_ST_POS = 0;
+    public static final int DATE_MONTH_ST_POS = 5;
+    public static final int DATE_MONTH_END_SLASH_POS = 7;
 
     /**
      * Get Current Date.
@@ -46,4 +49,21 @@ public class Utility {
 
         return (new SimpleDateFormat(DATE_FORMAT)).format(cal_date.getTime());
     }
+
+    /**
+     * Split Current Month and Day.
+     * @param String Data that Current Date (format is yyyy/MM/dd).
+     * @return String Date that Current Month and Day (format is MM/dd).
+     */
+    public static String splitCurrentMonthAndDay(String current_date) {
+        return current_date.substring(DATE_MONTH_ST_POS);
+    }
+
+    /**
+     * Get Current Year and Month.
+     * return String Data that Current Year and Month (format is yyyy/MM).
+     */
+    public static String getCurrentYearAndMonth() {
+        return getCurrentDate().substring(DATE_YEAR_ST_POS, DATE_MONTH_END_SLASH_POS);
+     }
 }

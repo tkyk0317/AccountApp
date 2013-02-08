@@ -47,38 +47,6 @@
             android:layout_height="fill_parent"
             android:stretchColumns="1,2"
             >
-            <TableRow>
-                <TextView
-                    android:id="@+id/income_label"
-                    android:text="@string/income_label"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:textSize="20sp"
-                    />
-                <TextView
-                    android:id="@+id/income"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:gravity="right"
-                    android:textSize="20sp"
-                    />
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:id="@+id/payment_label"
-                    android:text="@string/payment_label"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:textSize="20sp"
-                    />
-                <TextView
-                    android:id="@+id/payment"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:gravity="right"
-                    android:textSize="20sp"
-                    />
-            </TableRow>
         </TableLayout>
     </LinearLayout>
     <ImageView

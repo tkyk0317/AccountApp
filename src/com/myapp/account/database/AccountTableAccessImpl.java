@@ -15,18 +15,16 @@ import com.myapp.account.utility.Utility;
  */
 public class AccountTableAccessImpl {
 
-    private SQLiteDatabase read_db;
-    private SQLiteDatabase write_db;
-    private SQLiteOpenHelper db_helper;
-    private static final String TABLE_NAME = "AccountTable";
+    protected SQLiteDatabase readDatabase;
+    protected SQLiteDatabase writeDatabase;
+    protected static final String TABLE_NAME = "AccountTable";
 
     /**
      * Consturactor.
      */
     public AccountTableAccessImpl(SQLiteOpenHelper helper) {
-        db_helper = helper;
-        read_db = db_helper.getReadableDatabase();
-        write_db = db_helper.getWritableDatabase();
+        readDatabase = helper.getReadableDatabase();
+        writeDatabase = helper.getWritableDatabase();
     }
 
     /**
@@ -35,12 +33,12 @@ public class AccountTableAccessImpl {
      * @return AccountTableRecord Instance.
      */
     public AccountTableRecord getRecord(int key) {
-        Cursor cursor = read_db.rawQuery("select * from " + TABLE_NAME + " where _id = " + key + ";", null);
-        cursor.moveToFirst();
+        Cursor cursor = readDatabase.rawQuery("select * from " + TABLE_NAME + " where _id = " + key + ";", null);
 
         AccountTableRecord record = new AccountTableRecord();
-        record.set(cursor);
-
+        if( true == cursor.moveToFirst() ) {
+            record.set(cursor);
+        }
         return record;
     }
 
@@ -51,7 +49,7 @@ public class AccountTableAccessImpl {
     public List<AccountTableRecord> getRecordWithCurrentDate()
     {
         String current_date = Utility.getCurrentDate();
-        Cursor cursor = read_db.query(TABLE_NAME, null, "update_time=?" , new String[]{current_date}, null, null, null, null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date=?" , new String[]{current_date}, null, null, null, null);
 
         cursor.moveToFirst();
         int record_count = cursor.getCount();
@@ -63,14 +61,14 @@ public class AccountTableAccessImpl {
             cursor.moveToNext();
         }
         return record_list;
-     }
+    }
 
     /**
      * Get All Record.
      * @return All AccountTableRecord in AccountMasterTable.
      */
     public List<AccountTableRecord> getAllRecord() {
-        Cursor cursor = read_db.query(TABLE_NAME, null , null, null, null, null, null, null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, null, null);
         cursor.moveToFirst();
         int record_count = cursor.getCount();
         List<AccountTableRecord> record_list = new ArrayList<AccountTableRecord>(record_count+1);
@@ -84,37 +82,37 @@ public class AccountTableAccessImpl {
     }
 
     /**
-      * Get Income Total Money at Current Month.
-      * @return Total Money.
-      */
-    public long getTotalIncodemAtCurrentMonth() {
+     * Get Income Total Money at Current Month.
+     * @return Total Money.
+     */
+    public int getTotalIncomeAtCurrentMonth() {
         String last_date_of_month = Utility.getLastDateOfCurrentMonth();
         String first_date_of_month = Utility.getFirstDateOfCurrentMonth();
 
-        Cursor cursor = read_db.rawQuery("select sum(AccountTable.money) from AccountTable " +
+        Cursor cursor = readDatabase.rawQuery("select sum(AccountTable.money) from AccountTable " +
                 "join AccountMaster on AccountTable.category_id=AccountMaster._id " +
-                "where AccountMaster.kind_id=0 and AccountTable.update_time>=" + "'" + first_date_of_month + "'" +
-                " and AccountTable.update_time<=" + "'" + last_date_of_month + "'" + " ;", null);
+                "where AccountMaster.kind_id=0 and AccountTable.insert_date>=" + "'" + first_date_of_month + "'" +
+                " and AccountTable.insert_date<=" + "'" + last_date_of_month + "'" + " ;", null);
         cursor.moveToFirst();
 
-        return cursor.getLong(0);
+        return cursor.getInt(0);
     }
 
     /**
-      * Get Payment Total Money at Current Month.
-      * @return Total Money.
-      */
-    public long getTotalPaymentAtCurrentMonth() {
+     * Get Payment Total Money at Current Month.
+     * @return Total Money.
+     */
+    public int getTotalPaymentAtCurrentMonth() {
         String last_date_of_month = Utility.getLastDateOfCurrentMonth();
         String first_date_of_month = Utility.getFirstDateOfCurrentMonth();
 
-        Cursor cursor = read_db.rawQuery("select sum(AccountTable.money) from AccountTable " +
+        Cursor cursor = readDatabase.rawQuery("select sum(AccountTable.money) from AccountTable " +
                 "join AccountMaster on AccountTable.category_id=AccountMaster._id " +
-                "where AccountMaster.kind_id=1 and AccountTable.update_time>=" + "'" + first_date_of_month + "'" +
-                " and AccountTable.update_time<=" + "'" + last_date_of_month + "'" + " ;", null);
+                "where AccountMaster.kind_id=1 and AccountTable.insert_date>=" + "'" + first_date_of_month + "'" +
+                " and AccountTable.insert_date<=" + "'" + last_date_of_month + "'" + " ;", null);
         cursor.moveToFirst();
 
-        return cursor.getLong(0);
+        return cursor.getInt(0);
     }
 
     /**
@@ -123,16 +121,15 @@ public class AccountTableAccessImpl {
      * @return Insert Record Key(_id).
      */
     public long insert(AccountTableRecord record) {
-        ContentValues content = new ContentValues();
-        content.put("category_id", record.getCategoryId());
-        content.put("money", record.getMoney());
-        content.put("memo", record.getMemo());
-        //content.put("update_time", (new SimpleDateFormat(DATE_FORMAT)).format(new Date()) );
-        content.put("update_time", Utility.getCurrentDate() );
+        ContentValues insert_record = new ContentValues();
+        insert_record.put("category_id", record.getCategoryId());
+        insert_record.put("money", record.getMoney());
+        insert_record.put("memo", record.getMemo());
+        insert_record.put("update_date", Utility.getCurrentDate() );
+        insert_record.put("insert_date", Utility.getCurrentDate() );
 
         // insert item.
-        Log.d("AccountTableAccessImple", "START");
-        long key = write_db.insert(TABLE_NAME, null, content);
+        long key = writeDatabase.insert(TABLE_NAME, null, insert_record);
 
         return key;
     }
