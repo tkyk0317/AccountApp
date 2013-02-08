@@ -12,18 +12,16 @@ import android.util.Log;
  */
 public class AccountMasterTableAccessImpl {
 
-    private SQLiteDatabase read_db;
-    private SQLiteDatabase write_db;
-    private SQLiteOpenHelper db_helper;
-    private static final String TABLE_NAME = "AccountMaster";
+    protected SQLiteDatabase readDatabase;
+    protected SQLiteDatabase writeDatabase;
+    protected static final String TABLE_NAME = "AccountMaster";
 
     /**
       * Consturactor.
       */
     public AccountMasterTableAccessImpl(SQLiteOpenHelper helper) {
-        db_helper = helper;
-        read_db = db_helper.getReadableDatabase();
-        write_db = db_helper.getWritableDatabase();
+        readDatabase = helper.getReadableDatabase();
+        writeDatabase = helper.getWritableDatabase();
     }
 
     /**
@@ -32,12 +30,12 @@ public class AccountMasterTableAccessImpl {
       * @return AccountMasterTableRecord Instance.
       */
     public AccountMasterTableRecord get(int key) {
-        Cursor cursor = read_db.rawQuery("select * from " + TABLE_NAME + " where _id = " + key + ";", null);
-        cursor.moveToFirst();
+        Cursor cursor = readDatabase.rawQuery("select * from " + TABLE_NAME + " where _id = " + key + ";", null);
 
         AccountMasterTableRecord record = new AccountMasterTableRecord();
-        record.set(cursor);
-
+        if( true == cursor.moveToFirst() ) {
+            record.set(cursor);
+        }
         return record;
     }
 
@@ -47,12 +45,12 @@ public class AccountMasterTableAccessImpl {
       * @return AccountMasterTableRecord Instance.
       */
     public AccountMasterTableRecord getRecordMatchName(String name) {
-        Cursor cursor = read_db.rawQuery("select * from " + TABLE_NAME + " where name = " + "'" + name + "'" + ";", null);
-        cursor.moveToFirst();
+        Cursor cursor = readDatabase.rawQuery("select * from " + TABLE_NAME + " where name = " + "'" + name + "'" + ";", null);
 
         AccountMasterTableRecord record = new AccountMasterTableRecord();
-        record.set(cursor);
-
+        if( true == cursor.moveToFirst() ) {
+            record.set(cursor);
+        }
         return record;
     }
 
@@ -61,7 +59,7 @@ public class AccountMasterTableAccessImpl {
      * @return All AccountMasterTableRecord in AccountMasterTable.
      */
     public List<AccountMasterTableRecord> getAll() {
-        Cursor cursor = read_db.query(TABLE_NAME, null , null,
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , null,
                 null, null, null, null);
         cursor.moveToFirst();
         int record_count = cursor.getCount();

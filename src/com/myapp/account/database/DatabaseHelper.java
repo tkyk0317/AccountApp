@@ -10,25 +10,24 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    private static final int DB_VERSION               = 1;
-    private static final int INCOME_FLAG              = 0;
-    private static final int PAYMENT_FLAG             = 1;
-    private static final String LOG_TAG               = "DatabaseHelper";
-    private static final String DB_NAME               = "Account.db";
-    private static final String ACCOUNT_MASTER_NAME   = "AccountMaster";
-    private static final String ACCOUNT_TABLE_NAME    = "AccountTable";
-    private static final String BUDGET_TABLE_NAME     = "BudgetTable";
+    private static final int DB_VERSION  = 1;
+    private static final int INCOME_FLAG = 0;
+    private static final int PAYMENT_FLAG = 1;
+    private static final String LOG_TAG = "DatabaseHelper";
+    private static final String DB_NAME = "Account.db";
+    private static final String ACCOUNT_MASTER_NAME = "AccountMaster";
+    private static final String ACCOUNT_TABLE_NAME = "AccountTable";
+    private static final String ESTIMATE_TABLE_NAME = "EstimateTable";
     private static final String CREATE_ACCOUNT_MASTER =
         "create table "+ ACCOUNT_MASTER_NAME + "( _id integer not null primary key," +
-        "kind_id integer not null, name text not null, update_time text not null );";
+        "kind_id integer not null, name text not null, update_date text not null, insert_date text not null );";
     private static final String CREATE_ACCOUNT_TABLE  =
         "create table " + ACCOUNT_TABLE_NAME + "( _id integer not null primary key," +
         "category_id interger not null, money integer not null," +
-        "memo text, update_time text not null);";
-    private static final String CREATE_BUDGET_TABLE   =
-        "create table " + BUDGET_TABLE_NAME + "(_id integer not null primary key," +
-        "category_id interger not null, money integer not null," +
-        "target_date text not null, update_time text not null);";
+        "memo text, update_date text not null, insert_date text not null);";
+    private static final String CREATE_ESTIMATE_TABLE   =
+        "create table " + ESTIMATE_TABLE_NAME + "(_id integer not null primary key," +
+        "money integer not null, target_date text not null, update_date text not null, insert_date text not null);";
 
     private SQLiteDatabase m_SqliteDatabase;
 
@@ -62,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
     private void createTable(SQLiteDatabase db) {
         db.execSQL( CREATE_ACCOUNT_MASTER );
         db.execSQL( CREATE_ACCOUNT_TABLE );
-        db.execSQL( CREATE_BUDGET_TABLE );
+        db.execSQL( CREATE_ESTIMATE_TABLE );
     }
 
     /**
@@ -71,53 +70,53 @@ public class DatabaseHelper extends SQLiteOpenHelper
     private void insertDefaultItem(SQLiteDatabase db) {
         // default item insert for AccountCategoryMaster.
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + INCOME_FLAG +
-                ",'給料',datetime('now', 'localtime') );" );
+                "(kind_id, name, update_date, insert_date) values(" + INCOME_FLAG +
+                ",'給料',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + INCOME_FLAG +
-                ",'ボーナス',datetime('now', 'localtime') );" );
+                "(kind_id, name,update_date, insert_date) values(" + INCOME_FLAG +
+                ",'ボーナス',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + INCOME_FLAG +
-                ",'臨時収入',datetime('now', 'localtime') );" );
+                "(kind_id, name,update_date, insert_date) values(" + INCOME_FLAG +
+                ",'臨時収入',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + PAYMENT_FLAG +
-                ",'食費(外食)',datetime('now', 'localtime') );" );
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'食費(外食)',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + PAYMENT_FLAG +
-                ",'食費(家食)',datetime('now', 'localtime') );" );
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'食費(家食)',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values("  + PAYMENT_FLAG +
-                ",'お酒代',datetime('now', 'localtime') );" );
+                "(kind_id, name,update_date, insert_date) values("  + PAYMENT_FLAG +
+                ",'お酒代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values("  + PAYMENT_FLAG +
-                ",'書籍代',datetime('now', 'localtime') );" );
+                "(kind_id, name,update_date, insert_date) values("  + PAYMENT_FLAG +
+                ",'書籍代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + PAYMENT_FLAG +
-                ",'電気代',datetime('now', 'localtime'));" );
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'電気代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + PAYMENT_FLAG +
-                ",'ガス代',datetime('now', 'localtime'));" );
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'ガス代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + PAYMENT_FLAG +
-                ",'水道代',datetime('now', 'localtime'));" );
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'水道代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + PAYMENT_FLAG +
-                ",'インターネット代',datetime('now', 'localtime'));" );
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'インターネット代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + PAYMENT_FLAG +
-                ",'家賃',datetime('now', 'localtime'));" );
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'家賃',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + PAYMENT_FLAG +
-                ",'携帯電話代',datetime('now', 'localtime'));" );
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'携帯電話代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + PAYMENT_FLAG +
-                ",'ローン代',datetime('now', 'localtime'));" );
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'ローン代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + PAYMENT_FLAG +
-                ",'クレジットカード代',datetime('now', 'localtime'));" );
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'クレジットカード代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_time) values(" + PAYMENT_FLAG +
-                ",'雑費',datetime('now', 'localtime'));" );
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'雑費',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
     }
 }
 

@@ -11,7 +11,7 @@ import android.content.Context;
  */
 public class TitleArea
 {
-    private static final String DATE_FORMAT = "yyyy/MM/dd";
+    protected static final String DATE_FORMAT = "yyyy/MM/dd";
 
     /**
      * Class Constractor.
@@ -30,7 +30,7 @@ public class TitleArea
      * Appear Current Date.
      * @param activity Activity Instance.
      */
-    private void appearCurrentDate(Activity activity) {
+    protected void appearCurrentDate(Activity activity) {
         TextView date_title = (TextView) activity.findViewById(R.id.date_title);
         String current_date = (new SimpleDateFormat(DATE_FORMAT)).format(new Date());
         date_title.setText(current_date);
