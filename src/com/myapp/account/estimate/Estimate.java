@@ -102,7 +102,7 @@ public class Estimate {
 
         EstimateTableRecord record = estimateTable.getRecordWithCurrentMonth();
 
-        estimate_value.setText(String.valueOf(record.getEstimateMoney()) + activity.getText(R.string.money_unit).toString());
+        estimate_value.setText(String.format("%,d", record.getEstimateMoney()) + activity.getText(R.string.money_unit).toString());
         estimate_label.setText(activity.getText(R.string.estimate_label));
         estimate_label.setTextSize(TEXT_FONT_SIZE);
         estimate_value.setTextSize(TEXT_FONT_SIZE);
@@ -135,7 +135,7 @@ public class Estimate {
             estimate_rest_value.setTextColor(Color.GREEN);
         }
 
-        estimate_rest_value.setText(String.valueOf(rest_money) + activity.getText(R.string.money_unit).toString());
+        estimate_rest_value.setText(String.format("%,d", rest_money) + activity.getText(R.string.money_unit).toString());
         estimate_rest_label.setText(activity.getText(R.string.estimate_rest_money_label));
         estimate_rest_label.setTextSize(TEXT_FONT_SIZE);
         estimate_rest_value.setTextSize(TEXT_FONT_SIZE);
