@@ -14,6 +14,17 @@ public class Utility {
     public static final int DATE_MONTH_END_SLASH_POS = 7;
 
     /**
+     * Is String is NULL.
+     * @return true if String Data is NULL.
+     */
+    public static boolean isStringNULL(String str) {
+        if( str == null || 0 == str.length() ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Get Current Date.
      * @return Current Date(String Type).
      */

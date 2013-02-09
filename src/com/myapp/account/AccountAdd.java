@@ -1,6 +1,7 @@
 package com.myapp.account;
 
 import java.util.*;
+import java.lang.NumberFormatException;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.content.Context;
@@ -20,6 +21,7 @@ import com.myapp.account.database.AccountTableAccessImpl;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessImpl;
 import com.myapp.account.database.AccountMasterTableRecord;
+import com.myapp.account.utility.Utility;
 
 /**
  * AccountAdd Activity Class.
@@ -125,15 +127,24 @@ public class AccountAdd extends Activity
      * Add AccountRecord into AccountTable.
      */
     protected void addAccountRecord() {
-        AccountTableRecord record = getInputUserAccountInfo();
-        insertIntoDatabase(record);
-        printAddCompleteMessage();
+        try {
+            AccountTableRecord record = getInputUserAccountInfo();
+
+            if( isEnableInputData(record) ) {
+                insertIntoDatabase(record);
+                displayAddCompleteMessage();
+            } else {
+                displayInputDataAlertMessage();
+            }
+        } catch (NumberFormatException exception) {
+            displayInputDataAlertMessage();
+        }
     }
 
     /**
      * Get Account Information from user's input information.
      */
-    protected AccountTableRecord getInputUserAccountInfo() {
+    protected AccountTableRecord getInputUserAccountInfo()  throws NumberFormatException {
         EditText edit_category= (EditText) findViewById(R.id.category_value);
         EditText edit_money = (EditText) findViewById(R.id.money_value);
         EditText edit_memo = (EditText) findViewById(R.id.memo_value);
@@ -141,10 +152,25 @@ public class AccountAdd extends Activity
         AccountMasterTableRecord master_record = masterTable.getRecordMatchName( edit_category.getText().toString() );
 
         AccountTableRecord record = new AccountTableRecord();
-        record.setCategoryId( master_record.getId() );
-        record.setMoney( Integer.valueOf(edit_money.getText().toString()) );
-        record.setMemo( edit_memo.getText().toString() );
+        try {
+            record.setCategoryId( master_record.getId() );
+            record.setMoney( Integer.valueOf(edit_money.getText().toString()) );
+            record.setMemo( edit_memo.getText().toString() );
+        } catch (NumberFormatException exception) {
+            throw new NumberFormatException();
+        }
         return record;
+    }
+
+    /**
+     * Check User Input Data is Enable.
+     * @return true if user input data is enable data.
+     */
+    private boolean isEnableInputData(AccountTableRecord input_data) {
+        if( 0 == input_data.getMoney() || 0 == input_data.getCategoryId() ) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -156,12 +182,20 @@ public class AccountAdd extends Activity
     }
 
     /**
-     * Complete Add Accont Message.
+     * Display Complete Add Accont Message.
      */
-    protected void printAddCompleteMessage() {
+    protected void displayAddCompleteMessage() {
         String message = getText(R.string.regist_msg).toString();
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+
+    /**
+      * Display Alert Message.
+      */
+    protected void displayInputDataAlertMessage() {
+        String message = getText(R.string.regist_alert_msg).toString();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+     }
 
     /**
      * Appear Calculator.
