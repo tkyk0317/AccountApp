@@ -140,7 +140,7 @@ public class AccountMain extends Activity {
 
         int total = accountTable.getTotalIncomeAtCurrentMonth();
 
-        income_value.setText(String.valueOf(total) + getText(R.string.money_unit).toString());
+        income_value.setText(String.format("%,d", total) + getText(R.string.money_unit).toString());
         income_label.setText(getText(R.string.income_label));
         income_label.setTextSize(TEXT_FONT_SIZE);
         income_value.setTextSize(TEXT_FONT_SIZE);
@@ -163,7 +163,7 @@ public class AccountMain extends Activity {
 
         int total = accountTable.getTotalPaymentAtCurrentMonth();
 
-        payment_value.setText(String.valueOf(total) + getText(R.string.money_unit).toString());
+        payment_value.setText(String.format("%,d", total) + getText(R.string.money_unit).toString());
         payment_label.setText(getText(R.string.payment_label));
         payment_label.setTextSize(TEXT_FONT_SIZE);
         payment_value.setTextSize(TEXT_FONT_SIZE);
@@ -225,7 +225,7 @@ public class AccountMain extends Activity {
 
             account_date.setText( Utility.splitCurrentMonthAndDay(account_record.getInsertDate()) );
             account_item.setText( account_master_record.getName() );
-            String money = String.valueOf( account_record.getMoney() ) + getText(R.string.money_unit).toString();
+            String money = String.format("%,d", account_record.getMoney() ) + getText(R.string.money_unit).toString();
             account_money.setText( "(" + money +")" );
 
             account_date.setTextSize(18);
