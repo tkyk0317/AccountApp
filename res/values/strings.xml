@@ -12,8 +12,9 @@
     <string name="regist_btn_label">登録</string>
     <string name="regist_category_label">登録項目</string>
     <string name="regist_msg">家計簿の登録が完了しました</string>
+    <string name="regist_alert_msg">入力内容を確認してください</string>
     <string name="estimate_label">今月予算</string>
     <string name="estimate_rest_money_label">予算残金</string>
     <string name="estimate_title">今月の予算を入力してください</string>
-    <string name="estimate_again_title">適切な予算を入力してください。</string>
+    <string name="estimate_again_title">適切な予算を入力してください</string>
 </resources>
