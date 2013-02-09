@@ -198,7 +198,7 @@ public class AccountMain extends Activity {
          */
         public void appear() {
             // get info from database.
-            List<AccountTableRecord> account_record = accountTable.getRecordWithCurrentDate();
+            List<AccountTableRecord> account_record = accountTable.getRecordWithCurrentDateGroupByCategoryId();
             TableLayout item_table = (TableLayout) findViewById(R.id.item_table);
 
             Log.d("InfoArea", "AccountRecord Number = " + account_record.size() );

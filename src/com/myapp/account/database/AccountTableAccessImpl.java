@@ -64,6 +64,28 @@ public class AccountTableAccessImpl {
     }
 
     /**
+     * Get Record With Current Date Group by CategoryId.
+     * @return AccountTableRecord List at Current Date.
+     */
+    public List<AccountTableRecord> getRecordWithCurrentDateGroupByCategoryId()
+    {
+        String current_date = Utility.getCurrentDate();
+        Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
+                                           "insert_date=?" , new String[]{current_date}, "category_id", null, null, null);
+
+        cursor.moveToFirst();
+        int record_count = cursor.getCount();
+        List<AccountTableRecord> record_list = new ArrayList<AccountTableRecord>(record_count+1);
+
+        for( int i = 0 ; i < record_count ; i++ ) {
+            record_list.add( new AccountTableRecord() );
+            record_list.get(i).set(cursor);
+            cursor.moveToNext();
+        }
+        return record_list;
+    }
+
+    /**
      * Get All Record.
      * @return All AccountTableRecord in AccountMasterTable.
      */
