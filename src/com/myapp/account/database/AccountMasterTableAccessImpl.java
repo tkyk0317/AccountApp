@@ -1,11 +1,13 @@
 package com.myapp.account.database;
 
 import java.util.*;
+import android.util.Log;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
+import android.content.ContentValues;
 import com.myapp.account.database.AccountMasterTableRecord;
-import android.util.Log;
+import com.myapp.account.utility.Utility;
 
 /**
  * AccountMasterTableAccessImpl.
@@ -29,8 +31,8 @@ public class AccountMasterTableAccessImpl {
       * @param key Table key.
       * @return AccountMasterTableRecord Instance.
       */
-    public AccountMasterTableRecord get(int key) {
-        Cursor cursor = readDatabase.rawQuery("select * from " + TABLE_NAME + " where _id = " + key + ";", null);
+    public AccountMasterTableRecord getRecord(int key) {
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , "_id=?", new String[] {String.valueOf(key)}, null, null, null);
 
         AccountMasterTableRecord record = new AccountMasterTableRecord();
         if( true == cursor.moveToFirst() ) {
@@ -59,8 +61,8 @@ public class AccountMasterTableAccessImpl {
      * @return All AccountMasterTableRecord in AccountMasterTable.
      */
     public List<AccountMasterTableRecord> getAll() {
-        Cursor cursor = readDatabase.query(TABLE_NAME, null , null,
-                null, null, null, null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, "use_date desc");
+
         cursor.moveToFirst();
         int record_count = cursor.getCount();
         List<AccountMasterTableRecord> record_list = new ArrayList<AccountMasterTableRecord>(record_count+1);
@@ -98,6 +100,14 @@ public class AccountMasterTableAccessImpl {
      * @return true if update success.
      */
     public boolean update(AccountMasterTableRecord record) {
+        ContentValues update_record = new ContentValues();
+        update_record.put("kind_id", record.getKindId());
+        update_record.put("name", record.getName());
+        update_record.put("use_date", Utility.getCurrentDateAndTime());
+        update_record.put("update_date", record.getUpdateDate());
+        update_record.put("insert_date", record.getInsertDate());
+
+        writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
         return true;
     }
 }

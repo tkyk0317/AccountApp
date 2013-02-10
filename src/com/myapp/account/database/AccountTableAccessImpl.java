@@ -33,7 +33,7 @@ public class AccountTableAccessImpl {
      * @return AccountTableRecord Instance.
      */
     public AccountTableRecord getRecord(int key) {
-        Cursor cursor = readDatabase.rawQuery("select * from " + TABLE_NAME + " where _id = " + key + ";", null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , "_id=?", new String[] {String.valueOf(key)}, null, null, null);
 
         AccountTableRecord record = new AccountTableRecord();
         if( true == cursor.moveToFirst() ) {
@@ -74,6 +74,28 @@ public class AccountTableAccessImpl {
                                            "insert_date=?" , new String[]{current_date}, "category_id", null, null, null);
 
         cursor.moveToFirst();
+        int record_count = cursor.getCount();
+        List<AccountTableRecord> record_list = new ArrayList<AccountTableRecord>(record_count+1);
+
+        for( int i = 0 ; i < record_count ; i++ ) {
+            record_list.add( new AccountTableRecord() );
+            record_list.get(i).set(cursor);
+            cursor.moveToNext();
+        }
+        return record_list;
+    }
+
+    /**
+     * Get Record With Current Month Group by CategoryId.
+     */
+    public List<AccountTableRecord> getRecordWithCurrentMonthGroupByCategoryId() {
+        String last_date_of_month = Utility.getLastDateOfCurrentMonth();
+        String first_date_of_month = Utility.getFirstDateOfCurrentMonth();
+
+        Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
+                                           "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id", null, null, null);
+        cursor.moveToFirst();
+
         int record_count = cursor.getCount();
         List<AccountTableRecord> record_list = new ArrayList<AccountTableRecord>(record_count+1);
 

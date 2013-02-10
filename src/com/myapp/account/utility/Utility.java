@@ -9,6 +9,7 @@ import java.text.*;
 public class Utility {
 
     public static final String DATE_FORMAT = "yyyy/MM/dd";
+    public static final String DATE_AND_TIME_FORMAT = "yyyy/MM/dd-HH-mm-ss";
     public static final int DATE_YEAR_ST_POS = 0;
     public static final int DATE_MONTH_ST_POS = 5;
     public static final int DATE_MONTH_END_SLASH_POS = 7;
@@ -31,6 +32,15 @@ public class Utility {
     public static String getCurrentDate() {
         Calendar cal_date = Calendar.getInstance(TimeZone.getDefault());
         return (new SimpleDateFormat(DATE_FORMAT)).format(cal_date.getTime());
+    }
+
+    /**
+     * Get Current Date.
+     * @return Current Date and Time(String Type).
+     */
+    public static String getCurrentDateAndTime() {
+        Calendar cal_date = Calendar.getInstance(TimeZone.getDefault());
+        return (new SimpleDateFormat(DATE_AND_TIME_FORMAT)).format(cal_date.getTime());
     }
 
     /**
