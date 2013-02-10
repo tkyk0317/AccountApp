@@ -61,7 +61,7 @@ public class AccountMasterTableAccessImpl {
      * @return All AccountMasterTableRecord in AccountMasterTable.
      */
     public List<AccountMasterTableRecord> getAll() {
-        Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, "use_date desc");
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, "use_date desc", null);
 
         cursor.moveToFirst();
         int record_count = cursor.getCount();
