@@ -71,7 +71,7 @@ public class AccountTableAccessImpl {
     {
         String current_date = Utility.getCurrentDate();
         Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
-                                           "insert_date=?" , new String[]{current_date}, "category_id", null, null, null);
+                                           "insert_date=?" , new String[]{current_date}, "category_id", null, "category_id", null);
 
         cursor.moveToFirst();
         int record_count = cursor.getCount();
@@ -93,7 +93,7 @@ public class AccountTableAccessImpl {
         String first_date_of_month = Utility.getFirstDateOfCurrentMonth();
 
         Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
-                                           "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id", null, null, null);
+                                           "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id", null, "insert_date", null);
         cursor.moveToFirst();
 
         int record_count = cursor.getCount();

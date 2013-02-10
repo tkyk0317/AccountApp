@@ -13,6 +13,8 @@ import android.view.Gravity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.ImageButton;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 import com.myapp.account.TitleArea;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
@@ -21,6 +23,9 @@ import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessImpl;
 import com.myapp.account.estimate.Estimate;
+import com.myapp.account.infoarea.AbstractInfoArea;
+import com.myapp.account.infoarea.DailyInfoAreaImpl;
+import com.myapp.account.infoarea.MonthInfoAreaImpl;
 
 /**
  * Main Class in AccountApp Application.
@@ -28,7 +33,8 @@ import com.myapp.account.estimate.Estimate;
 public class AccountMain extends Activity {
 
     protected TitleArea titleArea;
-    protected InfoArea  infoArea;
+    protected AbstractInfoArea  infoDailyArea;
+    protected AbstractInfoArea  infoMonthArea;
     protected Estimate estimateInfo;
     protected AccountTableAccessImpl accountTable;
     protected static final int TEXT_FONT_SIZE = 20;
@@ -62,73 +68,49 @@ public class AccountMain extends Activity {
     }
 
     /**
-     * Display Main Content.
-     */
-    public void displayMainContent() {
-        // title area/info area appear.
-        appearTotalIncome();
-        appearTotalPayment();
-        titleArea.appear(this);
-        infoArea.appear();
-    }
-
-    /**
-     * Called Activity is Destoryed.
-     */
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        titleArea = null;
-        infoArea = null;
-        accountTable = null;
-        estimateInfo = null;
-    }
-
-    /**
-     * Called User can not see the Activity.
-     */
-    @Override
-    protected void onStop() {
-        super.onStop();
-        titleArea = null;
-        infoArea = null;
-        accountTable = null;
-        estimateInfo = null;
-    }
-
-    /**
      * Initialize Member-Variable.
      */
     protected void init() {
         titleArea = new TitleArea();
-        infoArea = new InfoArea();
-
+        infoDailyArea = new DailyInfoAreaImpl(this);
+        infoMonthArea = new MonthInfoAreaImpl(this);
         DatabaseHelper db_helper = new DatabaseHelper(getApplicationContext());
         accountTable = new AccountTableAccessImpl(db_helper);
         estimateInfo = new Estimate(db_helper, this);
     }
 
     /**
-     * Rejist Event
+     * Display Main Content.
      */
-    protected void registEvent () {
-        ImageButton btn = (ImageButton) findViewById(R.id.add_btn);
-        btn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        moveToAccountRegist();
-                    }
-                });
+    public void displayMainContent() {
+        // display tab.
+        displayTabContent();
+
+        // title area/info area appear.
+        appearTotalIncome();
+        appearTotalPayment();
+        titleArea.appear(this);
+        infoDailyArea.appear();
+        infoMonthArea.appear();
     }
 
     /**
-     * Move to AccountAdd Activity.
+     * Display Tab Content.
      */
-    protected void moveToAccountRegist() {
-        Intent intent = new Intent( AccountMain.this, AccountAdd.class);
-        startActivity(intent);
-    }
+    protected void displayTabContent() {
+        TabHost tab_host = (TabHost)findViewById(R.id.tabhost);
+        tab_host.setup();
+
+        TabSpec daily_tab = tab_host.newTabSpec("daily_tab");
+        daily_tab.setIndicator(getText(R.string.daily_summary_tab_label));
+        daily_tab.setContent(R.id.daily_summary);
+        tab_host.addTab(daily_tab);
+
+        TabSpec month_tab = tab_host.newTabSpec("month_tab");
+        month_tab.setIndicator(getText(R.string.month_summary_tab_label));
+        month_tab.setContent(R.id.month_summary);
+        tab_host.addTab(month_tab);
+   }
 
     /**
      * Appear Income Total.
@@ -177,72 +159,51 @@ public class AccountMain extends Activity {
     }
 
     /**
-     * Infomation Area Class.
+     * Called Activity is Destoryed.
      */
-    private class InfoArea
-    {
-        protected AccountTableAccessImpl accountTable;
-        protected AccountMasterTableAccessImpl masterTable;
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        titleArea = null;
+        infoDailyArea = null;
+        infoMonthArea = null;
+        accountTable = null;
+        estimateInfo = null;
+    }
 
-        /**
-         * InfoArea Class Constractor.
-         */
-        InfoArea() {
-            DatabaseHelper db_helper = new DatabaseHelper(getApplicationContext());
-            accountTable = new AccountTableAccessImpl(db_helper);
-            masterTable = new AccountMasterTableAccessImpl(db_helper);
-        }
+    /**
+     * Called User can not see the Activity.
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        titleArea = null;
+        infoDailyArea = null;
+        infoMonthArea = null;
+        accountTable = null;
+        estimateInfo = null;
+    }
 
-        /**
-         * Appear the infomation area.
-         */
-        public void appear() {
-            // get info from database.
-            List<AccountTableRecord> account_record = accountTable.getRecordWithCurrentDateGroupByCategoryId();
-            TableLayout item_table = (TableLayout) findViewById(R.id.item_table);
+    /**
+     * Rejist Event
+     */
+    protected void registEvent () {
+        ImageButton btn = (ImageButton) findViewById(R.id.add_btn);
+        btn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        moveToAccountRegist();
+                    }
+                });
+    }
 
-            Log.d("InfoArea", "AccountRecord Number = " + account_record.size() );
-            // item loop.
-            for( int i = 0 ; i < account_record.size() ; i++ ) {
-                // draw.
-                drawRecord(item_table, account_record.get(i) );
-            }
-        }
-
-        /**
-         * Draw Item from AccountTable.
-         * @param layout TableLayout instance.
-         * @param account_record AccountTable Record(Displayed Item).
-         */
-        protected void drawRecord(TableLayout layout, AccountTableRecord account_record) {
-            TextView account_date = new TextView(getApplicationContext());
-            TextView account_item = new TextView(getApplicationContext());
-            TextView account_money= new TextView(getApplicationContext());
-
-            // get item name from AccountMaster.
-            int master_id = account_record.getCategoryId();
-            AccountMasterTableRecord account_master_record = masterTable.getRecord(master_id);
-
-            account_date.setText( Utility.splitCurrentMonthAndDay(account_record.getInsertDate()) );
-            account_item.setText( account_master_record.getName() );
-            String money = String.format("%,d", account_record.getMoney() ) + getText(R.string.money_unit).toString();
-            account_money.setText( "(" + money +")" );
-
-            account_date.setTextSize(18);
-            account_money.setTextSize(18);
-            account_item.setTextSize(18);
-
-            account_date.setGravity(Gravity.RIGHT);
-            account_item.setGravity(Gravity.RIGHT);
-            account_money.setGravity(Gravity.RIGHT);
-
-            // display AccountTable.
-            TableRow row = new TableRow(getApplicationContext());
-            row.addView(account_date);
-            row.addView(account_item);
-            row.addView(account_money);
-            layout.addView(row);
-        }
+    /**
+     * Move to AccountAdd Activity.
+     */
+    protected void moveToAccountRegist() {
+        Intent intent = new Intent( AccountMain.this, AccountAdd.class);
+        startActivity(intent);
     }
 }
 
