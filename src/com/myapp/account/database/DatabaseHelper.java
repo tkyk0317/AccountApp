@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    private static final int DB_VERSION  = 1;
+    private static final int DB_VERSION  = 2;
     private static final int INCOME_FLAG = 0;
     private static final int PAYMENT_FLAG = 1;
     private static final String LOG_TAG = "DatabaseHelper";
@@ -20,7 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
     private static final String ESTIMATE_TABLE_NAME = "EstimateTable";
     private static final String CREATE_ACCOUNT_MASTER =
         "create table "+ ACCOUNT_MASTER_NAME + "( _id integer not null primary key," +
-        "kind_id integer not null, name text not null, update_date text not null, insert_date text not null );";
+        "kind_id integer not null, name text not null, use_date text, update_date text not null, insert_date text not null );";
     private static final String CREATE_ACCOUNT_TABLE  =
         "create table " + ACCOUNT_TABLE_NAME + "( _id integer not null primary key," +
         "category_id interger not null, money integer not null," +
@@ -52,6 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
      * Called when update database.
      **/
     public void onUpgrade(SQLiteDatabase db, int old_version, int new_version ) {
+        if( old_version >= new_version ) return;
     }
 
     /**
@@ -73,11 +74,17 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 "(kind_id, name, update_date, insert_date) values(" + INCOME_FLAG +
                 ",'給料',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_date, insert_date) values(" + INCOME_FLAG +
-                ",'ボーナス',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'電化製品代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_date, insert_date) values(" + INCOME_FLAG +
-                ",'臨時収入',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'パン代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
+        db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'交通費',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
+        db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
+                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
+                ",'日用品',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
                 "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
                 ",'食費(外食)',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
@@ -87,6 +94,12 @@ public class DatabaseHelper extends SQLiteOpenHelper
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
                 "(kind_id, name,update_date, insert_date) values("  + PAYMENT_FLAG +
                 ",'お酒代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
+        db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
+                "(kind_id, name,update_date, insert_date) values(" + INCOME_FLAG +
+                ",'ボーナス',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
+        db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
+                "(kind_id, name,update_date, insert_date) values(" + INCOME_FLAG +
+                ",'臨時収入',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
                 "(kind_id, name,update_date, insert_date) values("  + PAYMENT_FLAG +
                 ",'書籍代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
@@ -108,12 +121,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
                 "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
                 ",'携帯電話代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
-        db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
-                ",'ローン代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
-        db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
-                "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
-                ",'クレジットカード代',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
                 "(kind_id, name,update_date, insert_date) values(" + PAYMENT_FLAG +
                 ",'雑費',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );

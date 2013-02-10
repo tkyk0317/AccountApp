@@ -221,7 +221,7 @@ public class AccountMain extends Activity {
 
             // get item name from AccountMaster.
             int master_id = account_record.getCategoryId();
-            AccountMasterTableRecord account_master_record = masterTable.get(master_id);
+            AccountMasterTableRecord account_master_record = masterTable.getRecord(master_id);
 
             account_date.setText( Utility.splitCurrentMonthAndDay(account_record.getInsertDate()) );
             account_item.setText( account_master_record.getName() );

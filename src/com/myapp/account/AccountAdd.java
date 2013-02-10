@@ -132,6 +132,7 @@ public class AccountAdd extends Activity
 
             if( isEnableInputData(record) ) {
                 insertIntoDatabase(record);
+                updateUseDateOfMaterTable(record.getCategoryId());
                 displayAddCompleteMessage();
             } else {
                 displayInputDataAlertMessage();
@@ -180,6 +181,16 @@ public class AccountAdd extends Activity
     protected void insertIntoDatabase(AccountTableRecord record) {
         accountTable.insert(record);
     }
+
+    /**
+     * Update Use Date of Master Table.
+     * @param Key of master Table.
+     */
+    protected void updateUseDateOfMaterTable(int key) {
+        AccountMasterTableRecord master_record = masterTable.getRecord(key);
+
+        masterTable.update(master_record);
+   }
 
     /**
      * Display Complete Add Accont Message.
