@@ -14,6 +14,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
 import com.myapp.account.TitleArea;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.dialog.AbstractDialog;
@@ -44,7 +46,7 @@ public class AccountAdd extends Activity
         setContentView(R.layout.add_account);
         // initialize.
         init();
-        // title_area appear.
+        setCurrentDateToInputDateArea();
         titleArea.appear(this);
         registEvent();
 
@@ -88,9 +90,25 @@ public class AccountAdd extends Activity
     }
 
     /**
+     * Set Current Date To Input Date Area.
+     */
+    protected void setCurrentDateToInputDateArea() {
+        EditText input_date= (EditText) findViewById(R.id.input_date_value);
+        input_date.setText(Utility.getCurrentDate());
+    }
+
+    /**
      * Rejist Event
      */
     protected void registEvent() {
+        ImageButton input_date_btn = (ImageButton) findViewById(R.id.input_date_select_btn);
+        input_date_btn.setOnClickListener(
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    appearInputDateBox();
+                }
+            });
         ImageButton category_btn = (ImageButton) findViewById(R.id.category_select_btn);
         category_btn.setOnClickListener(
             new View.OnClickListener() {
@@ -114,6 +132,27 @@ public class AccountAdd extends Activity
                         appearCalculator();
                     }
                 });
+    }
+
+    /**
+     * Appear Input-date dialog.
+     */
+    protected void appearInputDateBox() {
+        String current_date = Utility.getCurrentDate();
+
+        DatePickerDialog dialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker picker, int year, int monthOfYear, int dayOfMonth) {
+                    EditText input_date= (EditText) findViewById(R.id.input_date_value);
+                    input_date.setText(Utility.CreateDateFormat(year, monthOfYear, dayOfMonth));
+                }
+        },
+        Integer.valueOf(current_date.substring(Utility.DATE_YEAR_ST_POS, Utility.DATE_YEAR_ST_POS + Utility.DATE_YEAR_SIZE)),
+        Integer.valueOf(current_date.substring(Utility.DATE_MONTH_ST_POS, Utility.DATE_MONTH_ST_POS + Utility.DATE_MONTH_SIZE)) - 1,
+        Integer.valueOf(current_date.substring(Utility.DATE_DAY_ST_POS, Utility.DATE_DAY_ST_POS + Utility.DATE_DAY_SIZE)) );
+
+        dialog.show();
     }
 
     /**
@@ -146,6 +185,7 @@ public class AccountAdd extends Activity
      * Get Account Information from user's input information.
      */
     protected AccountTableRecord getInputUserAccountInfo()  throws NumberFormatException {
+        EditText input_date= (EditText) findViewById(R.id.input_date_value);
         EditText edit_category= (EditText) findViewById(R.id.category_value);
         EditText edit_money = (EditText) findViewById(R.id.money_value);
         EditText edit_memo = (EditText) findViewById(R.id.memo_value);
@@ -154,9 +194,10 @@ public class AccountAdd extends Activity
 
         AccountTableRecord record = new AccountTableRecord();
         try {
-            record.setCategoryId( master_record.getId() );
-            record.setMoney( Integer.valueOf(edit_money.getText().toString()) );
-            record.setMemo( edit_memo.getText().toString() );
+            record.setInsertDate(input_date.getText().toString());
+            record.setCategoryId(master_record.getId());
+            record.setMoney(Integer.valueOf(edit_money.getText().toString()));
+            record.setMemo(edit_memo.getText().toString());
         } catch (NumberFormatException exception) {
             throw new NumberFormatException();
         }
@@ -168,7 +209,9 @@ public class AccountAdd extends Activity
      * @return true if user input data is enable data.
      */
     private boolean isEnableInputData(AccountTableRecord input_data) {
-        if( 0 == input_data.getMoney() || 0 == input_data.getCategoryId() ) {
+        if( 0 == input_data.getMoney() ||
+            0 == input_data.getCategoryId() ||
+            Utility.isStringNULL(input_data.getInsertDate()) ) {
             return false;
         }
         return true;

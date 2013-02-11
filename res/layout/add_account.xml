@@ -29,6 +29,37 @@
       android:layout_marginTop="20px"
       >
     <TextView
+        android:id="@+id/input_date_label"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/input_date_label"
+        />
+    <EditText
+        android:text=""
+        android:id="@+id/input_date_value"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:focusable="false"
+        android:inputType="none"
+        android:layout_width="0dip"
+        android:layout_weight="2"
+        />
+    <ImageButton
+        android:id="@+id/input_date_select_btn"
+        android:layout_width="35px"
+        android:layout_height="35px"
+        android:src="@android:drawable/ic_menu_day"
+        />
+  </LinearLayout>
+  <LinearLayout
+      android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="20px"
+      >
+    <TextView
         android:id="@+id/category_label"
         android:textSize="20sp"
         android:layout_width="wrap_content"
@@ -49,7 +80,7 @@
         android:id="@+id/category_select_btn"
         android:layout_width="35px"
         android:layout_height="35px"
-        android:src="@android:drawable/ic_menu_always_landscape_portrait"
+        android:src="@android:drawable/ic_menu_agenda"
         />
   </LinearLayout>
   <LinearLayout

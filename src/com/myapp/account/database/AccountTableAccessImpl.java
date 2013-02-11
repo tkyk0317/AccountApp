@@ -70,7 +70,7 @@ public class AccountTableAccessImpl {
     public List<AccountTableRecord> getRecordWithCurrentDateGroupByCategoryId()
     {
         String current_date = Utility.getCurrentDate();
-        Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
+        Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
                                            "insert_date=?" , new String[]{current_date}, "category_id", null, "category_id", null);
 
         cursor.moveToFirst();
@@ -92,7 +92,7 @@ public class AccountTableAccessImpl {
         String last_date_of_month = Utility.getLastDateOfCurrentMonth();
         String first_date_of_month = Utility.getFirstDateOfCurrentMonth();
 
-        Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
+        Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
                                            "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id", null, "insert_date", null);
         cursor.moveToFirst();
 
@@ -166,11 +166,12 @@ public class AccountTableAccessImpl {
      */
     public long insert(AccountTableRecord record) {
         ContentValues insert_record = new ContentValues();
+        insert_record.put("user_id", record.getUserId());
         insert_record.put("category_id", record.getCategoryId());
         insert_record.put("money", record.getMoney());
         insert_record.put("memo", record.getMemo());
         insert_record.put("update_date", Utility.getCurrentDate() );
-        insert_record.put("insert_date", Utility.getCurrentDate() );
+        insert_record.put("insert_date", record.getInsertDate() );
 
         // insert item.
         long key = writeDatabase.insert(TABLE_NAME, null, insert_record);
