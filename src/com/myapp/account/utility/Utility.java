@@ -11,8 +11,13 @@ public class Utility {
     public static final String DATE_FORMAT = "yyyy/MM/dd";
     public static final String DATE_AND_TIME_FORMAT = "yyyy/MM/dd-HH-mm-ss";
     public static final int DATE_YEAR_ST_POS = 0;
+    public static final int DATE_YEAR_SIZE = 4;
     public static final int DATE_MONTH_ST_POS = 5;
+    public static final int DATE_MONTH_SIZE = 2;
+    public static final int DATE_DAY_ST_POS = 8;
+    public static final int DATE_DAY_SIZE = 2;
     public static final int DATE_MONTH_END_SLASH_POS = 7;
+    public static final String DATE_DELIMITER = "/";
 
     /**
      * Is String is NULL.
@@ -23,6 +28,17 @@ public class Utility {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Create Date Format.
+     * @return Current Date of String Data Type (yyyy/MM/dd).
+     */
+    public static String CreateDateFormat(int year, int month, int day) {
+        Calendar cal_date = Calendar.getInstance(TimeZone.getDefault());
+        cal_date.set(year, month, day);
+
+        return (new SimpleDateFormat(DATE_FORMAT)).format(cal_date.getTime());
     }
 
     /**

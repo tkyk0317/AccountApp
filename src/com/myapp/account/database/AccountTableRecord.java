@@ -11,7 +11,7 @@ public class AccountTableRecord {
 
     // Database Index Enum.
     private enum DatabaseIndex {
-        ID(0), CATEGORY_ID(1), MONEY(2), MEMO(3), UPDATE_DATE(4), INSERT_DATE(5);
+        ID(0), USER_ID(1), CATEGORY_ID(2), MONEY(3), MEMO(4), UPDATE_DATE(5), INSERT_DATE(6);
 
        private final int index;
 
@@ -20,6 +20,7 @@ public class AccountTableRecord {
     }
 
     private int id;
+    private int user_id;
     private int category_id;
     private int money;
     private String memo;
@@ -29,6 +30,7 @@ public class AccountTableRecord {
     // Setter.
     public void set(Cursor cursor) {
         id = cursor.getInt(DatabaseIndex.ID.getIndex());
+        user_id = cursor.getInt(DatabaseIndex.USER_ID.getIndex());
         category_id = cursor.getInt(DatabaseIndex.CATEGORY_ID.getIndex());
         money = cursor.getInt(DatabaseIndex.MONEY.getIndex());
         memo = cursor.getString(DatabaseIndex.MEMO.getIndex());
@@ -38,9 +40,11 @@ public class AccountTableRecord {
     public void setCategoryId(int id) { category_id = id; }
     public void setMoney(int money) { this.money = money; }
     public void setMemo(String memo) { this.memo = memo; }
+    public void setInsertDate(String date) { insert_date = date; }
 
     // getter.
     public int getid() { return id; }
+    public int getUserId() { return user_id; }
     public int getCategoryId() { return category_id; }
     public int getMoney() { return money; }
     public String getMemo() { return memo; }
