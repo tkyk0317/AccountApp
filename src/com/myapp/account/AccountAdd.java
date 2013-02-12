@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
-import com.myapp.account.TitleArea;
+import com.myapp.account.titlearea.TitleArea;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.dialog.AbstractDialog;
 import com.myapp.account.database.AccountTableAccessImpl;
@@ -47,7 +47,7 @@ public class AccountAdd extends Activity
         // initialize.
         init();
         setCurrentDateToInputDateArea();
-        titleArea.appear(this);
+        titleArea.appear();
         registEvent();
 
         Log.d("AccountAdd", "[END] onCreate");
@@ -82,7 +82,7 @@ public class AccountAdd extends Activity
      */
     protected void init() {
         Log.d("AccountAdd", "[START] init");
-        titleArea = new TitleArea();
+        titleArea = new TitleArea(this);
         categoryItems = new CategoryItems(this);
         accountTable = new AccountTableAccessImpl( new DatabaseHelper(getApplicationContext()) );
         masterTable = new AccountMasterTableAccessImpl( new DatabaseHelper(getApplicationContext()) );
