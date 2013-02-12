@@ -12,13 +12,12 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.view.Gravity;
 import android.graphics.Color;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.content.DialogInterface;
 import com.myapp.account.R;
+import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.EstimateTableAccessImpl;
 import com.myapp.account.database.EstimateTableRecord;
 import com.myapp.account.database.AccountTableAccessImpl;
-import com.myapp.account.CallbackInterface;
 
 /**
  * Estimate Class.
@@ -35,11 +34,12 @@ public class Estimate {
 
     /**
      * Constractor.
+     * @param activity Activity Instance.
      */
-    public Estimate(SQLiteOpenHelper helper, Activity activity) {
-        estimateTable = new EstimateTableAccessImpl(helper);
-        accountTable = new AccountTableAccessImpl(helper);
+    public Estimate(Activity activity) {
         this.activity = activity;
+        estimateTable = new EstimateTableAccessImpl(new DatabaseHelper(activity.getApplicationContext()));
+        accountTable = new AccountTableAccessImpl(new DatabaseHelper(activity.getApplicationContext()));
     }
 
     /**
@@ -53,14 +53,6 @@ public class Estimate {
                 displayAlertMessage();
             }
         }
-    }
-
-    /**
-     * Display Main Content (with CallbackInterface).
-     */
-    protected void displayMainContent() {
-        CallbackInterface callback_if = (CallbackInterface)activity;
-        callback_if.callback();
     }
 
     /**
