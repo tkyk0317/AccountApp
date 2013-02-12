@@ -12,6 +12,17 @@ import com.myapp.account.R;
  */
 public class ApplicationMenu {
 
+    // Dialog List Index.
+    private enum DialogListIndex {
+
+        DAILY_ACCOUNT_EDIT_INDEX(0), MONTHLY_ACCOUNT_EDIT_INDEX(1), ADD_CATEGORY_INDEX(2);
+
+        private final int index;
+
+        private DialogListIndex(int index) { this.index = index; }
+        public int getIndex() { return this.index; }
+    }
+
     protected Activity activity;
 
     /**
@@ -56,7 +67,7 @@ public class ApplicationMenu {
     protected void moveToConfig() {
         Intent intent = new Intent( activity, AppConfigurationActivity.class);
         activity.startActivity(intent);
-     }
+    }
 
     /**
      * Display Edit Dialog.
@@ -71,10 +82,43 @@ public class ApplicationMenu {
         edit_menu_dialog.setTitle(R.string.menu_account_data_edit_list_title);
         edit_menu_dialog.setItems( edit_menus,
                 new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int index) {
+                        parseClickEvent(index);
                     }
                 });
-        edit_menu_dialog.create().show();
+        edit_menu_dialog.show();
+    }
+
+    /**
+     * Parse Click Event.
+     * @param click_index Click List Item Index.
+     */
+    protected void parseClickEvent(int click_index) {
+        if( click_index == DialogListIndex.DAILY_ACCOUNT_EDIT_INDEX.getIndex() ) {
+            moveToEditDailyAccountData();
+        } else if( click_index == DialogListIndex.MONTHLY_ACCOUNT_EDIT_INDEX.getIndex() ) {
+            moveToEditMonthlyAccountData();
+        } else if( click_index == DialogListIndex.ADD_CATEGORY_INDEX.getIndex() ) {
+            moveToAddCategory();
+        }
+    }
+
+    /**
+     * Move To Edit Daily Account Data Activity.
+     */
+    protected void moveToEditDailyAccountData() {
+    }
+
+    /**
+     * Move To Edit Monthly Account Data Activity.
+     */
+    protected void moveToEditMonthlyAccountData() {
+    }
+
+    /**
+     * Move To Add Category into Master Activity.
+     */
+    protected void moveToAddCategory() {
     }
 }
 
