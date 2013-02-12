@@ -9,10 +9,10 @@ import android.widget.TextView;
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
-import com.myapp.account.database.AccountTableAccessImpl;
+import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableRecord;
-import com.myapp.account.database.AccountMasterTableAccessImpl;
+import com.myapp.account.database.AccountMasterTableAccessor;
 
 /**
  * AbstractInfoArea Class.
@@ -20,8 +20,8 @@ import com.myapp.account.database.AccountMasterTableAccessImpl;
 public abstract class AbstractInfoArea {
 
     protected Activity activity;
-    protected AccountTableAccessImpl accountTable;
-    protected AccountMasterTableAccessImpl masterTable;
+    protected AccountTableAccessor accountTable;
+    protected AccountMasterTableAccessor masterTable;
 
     /**
      * InfoDailyArea Class Constractor.
@@ -29,8 +29,8 @@ public abstract class AbstractInfoArea {
     AbstractInfoArea(Activity activity) {
         this.activity = activity;
         DatabaseHelper db_helper = new DatabaseHelper(this.activity.getApplicationContext());
-        accountTable = new AccountTableAccessImpl(db_helper);
-        masterTable = new AccountMasterTableAccessImpl(db_helper);
+        accountTable = new AccountTableAccessor(db_helper);
+        masterTable = new AccountMasterTableAccessor(db_helper);
     }
 
     /**

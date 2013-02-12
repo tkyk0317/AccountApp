@@ -18,9 +18,9 @@ import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.dialog.AbstractDialog;
-import com.myapp.account.database.AccountTableAccessImpl;
+import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
-import com.myapp.account.database.AccountMasterTableAccessImpl;
+import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
 
 /**
@@ -30,8 +30,8 @@ public class AccountAdd {
 
     protected Activity activity;
     protected CategoryItems categoryItems;
-    protected AccountTableAccessImpl accountTable;
-    protected AccountMasterTableAccessImpl masterTable;
+    protected AccountTableAccessor accountTable;
+    protected AccountMasterTableAccessor masterTable;
 
     /**
      * Constractor.
@@ -39,8 +39,8 @@ public class AccountAdd {
     public AccountAdd(Activity activity) {
         this.activity = activity;
         categoryItems = new CategoryItems(activity);
-        accountTable = new AccountTableAccessImpl( new DatabaseHelper(activity.getApplicationContext()) );
-        masterTable = new AccountMasterTableAccessImpl( new DatabaseHelper(activity.getApplicationContext()) );
+        accountTable = new AccountTableAccessor( new DatabaseHelper(activity.getApplicationContext()) );
+        masterTable = new AccountMasterTableAccessor( new DatabaseHelper(activity.getApplicationContext()) );
     }
 
     /**
@@ -225,13 +225,13 @@ public class AccountAdd {
     private class CategoryItems implements AbstractDialog {
 
         protected String[] checkItems;
-        protected AccountMasterTableAccessImpl masterTable;
+        protected AccountMasterTableAccessor masterTable;
 
         /**
          * Class Constractor.
          */
         public CategoryItems(Context context) {
-            masterTable = new AccountMasterTableAccessImpl( new DatabaseHelper(context) );
+            masterTable = new AccountMasterTableAccessor( new DatabaseHelper(context) );
         }
 
         /**

@@ -10,9 +10,9 @@ import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.utility.Utility;
 
 /**
- * AccountMasterTableAccessImpl.
+ * AccountMasterTableAccessor.
  */
-public class AccountMasterTableAccessImpl {
+public class AccountMasterTableAccessor {
 
     protected SQLiteDatabase readDatabase;
     protected SQLiteDatabase writeDatabase;
@@ -21,7 +21,7 @@ public class AccountMasterTableAccessImpl {
     /**
       * Consturactor.
       */
-    public AccountMasterTableAccessImpl(SQLiteOpenHelper helper) {
+    public AccountMasterTableAccessor(SQLiteOpenHelper helper) {
         readDatabase = helper.getReadableDatabase();
         writeDatabase = helper.getWritableDatabase();
     }

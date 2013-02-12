@@ -13,7 +13,7 @@ import com.myapp.account.utility.Utility;
 /**
  * EstimateTableImpl Class.
  */
-public class EstimateTableAccessImpl {
+public class EstimateTableAccessor {
 
     protected SQLiteDatabase readDatabase;
     protected SQLiteDatabase writeDatabase;
@@ -22,7 +22,7 @@ public class EstimateTableAccessImpl {
     /**
      * Constractor.
      */
-    public EstimateTableAccessImpl(SQLiteOpenHelper helper) {
+    public EstimateTableAccessor(SQLiteOpenHelper helper) {
         readDatabase = helper.getReadableDatabase();
         writeDatabase = helper.getWritableDatabase();
     }

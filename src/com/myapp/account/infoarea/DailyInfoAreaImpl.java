@@ -5,10 +5,8 @@ import android.app.Activity;
 import android.widget.TableLayout;
 import com.myapp.account.R;
 import com.myapp.account.infoarea.AbstractInfoArea;
-import com.myapp.account.database.AccountTableAccessImpl;
+import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
-import com.myapp.account.database.AccountMasterTableRecord;
-import com.myapp.account.database.AccountMasterTableAccessImpl;
 
 /**
  * Daily Info Area Class.

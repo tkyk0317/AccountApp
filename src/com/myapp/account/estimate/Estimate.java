@@ -15,9 +15,9 @@ import android.graphics.Color;
 import android.content.DialogInterface;
 import com.myapp.account.R;
 import com.myapp.account.database.DatabaseHelper;
-import com.myapp.account.database.EstimateTableAccessImpl;
+import com.myapp.account.database.EstimateTableAccessor;
 import com.myapp.account.database.EstimateTableRecord;
-import com.myapp.account.database.AccountTableAccessImpl;
+import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.config.AppConfigurationData;
 
 /**
@@ -25,8 +25,8 @@ import com.myapp.account.config.AppConfigurationData;
  */
 public class Estimate {
 
-    protected EstimateTableAccessImpl estimateTable;
-    protected AccountTableAccessImpl accountTable;
+    protected EstimateTableAccessor estimateTable;
+    protected AccountTableAccessor accountTable;
     protected Activity activity;
     protected static final int ESTIMATE_MONEY_DIGITS = 9;
     protected static final int TABLE_FIRST_INDEX = 0;
@@ -39,8 +39,8 @@ public class Estimate {
      */
     public Estimate(Activity activity) {
         this.activity = activity;
-        estimateTable = new EstimateTableAccessImpl(new DatabaseHelper(activity.getApplicationContext()));
-        accountTable = new AccountTableAccessImpl(new DatabaseHelper(activity.getApplicationContext()));
+        estimateTable = new EstimateTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
+        accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
     }
 
     /**

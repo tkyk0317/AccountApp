@@ -11,9 +11,9 @@ import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.utility.Utility;
 
 /**
- * AccountTableAccessImpl.
+ * AccountTableAccessor.
  */
-public class AccountTableAccessImpl {
+public class AccountTableAccessor {
 
     protected SQLiteDatabase readDatabase;
     protected SQLiteDatabase writeDatabase;
@@ -22,7 +22,7 @@ public class AccountTableAccessImpl {
     /**
      * Consturactor.
      */
-    public AccountTableAccessImpl(SQLiteOpenHelper helper) {
+    public AccountTableAccessor(SQLiteOpenHelper helper) {
         readDatabase = helper.getReadableDatabase();
         writeDatabase = helper.getWritableDatabase();
     }
