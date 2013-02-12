@@ -15,7 +15,7 @@ import com.myapp.account.utility.Utility;
 import com.myapp.account.estimate.Estimate;
 import com.myapp.account.tabcontent.TabContent;
 import com.myapp.account.summary.Summary;
-import com.myapp.account.config.AppConfigurationActivity;
+import com.myapp.account.config.ApplicationMenu;
 
 /**
  * Main Class in AccountApp Application.
@@ -26,6 +26,7 @@ public class AccountMainActivity extends Activity {
     protected Estimate estimateInfo;
     protected Summary summary;
     protected TabContent tabContent;
+    protected ApplicationMenu applicationMenu;
 
     /**
      * Create Activity.
@@ -63,6 +64,7 @@ public class AccountMainActivity extends Activity {
         estimateInfo = new Estimate(this);
         tabContent = new TabContent(this);
         summary = new Summary(this);
+        applicationMenu = new ApplicationMenu(this);
     }
 
     /**
@@ -84,6 +86,7 @@ public class AccountMainActivity extends Activity {
         estimateInfo = null;
         tabContent = null;
         summary = null;
+        applicationMenu = null;
     }
 
     /**
@@ -92,7 +95,7 @@ public class AccountMainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.app_menu,menu);
+        applicationMenu.appear(menu);
         return true;
     }
 
@@ -101,27 +104,7 @@ public class AccountMainActivity extends Activity {
       */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean result = true;
-
-        switch(item.getItemId()) {
-            case R.id.menu_config:
-                moveToConfig();
-                break;
-            case R.id.menu_account_data_edit:
-                break;
-            default:
-                result = false;
-                break;
-        }
-        return result;
-    }
-
-    /**
-      * Move To Config Activity.
-      */
-    protected void moveToConfig() {
-        Intent intent = new Intent( AccountMainActivity.this, AppConfigurationActivity.class);
-        startActivity(intent);
+        return applicationMenu.displayMenu(item.getItemId());
     }
 
     /**
@@ -134,6 +117,7 @@ public class AccountMainActivity extends Activity {
         estimateInfo = null;
         tabContent = null;
         summary = null;
+        applicationMenu = null;
     }
 
     /**
