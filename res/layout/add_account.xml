@@ -80,7 +80,7 @@
         android:id="@+id/category_select_btn"
         android:layout_width="35px"
         android:layout_height="35px"
-        android:src="@android:drawable/ic_menu_agenda"
+        android:src="@android:drawable/ic_menu_search"
         />
   </LinearLayout>
   <LinearLayout
