@@ -28,10 +28,10 @@ public class Estimate {
     protected EstimateTableAccessImpl estimateTable;
     protected AccountTableAccessImpl accountTable;
     protected Activity activity;
-    private static final int ESTIMATE_MONEY_DIGITS = 9;
-    private static final int TABLE_FIRST_INDEX = 0;
-    private static final int TABLE_SECOND_INDEX = 1;
-    private static final int TEXT_FONT_SIZE = 20;
+    protected static final int ESTIMATE_MONEY_DIGITS = 9;
+    protected static final int TABLE_FIRST_INDEX = 0;
+    protected static final int TABLE_SECOND_INDEX = 1;
+    protected static final int TEXT_FONT_SIZE = 20;
 
     /**
      * Constractor.

@@ -12,6 +12,7 @@
             android:title="@string/estimate_money_configuration_title"
             android:inputType="number"
             android:digits="0123456789"
+            android:maxLength="9"
             android:dependency="estimate_configuration"
             />
         <EditTextPreference
