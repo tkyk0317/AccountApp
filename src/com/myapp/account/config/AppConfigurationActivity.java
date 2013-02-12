@@ -1,7 +1,11 @@
 package com.myapp.account.config;
 
 import java.util.*;
+import java.lang.NumberFormatException;
+import java.lang.RuntimeException;
 import android.os.Bundle;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -16,8 +20,6 @@ import com.myapp.account.config.AppConfigurationData;
 public class AppConfigurationActivity extends PreferenceActivity {
 
     protected AppConfigurationData appConfiguration;
-    protected final String ESTIMATE_KEY = "estimate_configuration";
-    protected final String USER_TARGET_KEY = "target_user_configuration";
 
     /**
      * Called the Activity is First Created.
@@ -43,8 +45,9 @@ public class AppConfigurationActivity extends PreferenceActivity {
       * Display Summary.
       */
     protected void displaySummary() {
-        CheckBoxPreference estimate_config = (CheckBoxPreference)findPreference(ESTIMATE_KEY);
-        EditTextPreference user_config = (EditTextPreference)findPreference(USER_TARGET_KEY);
+        CheckBoxPreference estimate_config = (CheckBoxPreference)findPreference(appConfiguration.getEstimateKey());
+        EditTextPreference user_config = (EditTextPreference)findPreference(appConfiguration.getTargetUserKey());
+        EditTextPreference estimate_money_config = (EditTextPreference)findPreference(appConfiguration.getEstimateMoneyKey());
 
         if( appConfiguration.getEstimate() ) {
             estimate_config.setSummary(getText(R.string.estimate_configuration_enable));
@@ -52,13 +55,14 @@ public class AppConfigurationActivity extends PreferenceActivity {
             estimate_config.setSummary(getText(R.string.estimate_configuration_unenable));
         }
         user_config.setSummary(appConfiguration.getTargetUserName());
+        estimate_money_config.setSummary(String.format("%,d", appConfiguration.getEstimateMoney()));
     }
 
     /**
       * Regist Event Listner.
       */
     protected void registEvent() {
-        CheckBoxPreference estimate_pref = (CheckBoxPreference)findPreference(ESTIMATE_KEY);
+        CheckBoxPreference estimate_pref = (CheckBoxPreference)findPreference(appConfiguration.getEstimateKey());
         estimate_pref.setOnPreferenceChangeListener(
                 new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference pref, Object value) {
@@ -72,11 +76,10 @@ public class AppConfigurationActivity extends PreferenceActivity {
                         } else {
                             estimate_config.setSummary(getText(R.string.estimate_configuration_unenable));
                         }
-
                        return true;
                     }
                 });
-        EditTextPreference user_pref = (EditTextPreference)findPreference(USER_TARGET_KEY);
+        EditTextPreference user_pref = (EditTextPreference)findPreference(appConfiguration.getTargetUserKey());
         user_pref.setOnPreferenceChangeListener(
                 new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference pref, Object value) {
@@ -91,6 +94,44 @@ public class AppConfigurationActivity extends PreferenceActivity {
                         return true;
                     }
                 });
+        EditTextPreference estimate_money_pref = (EditTextPreference)findPreference(appConfiguration.getEstimateMoneyKey());
+        estimate_money_pref.setOnPreferenceChangeListener(
+                new OnPreferenceChangeListener() {
+                    public boolean onPreferenceChange(Preference pref, Object value) {
+                        EditTextPreference estimate_money_config = (EditTextPreference)pref;
+                        try {
+                            int estimate_money = Integer.valueOf(value.toString());
+
+                            if( 0 >= estimate_money ) {
+                                displayAlertEstimateMoney();
+                                return false;
+                            }
+
+                            // save estimate_money.
+                            appConfiguration.saveEstimateMoney(estimate_money);
+                            estimate_money_config.setSummary(String.format("%,d", estimate_money));
+                        } catch (RuntimeException error) {
+                            displayAlertEstimateMoney();
+                        }
+                        return true;
+                    }
+                });
+     }
+
+    /**
+     * Display Alert Estimate Money.
+     */
+    protected void displayAlertEstimateMoney() {
+        AlertDialog.Builder alert_dialog = new AlertDialog.Builder(this);
+        alert_dialog.setTitle(getText(R.string.estimate_again_title));
+        alert_dialog.setPositiveButton(
+                "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int estimate_money) {
+                    }
+                }
+                );
+        alert_dialog.show();
     }
 }
 

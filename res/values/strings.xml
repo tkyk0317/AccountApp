@@ -22,6 +22,7 @@
     <string name="estimate_again_title">適切な予算を入力してください</string>
     <string name="configuration_title">アプリケーション設定</string>
     <string name="estimate_configuration_title">予算機能</string>
+    <string name="estimate_money_configuration_title">予算金額</string>
     <string name="target_user_configuration_title">対象ユーザー</string>
     <string name="menu_configuration_title">設定</string>
     <string name="menu_account_data_edit_title">編集</string>

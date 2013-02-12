@@ -8,6 +8,13 @@
             android:defaultValue="true"
             />
         <EditTextPreference
+            android:key="estimate_money_configuration"
+            android:title="@string/estimate_money_configuration_title"
+            android:inputType="number"
+            android:digits="0123456789"
+            android:dependency="estimate_configuration"
+            />
+        <EditTextPreference
             android:key="target_user_configuration"
             android:title="@string/target_user_configuration_title"
             android:summary=""
