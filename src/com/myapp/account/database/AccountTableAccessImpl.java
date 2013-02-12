@@ -39,6 +39,7 @@ public class AccountTableAccessImpl {
         if( true == cursor.moveToFirst() ) {
             record.set(cursor);
         }
+        cursor.close();
         return record;
     }
 
@@ -60,6 +61,7 @@ public class AccountTableAccessImpl {
             record_list.get(i).set(cursor);
             cursor.moveToNext();
         }
+        cursor.close();
         return record_list;
     }
 
@@ -82,6 +84,7 @@ public class AccountTableAccessImpl {
             record_list.get(i).set(cursor);
             cursor.moveToNext();
         }
+        cursor.close();
         return record_list;
     }
 
@@ -104,6 +107,7 @@ public class AccountTableAccessImpl {
             record_list.get(i).set(cursor);
             cursor.moveToNext();
         }
+        cursor.close();
         return record_list;
     }
 
@@ -122,6 +126,7 @@ public class AccountTableAccessImpl {
             record_list.get(i).set(cursor);
             cursor.moveToNext();
         }
+        cursor.close();
         return record_list;
     }
 
@@ -139,7 +144,10 @@ public class AccountTableAccessImpl {
                 " and AccountTable.insert_date<=" + "'" + last_date_of_month + "'" + " ;", null);
         cursor.moveToFirst();
 
-        return cursor.getInt(0);
+        int total = cursor.getInt(0);
+        cursor.close();
+
+        return total;
     }
 
     /**
@@ -156,7 +164,9 @@ public class AccountTableAccessImpl {
                 " and AccountTable.insert_date<=" + "'" + last_date_of_month + "'" + " ;", null);
         cursor.moveToFirst();
 
-        return cursor.getInt(0);
+        int total = cursor.getInt(0);
+        cursor.close();
+        return total;
     }
 
     /**

@@ -38,6 +38,7 @@ public class AccountMasterTableAccessImpl {
         if( true == cursor.moveToFirst() ) {
             record.set(cursor);
         }
+        cursor.close();
         return record;
     }
 
@@ -53,6 +54,7 @@ public class AccountMasterTableAccessImpl {
         if( true == cursor.moveToFirst() ) {
             record.set(cursor);
         }
+        cursor.close();
         return record;
     }
 
@@ -72,6 +74,7 @@ public class AccountMasterTableAccessImpl {
             record_list.get(i).set(cursor);
             cursor.moveToNext();
         }
+        cursor.close();
         return record_list;
     }
 

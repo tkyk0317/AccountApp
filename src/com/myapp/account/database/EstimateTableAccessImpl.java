@@ -40,6 +40,7 @@ public class EstimateTableAccessImpl {
         if( true == cursor.moveToFirst() ) {
             record.set(cursor);
         }
+        cursor.close();
         return record;
     }
 

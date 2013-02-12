@@ -18,6 +18,7 @@ import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.EstimateTableAccessImpl;
 import com.myapp.account.database.EstimateTableRecord;
 import com.myapp.account.database.AccountTableAccessImpl;
+import com.myapp.account.config.AppConfigurationData;
 
 /**
  * Estimate Class.
@@ -60,7 +61,12 @@ public class Estimate {
      * @return true if estimate function is enable.
      */
     protected boolean isEstimate() {
-        return true;
+        AppConfigurationData app_config = new AppConfigurationData(activity);
+
+        if( app_config.getEstimate() ) {
+            return true;
+        }
+        return false;
     }
 
     /**
