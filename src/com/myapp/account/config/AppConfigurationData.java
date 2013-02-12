@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import com.myapp.account.database.DatabaseHelper;
-import com.myapp.account.database.EstimateTableAccessImpl;
+import com.myapp.account.database.EstimateTableAccessor;
 import com.myapp.account.database.EstimateTableRecord;
 
 /**
@@ -21,7 +21,7 @@ public class AppConfigurationData {
     protected boolean isEstimate;
     protected String userName;
     protected int estimateMoney;
-    protected EstimateTableAccessImpl estimateTable;
+    protected EstimateTableAccessor estimateTable;
     protected final String ESTIMATE_KEY = "estimate_configuration";
     protected final String ESTIMATE_MONEY_KEY = "estimate_money_configuration";
     protected final String USER_TARGET_KEY = "target_user_configuration";
@@ -31,7 +31,7 @@ public class AppConfigurationData {
      */
     public AppConfigurationData(Context context) {
         appConfig = PreferenceManager.getDefaultSharedPreferences(context);
-        estimateTable = new EstimateTableAccessImpl(new DatabaseHelper(context.getApplicationContext()));
+        estimateTable = new EstimateTableAccessor(new DatabaseHelper(context.getApplicationContext()));
         readConfigurationData();
     }
 

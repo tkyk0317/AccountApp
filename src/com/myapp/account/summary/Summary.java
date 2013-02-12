@@ -7,7 +7,7 @@ import android.widget.TextView;
 import android.view.Gravity;
 import com.myapp.account.R;
 import com.myapp.account.database.DatabaseHelper;
-import com.myapp.account.database.AccountTableAccessImpl;
+import com.myapp.account.database.AccountTableAccessor;
 
 /**
  * Summary Class.
@@ -15,7 +15,7 @@ import com.myapp.account.database.AccountTableAccessImpl;
 public class Summary {
 
     protected Activity activity;
-    protected AccountTableAccessImpl accountTable;
+    protected AccountTableAccessor accountTable;
     protected static final int TEXT_FONT_SIZE = 20;
 
     /**
@@ -24,7 +24,7 @@ public class Summary {
      */
     public Summary(Activity activity) {
         this.activity = activity;
-        accountTable = new AccountTableAccessImpl(new DatabaseHelper(activity.getApplicationContext()));
+        accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
      }
 
     /**
