@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import com.myapp.account.titlearea.TitleArea;
 import com.myapp.account.add_account_data.AccountAdd;
-import com.myapp.account.config.AppConfigurationActivity;
+import com.myapp.account.config.ApplicationMenu;
 
 /**
  * AccountAdd Activity Class.
@@ -19,6 +21,7 @@ public class AccountAddActivity extends Activity
 {
     protected TitleArea titleArea;
     protected AccountAdd accountAdd;
+    protected ApplicationMenu applicationMenu;
 
     /**
      * Create Activity.
@@ -27,8 +30,15 @@ public class AccountAddActivity extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    /**
+     * Called Activity Start.
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
         setContentView(R.layout.add_account);
-        // initialize.
         init();
         titleArea.appear();
         accountAdd.appear();
@@ -40,6 +50,7 @@ public class AccountAddActivity extends Activity
     protected void init() {
         titleArea = new TitleArea(this);
         accountAdd = new AccountAdd(this);
+        applicationMenu = new ApplicationMenu(this);
     }
 
     /**
@@ -50,6 +61,7 @@ public class AccountAddActivity extends Activity
         super.onDestroy();
         titleArea = null;
         accountAdd = null;
+        applicationMenu = null;
     }
 
     /**
@@ -60,6 +72,7 @@ public class AccountAddActivity extends Activity
         super.onStop();
         titleArea = null;
         accountAdd = null;
+        applicationMenu = null;
     }
 
     /**
@@ -68,7 +81,7 @@ public class AccountAddActivity extends Activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.app_menu,menu);
+        applicationMenu.appear(menu);
         return true;
     }
 
@@ -77,26 +90,7 @@ public class AccountAddActivity extends Activity
       */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean result = true;
-
-        switch(item.getItemId()) {
-            case R.id.menu_config:
-                moveToConfig();
-                break;
-            case R.id.menu_account_data_edit:
-                break;
-            default:
-                result = false;
-                break;
-        }
-        return result;
-    }
-
-    /**
-      * Move To Config Activity.
-      */
-    protected void moveToConfig() {
-        Intent intent = new Intent( AccountAddActivity.this, AppConfigurationActivity.class);
-        startActivity(intent);
+        return applicationMenu.displayMenu(item.getItemId());
     }
 }
+
