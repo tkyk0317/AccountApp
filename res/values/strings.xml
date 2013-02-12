@@ -20,4 +20,11 @@
     <string name="estimate_rest_money_label">予算残金</string>
     <string name="estimate_title">今月の予算を入力してください</string>
     <string name="estimate_again_title">適切な予算を入力してください</string>
+    <string name="configuration_title">アプリケーション設定</string>
+    <string name="estimate_configuration_title">予算機能</string>
+    <string name="target_user_configuration_title">対象ユーザー</string>
+    <string name="menu_configuration_title">設定</string>
+    <string name="menu_account_data_edit_title">編集</string>
+    <string name="estimate_configuration_enable">有効</string>
+    <string name="estimate_configuration_unenable">無効</string>
 </resources>

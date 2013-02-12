@@ -1,130 +1,84 @@
-package com.myapp.account;
+package com.myapp.account.add_account_data;
 
-import java.util.*;
-import java.lang.NumberFormatException;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.content.Context;
+import java.util.List;
 import android.app.Activity;
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.util.Log;
+import android.content.Context;
+import android.widget.EditText;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
-import com.myapp.account.titlearea.TitleArea;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageButton;
+import com.myapp.account.R;
+import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.dialog.AbstractDialog;
 import com.myapp.account.database.AccountTableAccessImpl;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessImpl;
 import com.myapp.account.database.AccountMasterTableRecord;
-import com.myapp.account.utility.Utility;
 
 /**
- * AccountAdd Activity Class.
+ * Add Account Date Class.
  */
-public class AccountAdd extends Activity
-{
-    protected TitleArea titleArea;
+public class AccountAdd {
+
+    protected Activity activity;
     protected CategoryItems categoryItems;
     protected AccountTableAccessImpl accountTable;
     protected AccountMasterTableAccessImpl masterTable;
 
     /**
-     * Create Activity.
-     * @param savedInstanceState
+     * Constractor.
      */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Log.d("AccountAdd", "[START] onCreate");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_account);
-        // initialize.
-        init();
-        setCurrentDateToInputDateArea();
-        titleArea.appear();
+    public AccountAdd(Activity activity) {
+        this.activity = activity;
+        categoryItems = new CategoryItems(activity);
+        accountTable = new AccountTableAccessImpl( new DatabaseHelper(activity.getApplicationContext()) );
+        masterTable = new AccountMasterTableAccessImpl( new DatabaseHelper(activity.getApplicationContext()) );
+    }
+
+    /**
+     * Appear the Account Add Display.
+     */
+    public void appear() {
         registEvent();
-
-        Log.d("AccountAdd", "[END] onCreate");
-    }
-
-    /**
-     * Called Activity is Destoryed.
-     */
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        titleArea = null;
-        categoryItems = null;
-        accountTable = null;
-        masterTable = null;
-    }
-
-    /**
-     * Called User can not see the Activity.
-     */
-    @Override
-    protected void onStop() {
-        super.onStop();
-        titleArea = null;
-        categoryItems = null;
-        accountTable = null;
-        masterTable = null;
-    }
-
-    /**
-     * Initialize Member-Variable.
-     */
-    protected void init() {
-        Log.d("AccountAdd", "[START] init");
-        titleArea = new TitleArea(this);
-        categoryItems = new CategoryItems(this);
-        accountTable = new AccountTableAccessImpl( new DatabaseHelper(getApplicationContext()) );
-        masterTable = new AccountMasterTableAccessImpl( new DatabaseHelper(getApplicationContext()) );
-        Log.d("AccountAdd", "[END] init");
-    }
-
-    /**
-     * Set Current Date To Input Date Area.
-     */
-    protected void setCurrentDateToInputDateArea() {
-        EditText input_date= (EditText) findViewById(R.id.input_date_value);
-        input_date.setText(Utility.getCurrentDate());
+        setCurrentDateToInputDateArea();
     }
 
     /**
      * Rejist Event
      */
     protected void registEvent() {
-        ImageButton input_date_btn = (ImageButton) findViewById(R.id.input_date_select_btn);
+        ImageButton input_date_btn = (ImageButton) activity.findViewById(R.id.input_date_select_btn);
         input_date_btn.setOnClickListener(
-            new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    appearInputDateBox();
-                }
-            });
-        ImageButton category_btn = (ImageButton) findViewById(R.id.category_select_btn);
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        appearInputDateBox();
+                    }
+                });
+        ImageButton category_btn = (ImageButton) activity.findViewById(R.id.category_select_btn);
         category_btn.setOnClickListener(
-            new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    appearCheckbox();
-                }
-            });
-        Button regist_btn = (Button) findViewById(R.id.regist_btn);
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        appearCheckbox();
+                    }
+                });
+        Button regist_btn = (Button) activity.findViewById(R.id.regist_btn);
         regist_btn.setOnClickListener(
-            new View.OnClickListener() {
-                public void onClick(View v) {
-                    addAccountRecord();
-                }
-            });
-        ImageButton money_btn = (ImageButton) findViewById(R.id.money_btn);
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+                        addAccountRecord();
+                    }
+                });
+        ImageButton money_btn = (ImageButton) activity.findViewById(R.id.money_btn);
         money_btn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -135,22 +89,30 @@ public class AccountAdd extends Activity
     }
 
     /**
+     * Set Current Date To Input Date Area.
+     */
+    protected void setCurrentDateToInputDateArea() {
+        EditText input_date= (EditText) activity.findViewById(R.id.input_date_value);
+        input_date.setText(Utility.getCurrentDate());
+    }
+
+    /**
      * Appear Input-date dialog.
      */
     protected void appearInputDateBox() {
         String current_date = Utility.getCurrentDate();
 
-        DatePickerDialog dialog = new DatePickerDialog(this,
+        DatePickerDialog dialog = new DatePickerDialog(activity,
                 new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker picker, int year, int monthOfYear, int dayOfMonth) {
-                    EditText input_date= (EditText) findViewById(R.id.input_date_value);
-                    input_date.setText(Utility.CreateDateFormat(year, monthOfYear, dayOfMonth));
-                }
-        },
-        Integer.valueOf(current_date.substring(Utility.DATE_YEAR_ST_POS, Utility.DATE_YEAR_ST_POS + Utility.DATE_YEAR_SIZE)),
-        Integer.valueOf(current_date.substring(Utility.DATE_MONTH_ST_POS, Utility.DATE_MONTH_ST_POS + Utility.DATE_MONTH_SIZE)) - 1,
-        Integer.valueOf(current_date.substring(Utility.DATE_DAY_ST_POS, Utility.DATE_DAY_ST_POS + Utility.DATE_DAY_SIZE)) );
+                    @Override
+                    public void onDateSet(DatePicker picker, int year, int monthOfYear, int dayOfMonth) {
+                        EditText input_date= (EditText) activity.findViewById(R.id.input_date_value);
+                        input_date.setText(Utility.CreateDateFormat(year, monthOfYear, dayOfMonth));
+                    }
+                },
+                Integer.valueOf(current_date.substring(Utility.DATE_YEAR_ST_POS, Utility.DATE_YEAR_ST_POS + Utility.DATE_YEAR_SIZE)),
+                Integer.valueOf(current_date.substring(Utility.DATE_MONTH_ST_POS, Utility.DATE_MONTH_ST_POS + Utility.DATE_MONTH_SIZE)) - 1,
+                Integer.valueOf(current_date.substring(Utility.DATE_DAY_ST_POS, Utility.DATE_DAY_ST_POS + Utility.DATE_DAY_SIZE)) );
 
         dialog.show();
     }
@@ -159,7 +121,7 @@ public class AccountAdd extends Activity
      * Appear Checkbox.
      */
     protected void appearCheckbox() {
-        categoryItems.createDialog(this);
+        categoryItems.createDialog(activity);
     }
 
     /**
@@ -185,10 +147,10 @@ public class AccountAdd extends Activity
      * Get Account Information from user's input information.
      */
     protected AccountTableRecord getInputUserAccountInfo()  throws NumberFormatException {
-        EditText input_date= (EditText) findViewById(R.id.input_date_value);
-        EditText edit_category= (EditText) findViewById(R.id.category_value);
-        EditText edit_money = (EditText) findViewById(R.id.money_value);
-        EditText edit_memo = (EditText) findViewById(R.id.memo_value);
+        EditText input_date= (EditText) activity.findViewById(R.id.input_date_value);
+        EditText edit_category= (EditText) activity.findViewById(R.id.category_value);
+        EditText edit_money = (EditText)activity. findViewById(R.id.money_value);
+        EditText edit_memo = (EditText) activity.findViewById(R.id.memo_value);
 
         AccountMasterTableRecord master_record = masterTable.getRecordMatchName( edit_category.getText().toString() );
 
@@ -233,23 +195,23 @@ public class AccountAdd extends Activity
         AccountMasterTableRecord master_record = masterTable.getRecord(key);
 
         masterTable.update(master_record);
-   }
+    }
 
     /**
      * Display Complete Add Accont Message.
      */
     protected void displayAddCompleteMessage() {
-        String message = getText(R.string.regist_msg).toString();
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        String message = activity.getText(R.string.regist_msg).toString();
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
     }
 
     /**
-      * Display Alert Message.
-      */
+     * Display Alert Message.
+     */
     protected void displayInputDataAlertMessage() {
-        String message = getText(R.string.regist_alert_msg).toString();
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-     }
+        String message = activity.getText(R.string.regist_alert_msg).toString();
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+    }
 
     /**
      * Appear Calculator.
@@ -287,7 +249,7 @@ public class AccountAdd extends Activity
                  new DialogInterface.OnClickListener() {
                      @Override
                      public void onClick(DialogInterface dialog, int item) {
-                         EditText category = (EditText) findViewById(R.id.category_value);
+                         EditText category = (EditText) activity.findViewById(R.id.category_value);
                          category.setText(checkItems[item]);
                      }
                  });
@@ -307,3 +269,5 @@ public class AccountAdd extends Activity
         }
     }
 }
+
+

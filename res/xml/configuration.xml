@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/configuration_title">
+        <CheckBoxPreference
+            android:key="estimate_configuration"
+            android:title="@string/estimate_configuration_title"
+            android:summary=""
+            android:defaultValue="true"
+            />
+        <EditTextPreference
+            android:key="target_user_configuration"
+            android:title="@string/target_user_configuration_title"
+            android:summary=""
+            android:defaultValue="default"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>
+

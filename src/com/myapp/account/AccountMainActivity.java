@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import com.myapp.account.titlearea.TitleArea;
@@ -13,11 +15,12 @@ import com.myapp.account.utility.Utility;
 import com.myapp.account.estimate.Estimate;
 import com.myapp.account.tabcontent.TabContent;
 import com.myapp.account.summary.Summary;
+import com.myapp.account.config.AppConfigurationActivity;
 
 /**
  * Main Class in AccountApp Application.
  */
-public class AccountMain extends Activity {
+public class AccountMainActivity extends Activity {
 
     protected TitleArea titleArea;
     protected Estimate estimateInfo;
@@ -84,6 +87,44 @@ public class AccountMain extends Activity {
     }
 
     /**
+     * Called First Create Option menu.
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.app_menu,menu);
+        return true;
+    }
+
+    /**
+      * Called Option Menu Seelcted.
+      */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean result = true;
+
+        switch(item.getItemId()) {
+            case R.id.menu_config:
+                moveToConfig();
+                break;
+            case R.id.menu_account_data_edit:
+                break;
+            default:
+                result = false;
+                break;
+        }
+        return result;
+    }
+
+    /**
+      * Move To Config Activity.
+      */
+    protected void moveToConfig() {
+        Intent intent = new Intent( AccountMainActivity.this, AppConfigurationActivity.class);
+        startActivity(intent);
+    }
+
+    /**
      * Called User can not see the Activity.
      */
     @Override
@@ -113,7 +154,7 @@ public class AccountMain extends Activity {
      * Move to AccountAdd Activity.
      */
     protected void moveToAccountRegist() {
-        Intent intent = new Intent( AccountMain.this, AccountAdd.class);
+        Intent intent = new Intent( AccountMainActivity.this, AccountAddActivity.class);
         startActivity(intent);
     }
 }
