@@ -60,5 +60,19 @@ public class EstimateTableAccessImpl {
         // insert record.
         return writeDatabase.insert(TABLE_NAME, null, insert_record);
     }
+
+    /**
+     * Update Record in EstimateTAble.
+     * @param record EstimateTableRecord Instance.
+     */
+    public int update(EstimateTableRecord record) {
+        ContentValues update_record = new ContentValues();
+        update_record.put("money", record.getEstimateMoney());
+        update_record.put("target_date", record.getTargetDate());
+        update_record.put("update_date", record.getUpdateDate());
+        update_record.put("insert_date", record.getInsertDate());
+
+        return writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
+    }
 }
 
