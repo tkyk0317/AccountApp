@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.Menu;
 import com.myapp.account.R;
+import com.myapp.account.AppConfigurationActivity;
 
 /**
  * Application Menu Class.

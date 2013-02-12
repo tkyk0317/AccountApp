@@ -1,4 +1,4 @@
-package com.myapp.account.config;
+package com.myapp.account;
 
 import java.util.*;
 import java.lang.NumberFormatException;
