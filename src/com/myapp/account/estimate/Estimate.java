@@ -31,7 +31,7 @@ public class Estimate {
     protected static final int ESTIMATE_MONEY_DIGITS = 9;
     protected static final int TABLE_FIRST_INDEX = 0;
     protected static final int TABLE_SECOND_INDEX = 1;
-    protected static final int TEXT_FONT_SIZE = 20;
+    protected static final int TEXT_FONT_SIZE = 15;
 
     /**
      * Constractor.
@@ -86,15 +86,19 @@ public class Estimate {
      * Display Estimate Message.
      */
     protected void displayEstimateMessage() {
-        displayEstimateMoney();
-        displayRestEstimateMoney();
+        TableRow table_row = new TableRow(activity);
+        insertEstimateMoneyIntoTableRow(table_row);
+        insertRestEstimateMoneyIntoTableRow(table_row);
+
+        // Create Table.
+        TableLayout summry_table = (TableLayout) activity.findViewById(R.id.summry_table);
+        summry_table.addView(table_row);
     }
 
     /**
-     * Display Estimate Money.
+     * Insert Estimate Money.
      */
-    protected void displayEstimateMoney() {
-        TableLayout summry_table = (TableLayout) activity.findViewById(R.id.summry_table);
+    protected void insertEstimateMoneyIntoTableRow(TableRow table_row) {
         TextView estimate_label = new TextView(activity);
         TextView estimate_value = new TextView(activity);
 
@@ -107,17 +111,14 @@ public class Estimate {
         estimate_label.setGravity(Gravity.RIGHT);
         estimate_value.setGravity(Gravity.RIGHT);
 
-        TableRow row = new TableRow(activity);
-        row.addView(estimate_label);
-        row.addView(estimate_value);
-        summry_table.addView(row, TABLE_FIRST_INDEX);
+        table_row.addView(estimate_label);
+        table_row.addView(estimate_value);
     }
 
     /**
-     * Display Rest Estimate Money.
+     * Insert Rest Estimate Money.
      */
-    protected void displayRestEstimateMoney() {
-        TableLayout summry_table = (TableLayout) activity.findViewById(R.id.summry_table);
+    protected void insertRestEstimateMoneyIntoTableRow(TableRow table_row) {
         TextView estimate_rest_label = new TextView(activity);
         TextView estimate_rest_value = new TextView(activity);
 
@@ -140,10 +141,8 @@ public class Estimate {
         estimate_rest_label.setGravity(Gravity.RIGHT);
         estimate_rest_value.setGravity(Gravity.RIGHT);
 
-        TableRow row = new TableRow(activity);
-        row.addView(estimate_rest_label);
-        row.addView(estimate_rest_value);
-        summry_table.addView(row, TABLE_SECOND_INDEX);
+        table_row.addView(estimate_rest_label);
+        table_row.addView(estimate_rest_value);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.myapp.account.tabcontent;
 
 import android.app.Activity;
+import android.util.Log;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
@@ -32,10 +33,12 @@ public class TabContent {
      * Appear the TabContent.
      */
     public void appear() {
+        Log.d("TabContent", "[START]");
         displayTabContent();
         changeTabHeight();
         infoDailyArea.appear();
         infoMonthArea.appear();
+        Log.d("TabContent", "[END]");
      }
 
     /**
