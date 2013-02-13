@@ -16,6 +16,7 @@ import com.myapp.account.estimate.Estimate;
 import com.myapp.account.tabcontent.TabContent;
 import com.myapp.account.summary.Summary;
 import com.myapp.account.config.ApplicationMenu;
+import com.myapp.account.calendar.AccountCalendar;
 
 /**
  * Main Class in AccountApp Application.
@@ -27,6 +28,7 @@ public class AccountMainActivity extends Activity {
     protected Summary summary;
     protected TabContent tabContent;
     protected ApplicationMenu applicationMenu;
+    protected AccountCalendar accountCalendar;
 
     /**
      * Create Activity.
@@ -65,6 +67,7 @@ public class AccountMainActivity extends Activity {
         tabContent = new TabContent(this);
         summary = new Summary(this);
         applicationMenu = new ApplicationMenu(this);
+        accountCalendar = new AccountCalendar(this);
     }
 
     /**
@@ -74,6 +77,7 @@ public class AccountMainActivity extends Activity {
         summary.appear();
         titleArea.appear();
         tabContent.appear();
+        accountCalendar.appear();
    }
 
     /**
