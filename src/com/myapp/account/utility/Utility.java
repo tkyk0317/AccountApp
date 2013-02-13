@@ -88,12 +88,21 @@ public class Utility {
     }
 
     /**
-     * Split Current Month and Day.
-     * @param String Data that Current Date (format is yyyy/MM/dd).
-     * @return String Date that Current Month and Day (format is MM/dd).
+     * Split Target Date into Month and Day.
+     * @param String Data that Target Date (format is yyyy/MM/dd).
+     * @return String Date that Month and Day (format is MM/dd).
      */
-    public static String splitCurrentMonthAndDay(String current_date) {
-        return current_date.substring(DATE_MONTH_ST_POS);
+    public static String splitMonthAndDay(String target_date) {
+        return target_date.substring(DATE_MONTH_ST_POS);
+    }
+
+    /**
+     * Split Target Date into Day.
+     * @param String Data that Target Date (format is yyyy/MM/dd).
+     * @return String Date that Day (format is dd).
+     */
+    public static String splitDay(String target_date) {
+        return target_date.substring(DATE_DAY_ST_POS);
     }
 
     /**
@@ -103,4 +112,38 @@ public class Utility {
     public static String getCurrentYearAndMonth() {
         return getCurrentDate().substring(DATE_YEAR_ST_POS, DATE_MONTH_END_SLASH_POS);
      }
+
+    /**
+     * Get Current Day.
+     * @return String Current Day.
+     */
+    public static String getCurrentDay() {
+        return getCurrentDate().substring(DATE_DAY_ST_POS);
+    }
+
+    /**
+     * Get Current Day Of Week.
+     * @return int Current Day of Week.
+     */
+    public static int getCurrentDayOfWeek() {
+        return Calendar.getInstance(TimeZone.getDefault()).get(Calendar.DAY_OF_WEEK);
+    }
+
+    /**
+     * Get Day of Week.
+     * @param target date(yyyy/mm/dd).
+     * @return int day of week value(Sunday is One).
+     */
+    public static int getDayOfWeek(String target_date) {
+        int year = Integer.valueOf(target_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
+        int month = Integer.valueOf(target_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
+        int day = Integer.valueOf(target_date.substring(DATE_DAY_ST_POS, DATE_DAY_ST_POS + DATE_DAY_SIZE));
+
+        Calendar target_cal = Calendar.getInstance(TimeZone.getDefault());
+
+        // setting target date.
+        target_cal.set(year, month, day);
+
+        return target_cal.get(Calendar.DAY_OF_WEEK);
+    }
 }
