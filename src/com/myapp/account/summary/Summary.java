@@ -16,7 +16,7 @@ public class Summary {
 
     protected Activity activity;
     protected AccountTableAccessor accountTable;
-    protected static final int TEXT_FONT_SIZE = 20;
+    protected static final int TEXT_FONT_SIZE = 15;
 
     /**
      * Constractor.
@@ -31,15 +31,19 @@ public class Summary {
       * Appear the Summary.
       */
     public void appear() {
-        displayTotalIncome();
-        displayTotalPayment();
+        TableRow table_row = new TableRow(activity.getApplicationContext());
+        insertIncomeIntoTableRow(table_row);
+        insertPaymentIntoTableRow(table_row);
+
+        // Create Table.
+        TableLayout summry_table = (TableLayout) activity.findViewById(R.id.summry_table);
+        summry_table.addView(table_row);
     }
 
      /**
-     * Display Income Total.
+     * Insert Income TableRow.
      */
-    protected void displayTotalIncome() {
-        TableLayout summry_table = (TableLayout) activity.findViewById(R.id.summry_table);
+    protected void insertIncomeIntoTableRow(TableRow table_row) {
         TextView income_label = new TextView(activity.getApplicationContext());
         TextView income_value = new TextView(activity.getApplicationContext());
 
@@ -52,17 +56,15 @@ public class Summary {
         income_label.setGravity(Gravity.RIGHT);
         income_value.setGravity(Gravity.RIGHT);
 
-        TableRow row = new TableRow(activity.getApplicationContext());
-        row.addView(income_label);
-        row.addView(income_value);
-        summry_table.addView(row);
+        // insert table row.
+        table_row.addView(income_label);
+        table_row.addView(income_value);
     }
 
     /**
-     * Display Payment Total Money.
+     * Insert Payment into TableRow.
      */
-    protected void displayTotalPayment() {
-        TableLayout summry_table = (TableLayout) activity.findViewById(R.id.summry_table);
+    protected void insertPaymentIntoTableRow(TableRow table_row) {
         TextView payment_label = new TextView(activity.getApplicationContext());
         TextView payment_value = new TextView(activity.getApplicationContext());
 
@@ -75,10 +77,8 @@ public class Summary {
         payment_label.setGravity(Gravity.RIGHT);
         payment_value.setGravity(Gravity.RIGHT);
 
-        TableRow row = new TableRow(activity.getApplicationContext());
-        row.addView(payment_label);
-        row.addView(payment_value);
-        summry_table.addView(row);
+        table_row.addView(payment_label);
+        table_row.addView(payment_value);
     }
 }
 
