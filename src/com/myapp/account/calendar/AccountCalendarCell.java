@@ -5,13 +5,14 @@ import android.widget.TextView;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import com.myapp.account.ObserverInterface;
+import android.view.View.OnLongClickListener;
+import com.myapp.account.ClickObserverInterface;
 import com.myapp.account.utility.Utility;
 
 /**
  * Account Calendar Cell Class.
  */
-public class AccountCalendarCell implements OnClickListener {
+public class AccountCalendarCell implements OnClickListener, OnLongClickListener {
 
     protected TextView textView;
     protected int year;
@@ -19,7 +20,7 @@ public class AccountCalendarCell implements OnClickListener {
     protected int day;
     protected int dayOfWeek;
     protected String date;
-    protected ObserverInterface observer;
+    protected ClickObserverInterface observer;
 
     /**
      * Constractor.
@@ -27,13 +28,14 @@ public class AccountCalendarCell implements OnClickListener {
     public AccountCalendarCell(TextView view) {
         this.textView = view;
         this.textView.setOnClickListener(this);
+        this.textView.setOnLongClickListener(this);
     }
 
     /**
      * Set Observer Instance.
      * @param observer Observer Instance.
      */
-    public void attachObserver(ObserverInterface observer) {
+    public void attachObserver(ClickObserverInterface observer) {
         this.observer = observer;
     }
 
@@ -74,7 +76,17 @@ public class AccountCalendarCell implements OnClickListener {
      */
     @Override
     public void onClick(View event) {
-        if( null != this.observer ) this.observer.notify(this);
+        if( null != this.observer ) this.observer.notifyClick(this);
+    }
+
+    /**
+      * Long Click Listener.
+      * @param event View instance.
+      */
+    @Override
+    public boolean onLongClick(View event) {
+        if( null != this.observer ) this.observer.notifyLongClick(this);
+        return true;
     }
 
     // Getter.

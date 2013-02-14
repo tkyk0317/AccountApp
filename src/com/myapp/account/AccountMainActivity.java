@@ -18,12 +18,13 @@ import com.myapp.account.summary.Summary;
 import com.myapp.account.config.ApplicationMenu;
 import com.myapp.account.calendar.AccountCalendar;
 import com.myapp.account.calendar.AccountCalendarCell;
-import com.myapp.account.ObserverInterface;
+import com.myapp.account.ClickObserverInterface;
+import com.myapp.account.add_account_data.AccountAdd;
 
 /**
  * Main Class in AccountApp Application.
  */
-public class AccountMainActivity extends Activity implements ObserverInterface {
+public class AccountMainActivity extends Activity implements ClickObserverInterface {
 
     protected TitleArea titleArea;
     protected Estimate estimateInfo;
@@ -51,7 +52,6 @@ public class AccountMainActivity extends Activity implements ObserverInterface {
 
         // initialize.
         init();
-        registEvent();
 
         // appear estimate infomation.
         estimateInfo.appear();
@@ -130,36 +130,26 @@ public class AccountMainActivity extends Activity implements ObserverInterface {
     }
 
     /**
-     * Rejist Event
-     */
-    protected void registEvent () {
-        ImageButton btn = (ImageButton) findViewById(R.id.add_btn);
-        btn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        moveToAccountRegist();
-                    }
-                });
-    }
-
-    /**
-     * Move to AccountAdd Activity.
-     */
-    protected void moveToAccountRegist() {
-        Intent intent = new Intent( AccountMainActivity.this, AccountAddActivity.class);
-        startActivity(intent);
-    }
-
-    /**
      * Notify from Subject(AccountCalendar).
      * @param event AccountCalendarCell Instance.
      */
-    public void notify(Object event) {
+    public void notifyClick(Object event) {
         AccountCalendarCell cell = (AccountCalendarCell)event;
 
         titleArea.appear(cell.getDate());
         tabContent.appear(cell.getDate());
+    }
+
+    /**
+     * Notify Long Click from Subject(AccountCalendar).
+     * @param event AccountCalendarCell Instance.
+     */
+    public void notifyLongClick(Object event) {
+        AccountCalendarCell cell = (AccountCalendarCell)event;
+
+        // AccountAdd Displayed.
+        AccountAdd account_add = new AccountAdd(this);
+        account_add.appear(cell.getDate());
     }
 }
 

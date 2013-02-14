@@ -13,16 +13,16 @@ import android.view.View;
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.calendar.AccountCalendarCell;
-import com.myapp.account.ObserverInterface;
+import com.myapp.account.ClickObserverInterface;
 
 /**
  * Account Calendar Class.
  */
-public class AccountCalendar implements ObserverInterface {
+public class AccountCalendar implements ClickObserverInterface {
 
     protected Activity activity;
     protected List<AccountCalendarCell> calendarCells = new ArrayList<AccountCalendarCell>(CALENDAR_DAY_OF_WEEK_NUM*CALENDAR_ROW_NUM);
-    protected ObserverInterface observer;
+    protected ClickObserverInterface observer;
     protected AccountCalendarCell currentCell;
     protected static final int CALENDAR_DAY_OF_WEEK_NUM = 7;
     protected static final int CALENDAR_ROW_NUM = 6;
@@ -89,7 +89,7 @@ public class AccountCalendar implements ObserverInterface {
       * Attach Observer.
       * @param observer ObserverInterface Instance.
       */
-    public void attachObserver(ObserverInterface observer) {
+    public void attachObserver(ClickObserverInterface observer) {
         this.observer = observer;
     }
 
@@ -163,7 +163,7 @@ public class AccountCalendar implements ObserverInterface {
      * Click Event from AccountCalendarCell Instance.
      * @param event Account Calendar Cell Instance.
      */
-    public void notify(Object event) {
+    public void notifyClick(Object event) {
         // previous cell setting.
         Resources resources = activity.getResources();
         currentCell.setBackgroundColor(resources.getColor(R.color.cal_default_background));
@@ -173,7 +173,15 @@ public class AccountCalendar implements ObserverInterface {
         currentCell.setBackgroundColor(resources.getColor(R.color.cal_focus_background));
 
         // notify observer.
-        if( null != this.observer ) this.observer.notify(event);
+        if( null != this.observer ) this.observer.notifyClick(event);
+    }
+
+    /**
+     * Long Click Event from AccountCalendarCell Instance.
+     * @param event Account Calendar Cell Instance.
+     */
+    public void notifyLongClick(Object event) {
+        if( null != this.observer ) this.observer.notifyLongClick(event);
     }
 }
 

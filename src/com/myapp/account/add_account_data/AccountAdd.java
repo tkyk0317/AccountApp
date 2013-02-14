@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.view.ViewGroup;
+import android.view.LayoutInflater;
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
@@ -32,6 +34,7 @@ public class AccountAdd {
     protected CategoryItems categoryItems;
     protected AccountTableAccessor accountTable;
     protected AccountMasterTableAccessor masterTable;
+    protected View layout;
 
     /**
      * Constractor.
@@ -46,24 +49,21 @@ public class AccountAdd {
     /**
      * Appear the Account Add Display.
      */
-    public void appear() {
+    public void appear(String date) {
+        LayoutInflater inflater = LayoutInflater.from(this.activity);
+        layout = inflater.inflate(R.layout.add_account, (ViewGroup)activity.findViewById(R.id.account_add));
+        AlertDialog.Builder dialog = new AlertDialog.Builder(activity).setView(layout);
+        dialog.show();
+
         registEvent();
-        setCurrentDateToInputDateArea();
+        setCurrentDateToInputDateArea(date);
     }
 
     /**
      * Rejist Event
      */
     protected void registEvent() {
-        ImageButton input_date_btn = (ImageButton) activity.findViewById(R.id.input_date_select_btn);
-        input_date_btn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        appearInputDateBox();
-                    }
-                });
-        ImageButton category_btn = (ImageButton) activity.findViewById(R.id.category_select_btn);
+        ImageButton category_btn = (ImageButton)layout.findViewById(R.id.category_select_btn);
         category_btn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -71,14 +71,14 @@ public class AccountAdd {
                         appearCheckbox();
                     }
                 });
-        Button regist_btn = (Button) activity.findViewById(R.id.regist_btn);
+        Button regist_btn = (Button)layout.findViewById(R.id.regist_btn);
         regist_btn.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
                         addAccountRecord();
                     }
                 });
-        ImageButton money_btn = (ImageButton) activity.findViewById(R.id.money_btn);
+        ImageButton money_btn = (ImageButton)layout.findViewById(R.id.money_btn);
         money_btn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -91,30 +91,9 @@ public class AccountAdd {
     /**
      * Set Current Date To Input Date Area.
      */
-    protected void setCurrentDateToInputDateArea() {
-        EditText input_date= (EditText) activity.findViewById(R.id.input_date_value);
-        input_date.setText(Utility.getCurrentDate());
-    }
-
-    /**
-     * Appear Input-date dialog.
-     */
-    protected void appearInputDateBox() {
-        String current_date = Utility.getCurrentDate();
-
-        DatePickerDialog dialog = new DatePickerDialog(activity,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker picker, int year, int monthOfYear, int dayOfMonth) {
-                        EditText input_date= (EditText) activity.findViewById(R.id.input_date_value);
-                        input_date.setText(Utility.CreateDateFormat(year, monthOfYear, dayOfMonth));
-                    }
-                },
-                Integer.valueOf(current_date.substring(Utility.DATE_YEAR_ST_POS, Utility.DATE_YEAR_ST_POS + Utility.DATE_YEAR_SIZE)),
-                Integer.valueOf(current_date.substring(Utility.DATE_MONTH_ST_POS, Utility.DATE_MONTH_ST_POS + Utility.DATE_MONTH_SIZE)) - 1,
-                Integer.valueOf(current_date.substring(Utility.DATE_DAY_ST_POS, Utility.DATE_DAY_ST_POS + Utility.DATE_DAY_SIZE)) );
-
-        dialog.show();
+    protected void setCurrentDateToInputDateArea(String date) {
+        EditText input_date= (EditText)layout.findViewById(R.id.input_date_value);
+        input_date.setText(date);
     }
 
     /**
@@ -147,10 +126,10 @@ public class AccountAdd {
      * Get Account Information from user's input information.
      */
     protected AccountTableRecord getInputUserAccountInfo()  throws NumberFormatException {
-        EditText input_date= (EditText) activity.findViewById(R.id.input_date_value);
-        EditText edit_category= (EditText) activity.findViewById(R.id.category_value);
-        EditText edit_money = (EditText)activity. findViewById(R.id.money_value);
-        EditText edit_memo = (EditText) activity.findViewById(R.id.memo_value);
+        EditText input_date= (EditText)layout.findViewById(R.id.input_date_value);
+        EditText edit_category= (EditText)layout.findViewById(R.id.category_value);
+        EditText edit_money = (EditText)layout. findViewById(R.id.money_value);
+        EditText edit_memo = (EditText)layout.findViewById(R.id.memo_value);
 
         AccountMasterTableRecord master_record = masterTable.getRecordMatchName( edit_category.getText().toString() );
 
@@ -249,7 +228,7 @@ public class AccountAdd {
                  new DialogInterface.OnClickListener() {
                      @Override
                      public void onClick(DialogInterface dialog, int item) {
-                         EditText category = (EditText) activity.findViewById(R.id.category_value);
+                         EditText category = (EditText)layout.findViewById(R.id.category_value);
                          category.setText(checkItems[item]);
                      }
                  });
