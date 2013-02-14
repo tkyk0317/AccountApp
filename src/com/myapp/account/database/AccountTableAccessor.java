@@ -66,14 +66,14 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Get Record With Current Date Group by CategoryId.
+     * Get Record With Target Date Group by CategoryId.
+     * @param Target Insert Date.
      * @return AccountTableRecord List at Current Date.
      */
-    public List<AccountTableRecord> getRecordWithCurrentDateGroupByCategoryId()
+    public List<AccountTableRecord> getRecordWithTargetDateGroupByCategoryId(String target_date)
     {
-        String current_date = Utility.getCurrentDate();
         Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
-                                           "insert_date=?" , new String[]{current_date}, "category_id", null, "category_id", null);
+                                           "insert_date=?" , new String[]{target_date}, "category_id", null, "category_id", null);
 
         cursor.moveToFirst();
         int record_count = cursor.getCount();

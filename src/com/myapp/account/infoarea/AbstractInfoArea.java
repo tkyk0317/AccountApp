@@ -23,6 +23,7 @@ public abstract class AbstractInfoArea {
     protected Activity activity;
     protected AccountTableAccessor accountTable;
     protected AccountMasterTableAccessor masterTable;
+    protected String displayDate;
     protected static int TEXT_SIZE = 15;
 
     /**
@@ -38,11 +39,16 @@ public abstract class AbstractInfoArea {
     /**
      * Appear the Daily Infomation Area.
      */
-    public void appear() {
+    public void appear(String display_date) {
         Log.d("AbstractInfoArea", "[START]");
+        this.displayDate = display_date;
+
         // get info from database.
         List<AccountTableRecord> account_record = getAccountRecord();
         TableLayout item_table = getTableLayout();
+
+        // remove child item.
+        item_table.removeAllViews();
 
         // item loop.
         for( int i = 0 ; i < account_record.size() ; i++ ) {

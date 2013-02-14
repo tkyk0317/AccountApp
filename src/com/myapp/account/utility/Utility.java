@@ -36,8 +36,7 @@ public class Utility {
      */
     public static String CreateDateFormat(int year, int month, int day) {
         Calendar cal_date = Calendar.getInstance(TimeZone.getDefault());
-        cal_date.set(year, month, day);
-
+        cal_date.set(year, month - 1, day);
         return (new SimpleDateFormat(DATE_FORMAT)).format(cal_date.getTime());
     }
 
@@ -112,6 +111,22 @@ public class Utility {
     public static String getCurrentYearAndMonth() {
         return getCurrentDate().substring(DATE_YEAR_ST_POS, DATE_MONTH_END_SLASH_POS);
      }
+
+    /**
+     * Get Current Year.
+     * @return Current year.
+     */
+    public static String getCurrentYear() {
+        return getCurrentDate().substring(DATE_YEAR_ST_POS, DATE_YEAR_SIZE + DATE_YEAR_ST_POS);
+    }
+
+    /**
+     * Get Current Month.
+     * @return current month.
+     */
+    public static String getCurrentMonth() {
+        return getCurrentDate().substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE);
+    }
 
     /**
      * Get Current Day.

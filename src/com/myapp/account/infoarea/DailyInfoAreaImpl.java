@@ -25,7 +25,7 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
      * @return AccounTable record List.
      */
     protected List<AccountTableRecord> getAccountRecord() {
-        return accountTable.getRecordWithCurrentDateGroupByCategoryId();
+        return accountTable.getRecordWithTargetDateGroupByCategoryId(displayDate);
     }
 
     /**

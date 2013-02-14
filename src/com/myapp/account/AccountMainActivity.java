@@ -17,11 +17,13 @@ import com.myapp.account.tabcontent.TabContent;
 import com.myapp.account.summary.Summary;
 import com.myapp.account.config.ApplicationMenu;
 import com.myapp.account.calendar.AccountCalendar;
+import com.myapp.account.calendar.AccountCalendarCell;
+import com.myapp.account.ObserverInterface;
 
 /**
  * Main Class in AccountApp Application.
  */
-public class AccountMainActivity extends Activity {
+public class AccountMainActivity extends Activity implements ObserverInterface {
 
     protected TitleArea titleArea;
     protected Estimate estimateInfo;
@@ -68,6 +70,9 @@ public class AccountMainActivity extends Activity {
         summary = new Summary(this);
         applicationMenu = new ApplicationMenu(this);
         accountCalendar = new AccountCalendar(this);
+
+        // attach observer.
+        accountCalendar.attachObserver(this);
     }
 
     /**
@@ -75,8 +80,8 @@ public class AccountMainActivity extends Activity {
      */
     public void displayMainContent() {
         summary.appear();
-        titleArea.appear();
-        tabContent.appear();
+        titleArea.appear(Utility.getCurrentDate());
+        tabContent.appear(Utility.getCurrentDate());
         accountCalendar.appear();
    }
 
@@ -144,6 +149,17 @@ public class AccountMainActivity extends Activity {
     protected void moveToAccountRegist() {
         Intent intent = new Intent( AccountMainActivity.this, AccountAddActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * Notify from Subject(AccountCalendar).
+     * @param event AccountCalendarCell Instance.
+     */
+    public void notify(Object event) {
+        AccountCalendarCell cell = (AccountCalendarCell)event;
+
+        titleArea.appear(cell.getDate());
+        tabContent.appear(cell.getDate());
     }
 }
 
