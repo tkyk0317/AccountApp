@@ -71,31 +71,36 @@
                     android:gravity="right"
                     android:textColor="@color/red"
                     android:background="@drawable/border_sunday"
+                    android:textSize="15px"
                     android:text="@string/sunday"
                     />
                 <TextView
                     android:gravity="right"
-                    android:background="@drawable/border"
+                    android:background="@drawable/border_weekday"
+                    android:textSize="15px"
                     android:text="@string/monday"
                     />
                 <TextView
                     android:gravity="right"
-                    android:background="@drawable/border"
+                    android:background="@drawable/border_weekday"
+                    android:textSize="15px"
                     android:text="@string/tuesday"
                     />
                 <TextView
                     android:gravity="right"
-                    android:background="@drawable/border"
+                    android:background="@drawable/border_weekday"
+                    android:textSize="15px"
                     android:text="@string/wednesday"
                     />
                 <TextView
                     android:gravity="right"
-                    android:background="@drawable/border"
+                    android:background="@drawable/border_weekday"
+                    android:textSize="15px"
                     android:text="@string/thursday"
                     />
                 <TextView
                     android:gravity="right"
-                    android:background="@drawable/border"
+                    android:background="@drawable/border_weekday"
                     android:text="@string/friday"
                     />
                 <TextView
