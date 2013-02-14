@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/account_add"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -9,7 +10,9 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text=""
-      android:textSize="30sp"
+      android:focusable="false"
+      android:inputType="none"
+       android:textSize="30sp"
       />
   <ImageView
       android:src="@android:drawable/divider_horizontal_dark"
@@ -44,12 +47,6 @@
         android:inputType="none"
         android:layout_width="0dip"
         android:layout_weight="2"
-        />
-    <ImageButton
-        android:id="@+id/input_date_select_btn"
-        android:layout_width="35px"
-        android:layout_height="35px"
-        android:src="@android:drawable/ic_menu_day"
         />
   </LinearLayout>
   <LinearLayout

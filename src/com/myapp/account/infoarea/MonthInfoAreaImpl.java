@@ -25,7 +25,7 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
      * @return AccounTable record List.
      */
     protected List<AccountTableRecord> getAccountRecord() {
-        return accountTable.getRecordWithCurrentMonthGroupByCategoryId();
+        return accountTable.getRecordWithTargetMonthGroupByCategoryId(displayDate);
     }
 
     /**

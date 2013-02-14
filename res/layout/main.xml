@@ -21,12 +21,6 @@
             android:layout_weight="1"
             android:textSize="20px"
             />
-        <ImageButton
-            android:id="@+id/add_btn"
-            android:layout_width="25px"
-            android:layout_height="25px"
-            android:src="@android:drawable/ic_menu_add"
-            />
     </LinearLayout>
     <ImageView
         android:src="@android:drawable/divider_horizontal_dark"

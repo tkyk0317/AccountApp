@@ -68,7 +68,7 @@ public class AccountTableAccessor {
     /**
      * Get Record With Target Date Group by CategoryId.
      * @param Target Insert Date.
-     * @return AccountTableRecord List at Current Date.
+     * @return AccountTableRecord List at Target Date.
      */
     public List<AccountTableRecord> getRecordWithTargetDateGroupByCategoryId(String target_date)
     {
@@ -89,11 +89,13 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Get Record With Current Month Group by CategoryId.
+     * Get Record With Target Month Group by CategoryId.
+     * @param Target Insert Date.
+     * @return AccountTableRecord List at Target Month.
      */
-    public List<AccountTableRecord> getRecordWithCurrentMonthGroupByCategoryId() {
-        String last_date_of_month = Utility.getLastDateOfCurrentMonth();
-        String first_date_of_month = Utility.getFirstDateOfCurrentMonth();
+    public List<AccountTableRecord> getRecordWithTargetMonthGroupByCategoryId(String target_date) {
+        String last_date_of_month = Utility.getLastDateOfTargetMonth(target_date);
+        String first_date_of_month = Utility.getFirstDateOfTargetMonth(target_date);
 
         Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
                                            "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id", null, "insert_date", null);
