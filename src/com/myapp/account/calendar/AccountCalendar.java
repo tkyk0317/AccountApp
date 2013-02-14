@@ -164,6 +164,9 @@ public class AccountCalendar implements ClickObserverInterface {
      * @param event Account Calendar Cell Instance.
      */
     public void notifyClick(Object event) {
+        AccountCalendarCell cell = (AccountCalendarCell)event;
+        if( true == Utility.isStringNULL(cell.getDate()) ) return;
+
         // previous cell setting.
         Resources resources = activity.getResources();
         currentCell.setBackgroundColor(resources.getColor(R.color.cal_default_background));
@@ -181,6 +184,9 @@ public class AccountCalendar implements ClickObserverInterface {
      * @param event Account Calendar Cell Instance.
      */
     public void notifyLongClick(Object event) {
+        AccountCalendarCell cell = (AccountCalendarCell)event;
+        if( true == Utility.isStringNULL(cell.getDate()) ) return;
+
         if( null != this.observer ) this.observer.notifyLongClick(event);
     }
 }
