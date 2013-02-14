@@ -1,7 +1,6 @@
 package com.myapp.account.titlearea;
 
 import java.util.*;
-import java.text.*;
 import android.app.Activity;
 import android.widget.TextView;
 import android.content.Context;
@@ -25,17 +24,10 @@ public class TitleArea
 
     /**
      * Appear the Title Area.
+     * @param current_date current_date String(yyyy/MM/dd).
      */
-    public void appear() {
-        appearCurrentDate();
-    }
-
-    /**
-     * Appear Current Date.
-     */
-    protected void appearCurrentDate() {
+    public void appear(String current_date) {
         TextView date_title = (TextView) activity.findViewById(R.id.date_title);
-        String current_date = (new SimpleDateFormat(DATE_FORMAT)).format(new Date());
         date_title.setText(current_date);
     }
 }

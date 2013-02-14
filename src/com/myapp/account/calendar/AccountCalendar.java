@@ -2,22 +2,28 @@ package com.myapp.account.calendar;
 
 import java.util.*;
 import java.text.*;
+import android.util.Log;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.view.Gravity;
 import android.graphics.Color;
+import android.view.View;
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
+import com.myapp.account.calendar.AccountCalendarCell;
+import com.myapp.account.ObserverInterface;
 
 /**
  * Account Calendar Class.
  */
-public class AccountCalendar {
+public class AccountCalendar implements ObserverInterface {
 
     protected Activity activity;
-    protected List<TextView> calendarCells = new ArrayList<TextView>(CALENDAR_DAY_OF_WEEK_NUM*CALENDAR_ROW_NUM);
+    protected List<AccountCalendarCell> calendarCells = new ArrayList<AccountCalendarCell>(CALENDAR_DAY_OF_WEEK_NUM*CALENDAR_ROW_NUM);
+    protected ObserverInterface observer;
+    protected AccountCalendarCell currentCell;
     protected static final int CALENDAR_DAY_OF_WEEK_NUM = 7;
     protected static final int CALENDAR_ROW_NUM = 6;
     protected static final int WEEK_OF_SATURDAY = 5;
@@ -29,110 +35,108 @@ public class AccountCalendar {
     public AccountCalendar(Activity activity) {
         this.activity = activity;
         getTableItemFromXml();
-        markSaturdayAndSunday();
     }
 
     /**
      * Get Table Item.
      */
     protected void getTableItemFromXml() {
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_0) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_1) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_2) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_3) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_4) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_5) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_6) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_7) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_8) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_9) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_10) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_11) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_12) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_13) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_14) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_15) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_16) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_17) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_18) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_19) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_20) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_21) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_22) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_23) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_24) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_25) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_26) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_27) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_28) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_29) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_30) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_31) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_32) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_33) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_34) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_35) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_36) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_37) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_38) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_39) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_40) );
-        calendarCells.add( (TextView) activity.findViewById(R.id.calendar_cell_41) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_0)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_1)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_2)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_3)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_4)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_5)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_6)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_7)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_8)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_9)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_10)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_11)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_12)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_13)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_14)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_15)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_16)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_17)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_18)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_19)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_20)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_21)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_22)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_23)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_24)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_25)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_26)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_27)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_28)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_29)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_30)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_31)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_32)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_33)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_34)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_35)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_36)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_37)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_38)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_39)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_40)) );
+        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_41)) );
     }
 
     /**
-     * Mark Saturday and Sanday.
-     */
-    protected void markSaturdayAndSunday() {
-        for( int i = 0 ; i < CALENDAR_DAY_OF_WEEK_NUM * CALENDAR_ROW_NUM ; ++i ) {
-            // Color for Saturday and Sunday.
-            if( isSaturday(i) ) calendarCells.get(i).setTextColor(Color.BLUE);
-            if( isSunday(i) ) calendarCells.get(i).setTextColor(Color.RED);
-        }
-    }
-
-    /**
-     * Check Index is Saturday.
-     * @return true if index is saturday.
-     */
-    protected boolean isSaturday(int index) {
-        int check_index = index - WEEK_OF_SATURDAY;
-
-        if( 0 == check_index % CALENDAR_DAY_OF_WEEK_NUM ) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Check Index is Sunday.
-     * @return true if index is sunday.
-     */
-    protected boolean isSunday(int index) {
-        int check_index = index - WEEK_OF_SUNDAY;
-
-        if( 0 == check_index % CALENDAR_DAY_OF_WEEK_NUM ) {
-            return true;
-        }
-        return false;
+      * Attach Observer.
+      * @param observer ObserverInterface Instance.
+      */
+    public void attachObserver(ObserverInterface observer) {
+        this.observer = observer;
     }
 
     /**
      * Appear the Calender.
      */
     public void appear() {
-        int day_index = 1;
+        createCalendar();
+        focusCurrentDate();
+    }
+
+    /**
+      * Create Calendar.
+      */
+    protected void createCalendar() {
+        int day = 1;
+        int current_year = Integer.valueOf(Utility.getCurrentYear());
+        int current_month = Integer.valueOf(Utility.getCurrentMonth());
 
         // Create Calendar.
         for( int row = 0 ; row < CALENDAR_ROW_NUM ; ++row ) {
             for( int week = 0 ; week < CALENDAR_DAY_OF_WEEK_NUM ; ++week ) {
+                AccountCalendarCell cell = calendarCells.get(row * CALENDAR_DAY_OF_WEEK_NUM + week );
+                cell.attachObserver(this);
 
                 if( row * CALENDAR_DAY_OF_WEEK_NUM + week >= getStartPosition() &&
                     row * CALENDAR_DAY_OF_WEEK_NUM + week <= getEndPosition() ) {
-                    calendarCells.get(row * CALENDAR_DAY_OF_WEEK_NUM + week).setText(String.valueOf(day_index++));
-                    }
+                    String date = Utility.CreateDateFormat(current_year, current_month, day);
+                    int day_of_week = Utility.getDayOfWeek(date);
+
+                    // setting calendar cell.
+                    cell.setText(String.valueOf(day));
+                    cell.setDate(current_year, current_month, day++, day_of_week);
+                }
             }
         }
+    }
+
+    /**
+      * Focus Current Date.
+      */
+    protected void focusCurrentDate() {
+        currentCell = calendarCells.get(getStartPosition() + Integer.valueOf(Utility.getCurrentDay()) - 1);
+
+        // color setting.
+        Resources resources = activity.getResources();
+        currentCell.setBackgroundColor(resources.getColor(R.color.cal_focus_background));
     }
 
     /**
@@ -140,6 +144,7 @@ public class AccountCalendar {
      * @return int Calendar Start Position.
      */
     protected int getStartPosition() {
+        // calednar start if index zero(day of week start is index one).
         return Utility.getDayOfWeek(Utility.getFirstDateOfCurrentMonth()) - 1;
     }
 
@@ -148,10 +153,27 @@ public class AccountCalendar {
      * @return int Calendar End Position.
      */
     protected int getEndPosition() {
-        int cal_st_pos = Utility.getDayOfWeek(Utility.getFirstDateOfCurrentMonth()) - 1;
+        int cal_st_pos = getStartPosition();
         int end_current_month = Integer.valueOf(Utility.splitDay(Utility.getLastDateOfCurrentMonth()));
 
-        return cal_st_pos + end_current_month;
+        return cal_st_pos + end_current_month - 1;
+    }
+
+    /**
+     * Click Event from AccountCalendarCell Instance.
+     * @param event Account Calendar Cell Instance.
+     */
+    public void notify(Object event) {
+        // previous cell setting.
+        Resources resources = activity.getResources();
+        currentCell.setBackgroundColor(resources.getColor(R.color.cal_default_background));
+
+        // current cell setteing.
+        currentCell = (AccountCalendarCell)event;
+        currentCell.setBackgroundColor(resources.getColor(R.color.cal_focus_background));
+
+        // notify observer.
+        if( null != this.observer ) this.observer.notify(event);
     }
 }
 
