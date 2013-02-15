@@ -1,4 +1,4 @@
-package com.myapp.account;
+package com.myapp.account.observer;
 
 /**
  * ClickObserver Interface.
@@ -14,5 +14,10 @@ public interface ClickObserverInterface {
      * Notify Long Click.
      */
     public void notifyLongClick(Object event);
+
+    /**
+     * Notify Long Click for DailyInfo.
+     */
+    public void notifyLongClickForDailyInfo(Object event);
 }
 

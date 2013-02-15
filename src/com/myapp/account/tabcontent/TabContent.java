@@ -9,6 +9,7 @@ import com.myapp.account.R;
 import com.myapp.account.infoarea.AbstractInfoArea;
 import com.myapp.account.infoarea.DailyInfoAreaImpl;
 import com.myapp.account.infoarea.MonthInfoAreaImpl;
+import com.myapp.account.observer.ClickObserverInterface;
 
 /**
  * TabContent Class.
@@ -35,17 +36,6 @@ public class TabContent {
      }
 
     /**
-     * Appear the TabContent.
-     */
-    public void appear(String display_date) {
-        Log.d("TabContent", "[START]");
-        changeTabHeight();
-        infoDailyArea.appear(display_date);
-        infoMonthArea.appear(display_date);
-        Log.d("TabContent", "[END]");
-     }
-
-    /**
      * Create Tab Content.
      */
     protected void createTabContent() {
@@ -67,6 +57,25 @@ public class TabContent {
             }
         });
     }
+
+    /**
+     * Attach Observer for Daily Info.
+     * @param observer Observer Instance.
+     */
+    public void attachObserverForDailyInfo(ClickObserverInterface observer) {
+        infoDailyArea.attachObserver(observer);
+    }
+
+    /**
+     * Appear the TabContent.
+     */
+    public void appear(String display_date) {
+        Log.d("TabContent", "[START]");
+        changeTabHeight();
+        infoDailyArea.appear(display_date);
+        infoMonthArea.appear(display_date);
+        Log.d("TabContent", "[END]");
+     }
 
    /**
     * Create Daily Tab.

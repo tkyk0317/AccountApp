@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import com.myapp.account.ClickObserverInterface;
+import com.myapp.account.observer.ClickObserverInterface;
 import com.myapp.account.utility.Utility;
 
 /**

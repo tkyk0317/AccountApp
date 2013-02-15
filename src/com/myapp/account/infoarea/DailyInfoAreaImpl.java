@@ -1,16 +1,21 @@
 package com.myapp.account.infoarea;
 
 import java.util.*;
+import android.util.Log;
 import android.app.Activity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import com.myapp.account.R;
 import com.myapp.account.infoarea.AbstractInfoArea;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableRecord;
+import com.myapp.account.infoarea.DailyInfoRecord;
 
 /**
  * Daily Info Area Class.
@@ -51,33 +56,55 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
      */
     @Override
     protected void drawRecord(TableLayout layout, AccountTableRecord account_record) {
-        TextView account_item = new TextView(activity.getApplicationContext());
-        TextView account_money= new TextView(activity.getApplicationContext());
-        TextView account_memo = new TextView(activity.getApplicationContext());
+        // set long click event listener.
+        DailyInfoRecord row = new DailyInfoRecord(activity.getApplicationContext());
+        row.removeAllViews();
 
         // get item name from AccountMaster.
         int master_id = account_record.getCategoryId();
         AccountMasterTableRecord account_master_record = masterTable.getRecord(master_id);
 
-        account_item.setText( account_master_record.getName() );
+        row.setAccountDate(account_record.getInsertDate());
+        row.setCategoryName(account_master_record.getName() );
         String money = String.format("%,d", account_record.getMoney() ) + activity.getText(R.string.money_unit).toString();
-        account_money.setText(money);
-        account_memo.setText( account_record.getMemo() );
+        row.setAccountMoney( money );
+        row.setAccountMemo( account_record.getMemo() );
 
-        account_money.setTextSize(TEXT_SIZE);
-        account_item.setTextSize(TEXT_SIZE);
-        account_memo.setTextSize(TEXT_SIZE);
-        account_memo.setMaxLines(DISPLAY_MAX_LINE);
+        row.setClickable(true);
+        row.setOnLongClickListener( new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View event) {
+                focusCurrentRow((TableRow)event);
 
-        account_item.setGravity(Gravity.RIGHT);
-        account_money.setGravity(Gravity.RIGHT);
-        account_memo.setGravity(Gravity.RIGHT);
+                if( null != observer ) {
+                    observer.notifyLongClickForDailyInfo(event);
+                }
+                return true;
+            }
+        });
+
+        // set click event litener.
+        row.setOnClickListener( new OnClickListener() {
+            @Override
+            public void onClick(View event) {
+                focusCurrentRow((TableRow)event);
+            }
+        });
 
         // display AccountTable.
-        TableRow row = new TableRow(activity.getApplicationContext());
-        row.addView(account_item);
-        row.addView(account_money);
-        row.addView(account_memo);
         layout.addView(row);
+    }
+
+    /**
+     * Focus Current Row.
+     * @param current_row Current TableRow Instance.
+     */
+    protected void focusCurrentRow(TableRow current_row) {
+        if( null != currentRow )
+        {
+            currentRow.setBackgroundColor(activity.getResources().getColor(R.color.default_background));
+        }
+        currentRow = current_row;
+        currentRow.setBackgroundColor(activity.getResources().getColor(R.color.focus_background));
     }
 }

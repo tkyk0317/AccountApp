@@ -13,7 +13,7 @@ import android.view.View;
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.calendar.AccountCalendarCell;
-import com.myapp.account.ClickObserverInterface;
+import com.myapp.account.observer.ClickObserverInterface;
 
 /**
  * Account Calendar Class.
@@ -136,7 +136,7 @@ public class AccountCalendar implements ClickObserverInterface {
 
         // color setting.
         Resources resources = activity.getResources();
-        currentCell.setBackgroundColor(resources.getColor(R.color.cal_focus_background));
+        currentCell.setBackgroundColor(resources.getColor(R.color.focus_background));
     }
 
     /**
@@ -163,17 +163,18 @@ public class AccountCalendar implements ClickObserverInterface {
      * Click Event from AccountCalendarCell Instance.
      * @param event Account Calendar Cell Instance.
      */
+    @Override
     public void notifyClick(Object event) {
         AccountCalendarCell cell = (AccountCalendarCell)event;
         if( true == Utility.isStringNULL(cell.getDate()) ) return;
 
         // previous cell setting.
         Resources resources = activity.getResources();
-        currentCell.setBackgroundColor(resources.getColor(R.color.cal_default_background));
+        currentCell.setBackgroundColor(resources.getColor(R.color.default_background));
 
         // current cell setteing.
         currentCell = (AccountCalendarCell)event;
-        currentCell.setBackgroundColor(resources.getColor(R.color.cal_focus_background));
+        currentCell.setBackgroundColor(resources.getColor(R.color.focus_background));
 
         // notify observer.
         if( null != this.observer ) this.observer.notifyClick(event);
@@ -183,11 +184,16 @@ public class AccountCalendar implements ClickObserverInterface {
      * Long Click Event from AccountCalendarCell Instance.
      * @param event Account Calendar Cell Instance.
      */
+    @Override
     public void notifyLongClick(Object event) {
         AccountCalendarCell cell = (AccountCalendarCell)event;
         if( true == Utility.isStringNULL(cell.getDate()) ) return;
 
         if( null != this.observer ) this.observer.notifyLongClick(event);
     }
+
+    // not implement.
+    @Override
+    public void notifyLongClickForDailyInfo(Object event) {}
 }
 
