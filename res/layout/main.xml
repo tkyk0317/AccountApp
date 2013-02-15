@@ -381,7 +381,7 @@
                             android:id="@+id/daily_item_table"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
-                            android:stretchColumns="0,1"
+                            android:stretchColumns="0,1,2"
                             >
                         </TableLayout>
                     </ScrollView>
@@ -399,7 +399,7 @@
                             android:id="@+id/month_item_table"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
-                            android:stretchColumns="0,1"
+                            android:stretchColumns="0,1,2"
                             >
                         </TableLayout>
                     </ScrollView>
