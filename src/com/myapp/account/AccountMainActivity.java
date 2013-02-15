@@ -18,8 +18,9 @@ import com.myapp.account.summary.Summary;
 import com.myapp.account.config.ApplicationMenu;
 import com.myapp.account.calendar.AccountCalendar;
 import com.myapp.account.calendar.AccountCalendarCell;
-import com.myapp.account.ClickObserverInterface;
+import com.myapp.account.observer.ClickObserverInterface;
 import com.myapp.account.add_account_data.AccountAdd;
+import com.myapp.account.infoarea.DailyInfoRecord;
 
 /**
  * Main Class in AccountApp Application.
@@ -73,6 +74,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
 
         // attach observer.
         accountCalendar.attachObserver(this);
+        tabContent.attachObserverForDailyInfo(this);
     }
 
     /**
@@ -133,9 +135,9 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * Notify from Subject(AccountCalendar).
      * @param event AccountCalendarCell Instance.
      */
+    @Override
     public void notifyClick(Object event) {
         AccountCalendarCell cell = (AccountCalendarCell)event;
-
         titleArea.appear(cell.getDate());
         tabContent.appear(cell.getDate());
     }
@@ -144,12 +146,25 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * Notify Long Click from Subject(AccountCalendar).
      * @param event AccountCalendarCell Instance.
      */
+    @Override
     public void notifyLongClick(Object event) {
         AccountCalendarCell cell = (AccountCalendarCell)event;
 
         // AccountAdd Displayed.
         AccountAdd account_add = new AccountAdd(this);
         account_add.appear(cell.getDate());
+    }
+
+    /**
+     * Notify Long Click from DailyInfoArea.
+     * @param event DailyInfoRecord Instance.
+     */
+    @Override
+    public void notifyLongClickForDailyInfo(Object event) {
+        Log.d("AccountMainACtivity", "CurrentDate = " + ((DailyInfoRecord)event).getAccountDate() );
+        Log.d("AccountMainACtivity", "CategoryName = " + ((DailyInfoRecord)event).getCategoryName() );
+        Log.d("AccountMainACtivity", "AccountMoney = " + ((DailyInfoRecord)event).getAccountMoney() );
+        Log.d("AccountMainACtivity", "AccountMemo = " + ((DailyInfoRecord)event).getAccountMemo() );
     }
 }
 

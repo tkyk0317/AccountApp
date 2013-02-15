@@ -4,11 +4,13 @@ import java.util.*;
 import android.util.Log;
 import android.app.Activity;
 import android.widget.TableLayout;
+import android.widget.TableRow;
 import com.myapp.account.R;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessor;
+import com.myapp.account.observer.ClickObserverInterface;
 
 /**
  * AbstractInfoArea Class.
@@ -20,6 +22,8 @@ public abstract class AbstractInfoArea {
     protected AccountMasterTableAccessor masterTable;
     protected String displayDate;
     protected static int TEXT_SIZE = 15;
+    protected ClickObserverInterface observer;
+    protected TableRow currentRow;
 
     /**
      * InfoDailyArea Class Constractor.
@@ -29,6 +33,14 @@ public abstract class AbstractInfoArea {
         DatabaseHelper db_helper = new DatabaseHelper(this.activity.getApplicationContext());
         accountTable = new AccountTableAccessor(db_helper);
         masterTable = new AccountMasterTableAccessor(db_helper);
+    }
+
+    /**
+     * Attach Observer Instance.
+     * @param observer Observer Instance.
+     */
+    public void attachObserver(ClickObserverInterface observer) {
+        this.observer = observer;
     }
 
     /**

@@ -2,8 +2,8 @@
 <resources>
     <color name="red">#FF0000</color>
     <color name="blue">#187FC4</color>
-    <color name="cal_default_text">#FFFFFF</color>
-    <color name="cal_default_background">#000000</color>
-    <color name="cal_focus_text">#000000</color>
-    <color name="cal_focus_background">#6B8E23</color>
+    <color name="default_text">#FFFFFF</color>
+    <color name="default_background">#000000</color>
+    <color name="focus_text">#000000</color>
+    <color name="focus_background">#6B8E23</color>
 </resources>
