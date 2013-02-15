@@ -16,7 +16,7 @@ public class ApplicationMenu {
     // Dialog List Index.
     private enum DialogListIndex {
 
-        DAILY_ACCOUNT_EDIT_INDEX(0), MONTHLY_ACCOUNT_EDIT_INDEX(1), ADD_CATEGORY_INDEX(2);
+        ADD_CATEGORY_INDEX(0), ADD_USER_INDEX(1);
 
         private final int index;
 
@@ -75,9 +75,8 @@ public class ApplicationMenu {
      */
     protected void displayEditDialog() {
         final String[] edit_menus
-            = { activity.getText(R.string.menu_account_daily_edit_title).toString(),
-                activity.getText(R.string.menu_account_month_edit_title).toString(),
-                activity.getText(R.string.menu_master_add_title).toString() };
+            = { activity.getText(R.string.menu_master_add_title).toString(),
+                activity.getText(R.string.menu_user_add_title).toString()};
 
         AlertDialog.Builder edit_menu_dialog = new AlertDialog.Builder(activity);
         edit_menu_dialog.setTitle(R.string.menu_account_data_edit_list_title);
@@ -95,31 +94,23 @@ public class ApplicationMenu {
      * @param click_index Click List Item Index.
      */
     protected void parseClickEvent(int click_index) {
-        if( click_index == DialogListIndex.DAILY_ACCOUNT_EDIT_INDEX.getIndex() ) {
-            moveToEditDailyAccountData();
-        } else if( click_index == DialogListIndex.MONTHLY_ACCOUNT_EDIT_INDEX.getIndex() ) {
-            moveToEditMonthlyAccountData();
-        } else if( click_index == DialogListIndex.ADD_CATEGORY_INDEX.getIndex() ) {
+        if( click_index == DialogListIndex.ADD_CATEGORY_INDEX.getIndex() ) {
             moveToAddCategory();
+        } else if( click_index == DialogListIndex.ADD_USER_INDEX.getIndex() ) {
+            moveToUser();
         }
-    }
-
-    /**
-     * Move To Edit Daily Account Data Activity.
-     */
-    protected void moveToEditDailyAccountData() {
-    }
-
-    /**
-     * Move To Edit Monthly Account Data Activity.
-     */
-    protected void moveToEditMonthlyAccountData() {
     }
 
     /**
      * Move To Add Category into Master Activity.
      */
     protected void moveToAddCategory() {
+    }
+
+    /**
+     * Move To Add User into User Table.
+     */
+    protected void moveToUser() {
     }
 }
 

@@ -27,9 +27,8 @@
     <string name="menu_configuration_title">設定</string>
     <string name="menu_account_data_edit_title">編集</string>
     <string name="menu_account_data_edit_list_title">編集項目</string>
-    <string name="menu_account_daily_edit_title">入力済み項目修正(日)</string>
-    <string name="menu_account_month_edit_title">入力済み項目修正(月)</string>
     <string name="menu_master_add_title">カテゴリ追加</string>
+    <string name="menu_user_add_title">ユーザー追加</string>
     <string name="estimate_configuration_enable">有効</string>
     <string name="estimate_configuration_unenable">無効</string>
     <string name="sunday">日</string>
