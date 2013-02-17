@@ -2,14 +2,14 @@ package com.myapp.account.add_account_data;
 
 import java.util.List;
 import android.app.Activity;
+import android.view.Window;
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.EditText;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.app.DatePickerDialog;
-import android.widget.DatePicker;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -35,6 +35,7 @@ public class AccountAdd {
     protected AccountTableAccessor accountTable;
     protected AccountMasterTableAccessor masterTable;
     protected View layout;
+    protected String currentDate;
 
     /**
      * Constractor.
@@ -50,13 +51,25 @@ public class AccountAdd {
      * Appear the Account Add Display.
      */
     public void appear(String date) {
+        this.currentDate = date;
         LayoutInflater inflater = LayoutInflater.from(this.activity);
         layout = inflater.inflate(R.layout.add_account, (ViewGroup)activity.findViewById(R.id.account_add));
-        AlertDialog.Builder dialog = new AlertDialog.Builder(activity).setView(layout);
-        dialog.show();
+        AlertDialog alert_dialog = new AlertDialog.Builder(activity).create();
+        alert_dialog.setView(layout);
+        alert_dialog.getWindow().setGravity(Gravity.TOP);
+        alert_dialog.show();
 
+        // Title Area Display.
+        setTitleArea();
         registEvent();
-        setCurrentDateToInputDateArea(date);
+    }
+
+    /**
+     * Set Title Area.
+     */
+    protected void setTitleArea() {
+        TextView title= (TextView)layout.findViewById(R.id.date_title);
+        title.setText(this.currentDate);
     }
 
     /**
@@ -89,14 +102,6 @@ public class AccountAdd {
     }
 
     /**
-     * Set Current Date To Input Date Area.
-     */
-    protected void setCurrentDateToInputDateArea(String date) {
-        EditText input_date= (EditText)layout.findViewById(R.id.input_date_value);
-        input_date.setText(date);
-    }
-
-    /**
      * Appear Checkbox.
      */
     protected void appearCheckbox() {
@@ -126,7 +131,6 @@ public class AccountAdd {
      * Get Account Information from user's input information.
      */
     protected AccountTableRecord getInputUserAccountInfo()  throws NumberFormatException {
-        EditText input_date= (EditText)layout.findViewById(R.id.input_date_value);
         EditText edit_category= (EditText)layout.findViewById(R.id.category_value);
         EditText edit_money = (EditText)layout. findViewById(R.id.money_value);
         EditText edit_memo = (EditText)layout.findViewById(R.id.memo_value);
@@ -135,7 +139,7 @@ public class AccountAdd {
 
         AccountTableRecord record = new AccountTableRecord();
         try {
-            record.setInsertDate(input_date.getText().toString());
+            record.setInsertDate(this.currentDate);
             record.setCategoryId(master_record.getId());
             record.setMoney(Integer.valueOf(edit_money.getText().toString()));
             record.setMemo(edit_memo.getText().toString());

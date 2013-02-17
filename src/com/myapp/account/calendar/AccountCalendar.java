@@ -165,18 +165,12 @@ public class AccountCalendar implements ClickObserverInterface {
      */
     @Override
     public void notifyClick(Object event) {
-        AccountCalendarCell cell = (AccountCalendarCell)event;
-        if( true == Utility.isStringNULL(cell.getDate()) ) return;
+        if( true == Utility.isStringNULL(((AccountCalendarCell)event).getDate()) ) return;
 
-        // previous cell setting.
-        Resources resources = activity.getResources();
-        currentCell.setBackgroundColor(resources.getColor(R.color.default_background));
+        // focus current cell.
+        focusCurrentCell((AccountCalendarCell)event);
 
-        // current cell setteing.
-        currentCell = (AccountCalendarCell)event;
-        currentCell.setBackgroundColor(resources.getColor(R.color.focus_background));
-
-        // notify observer.
+       // notify observer.
         if( null != this.observer ) this.observer.notifyClick(event);
     }
 
@@ -186,11 +180,26 @@ public class AccountCalendar implements ClickObserverInterface {
      */
     @Override
     public void notifyLongClick(Object event) {
-        AccountCalendarCell cell = (AccountCalendarCell)event;
-        if( true == Utility.isStringNULL(cell.getDate()) ) return;
+        if( true == Utility.isStringNULL(((AccountCalendarCell)event).getDate()) ) return;
+
+        // focus current cell.
+        focusCurrentCell((AccountCalendarCell)event);
 
         if( null != this.observer ) this.observer.notifyLongClick(event);
     }
+
+    /**
+     * Focus Current Calendar Cell.
+     */
+    protected void focusCurrentCell(AccountCalendarCell current_cell) {
+        // previous cell setting.
+        Resources resources = activity.getResources();
+        currentCell.setBackgroundColor(resources.getColor(R.color.default_background));
+
+        // current cell setteing.
+        currentCell = current_cell;
+        currentCell.setBackgroundColor(resources.getColor(R.color.focus_background));
+     }
 
     // not implement.
     @Override
