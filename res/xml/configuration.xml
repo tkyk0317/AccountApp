@@ -5,7 +5,7 @@
             android:key="estimate_configuration"
             android:title="@string/estimate_configuration_title"
             android:summary=""
-            android:defaultValue="true"
+            android:defaultValue="false"
             />
         <EditTextPreference
             android:key="estimate_money_configuration"
