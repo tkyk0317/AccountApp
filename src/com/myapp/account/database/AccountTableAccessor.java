@@ -44,13 +44,13 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Get Record with Current Date.
+     * Get Record with Target Date.
+     * @param target_date String Target Date.
      * @return AccountTableRecord at Current Date.
      */
-    public List<AccountTableRecord> getRecordWithCurrentDate()
+    public List<AccountTableRecord> getRecordWithTargetDate(String target_date)
     {
-        String current_date = Utility.getCurrentDate();
-        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date=?" , new String[]{current_date}, null, null, null, null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date=?" , new String[]{target_date}, null, null, "category_id", null);
 
         cursor.moveToFirst();
         int record_count = cursor.getCount();
