@@ -91,6 +91,9 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
             }
         });
 
+        // setting record info.
+        row.setAccountTableRecord(account_record);
+
         // display AccountTable.
         layout.addView(row);
     }

@@ -5,12 +5,14 @@ import android.widget.TableRow;
 import android.content.Context;
 import android.widget.TextView;
 import android.view.Gravity;
+import com.myapp.account.database.AccountTableRecord;
 
 /**
  * Daily Info Record Class.
  */
 public class DailyInfoRecord extends TableRow {
 
+    protected AccountTableRecord accountRecord;
     protected String accountDate;
     protected TextView categoryName;
     protected TextView accountMoney;
@@ -19,6 +21,7 @@ public class DailyInfoRecord extends TableRow {
     protected static final int DISPLAY_MAX_LINE = 1;
 
     // getter.
+    public AccountTableRecord getAccountRecord() { return accountRecord; }
     public String getAccountDate() { return accountDate; }
     public String getCategoryName() { return String.valueOf(categoryName.getText()); }
     public String getAccountMoney() { return String.valueOf(accountMoney.getText()); }
@@ -32,6 +35,14 @@ public class DailyInfoRecord extends TableRow {
         categoryName = new TextView(context);
         accountMoney = new TextView(context);
         accountMemo = new TextView(context);
+    }
+
+    /**
+     * Set Account Table Record.
+     * @param record AccountTable Record Instance.
+     */
+    protected void setAccountTableRecord(AccountTableRecord record) {
+        this.accountRecord = record;
     }
 
     /**
