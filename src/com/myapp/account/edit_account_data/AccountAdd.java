@@ -1,4 +1,4 @@
-package com.myapp.account.add_account_data;
+package com.myapp.account.edit_account_data;
 
 import java.util.List;
 import android.app.Activity;
@@ -24,6 +24,7 @@ import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
+import com.myapp.account.infoarea.DailyInfoRecord;
 
 /**
  * Add Account Date Class.
@@ -31,11 +32,12 @@ import com.myapp.account.database.AccountMasterTableRecord;
 public class AccountAdd {
 
     protected Activity activity;
+    protected AlertDialog inputDialog;
     protected CategoryItems categoryItems;
     protected AccountTableAccessor accountTable;
     protected AccountMasterTableAccessor masterTable;
     protected View layout;
-    protected String currentDate;
+    protected String insertDate;
 
     /**
      * Constractor.
@@ -51,17 +53,26 @@ public class AccountAdd {
      * Appear the Account Add Display.
      */
     public void appear(String date) {
-        this.currentDate = date;
+        this.insertDate = date;
         LayoutInflater inflater = LayoutInflater.from(this.activity);
-        layout = inflater.inflate(R.layout.add_account, (ViewGroup)activity.findViewById(R.id.account_add));
-        AlertDialog alert_dialog = new AlertDialog.Builder(activity).create();
-        alert_dialog.setView(layout);
-        alert_dialog.getWindow().setGravity(Gravity.TOP);
-        alert_dialog.show();
+        layout = inflater.inflate(R.layout.account_edit, (ViewGroup)activity.findViewById(R.id.account_edit));
+        inputDialog = new AlertDialog.Builder(activity).create();
+        inputDialog.setView(layout);
+        inputDialog.getWindow().setGravity(Gravity.TOP);
+        inputDialog.show();
 
-        // Title Area Display.
+        // Title Display.
         setTitleArea();
+        setButtonTitle();
         registEvent();
+    }
+
+    /**
+     * Appear the Account Display.
+     * @param record AccoundTableRecord.
+     */
+    public void appear(DailyInfoRecord record) {
+        // not supported.
     }
 
     /**
@@ -69,8 +80,16 @@ public class AccountAdd {
      */
     protected void setTitleArea() {
         TextView title= (TextView)layout.findViewById(R.id.date_title);
-        title.setText(this.currentDate);
-    }
+        title.setText(this.insertDate);
+   }
+
+    /**
+     * Set Button Title.
+     */
+    protected void setButtonTitle() {
+        Button regist_button = (Button)layout.findViewById(R.id.regist_btn);
+        regist_button.setText(activity.getText(R.string.regist_btn_label));
+     }
 
     /**
      * Rejist Event
@@ -88,7 +107,7 @@ public class AccountAdd {
         regist_btn.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
-                        addAccountRecord();
+                        insertOrUpdateAccountRecord();
                     }
                 });
         ImageButton money_btn = (ImageButton)layout.findViewById(R.id.money_btn);
@@ -109,16 +128,17 @@ public class AccountAdd {
     }
 
     /**
-     * Add AccountRecord into AccountTable.
+     * Insert or Update AccountRecord into AccountTable.
      */
-    protected void addAccountRecord() {
+    protected void insertOrUpdateAccountRecord() {
         try {
             AccountTableRecord record = getInputUserAccountInfo();
 
             if( isEnableInputData(record) ) {
-                insertIntoDatabase(record);
+                insertOrUpdateIntoDatabase(record);
                 updateUseDateOfMaterTable(record.getCategoryId());
-                displayAddCompleteMessage();
+                closeInputDialog();
+                displayCompleteMessage();
             } else {
                 displayInputDataAlertMessage();
             }
@@ -139,7 +159,7 @@ public class AccountAdd {
 
         AccountTableRecord record = new AccountTableRecord();
         try {
-            record.setInsertDate(this.currentDate);
+            record.setInsertDate(this.insertDate);
             record.setCategoryId(master_record.getId());
             record.setMoney(Integer.valueOf(edit_money.getText().toString()));
             record.setMemo(edit_memo.getText().toString());
@@ -153,7 +173,7 @@ public class AccountAdd {
      * Check User Input Data is Enable.
      * @return true if user input data is enable data.
      */
-    private boolean isEnableInputData(AccountTableRecord input_data) {
+    protected boolean isEnableInputData(AccountTableRecord input_data) {
         if( 0 == input_data.getMoney() ||
             0 == input_data.getCategoryId() ||
             Utility.isStringNULL(input_data.getInsertDate()) ) {
@@ -163,10 +183,10 @@ public class AccountAdd {
     }
 
     /**
-     * Insert into Database.
+     * Insert or Update into Database.
      * @param record User input Account Infomation.
      */
-    protected void insertIntoDatabase(AccountTableRecord record) {
+    protected void insertOrUpdateIntoDatabase(AccountTableRecord record) {
         accountTable.insert(record);
     }
 
@@ -181,9 +201,16 @@ public class AccountAdd {
     }
 
     /**
-     * Display Complete Add Accont Message.
+     * Close Input Dialog.
      */
-    protected void displayAddCompleteMessage() {
+    protected void closeInputDialog() {
+        this.inputDialog.dismiss();
+    }
+
+    /**
+     * Display Complete Message.
+     */
+    protected void displayCompleteMessage() {
         String message = activity.getText(R.string.regist_msg).toString();
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
     }
@@ -205,7 +232,7 @@ public class AccountAdd {
     /**
      * Account Category Items Class.
      */
-    private class CategoryItems implements AbstractDialog {
+    protected class CategoryItems implements AbstractDialog {
 
         protected String[] checkItems;
         protected AccountMasterTableAccessor masterTable;

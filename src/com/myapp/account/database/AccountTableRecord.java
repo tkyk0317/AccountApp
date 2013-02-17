@@ -37,13 +37,15 @@ public class AccountTableRecord {
         update_date = cursor.getString(DatabaseIndex.UPDATE_DATE.getIndex());
         insert_date = cursor.getString(DatabaseIndex.INSERT_DATE.getIndex());
     }
-    public void setCategoryId(int id) { category_id = id; }
+    public void setId(int id) { this.id = id; }
+    public void setCategoryId(int id) { this.category_id = id; }
     public void setMoney(int money) { this.money = money; }
     public void setMemo(String memo) { this.memo = memo; }
-    public void setInsertDate(String date) { insert_date = date; }
+    public void setUpdateDate(String date) { this.update_date = date; }
+    public void setInsertDate(String date) { this.insert_date = date; }
 
     // getter.
-    public int getid() { return id; }
+    public int getId() { return id; }
     public int getUserId() { return user_id; }
     public int getCategoryId() { return category_id; }
     public int getMoney() { return money; }

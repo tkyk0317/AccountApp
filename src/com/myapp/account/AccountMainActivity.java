@@ -19,7 +19,8 @@ import com.myapp.account.config.ApplicationMenu;
 import com.myapp.account.calendar.AccountCalendar;
 import com.myapp.account.calendar.AccountCalendarCell;
 import com.myapp.account.observer.ClickObserverInterface;
-import com.myapp.account.add_account_data.AccountAdd;
+import com.myapp.account.edit_account_data.AccountAdd;
+import com.myapp.account.edit_account_data.AccountEdit;
 import com.myapp.account.infoarea.DailyInfoRecord;
 
 /**
@@ -80,7 +81,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * Display Main Content.
      */
-    public void displayMainContent() {
+    protected void displayMainContent() {
         summary.appear();
         titleArea.appear(Utility.getCurrentDate());
         tabContent.appear(Utility.getCurrentDate());
@@ -161,10 +162,9 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     @Override
     public void notifyLongClickForDailyInfo(Object event) {
-        Log.d("AccountMainACtivity", "CurrentDate = " + ((DailyInfoRecord)event).getAccountDate() );
-        Log.d("AccountMainACtivity", "CategoryName = " + ((DailyInfoRecord)event).getCategoryName() );
-        Log.d("AccountMainACtivity", "AccountMoney = " + ((DailyInfoRecord)event).getAccountMoney() );
-        Log.d("AccountMainACtivity", "AccountMemo = " + ((DailyInfoRecord)event).getAccountMemo() );
+        // Modify dialog Display.
+        AccountEdit account_edit = new AccountEdit(this);
+        account_edit.appear((DailyInfoRecord)event);
     }
 }
 

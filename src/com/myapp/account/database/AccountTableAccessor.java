@@ -206,6 +206,15 @@ public class AccountTableAccessor {
      * @return true if update success.
      */
     public boolean update(AccountTableRecord record) {
+        ContentValues update_record = new ContentValues();
+        update_record.put("user_id", record.getUserId());
+        update_record.put("category_id", record.getCategoryId());
+        update_record.put("money", record.getMoney());
+        update_record.put("memo", record.getMemo());
+        update_record.put("update_date", record.getUpdateDate() );
+        update_record.put("insert_date", record.getInsertDate() );
+
+        writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
         return true;
     }
 }
