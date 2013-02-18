@@ -171,7 +171,7 @@ public class AccountAdd implements OnItemSelectedListener {
             if( isEnableInputData(record) ) {
                 insertOrUpdateIntoDatabase(record);
                 updateUseDateOfMaterTable(record.getCategoryId());
-                this.observer.notifyAccountEditComplete();
+                observer.notifyAccountEditComplete();
                 closeInputDialog();
                 displayCompleteMessage();
             } else {

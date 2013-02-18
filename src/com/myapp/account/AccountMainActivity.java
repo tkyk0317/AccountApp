@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.os.Bundle;
 import android.widget.ImageButton;
+import android.widget.TableLayout;
 import com.myapp.account.titlearea.TitleArea;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.estimate.Estimate;
@@ -75,9 +76,20 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         applicationMenu = new ApplicationMenu(this);
         accountCalendar = new AccountCalendar(this);
 
+        // clear summar/estimate.
+        clearSummaryAndEstimateArea();
+
         // attach observer.
         accountCalendar.attachObserver(this);
         tabContent.attachObserverForDailyInfo(this);
+    }
+
+    /**
+     * Clear Summary and Estimate Area.
+     */
+    protected void clearSummaryAndEstimateArea() {
+        TableLayout summary_estimate_area = (TableLayout)findViewById(R.id.summary_table);
+        summary_estimate_area.removeAllViews();
     }
 
     /**
@@ -182,6 +194,10 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     @Override
     public void notifyAccountEditComplete() {
+        // reflesh display.
+        clearSummaryAndEstimateArea();
+        estimateInfo.appear();
+        summary.appear();
         titleArea.appear(currentDate);
         tabContent.appear(currentDate);
      }

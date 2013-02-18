@@ -24,6 +24,7 @@ public abstract class AbstractInfoArea {
     protected static int TEXT_SIZE = 15;
     protected ClickObserverInterface observer;
     protected TableRow currentRow;
+    protected static final String MONEY_SPACE = " ";
 
     /**
      * InfoDailyArea Class Constractor.

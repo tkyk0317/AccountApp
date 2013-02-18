@@ -2,18 +2,16 @@ package com.myapp.account.edit_account_data;
 
 import android.app.Activity;
 import android.util.Log;
-import android.view.Window;
-import android.content.Context;
-import android.view.Gravity;
-import android.app.AlertDialog;
 import android.widget.Toast;
 import android.widget.Button;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.view.LayoutInflater;
+import android.widget.LinearLayout;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
-import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.infoarea.DailyInfoRecord;
@@ -24,6 +22,7 @@ import com.myapp.account.infoarea.DailyInfoRecord;
 public class AccountEdit extends AccountAdd {
 
     protected DailyInfoRecord updateRecord;
+    protected static final int BUTTON_WIDTH = 100;
 
     /**
      * Constractor.
@@ -48,12 +47,64 @@ public class AccountEdit extends AccountAdd {
     public void appear(DailyInfoRecord record) {
         this.updateRecord = record;
         this.insertDate = record.getAccountDate();
-
         // initalize.
         initialize();
-
         // set current data.
         setCurrentData();
+        // Add Delete Button.
+        addDeleteButton();
+    }
+
+    /**
+     * Add Delete Button.
+     */
+    protected void addDeleteButton() {
+        Button delete_button = new Button(activity);
+        delete_button.setWidth(BUTTON_WIDTH);
+        delete_button.setText(R.string.delete_btn_label);
+
+        LinearLayout linear_layout = (LinearLayout)layout.findViewById(R.id.commit_btn_area);
+        linear_layout.addView(delete_button);
+
+        // set event listener.
+        delete_button.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+                        // Create Dialog.
+                        AlertDialog.Builder confirm_dialog = new AlertDialog.Builder(activity);
+                        confirm_dialog.setTitle(R.string.delete_confirm_msg);
+
+                        // delete OK.
+                        confirm_dialog.setPositiveButton(
+                            R.string.delete_confirm_yes,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    deleteAccountRecord();
+                                    observer.notifyAccountEditComplete();
+                                    closeInputDialog();
+                                    displayDeleteCompleteMessage();
+                                }
+                        });
+
+                        // delete NO.
+                        confirm_dialog.setNegativeButton(
+                            R.string.delete_confirm_no,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                        confirm_dialog.show();
+                   }
+                });
+    }
+
+    /**
+     * Delete Current Record.
+     */
+    protected void deleteAccountRecord() {
+        accountTable.delete(updateRecord.getAccountRecord().getId());
     }
 
     /**
@@ -107,12 +158,19 @@ public class AccountEdit extends AccountAdd {
         accountTable.update(record);
     }
 
-
     /**
      * Display Complete Message.
      */
     protected void displayCompleteMessage() {
         String message = activity.getText(R.string.modify_msg).toString();
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Display Delete Complete Message.
+     */
+    protected void displayDeleteCompleteMessage() {
+        String message = activity.getText(R.string.delete_msg).toString();
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
     }
 }
