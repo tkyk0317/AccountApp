@@ -19,6 +19,7 @@ import com.myapp.account.config.ApplicationMenu;
 import com.myapp.account.calendar.AccountCalendar;
 import com.myapp.account.calendar.AccountCalendarCell;
 import com.myapp.account.observer.ClickObserverInterface;
+import com.myapp.account.observer.AccountEditCompleteObserver;
 import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.edit_account_data.AccountEdit;
 import com.myapp.account.infoarea.DailyInfoRecord;
@@ -26,7 +27,7 @@ import com.myapp.account.infoarea.DailyInfoRecord;
 /**
  * Main Class in AccountApp Application.
  */
-public class AccountMainActivity extends Activity implements ClickObserverInterface {
+public class AccountMainActivity extends Activity implements ClickObserverInterface, AccountEditCompleteObserver {
 
     protected TitleArea titleArea;
     protected Estimate estimateInfo;
@@ -34,6 +35,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     protected TabContent tabContent;
     protected ApplicationMenu applicationMenu;
     protected AccountCalendar accountCalendar;
+    protected String currentDate;
 
     /**
      * Create Activity.
@@ -82,9 +84,11 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * Display Main Content.
      */
     protected void displayMainContent() {
+        currentDate = Utility.getCurrentDate();
+
         summary.appear();
-        titleArea.appear(Utility.getCurrentDate());
-        tabContent.appear(Utility.getCurrentDate());
+        titleArea.appear(currentDate);
+        tabContent.appear(currentDate);
         accountCalendar.appear();
    }
 
@@ -139,8 +143,10 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     @Override
     public void notifyClick(Object event) {
         AccountCalendarCell cell = (AccountCalendarCell)event;
-        titleArea.appear(cell.getDate());
-        tabContent.appear(cell.getDate());
+
+        currentDate = cell.getDate();
+        titleArea.appear(currentDate);
+        tabContent.appear(currentDate);
     }
 
     /**
@@ -152,8 +158,10 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         AccountCalendarCell cell = (AccountCalendarCell)event;
 
         // AccountAdd Displayed.
+        currentDate = cell.getDate();
         AccountAdd account_add = new AccountAdd(this);
-        account_add.appear(cell.getDate());
+        account_add.attachObserver(this);
+        account_add.appear(currentDate);
     }
 
     /**
@@ -162,9 +170,20 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     @Override
     public void notifyLongClickForDailyInfo(Object event) {
+        currentDate = ((DailyInfoRecord)event).getAccountDate();
         // Modify dialog Display.
         AccountEdit account_edit = new AccountEdit(this);
+        account_edit.attachObserver(this);
         account_edit.appear((DailyInfoRecord)event);
     }
+
+    /**
+     * Notify AccountEdit Complete.
+     */
+    @Override
+    public void notifyAccountEditComplete() {
+        titleArea.appear(currentDate);
+        tabContent.appear(currentDate);
+     }
 }
 
