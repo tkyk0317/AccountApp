@@ -25,6 +25,7 @@ import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.infoarea.DailyInfoRecord;
+import com.myapp.account.observer.AccountEditCompleteObserver;
 
 /**
  * Add Account Date Class.
@@ -38,6 +39,7 @@ public class AccountAdd {
     protected AccountMasterTableAccessor masterTable;
     protected View layout;
     protected String insertDate;
+    protected AccountEditCompleteObserver observer;
 
     /**
      * Constractor.
@@ -47,6 +49,14 @@ public class AccountAdd {
         categoryItems = new CategoryItems(activity);
         accountTable = new AccountTableAccessor( new DatabaseHelper(activity.getApplicationContext()) );
         masterTable = new AccountMasterTableAccessor( new DatabaseHelper(activity.getApplicationContext()) );
+    }
+
+    /**
+     * Attach Observer.
+     * @param observer AccountEditCompleteObserver Instance.
+     */
+    public void attachObserver(AccountEditCompleteObserver observer) {
+        this.observer = observer;
     }
 
     /**
@@ -137,6 +147,7 @@ public class AccountAdd {
             if( isEnableInputData(record) ) {
                 insertOrUpdateIntoDatabase(record);
                 updateUseDateOfMaterTable(record.getCategoryId());
+                this.observer.notifyAccountEditComplete();
                 closeInputDialog();
                 displayCompleteMessage();
             } else {
