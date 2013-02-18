@@ -1,6 +1,7 @@
 package com.myapp.account.edit_account_data;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.Window;
 import android.content.Context;
 import android.view.Gravity;
@@ -47,26 +48,18 @@ public class AccountEdit extends AccountAdd {
     public void appear(DailyInfoRecord record) {
         this.updateRecord = record;
         this.insertDate = record.getAccountDate();
-        LayoutInflater inflater = LayoutInflater.from(this.activity);
-        layout = inflater.inflate(R.layout.account_edit, (ViewGroup)activity.findViewById(R.id.account_edit));
-        inputDialog = new AlertDialog.Builder(activity).create();
-        inputDialog.setView(layout);
-        inputDialog.getWindow().setGravity(Gravity.TOP);
-        inputDialog.show();
 
-        // Title Display.
-        setTitleArea();
-        setButtonTitle();
+        // initalize.
+        initialize();
 
         // set current data.
         setCurrentData();
-
-        registEvent();
     }
 
     /**
      * Set Button Title.
      */
+    @Override
     protected void setButtonTitle() {
         Button regist_button = (Button)layout.findViewById(R.id.regist_btn);
         regist_button.setText(activity.getText(R.string.modify_btn_label));
@@ -76,14 +69,30 @@ public class AccountEdit extends AccountAdd {
      * set Current Data.
      */
     protected void setCurrentData() {
-        EditText current_category= (EditText)layout.findViewById(R.id.category_value);
         EditText current_money = (EditText)layout. findViewById(R.id.money_value);
         EditText current_memo = (EditText)layout.findViewById(R.id.memo_value);
 
         // set current data.
-        current_category.setText(this.updateRecord.getCategoryName());
+        categorySpinner.setSelection(getCategoryPositionFromSpinner(updateRecord.getCategoryName()));
         current_money.setText(String.valueOf(this.updateRecord.getAccountRecord().getMoney()));
         current_memo.setText(this.updateRecord.getAccountMemo());
+    }
+
+    /**
+     * Get Category Position in Spinner.
+     */
+    protected int getCategoryPositionFromSpinner(String category_name) {
+        int pos = 0;
+        boolean is_find = false;
+        for( pos = 0 ; pos < categoryItems.length ; ++pos ) {
+            if( categoryItems[pos].equals(category_name) ) {
+                is_find = true;
+                break;
+            }
+        }
+
+        if( true == is_find ) return pos;
+        return 0;
     }
 
     /**

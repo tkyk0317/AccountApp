@@ -1,6 +1,7 @@
 package com.myapp.account.edit_account_data;
 
 import java.util.List;
+import android.util.Log;
 import android.app.Activity;
 import android.view.Window;
 import android.content.Context;
@@ -16,6 +17,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
@@ -26,27 +31,27 @@ import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.infoarea.DailyInfoRecord;
 import com.myapp.account.observer.AccountEditCompleteObserver;
-
 /**
  * Add Account Date Class.
  */
-public class AccountAdd {
+public class AccountAdd implements OnItemSelectedListener {
 
     protected Activity activity;
     protected AlertDialog inputDialog;
-    protected CategoryItems categoryItems;
     protected AccountTableAccessor accountTable;
     protected AccountMasterTableAccessor masterTable;
     protected View layout;
     protected String insertDate;
     protected AccountEditCompleteObserver observer;
+    protected Spinner categorySpinner;
+    protected String selectedCategoryItem;
+    protected String[] categoryItems;
 
     /**
      * Constractor.
      */
     public AccountAdd(Activity activity) {
         this.activity = activity;
-        categoryItems = new CategoryItems(activity);
         accountTable = new AccountTableAccessor( new DatabaseHelper(activity.getApplicationContext()) );
         masterTable = new AccountMasterTableAccessor( new DatabaseHelper(activity.getApplicationContext()) );
     }
@@ -64,18 +69,10 @@ public class AccountAdd {
      */
     public void appear(String date) {
         this.insertDate = date;
-        LayoutInflater inflater = LayoutInflater.from(this.activity);
-        layout = inflater.inflate(R.layout.account_edit, (ViewGroup)activity.findViewById(R.id.account_edit));
-        inputDialog = new AlertDialog.Builder(activity).create();
-        inputDialog.setView(layout);
-        inputDialog.getWindow().setGravity(Gravity.TOP);
-        inputDialog.show();
 
-        // Title Display.
-        setTitleArea();
-        setButtonTitle();
-        registEvent();
-    }
+        // initialize.
+        initialize();
+   }
 
     /**
      * Appear the Account Display.
@@ -83,6 +80,56 @@ public class AccountAdd {
      */
     public void appear(DailyInfoRecord record) {
         // not supported.
+    }
+
+    /**
+     * Initialize.
+     */
+    protected void initialize() {
+        createDialog();
+        createCategoryItems();
+        createSpinner();
+        setTitleArea();
+        setButtonTitle();
+        registEvent();
+     }
+
+    /**
+     * Create Alert Dialog.
+     */
+    protected void createDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this.activity);
+        layout = inflater.inflate(R.layout.account_edit, (ViewGroup)activity.findViewById(R.id.account_edit));
+        inputDialog = new AlertDialog.Builder(activity).create();
+        inputDialog.setView(layout);
+        inputDialog.getWindow().setGravity(Gravity.TOP);
+        inputDialog.show();
+    }
+
+    /**
+     * Create Category Spinner.
+     */
+    protected void createSpinner() {
+       categorySpinner = (Spinner)layout.findViewById(R.id.category_spinner);
+       ArrayAdapter<String> adapter =
+           new ArrayAdapter(activity, android.R.layout.simple_spinner_item, categoryItems);
+       adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+       categorySpinner.setAdapter(adapter);
+
+       // set event listener.
+       categorySpinner.setOnItemSelectedListener(this);
+    }
+
+    /**
+     * Create Category Items.
+     */
+    protected void createCategoryItems() {
+        List<AccountMasterTableRecord> record = masterTable.getAll();
+        categoryItems = new String[ record.size() ];
+
+        for( int i = 0 ; i < record.size() ; i++ ) {
+            categoryItems[i] = record.get(i).getName();
+        }
     }
 
     /**
@@ -105,14 +152,6 @@ public class AccountAdd {
      * Rejist Event
      */
     protected void registEvent() {
-        ImageButton category_btn = (ImageButton)layout.findViewById(R.id.category_select_btn);
-        category_btn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        appearCheckbox();
-                    }
-                });
         Button regist_btn = (Button)layout.findViewById(R.id.regist_btn);
         regist_btn.setOnClickListener(
                 new View.OnClickListener() {
@@ -120,21 +159,6 @@ public class AccountAdd {
                         insertOrUpdateAccountRecord();
                     }
                 });
-        ImageButton money_btn = (ImageButton)layout.findViewById(R.id.money_btn);
-        money_btn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        appearCalculator();
-                    }
-                });
-    }
-
-    /**
-     * Appear Checkbox.
-     */
-    protected void appearCheckbox() {
-        categoryItems.createDialog(activity);
     }
 
     /**
@@ -162,11 +186,10 @@ public class AccountAdd {
      * Get Account Information from user's input information.
      */
     protected AccountTableRecord getInputUserAccountInfo()  throws NumberFormatException {
-        EditText edit_category= (EditText)layout.findViewById(R.id.category_value);
         EditText edit_money = (EditText)layout. findViewById(R.id.money_value);
         EditText edit_memo = (EditText)layout.findViewById(R.id.memo_value);
 
-        AccountMasterTableRecord master_record = masterTable.getRecordMatchName( edit_category.getText().toString() );
+        AccountMasterTableRecord master_record = masterTable.getRecordMatchName( selectedCategoryItem );
 
         AccountTableRecord record = new AccountTableRecord();
         try {
@@ -186,8 +209,8 @@ public class AccountAdd {
      */
     protected boolean isEnableInputData(AccountTableRecord input_data) {
         if( 0 == input_data.getMoney() ||
-            0 == input_data.getCategoryId() ||
-            Utility.isStringNULL(input_data.getInsertDate()) ) {
+            true == Utility.isStringNULL(selectedCategoryItem) ||
+            true == Utility.isStringNULL(input_data.getInsertDate()) ) {
             return false;
         }
         return true;
@@ -207,7 +230,6 @@ public class AccountAdd {
      */
     protected void updateUseDateOfMaterTable(int key) {
         AccountMasterTableRecord master_record = masterTable.getRecord(key);
-
         masterTable.update(master_record);
     }
 
@@ -235,59 +257,19 @@ public class AccountAdd {
     }
 
     /**
-     * Appear Calculator.
+     * Select item on Spinner.
      */
-    protected void appearCalculator() {
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id ) {
+        Spinner spinner = (Spinner)parent;
+        selectedCategoryItem = (String)spinner.getSelectedItem().toString();
     }
 
     /**
-     * Account Category Items Class.
+     * Non Selected item on Spinner.
      */
-    protected class CategoryItems implements AbstractDialog {
-
-        protected String[] checkItems;
-        protected AccountMasterTableAccessor masterTable;
-
-        /**
-         * Class Constractor.
-         */
-        public CategoryItems(Context context) {
-            masterTable = new AccountMasterTableAccessor( new DatabaseHelper(context) );
-        }
-
-        /**
-         * Create Checkbox.
-         * @param context Context instance.
-         */
-        public void createDialog(Context context) {
-            SetAccountMasterItemToCheckItems();
-
-            // Create Dialog.
-            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-            dialog.setTitle(R.string.regist_category_label);
-            dialog.setItems
-                (checkItems,
-                 new DialogInterface.OnClickListener() {
-                     @Override
-                     public void onClick(DialogInterface dialog, int item) {
-                         EditText category = (EditText)layout.findViewById(R.id.category_value);
-                         category.setText(checkItems[item]);
-                     }
-                 });
-            dialog.show();
-        }
-
-        /**
-         * Set AccountMaster Item To CheckItem.
-         */
-        protected void SetAccountMasterItemToCheckItems() {
-            List<AccountMasterTableRecord> record = masterTable.getAll();
-            checkItems = new String[ record.size() ];
-
-            for( int i = 0 ; i < record.size() ; i++ ) {
-                checkItems[i] = record.get(i).getName();
-            }
-        }
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 }
 
