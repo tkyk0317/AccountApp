@@ -14,9 +14,14 @@
     <string name="memo_label">メモ</string>
     <string name="regist_btn_label">登録</string>
     <string name="modify_btn_label">修正</string>
+    <string name="delete_btn_label">削除</string>
     <string name="regist_category_label">登録項目</string>
     <string name="regist_msg">家計簿の登録が完了しました</string>
     <string name="modify_msg">家計簿の修正が完了しました</string>
+    <string name="delete_confirm_msg">データを削除しますか？</string>
+    <string name="delete_confirm_yes">はい</string>
+    <string name="delete_confirm_no">いいえ</string>
+    <string name="delete_msg">データの削除が完了しました</string>
     <string name="regist_alert_msg">入力内容を確認してください</string>
     <string name="estimate_label">予算</string>
     <string name="estimate_rest_money_label">予算残</string>

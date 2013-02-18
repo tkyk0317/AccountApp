@@ -91,8 +91,8 @@ public class Estimate {
         insertRestEstimateMoneyIntoTableRow(table_row);
 
         // Create Table.
-        TableLayout summry_table = (TableLayout) activity.findViewById(R.id.summry_table);
-        summry_table.addView(table_row);
+        TableLayout summary_table = (TableLayout) activity.findViewById(R.id.summary_table);
+        summary_table.addView(table_row);
     }
 
     /**

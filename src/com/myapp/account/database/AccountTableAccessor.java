@@ -98,7 +98,7 @@ public class AccountTableAccessor {
         String first_date_of_month = Utility.getFirstDateOfTargetMonth(target_date);
 
         Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
-                                           "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id", null, "insert_date", null);
+                                           "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id, insert_date", null, "insert_date", null);
         cursor.moveToFirst();
 
         int record_count = cursor.getCount();
@@ -194,10 +194,11 @@ public class AccountTableAccessor {
     /**
      * Delete Record from AccountMasterTable.
      * @param key Delete Target id of AccountTable.
-     * @return true if delete success.
+     * @return  deleteted key number.
      */
-    public boolean delete(int key) {
-        return true;
+    public int delete(int key) {
+        writeDatabase.delete(TABLE_NAME, "_id=" + String.valueOf(key), null);
+        return key;
     }
 
     /**
