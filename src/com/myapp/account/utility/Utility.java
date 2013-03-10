@@ -193,7 +193,7 @@ public class Utility {
         Calendar target_cal = Calendar.getInstance(TimeZone.getDefault());
 
         // setting target date.
-        target_cal.set(year, month, day);
+        target_cal.set(year, month - 1, day);
 
         return target_cal.get(Calendar.DAY_OF_WEEK);
     }
