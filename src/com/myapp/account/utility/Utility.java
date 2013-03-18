@@ -2,6 +2,7 @@ package com.myapp.account.utility;
 
 import java.util.*;
 import java.text.*;
+import android.util.Log;
 
 /**
  * Utility Class.
@@ -47,6 +48,36 @@ public class Utility {
     public static String getCurrentDate() {
         Calendar cal_date = Calendar.getInstance(TimeZone.getDefault());
         return (new SimpleDateFormat(DATE_FORMAT)).format(cal_date.getTime());
+    }
+
+    /**
+     * @brief Get Previous Date.
+     * @return Previous Date(String Type).
+     */
+    public static String getPreviousMonthDate(String current_date) {
+        int year = Integer.valueOf(current_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
+        int month = Integer.valueOf(current_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
+        int day = Integer.valueOf(current_date.substring(DATE_DAY_ST_POS));
+
+        Calendar previous_date = Calendar.getInstance(TimeZone.getDefault());
+        previous_date.set(year, month - 1, day);
+        previous_date.add(Calendar.MONTH, -1);
+        return (new SimpleDateFormat(DATE_FORMAT)).format(previous_date.getTime());
+    }
+
+    /**
+     * @brief Get Next Date.
+     * @return Next Date(String Type).
+     */
+    public static String getNextMonthDate(String current_date) {
+        int year = Integer.valueOf(current_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
+        int month = Integer.valueOf(current_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
+        int day = Integer.valueOf(current_date.substring(DATE_DAY_ST_POS));
+
+        Calendar previous_date = Calendar.getInstance(TimeZone.getDefault());
+        previous_date.set(year, month - 1, day);
+        previous_date.add(Calendar.MONTH, 1);
+        return (new SimpleDateFormat(DATE_FORMAT)).format(previous_date.getTime());
     }
 
     /**
@@ -129,6 +160,24 @@ public class Utility {
      */
     public static String splitMonthAndDay(String target_date) {
         return target_date.substring(DATE_MONTH_ST_POS);
+    }
+
+    /**
+     * @brief Split the year from Specified Date.
+     * @param target_date Specified Date(yyyy/mm/dd).
+     * @return splited year.
+     */
+    public static String splitYear(String target_date) {
+        return target_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_SIZE);
+    }
+
+    /**
+     * @brief Split the month from Specified Date.
+     * @param target_date Specified Date(yyyy/mm/dd).
+     * @return splited month.
+     */
+    public static String splitMonth(String target_date) {
+        return target_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE);
     }
 
     /**

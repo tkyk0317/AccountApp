@@ -11,6 +11,12 @@ import android.view.MenuItem;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
+import android.view.MotionEvent;
+import android.widget.LinearLayout;
+import android.widget.ViewFlipper;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import com.myapp.account.titlearea.TitleArea;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.estimate.Estimate;
@@ -35,8 +41,15 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     protected Summary summary;
     protected TabContent tabContent;
     protected ApplicationMenu applicationMenu;
-    protected AccountCalendar accountCalendar;
+    protected AccountCalendar currentCalendar;
+    protected AccountCalendar nextCalendar;
+    protected ViewFlipper viewFlipper;
     protected String currentDate;
+    protected Animation leftInAnimation;
+    protected Animation rightInAnimation;
+    protected Animation leftOutAnimation;
+    protected Animation rightOutAnimation;
+    protected static final int ANIMATION_DURATION = 300;
 
     /**
      * Create Activity.
@@ -54,6 +67,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     protected void onStart() {
         super.onStart();
         setContentView(R.layout.main);
+        viewFlipper = (ViewFlipper)findViewById(R.id.calendar_flipper);
 
         // initialize.
         init();
@@ -74,14 +88,33 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         tabContent = new TabContent(this);
         summary = new Summary(this);
         applicationMenu = new ApplicationMenu(this);
-        accountCalendar = new AccountCalendar(this);
+        currentCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.current_flipper));
+        nextCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.next_flipper));
+
+        // create animation.
+        createTranslateAnimation();
 
         // clear summar/estimate.
         clearSummaryAndEstimateArea();
 
         // attach observer.
-        accountCalendar.attachObserver(this);
+        currentCalendar.attachObserver(this);
+        nextCalendar.attachObserver(this);
         tabContent.attachObserverForDailyInfo(this);
+    }
+
+    /**
+     * @brief Create Translate Animation.
+     */
+    protected void createTranslateAnimation() {
+        this.leftInAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT,-1.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f);
+        this.rightInAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT,1.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f);
+        this.leftOutAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,-1.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f);
+        this.rightOutAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,1.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f);
+        this.leftInAnimation.setDuration(ANIMATION_DURATION);
+        this.leftOutAnimation.setDuration(ANIMATION_DURATION);
+        this.rightInAnimation.setDuration(ANIMATION_DURATION);
+        this.rightOutAnimation.setDuration(ANIMATION_DURATION);
     }
 
     /**
@@ -101,7 +134,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         summary.appear();
         titleArea.appear(currentDate);
         tabContent.appear(currentDate);
-        accountCalendar.appear();
+        currentCalendar.appear(currentDate);
    }
 
     /**
@@ -146,6 +179,10 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         tabContent = null;
         summary = null;
         applicationMenu = null;
+        leftInAnimation = null;
+        leftOutAnimation = null;
+        rightInAnimation = null;
+        rightOutAnimation = null;
     }
 
     /**
@@ -187,6 +224,54 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         AccountEdit account_edit = new AccountEdit(this);
         account_edit.attachObserver(this);
         account_edit.appear((DailyInfoRecord)event);
+    }
+
+    /**
+     * @brief OnFiling Event.
+     */
+    @Override
+    public void notifyOnFling(Object event, MotionEvent motion_start, MotionEvent motion_end, float velocity_x, float velocity_y) {
+
+        // appear the next calendar.
+        setCurrentDate(velocity_x);
+        if( nextCalendar.equals((AccountCalendar)event) ) {
+            currentCalendar.appear(currentDate);
+        } else {
+            nextCalendar.appear(currentDate);
+        }
+
+        // move to next calendar.
+        moveCalendar(velocity_x);
+        this.titleArea.appear(this.currentDate);
+        this.tabContent.appear(this.currentDate);
+     }
+
+    /**
+     * @brief Set Current Date.
+     * @param velocity_x Velocity of X.
+     */
+    protected void setCurrentDate(float velocity_x) {
+        if( velocity_x < 0 ) {
+            this.currentDate = Utility.getNextMonthDate(currentDate);
+        } else {
+            this.currentDate = Utility.getPreviousMonthDate(currentDate);
+        }
+    }
+
+    /**
+     * @brief Move Next Calendar.
+     * @param velocity_x Velocity of X.
+     */
+    protected void moveCalendar(float velocity_x) {
+        if( velocity_x < 0 ) {
+            this.viewFlipper.setInAnimation(rightInAnimation);
+            this.viewFlipper.setOutAnimation(leftOutAnimation);
+            this.viewFlipper.showNext();
+        } else {
+            this.viewFlipper.setInAnimation(leftInAnimation);
+            this.viewFlipper.setOutAnimation(rightOutAnimation);
+            this.viewFlipper.showPrevious();
+        }
     }
 
     /**
