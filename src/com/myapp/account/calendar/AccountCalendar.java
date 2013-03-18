@@ -10,6 +10,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.graphics.Color;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.view.MotionEvent;
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.calendar.AccountCalendarCell;
@@ -24,6 +26,8 @@ public class AccountCalendar implements ClickObserverInterface {
     protected List<AccountCalendarCell> calendarCells = new ArrayList<AccountCalendarCell>(CALENDAR_DAY_OF_WEEK_NUM*CALENDAR_ROW_NUM);
     protected ClickObserverInterface observer;
     protected AccountCalendarCell currentCell;
+    protected LinearLayout layout;
+    protected String appearDate;
     protected static final int CALENDAR_DAY_OF_WEEK_NUM = 7;
     protected static final int CALENDAR_ROW_NUM = 6;
     protected static final int WEEK_OF_SATURDAY = 5;
@@ -32,57 +36,79 @@ public class AccountCalendar implements ClickObserverInterface {
     /**
      * Constractor.
      */
-    public AccountCalendar(Activity activity) {
+    public AccountCalendar(Activity activity, LinearLayout layout) {
         this.activity = activity;
-        getTableItemFromXml();
+        this.layout = layout;
+        getCalendarItems();
     }
 
     /**
-     * Get Table Item.
+     * Appear the Calender.
      */
-    protected void getTableItemFromXml() {
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_0)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_1)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_2)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_3)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_4)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_5)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_6)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_7)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_8)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_9)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_10)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_11)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_12)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_13)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_14)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_15)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_16)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_17)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_18)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_19)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_20)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_21)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_22)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_23)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_24)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_25)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_26)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_27)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_28)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_29)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_30)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_31)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_32)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_33)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_34)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_35)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_36)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_37)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_38)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_39)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_40)) );
-        calendarCells.add( new AccountCalendarCell( (TextView)activity.findViewById(R.id.calendar_cell_41)) );
+    public void appear(String target_date) {
+        this.appearDate = target_date;
+        clearCalendarItems();
+        createCalendar();
+        focusCurrentDate();
+    }
+
+    /**
+     * @brief Clear Calendar Items.
+     */
+    protected void clearCalendarItems() {
+        for( Object object : this.calendarCells ) {
+            AccountCalendarCell cell = (AccountCalendarCell)object;
+            cell.setDate(0, 0, 0, 0);
+            cell.setText("");
+        }
+    }
+
+    /**
+     * @brief Get CalendarItems.
+     */
+    protected void getCalendarItems() {
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_0), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_1), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_2), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_3), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_4), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_5), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_6), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_7), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_8), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_9), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_10), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_11), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_12), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_13), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_14), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_15), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_16), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_17), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_18), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_19), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_20), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_21), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_22), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_23), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_24), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_25), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_26), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_27), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_28), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_29), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_30), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_31), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_32), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_33), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_34), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_35), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_36), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_37), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_38), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_39), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_40), this.activity) );
+        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_41), this.activity) );
     }
 
     /**
@@ -94,20 +120,12 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-     * Appear the Calender.
-     */
-    public void appear() {
-        createCalendar();
-        focusCurrentDate();
-    }
-
-    /**
       * Create Calendar.
       */
     protected void createCalendar() {
         int day = 1;
-        int current_year = Integer.valueOf(Utility.getCurrentYear());
-        int current_month = Integer.valueOf(Utility.getCurrentMonth());
+        int year = Integer.valueOf(Utility.splitYear(this.appearDate));
+        int month = Integer.valueOf(Utility.splitMonth(this.appearDate));
 
         // Create Calendar.
         for( int row = 0 ; row < CALENDAR_ROW_NUM ; ++row ) {
@@ -117,12 +135,12 @@ public class AccountCalendar implements ClickObserverInterface {
 
                 if( row * CALENDAR_DAY_OF_WEEK_NUM + week >= getStartPosition() &&
                     row * CALENDAR_DAY_OF_WEEK_NUM + week <= getEndPosition() ) {
-                    String date = Utility.CreateDateFormat(current_year, current_month, day);
+                    String date = Utility.CreateDateFormat(year, month, day);
                     int day_of_week = Utility.getDayOfWeek(date);
 
                     // setting calendar cell.
                     cell.setText(String.valueOf(day));
-                    cell.setDate(current_year, current_month, day++, day_of_week);
+                    cell.setDate(year, month, day++, day_of_week);
                 }
             }
         }
@@ -132,7 +150,12 @@ public class AccountCalendar implements ClickObserverInterface {
       * Focus Current Date.
       */
     protected void focusCurrentDate() {
-        currentCell = calendarCells.get(getStartPosition() + Integer.valueOf(Utility.getCurrentDay()) - 1);
+        if( null != currentCell ) {
+            Resources resources = activity.getResources();
+            currentCell.setBackgroundColor(resources.getColor(R.color.default_background));
+        }
+
+        currentCell = calendarCells.get(getStartPosition() + Integer.valueOf(Utility.splitDay(this.appearDate)) - 1);
 
         // color setting.
         Resources resources = activity.getResources();
@@ -145,7 +168,7 @@ public class AccountCalendar implements ClickObserverInterface {
      */
     protected int getStartPosition() {
         // calednar start if index zero(day of week start is index one).
-        return Utility.getDayOfWeek(Utility.getFirstDateOfCurrentMonth()) - 1;
+        return Utility.getDayOfWeek(Utility.getFirstDateOfTargetMonth(this.appearDate)) - 1;
     }
 
     /**
@@ -154,9 +177,9 @@ public class AccountCalendar implements ClickObserverInterface {
      */
     protected int getEndPosition() {
         int cal_st_pos = getStartPosition();
-        int end_current_month = Integer.valueOf(Utility.splitDay(Utility.getLastDateOfCurrentMonth()));
+        int end_month = Integer.valueOf(Utility.splitDay(Utility.getLastDateOfTargetMonth(this.appearDate)));
 
-        return cal_st_pos + end_current_month - 1;
+        return cal_st_pos + end_month - 1;
     }
 
     /**
@@ -189,6 +212,17 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
+     * @brief Onfiling Event.
+     */
+    @Override
+    public void notifyOnFling(Object event, MotionEvent motion_start, MotionEvent motion_end, float velocityX, float velocityY) {
+        if( null != this.observer ) {
+            this.observer.notifyOnFling(this, motion_start, motion_end, velocityX, velocityY);
+            focusCurrentDate();
+        }
+    }
+
+    /**
      * Focus Current Calendar Cell.
      */
     protected void focusCurrentCell(AccountCalendarCell current_cell) {
@@ -199,10 +233,11 @@ public class AccountCalendar implements ClickObserverInterface {
         // current cell setteing.
         currentCell = current_cell;
         currentCell.setBackgroundColor(resources.getColor(R.color.focus_background));
-     }
+    }
 
     // not implement.
     @Override
     public void notifyLongClickForDailyInfo(Object event) {}
 }
+
 

@@ -1,19 +1,20 @@
 package com.myapp.account.calendar;
 
 import java.util.*;
+import android.app.Activity;
 import android.widget.TextView;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.GestureDetector.OnGestureListener;
 import com.myapp.account.observer.ClickObserverInterface;
 import com.myapp.account.utility.Utility;
 
 /**
  * Account Calendar Cell Class.
  */
-public class AccountCalendarCell implements OnClickListener, OnLongClickListener {
-
+public class AccountCalendarCell implements OnGestureListener, View.OnTouchListener {
     protected TextView textView;
     protected int year;
     protected int month;
@@ -21,14 +22,15 @@ public class AccountCalendarCell implements OnClickListener, OnLongClickListener
     protected int dayOfWeek;
     protected String date;
     protected ClickObserverInterface observer;
+    protected GestureDetector gestureDetector;
 
     /**
      * Constractor.
      */
-    public AccountCalendarCell(TextView view) {
+    public AccountCalendarCell(TextView view, Activity activity) {
         this.textView = view;
-        this.textView.setOnClickListener(this);
-        this.textView.setOnLongClickListener(this);
+        this.textView.setOnTouchListener(this);
+        gestureDetector = new GestureDetector(activity, this);
     }
 
     /**
@@ -70,27 +72,55 @@ public class AccountCalendarCell implements OnClickListener, OnLongClickListener
         this.textView.setText(text);
     }
 
+    // Getter.
+    public String getDate() { return this.date; }
+
     /**
-     * Click Event Listener.
-     * @param event View instance.
+     * @brief OnTouchEvent.
+     * @return true:handle the event false:not handle the event.
      */
     @Override
-    public void onClick(View event) {
-        if( null != this.observer ) this.observer.notifyClick(this);
+    public boolean onTouch(View view, MotionEvent event) {
+        this.gestureDetector.onTouchEvent(event);
+        return false;
     }
 
     /**
-      * Long Click Listener.
-      * @param event View instance.
-      */
+     * @brief Down Click Event.
+     * @return true:handle the event false:not handle the event.
+     */
     @Override
-    public boolean onLongClick(View event) {
-        if( null != this.observer ) this.observer.notifyLongClick(this);
+    public boolean onDown(MotionEvent e) {
+        if( null != this.observer ) this.observer.notifyClick(this);
         return true;
     }
 
-    // Getter.
-    public String getDate() { return this.date; }
+    /**
+     * @brief Long Click Event.
+     * @return true:handle the event false:not handle the event.
+     */
+    @Override
+    public void onLongPress(MotionEvent e) {
+        if( null != this.observer ) this.observer.notifyLongClick(this);
+    }
+
+    /**
+     * @brief Flick Event.
+     * @return true:handle the event false:not handle the event.
+     */
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        if( null != this.observer ) this.observer.notifyOnFling(this, e1, e2, velocityX, velocityY);
+        return true;
+    }
+
+    // not support module.
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float x, float y) { return true; }
+    @Override
+    public void onShowPress(MotionEvent e) {}
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) { return false; }
 }
 
 
