@@ -45,12 +45,14 @@
             <TextView
                 android:gravity="right"
                 android:background="@drawable/border_weekday"
+                android:textSize="15px"
                 android:text="@string/friday"
                 />
             <TextView
                 android:gravity="right"
                 android:textColor="@color/blue"
                 android:background="@drawable/border_saturday"
+                android:textSize="15px"
                 android:text="@string/saturday"
                 />
         </TableRow>

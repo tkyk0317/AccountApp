@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.widget.TextView;
 import android.util.Log;
 import android.view.View;
+import android.view.Gravity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.GestureDetector.OnGestureListener;
@@ -23,12 +24,15 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     protected String date;
     protected ClickObserverInterface observer;
     protected GestureDetector gestureDetector;
+    protected static final int HEIGHT = 32;
 
     /**
      * Constractor.
      */
     public AccountCalendarCell(TextView view, Activity activity) {
         this.textView = view;
+        this.textView.setHeight(HEIGHT);
+        this.textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
         this.textView.setOnTouchListener(this);
         gestureDetector = new GestureDetector(activity, this);
     }
