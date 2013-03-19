@@ -35,7 +35,7 @@ public class Utility {
      * Create Date Format.
      * @return Current Date of String Data Type (yyyy/MM/dd).
      */
-    public static String CreateDateFormat(int year, int month, int day) {
+    public static String createDateFormat(int year, int month, int day) {
         Calendar cal_date = Calendar.getInstance(TimeZone.getDefault());
         cal_date.set(year, month - 1, day);
         return (new SimpleDateFormat(DATE_FORMAT)).format(cal_date.getTime());

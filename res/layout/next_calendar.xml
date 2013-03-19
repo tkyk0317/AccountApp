@@ -59,234 +59,150 @@
         <TableRow>
             <TextView
                 android:id="@+id/calendar_cell_0"
-                android:clickable="true"
-                android:gravity="right"
                 android:textColor="@color/red"
                 />
             <TextView
                 android:id="@+id/calendar_cell_1"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_2"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_3"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_4"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_5"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_6"
-                android:clickable="true"
-                android:gravity="right"
                 android:textColor="@color/blue"
                 />
         </TableRow>
         <TableRow>
             <TextView
                 android:id="@+id/calendar_cell_7"
-                android:clickable="true"
-                android:gravity="right"
                 android:textColor="@color/red"
                 />
             <TextView
                 android:id="@+id/calendar_cell_8"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_9"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_10"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_11"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_12"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_13"
-                android:clickable="true"
-                android:gravity="right"
                 android:textColor="@color/blue"
                 />
         </TableRow>
         <TableRow>
             <TextView
                 android:id="@+id/calendar_cell_14"
-                android:clickable="true"
-                android:gravity="right"
                 android:textColor="@color/red"
                 />
             <TextView
                 android:id="@+id/calendar_cell_15"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_16"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_17"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_18"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_19"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_20"
-                android:clickable="true"
-                android:gravity="right"
                 android:textColor="@color/blue"
                 />
         </TableRow>
         <TableRow>
             <TextView
                 android:id="@+id/calendar_cell_21"
-                android:clickable="true"
-                android:gravity="right"
                 android:textColor="@color/red"
                 />
             <TextView
                 android:id="@+id/calendar_cell_22"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_23"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_24"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_25"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_26"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_27"
-                android:clickable="true"
-                android:gravity="right"
                 android:textColor="@color/blue"
                 />
         </TableRow>
         <TableRow>
             <TextView
                 android:id="@+id/calendar_cell_28"
-                android:clickable="true"
-                android:gravity="right"
                 android:textColor="@color/red"
                 />
             <TextView
                 android:id="@+id/calendar_cell_29"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_30"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_31"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_32"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_33"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_34"
-                android:clickable="true"
-                android:gravity="right"
                 android:textColor="@color/blue"
                 />
         </TableRow>
         <TableRow>
             <TextView
                 android:id="@+id/calendar_cell_35"
-                android:clickable="true"
-                android:gravity="right"
                 android:textColor="@color/red"
                 />
             <TextView
                 android:id="@+id/calendar_cell_36"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_37"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_38"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_39"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_40"
-                android:clickable="true"
-                android:gravity="right"
                 />
             <TextView
                 android:id="@+id/calendar_cell_41"
-                android:clickable="true"
-                android:gravity="right"
                 android:textColor="@color/blue"
                 />
         </TableRow>

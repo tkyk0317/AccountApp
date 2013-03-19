@@ -9,6 +9,9 @@ import android.view.Gravity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.GestureDetector.OnGestureListener;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import com.myapp.account.R;
 import com.myapp.account.observer.ClickObserverInterface;
 import com.myapp.account.utility.Utility;
 
@@ -16,6 +19,8 @@ import com.myapp.account.utility.Utility;
  * Account Calendar Cell Class.
  */
 public class AccountCalendarCell implements OnGestureListener, View.OnTouchListener {
+
+    protected Activity activity;
     protected TextView textView;
     protected int year;
     protected int month;
@@ -31,10 +36,12 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
      */
     public AccountCalendarCell(TextView view, Activity activity) {
         this.textView = view;
+        this.activity = activity;
+        this.textView.setClickable(false);
         this.textView.setHeight(HEIGHT);
         this.textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
         this.textView.setOnTouchListener(this);
-        gestureDetector = new GestureDetector(activity, this);
+        gestureDetector = new GestureDetector(this.activity, this);
     }
 
     /**
@@ -57,7 +64,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
         this.month = month;
         this.day = day;
         this.dayOfWeek = day_of_week;
-        this.date = Utility.CreateDateFormat(year, month, day);
+        this.date = Utility.createDateFormat(year, month, day);
     }
 
     /**
@@ -76,6 +83,27 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
         this.textView.setText(text);
     }
 
+    /**
+     * @brief Set Clickable Param.
+     * @param is_click Specified Clickable Param.
+     */
+    public void setClickable(boolean is_click) {
+        this.textView.setClickable(is_click);
+    }
+
+    /**
+     * @brief Set Checked Image.
+     * @param is_checked Specified Check Status.
+     */
+    public void setCheckedImage(boolean is_checked) {
+        Drawable check_image = null;
+        if( is_checked ) {
+            Resources resources = activity.getResources();
+            check_image = resources.getDrawable(R.drawable.circle);
+        }
+        this.textView.setCompoundDrawablesWithIntrinsicBounds(check_image, null, null, null);
+    }
+
     // Getter.
     public String getDate() { return this.date; }
 
@@ -85,8 +113,9 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
      */
     @Override
     public boolean onTouch(View view, MotionEvent event) {
+        if( false == this.textView.isClickable() ) return false;
         this.gestureDetector.onTouchEvent(event);
-        return false;
+        return true;
     }
 
     /**
