@@ -16,6 +16,8 @@ import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.calendar.AccountCalendarCell;
 import com.myapp.account.observer.ClickObserverInterface;
+import com.myapp.account.database.DatabaseHelper;
+import com.myapp.account.database.AccountTableAccessor;
 
 /**
  * Account Calendar Class.
@@ -28,6 +30,7 @@ public class AccountCalendar implements ClickObserverInterface {
     protected AccountCalendarCell currentCell;
     protected LinearLayout layout;
     protected String appearDate;
+    protected AccountTableAccessor accountTableAccessor;
     protected static final int CALENDAR_DAY_OF_WEEK_NUM = 7;
     protected static final int CALENDAR_ROW_NUM = 6;
     protected static final int WEEK_OF_SATURDAY = 5;
@@ -39,6 +42,7 @@ public class AccountCalendar implements ClickObserverInterface {
     public AccountCalendar(Activity activity, LinearLayout layout) {
         this.activity = activity;
         this.layout = layout;
+        this.accountTableAccessor = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
         getCalendarItems();
     }
 
@@ -131,15 +135,23 @@ public class AccountCalendar implements ClickObserverInterface {
             for( int week = 0 ; week < CALENDAR_DAY_OF_WEEK_NUM ; ++week ) {
                 AccountCalendarCell cell = calendarCells.get(row * CALENDAR_DAY_OF_WEEK_NUM + week );
                 cell.attachObserver(this);
+                cell.setCheckedImage(false);
+                cell.setClickable(false);
 
                 if( row * CALENDAR_DAY_OF_WEEK_NUM + week >= getStartPosition() &&
                     row * CALENDAR_DAY_OF_WEEK_NUM + week <= getEndPosition() ) {
-                    String date = Utility.CreateDateFormat(year, month, day);
+                    String date = Utility.createDateFormat(year, month, day);
                     int day_of_week = Utility.getDayOfWeek(date);
 
                     // setting calendar cell.
                     cell.setText(String.valueOf(day));
                     cell.setDate(year, month, day++, day_of_week);
+                    cell.setClickable(true);
+
+                    // check exsit data.
+                    if( this.accountTableAccessor.isExsitRecordAtTargetDate(date) ) {
+                        cell.setCheckedImage(true);
+                    }
                 }
             }
         }
