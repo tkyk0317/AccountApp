@@ -56,8 +56,7 @@ public class AccountCalendar implements ClickObserverInterface {
      * @brief Clear Calendar Items.
      */
     protected void clearCalendarItems() {
-        for( Object object : this.calendarCells ) {
-            AccountCalendarCell cell = (AccountCalendarCell)object;
+        for( AccountCalendarCell cell : this.calendarCells ) {
             cell.setDate(0, 0, 0, 0);
             cell.setText("");
         }

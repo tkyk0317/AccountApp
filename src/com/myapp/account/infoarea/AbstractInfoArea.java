@@ -48,7 +48,6 @@ public abstract class AbstractInfoArea {
      * Appear the Daily Infomation Area.
      */
     public void appear(String display_date) {
-        Log.d("AbstractInfoArea", "[START]");
         this.displayDate = display_date;
 
         // get info from database.
@@ -63,7 +62,6 @@ public abstract class AbstractInfoArea {
             // draw.
             drawRecord(item_table, account_record.get(i) );
         }
-        Log.d("AbstractInfoArea", "[END]");
     }
 
     /**

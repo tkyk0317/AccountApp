@@ -30,6 +30,7 @@ import com.myapp.account.observer.AccountEditCompleteObserver;
 import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.edit_account_data.AccountEdit;
 import com.myapp.account.infoarea.DailyInfoRecord;
+import com.myapp.account.file_manager.ImportAccountDataTableImpl;
 
 /**
  * Main Class in AccountApp Application.
@@ -67,7 +68,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     protected void onStart() {
         super.onStart();
         setContentView(R.layout.main);
-        viewFlipper = (ViewFlipper)findViewById(R.id.calendar_flipper);
+        this.viewFlipper = (ViewFlipper)findViewById(R.id.calendar_flipper);
 
         // initialize.
         init();
@@ -83,13 +84,13 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * Initialize Member-Variable.
      */
     protected void init() {
-        titleArea = new TitleArea(this);
-        estimateInfo = new Estimate(this);
-        tabContent = new TabContent(this);
-        summary = new Summary(this);
-        applicationMenu = new ApplicationMenu(this);
-        currentCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.current_flipper));
-        nextCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.next_flipper));
+        this.titleArea = new TitleArea(this);
+        this.estimateInfo = new Estimate(this);
+        this.tabContent = new TabContent(this);
+        this.summary = new Summary(this);
+        this.applicationMenu = new ApplicationMenu(this);
+        this.currentCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.current_flipper));
+        this.nextCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.next_flipper));
 
         // create animation.
         createTranslateAnimation();
@@ -98,9 +99,9 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         clearSummaryAndEstimateArea();
 
         // attach observer.
-        currentCalendar.attachObserver(this);
-        nextCalendar.attachObserver(this);
-        tabContent.attachObserverForDailyInfo(this);
+        this.currentCalendar.attachObserver(this);
+        this.nextCalendar.attachObserver(this);
+        this.tabContent.attachObserverForDailyInfo(this);
     }
 
     /**
@@ -131,10 +132,10 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     protected void displayMainContent() {
         currentDate = Utility.getCurrentDate();
 
-        summary.appear();
-        titleArea.appear(currentDate);
-        tabContent.appear(currentDate);
-        currentCalendar.appear(currentDate);
+        this.summary.appear();
+        this.titleArea.appear(currentDate);
+        this.tabContent.appear(currentDate);
+        this.currentCalendar.appear(currentDate);
    }
 
     /**
@@ -143,11 +144,15 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     @Override
     public void onDestroy() {
         super.onDestroy();
-        titleArea = null;
-        estimateInfo = null;
-        tabContent = null;
-        summary = null;
-        applicationMenu = null;
+        this.titleArea = null;
+        this.estimateInfo = null;
+        this.tabContent = null;
+        this.summary = null;
+        this.applicationMenu = null;
+        this.leftInAnimation = null;
+        this.leftOutAnimation = null;
+        this.rightInAnimation = null;
+        this.rightOutAnimation = null;
     }
 
     /**
@@ -156,7 +161,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
-        applicationMenu.appear(menu);
+        this.applicationMenu.appear(menu);
         return true;
     }
 
@@ -165,7 +170,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
       */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return applicationMenu.displayMenu(item.getItemId());
+        return this.applicationMenu.displayMenu(item.getItemId());
     }
 
     /**
@@ -174,15 +179,15 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     @Override
     protected void onStop() {
         super.onStop();
-        titleArea = null;
-        estimateInfo = null;
-        tabContent = null;
-        summary = null;
-        applicationMenu = null;
-        leftInAnimation = null;
-        leftOutAnimation = null;
-        rightInAnimation = null;
-        rightOutAnimation = null;
+        this.titleArea = null;
+        this.estimateInfo = null;
+        this.tabContent = null;
+        this.summary = null;
+        this.applicationMenu = null;
+        this.leftInAnimation = null;
+        this.leftOutAnimation = null;
+        this.rightInAnimation = null;
+        this.rightOutAnimation = null;
     }
 
     /**
@@ -193,9 +198,9 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     public void notifyClick(Object event) {
         AccountCalendarCell cell = (AccountCalendarCell)event;
 
-        currentDate = cell.getDate();
-        titleArea.appear(currentDate);
-        tabContent.appear(currentDate);
+        this.currentDate = cell.getDate();
+        this.titleArea.appear(currentDate);
+        this.tabContent.appear(currentDate);
     }
 
     /**
@@ -207,7 +212,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         AccountCalendarCell cell = (AccountCalendarCell)event;
 
         // AccountAdd Displayed.
-        currentDate = cell.getDate();
+        this.currentDate = cell.getDate();
         AccountAdd account_add = new AccountAdd(this);
         account_add.attachObserver(this);
         account_add.appear(currentDate);
@@ -219,7 +224,8 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     @Override
     public void notifyLongClickForDailyInfo(Object event) {
-        currentDate = ((DailyInfoRecord)event).getAccountDate();
+        this.currentDate = ((DailyInfoRecord)event).getAccountDate();
+
         // Modify dialog Display.
         AccountEdit account_edit = new AccountEdit(this);
         account_edit.attachObserver(this);
@@ -234,10 +240,10 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
 
         // appear the next calendar.
         setCurrentDate(velocity_x);
-        if( nextCalendar.equals((AccountCalendar)event) ) {
-            currentCalendar.appear(currentDate);
+        if( this.nextCalendar.equals((AccountCalendar)event) ) {
+            this.currentCalendar.appear(currentDate);
         } else {
-            nextCalendar.appear(currentDate);
+            this.nextCalendar.appear(currentDate);
         }
 
         // move to next calendar.
@@ -281,10 +287,10 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     public void notifyAccountEditComplete() {
         // reflesh display.
         clearSummaryAndEstimateArea();
-        estimateInfo.appear();
-        summary.appear();
-        titleArea.appear(currentDate);
-        tabContent.appear(currentDate);
+        this.estimateInfo.appear();
+        this.summary.appear();
+        this.titleArea.appear(currentDate);
+        this.tabContent.appear(currentDate);
      }
 }
 

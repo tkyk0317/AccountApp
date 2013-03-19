@@ -70,11 +70,9 @@ public class TabContent {
      * Appear the TabContent.
      */
     public void appear(String display_date) {
-        Log.d("TabContent", "[START]");
         changeTabHeight();
         infoDailyArea.appear(display_date);
         infoMonthArea.appear(display_date);
-        Log.d("TabContent", "[END]");
      }
 
    /**
