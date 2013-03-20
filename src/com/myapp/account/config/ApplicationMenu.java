@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.view.Menu;
 import com.myapp.account.R;
 import com.myapp.account.AppConfigurationActivity;
+import com.myapp.account.EditAccountMasterActivity;
 
 /**
  * Application Menu Class.
@@ -15,8 +16,7 @@ public class ApplicationMenu {
 
     // Dialog List Index.
     private enum DialogListIndex {
-
-        ADD_CATEGORY_INDEX(0), ADD_USER_INDEX(1);
+        ADD_USER_INDEX(0), ADD_CATEGORY_INDEX(0);
 
         private final int index;
 
@@ -37,7 +37,7 @@ public class ApplicationMenu {
      * Appear the Application Menu.
      */
     public void appear(Menu menu) {
-        activity.getMenuInflater().inflate(R.menu.app_menu,menu);
+        this.activity.getMenuInflater().inflate(R.menu.app_menu,menu);
     }
 
     /**
@@ -66,8 +66,8 @@ public class ApplicationMenu {
      * Move To Configuration Activity.
      */
     protected void moveToConfig() {
-        Intent intent = new Intent( activity, AppConfigurationActivity.class);
-        activity.startActivity(intent);
+        Intent intent = new Intent( this.activity, AppConfigurationActivity.class);
+        this.activity.startActivity(intent);
     }
 
     /**
@@ -75,10 +75,10 @@ public class ApplicationMenu {
      */
     protected void displayEditDialog() {
         final String[] edit_menus
-            = { activity.getText(R.string.menu_master_add_title).toString(),
-                activity.getText(R.string.menu_user_add_title).toString()};
+            = { this.activity.getText(R.string.menu_master_edit_title).toString(),
+                this.activity.getText(R.string.menu_user_add_title).toString()};
 
-        AlertDialog.Builder edit_menu_dialog = new AlertDialog.Builder(activity);
+        AlertDialog.Builder edit_menu_dialog = new AlertDialog.Builder(this.activity);
         edit_menu_dialog.setTitle(R.string.menu_account_data_edit_list_title);
         edit_menu_dialog.setItems( edit_menus,
                 new DialogInterface.OnClickListener() {
@@ -105,6 +105,8 @@ public class ApplicationMenu {
      * Move To Add Category into Master Activity.
      */
     protected void moveToAddCategory() {
+        Intent intent = new Intent( this.activity, EditAccountMasterActivity.class);
+        this.activity.startActivity(intent);
     }
 
     /**

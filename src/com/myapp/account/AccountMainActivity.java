@@ -3,7 +3,6 @@ package com.myapp.account;
 import java.util.*;
 import android.util.Log;
 import android.app.Activity;
-import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Menu;
@@ -30,7 +29,6 @@ import com.myapp.account.observer.AccountEditCompleteObserver;
 import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.edit_account_data.AccountEdit;
 import com.myapp.account.infoarea.DailyInfoRecord;
-import com.myapp.account.file_manager.ImportAccountDataTableImpl;
 
 /**
  * Main Class in AccountApp Application.
@@ -50,6 +48,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     protected Animation rightInAnimation;
     protected Animation leftOutAnimation;
     protected Animation rightOutAnimation;
+    protected CalendarIndex currentCalendarIndex;
     protected static final int ANIMATION_DURATION = 300;
 
     /**
@@ -136,6 +135,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.titleArea.appear(currentDate);
         this.tabContent.appear(currentDate);
         this.currentCalendar.appear(currentDate);
+        this.currentCalendarIndex = CalendarIndex.CURRENT_ID;
    }
 
     /**
@@ -242,8 +242,10 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         setCurrentDate(velocity_x);
         if( this.nextCalendar.equals((AccountCalendar)event) ) {
             this.currentCalendar.appear(currentDate);
+            this.currentCalendarIndex = CalendarIndex.CURRENT_ID;
         } else {
             this.nextCalendar.appear(currentDate);
+            this.currentCalendarIndex = CalendarIndex.NEXT_ID;
         }
 
         // move to next calendar.
@@ -287,10 +289,29 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     public void notifyAccountEditComplete() {
         // reflesh display.
         clearSummaryAndEstimateArea();
+        refleshCalendar();
         this.estimateInfo.appear();
         this.summary.appear();
         this.titleArea.appear(currentDate);
         this.tabContent.appear(currentDate);
      }
+
+    /**
+     * @brief Reflesh Calendar.
+     */
+    protected void refleshCalendar() {
+        if( this.currentCalendarIndex == CalendarIndex.CURRENT_ID ) {
+            this.currentCalendar.appear(currentDate);
+        } else if( this.currentCalendarIndex == CalendarIndex.NEXT_ID ) {
+            this.nextCalendar.appear(currentDate);
+        }
+     }
+
+    /**
+     * @brief Calendar Index Enum.
+     */
+    private enum CalendarIndex {
+        CURRENT_ID(), NEXT_ID();
+    }
 }
 
