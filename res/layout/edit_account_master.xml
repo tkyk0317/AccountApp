@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        >
+        <TextView
+            android:id="@+id/menu_master_edit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_master_edit_title"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textSize="20px"
+            />
+    </LinearLayout>
+    <ImageView
+        android:src="@android:drawable/divider_horizontal_dark"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        />
+    <LinearLayout
+        android:id="@+id/account_master"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+        <ScrollView
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            >
+            <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/account_master_table"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:stretchColumns="0,1,2"
+                >
+            </TableLayout>
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>
+

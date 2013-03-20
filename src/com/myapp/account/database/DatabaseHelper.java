@@ -10,9 +10,9 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class DatabaseHelper extends SQLiteOpenHelper
 {
+    public static final int INCOME_FLAG = 0;
+    public static final int PAYMENT_FLAG = 1;
     private static final int DB_VERSION  = 1;
-    private static final int INCOME_FLAG = 0;
-    private static final int PAYMENT_FLAG = 1;
     private static final String LOG_TAG = "DatabaseHelper";
     private static final String DB_NAME = "Account.db";
     private static final String ACCOUNT_MASTER_NAME = "AccountMaster";

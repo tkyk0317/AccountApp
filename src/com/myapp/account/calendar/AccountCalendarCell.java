@@ -39,7 +39,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
         this.activity = activity;
         this.textView.setClickable(false);
         this.textView.setHeight(HEIGHT);
-        this.textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+        this.textView.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.TOP);
         this.textView.setOnTouchListener(this);
         gestureDetector = new GestureDetector(this.activity, this);
     }
@@ -101,7 +101,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
             Resources resources = activity.getResources();
             check_image = resources.getDrawable(R.drawable.circle);
         }
-        this.textView.setCompoundDrawablesWithIntrinsicBounds(check_image, null, null, null);
+        this.textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, check_image);
     }
 
     // Getter.
