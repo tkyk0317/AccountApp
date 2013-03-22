@@ -26,7 +26,7 @@
     <string name="regist_alert_msg">入力内容を確認してください</string>
     <string name="estimate_label">予算</string>
     <string name="estimate_rest_money_label">予算残</string>
-    <string name="estimate_title">今月の予算を入力してください</string>
+    <string name="estimate_title">今月の予算をメニューから入力してください</string>
     <string name="estimate_again_title">適切な予算を入力してください</string>
     <string name="configuration_title">アプリケーション設定</string>
     <string name="estimate_configuration_title">予算機能</string>

@@ -81,9 +81,9 @@ public class DailyInfoRecord extends TableRow {
      */
     protected void setTextColor() {
         if( this.kindId == DatabaseHelper.INCOME_FLAG ) {
-            this.categoryName.setTextColor(Color.GREEN);
-            this.accountMoney.setTextColor(Color.GREEN);
-            this.accountMemo.setTextColor(Color.GREEN);
+            this.categoryName.setTextColor(Color.WHITE);
+            this.accountMoney.setTextColor(Color.WHITE);
+            this.accountMemo.setTextColor(Color.WHITE);
         } else {
             this.categoryName.setTextColor(Color.RED);
             this.accountMoney.setTextColor(Color.RED);

@@ -76,9 +76,9 @@ public class MonthlyInfoRecord extends TableRow {
      */
     protected void setTextColor() {
         if( this.kindId == DatabaseHelper.INCOME_FLAG ) {
-            this.accountDate.setTextColor(Color.GREEN);
-            this.categoryName.setTextColor(Color.GREEN);
-            this.accountMoney.setTextColor(Color.GREEN);
+            this.accountDate.setTextColor(Color.WHITE);
+            this.categoryName.setTextColor(Color.WHITE);
+            this.accountMoney.setTextColor(Color.WHITE);
         } else {
             this.accountDate.setTextColor(Color.RED);
             this.categoryName.setTextColor(Color.RED);
