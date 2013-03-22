@@ -4,6 +4,7 @@ import java.util.*;
 import android.util.Log;
 import android.app.Activity;
 import android.view.View;
+import android.widget.TextView;
 import android.view.View.OnClickListener;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +33,7 @@ import com.myapp.account.infoarea.DailyInfoRecord;
 /**
  * @brief Main Class in AccountApp Application.
  */
-public class AccountMainActivity extends Activity implements ClickObserverInterface, AccountEditCompleteObserver {
+public class AccountMainActivity extends Activity implements ClickObserverInterface, AccountEditCompleteObserver, OnClickListener {
 
     protected TitleArea titleArea;
     protected Summary summary;
@@ -47,6 +48,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     protected Animation leftOutAnimation;
     protected Animation rightOutAnimation;
     protected CalendarIndex currentCalendarIndex;
+    protected TextView returnCurrentMonthView;
     protected static final int ANIMATION_DURATION = 300;
 
     /**
@@ -78,6 +80,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     protected void init() {
         this.viewFlipper = (ViewFlipper)findViewById(R.id.calendar_flipper);
+        this.returnCurrentMonthView = (TextView)findViewById(R.id.return_current_month);
         this.titleArea = new TitleArea(this);
         this.tabContent = new TabContent(this);
         this.summary = new Summary(this);
@@ -86,11 +89,18 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.nextCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.next_flipper));
         this.currentDate = Utility.getCurrentDate();
 
+        // not display return current month view.
+        this.returnCurrentMonthView.setClickable(false);
+        this.returnCurrentMonthView.setVisibility(View.INVISIBLE);
+
         // create animation.
         createTranslateAnimation();
 
         // clear summary views.
         clearSummaryViews();
+
+        // regist event.
+        registEvent();
 
         // attach observer.
         this.currentCalendar.attachObserver(this);
@@ -121,6 +131,33 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
+     * @brief Regist Event.
+     */
+    protected void registEvent() {
+        this.returnCurrentMonthView.setOnClickListener(this);
+    }
+
+    /**
+     * @brief OnClickEvent Listener.
+     * @param view View Instance.
+     */
+    @Override
+    public void onClick(View view) {
+        if( false == this.returnCurrentMonthView.equals((TextView)view) ) return;
+
+        float velocity_x = 0;
+        String current_date = Utility.getCurrentDate();
+
+        if( this.currentDate.compareTo(current_date) < 0 ) {
+            velocity_x = -1; // past than current.
+        } else {
+            velocity_x = 1; // future than current.
+        }
+        this.currentDate = Utility.getCurrentDate();
+        moveToNextCalendar(velocity_x);
+    }
+
+    /**
      * @brief Display Main Content.
      */
     protected void displayMainContent() {
@@ -129,7 +166,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.tabContent.appear(this.currentDate);
         this.currentCalendar.appear(this.currentDate);
         this.currentCalendarIndex = CalendarIndex.CURRENT_ID;
-   }
+    }
 
     /**
      * @brief Called Activity is Destoryed.
@@ -158,8 +195,8 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-      * @brief Called Option Menu Seelcted.
-      */
+     * @brief Called Option Menu Seelcted.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return this.applicationMenu.displayMenu(item.getItemId());
@@ -229,21 +266,8 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     @Override
     public void notifyOnFling(Object event, MotionEvent motion_start, MotionEvent motion_end, float velocity_x, float velocity_y) {
         setCurrentDate(velocity_x);
-
-        if( this.nextCalendar.equals((AccountCalendar)event) ) {
-            this.currentCalendar.appear(currentDate);
-            this.currentCalendarIndex = CalendarIndex.CURRENT_ID;
-        } else {
-            this.nextCalendar.appear(currentDate);
-            this.currentCalendarIndex = CalendarIndex.NEXT_ID;
-        }
-
-        // move to next calendar.
-        moveCalendar(velocity_x);
-
-        // reflesh.
-        refleshDisplay();
-     }
+        moveToNextCalendar(velocity_x);
+    }
 
     /**
      * @brief Set Current Date.
@@ -258,10 +282,31 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * @brief Move Next Calendar.
+     * @brief Move To Next Calendar.
+     * @param velocit_x Velocity for X.
+     */
+    protected void moveToNextCalendar(float velocity_x) {
+
+        if( this.currentCalendarIndex == CalendarIndex.NEXT_ID ) {
+            this.currentCalendar.appear(this.currentDate);
+            this.currentCalendarIndex = CalendarIndex.CURRENT_ID;
+        } else {
+            this.nextCalendar.appear(this.currentDate);
+            this.currentCalendarIndex = CalendarIndex.NEXT_ID;
+        }
+
+        // Animatio calendar.
+        animationCalendar(velocity_x);
+
+        // reflesh.
+        refleshDisplay();
+    }
+
+    /**
+     * @brief Animation Calendar.
      * @param velocity_x Velocity of X.
      */
-    protected void moveCalendar(float velocity_x) {
+    protected void animationCalendar(float velocity_x) {
         if( velocity_x < 0 ) {
             this.viewFlipper.setInAnimation(rightInAnimation);
             this.viewFlipper.setOutAnimation(leftOutAnimation);
@@ -287,6 +332,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     protected void refleshDisplay() {
         clearSummaryViews();
         refleshCalendar();
+        refleshReturnCurrentMonthView();
         this.summary.appear(this.currentDate);
         this.titleArea.appear(this.currentDate);
         this.tabContent.appear(this.currentDate);
@@ -301,7 +347,20 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         } else if( this.currentCalendarIndex == CalendarIndex.NEXT_ID ) {
             this.nextCalendar.appear(currentDate);
         }
-     }
+    }
+
+    /**
+     * @brief Reflesh Return Current Month View.
+     */
+    protected void refleshReturnCurrentMonthView() {
+        if( false == Utility.isIncludeTargetDateInCurrentMonth(this.currentDate) ) {
+            this.returnCurrentMonthView.setClickable(true);
+            this.returnCurrentMonthView.setVisibility(View.VISIBLE);
+        } else {
+            this.returnCurrentMonthView.setClickable(false);
+            this.returnCurrentMonthView.setVisibility(View.INVISIBLE);
+        }
+    }
 
     /**
      * @brief Calendar Index Enum.

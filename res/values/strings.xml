@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">家計簿</string>
+    <string name="current_month_title">今月</string>
     <string name="daily_summary_tab_label">日別</string>
     <string name="month_summary_tab_label">月別</string>
     <string name="money_unit">円</string>
