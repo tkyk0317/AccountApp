@@ -148,12 +148,22 @@ public class AccountCalendar implements ClickObserverInterface {
                     cell.setDate(year, month, day++, day_of_week);
                     cell.setClickable(true);
 
-                    // check exsit data.
-                    if( this.accountTableAccessor.isExsitRecordAtTargetDate(date) ) {
-                        cell.setCheckedImage(true);
-                    }
+                    // set checked image.
+                    setCheckImageAtCell(cell, date);
                 }
             }
+        }
+    }
+
+    /**
+     * @brief Set Checked Image at Calendar Cell.
+     * @param cell AccountCalendarCell Instance.
+     * @param date Calendar Date.
+     */
+    protected void setCheckImageAtCell(AccountCalendarCell cell, String date) {
+        if( this.accountTableAccessor.isExsitPaymentRecordAtTargetDate(date) ||
+            this.accountTableAccessor.isExsitIncomeRecordAtTargetDate(date) ) {
+            cell.setCheckedImage(true);
         }
     }
 

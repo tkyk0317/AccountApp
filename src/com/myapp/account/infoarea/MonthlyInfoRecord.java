@@ -5,6 +5,8 @@ import android.widget.TableRow;
 import android.content.Context;
 import android.widget.TextView;
 import android.view.Gravity;
+import android.graphics.Color;
+import com.myapp.account.database.DatabaseHelper;
 
 /**
  * @brief Monthly Info Record Class.
@@ -14,6 +16,7 @@ public class MonthlyInfoRecord extends TableRow {
     protected TextView accountDate;
     protected TextView categoryName;
     protected TextView accountMoney;
+    protected int kindId;
     protected static final int TEXT_SIZE = 15;
 
     /**
@@ -21,9 +24,9 @@ public class MonthlyInfoRecord extends TableRow {
      */
     public MonthlyInfoRecord(Context context) {
         super(context);
-        accountDate = new TextView(context);
-        categoryName = new TextView(context);
-        accountMoney = new TextView(context);
+        this.accountDate = new TextView(context);
+        this.categoryName = new TextView(context);
+        this.accountMoney = new TextView(context);
     }
 
     /**
@@ -31,9 +34,9 @@ public class MonthlyInfoRecord extends TableRow {
      * @param String Account Date.
      */
     public void setAccountDate(String account_date) {
-        accountDate.setText(account_date);
-        accountDate.setTextSize(TEXT_SIZE);
-        accountDate.setGravity(Gravity.RIGHT);
+        this.accountDate.setText(account_date);
+        this.accountDate.setTextSize(TEXT_SIZE);
+        this.accountDate.setGravity(Gravity.RIGHT);
         super.addView(accountDate);
     }
 
@@ -42,9 +45,9 @@ public class MonthlyInfoRecord extends TableRow {
      * @param String Category Name.
      */
     public void setCategoryName(String category_name) {
-        categoryName.setText(category_name);
-        categoryName.setTextSize(TEXT_SIZE);
-        categoryName.setGravity(Gravity.RIGHT);
+        this.categoryName.setText(category_name);
+        this.categoryName.setTextSize(TEXT_SIZE);
+        this.categoryName.setGravity(Gravity.RIGHT);
         super.addView(categoryName);
     }
 
@@ -53,10 +56,35 @@ public class MonthlyInfoRecord extends TableRow {
      * @param String Account Money.
      */
     public void setAccountMoney(String account_money) {
-        accountMoney.setText(account_money);
-        accountMoney.setTextSize(TEXT_SIZE);
-        accountMoney.setGravity(Gravity.RIGHT);
+        this.accountMoney.setText(account_money);
+        this.accountMoney.setTextSize(TEXT_SIZE);
+        this.accountMoney.setGravity(Gravity.RIGHT);
         super.addView(accountMoney);
     }
+
+    /**
+     * @brief Set TextColor.
+     * @param kind_id category kind id.
+     */
+    public void setKindId(int kind_id) {
+        this.kindId = kind_id;
+        setTextColor();
+    }
+
+    /**
+     * @brief Set Text Color correspond Kind Id.
+     */
+    protected void setTextColor() {
+        if( this.kindId == DatabaseHelper.INCOME_FLAG ) {
+            this.accountDate.setTextColor(Color.GREEN);
+            this.categoryName.setTextColor(Color.GREEN);
+            this.accountMoney.setTextColor(Color.GREEN);
+        } else {
+            this.accountDate.setTextColor(Color.RED);
+            this.categoryName.setTextColor(Color.RED);
+            this.accountMoney.setTextColor(Color.RED);
+        }
+    }
+
 }
 

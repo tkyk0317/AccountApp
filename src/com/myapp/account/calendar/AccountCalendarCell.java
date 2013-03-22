@@ -99,7 +99,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
         Drawable check_image = null;
         if( is_checked ) {
             Resources resources = activity.getResources();
-            check_image = resources.getDrawable(R.drawable.circle);
+            check_image = resources.getDrawable(R.drawable.circle_red);
         }
         this.textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, check_image);
     }

@@ -174,6 +174,13 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     @Override
     public void onDestroy() {
         super.onDestroy();
+        terminate();
+    }
+
+    /**
+     * @brief TErminate Process.
+     */
+    protected void terminate() {
         this.titleArea = null;
         this.tabContent = null;
         this.summary = null;
@@ -182,6 +189,12 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.leftOutAnimation = null;
         this.rightInAnimation = null;
         this.rightOutAnimation = null;
+        this.currentCalendar = null;
+        this.nextCalendar = null;
+        this.viewFlipper = null;
+        this.currentDate = null;
+        this.currentCalendarIndex = null;
+        this.returnCurrentMonthView = null;
     }
 
     /**
@@ -208,14 +221,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     @Override
     protected void onStop() {
         super.onStop();
-        this.titleArea = null;
-        this.tabContent = null;
-        this.summary = null;
-        this.applicationMenu = null;
-        this.leftInAnimation = null;
-        this.leftOutAnimation = null;
-        this.rightInAnimation = null;
-        this.rightOutAnimation = null;
+        terminate();
     }
 
     /**

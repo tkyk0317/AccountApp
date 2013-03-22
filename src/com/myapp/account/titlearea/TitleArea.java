@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.widget.TextView;
 import android.content.Context;
 import com.myapp.account.R;
+import com.myapp.account.utility.Utility;
 
 /**
  * @brief TitleArea Class
@@ -12,7 +13,8 @@ import com.myapp.account.R;
 public class TitleArea
 {
     protected Activity activity;
-    protected static final String DATE_FORMAT = "yyyy/MM/dd";
+    protected static final String DAY_OF_WEEK_PREFIX = "(";
+    protected static final String DAY_OF_WEEK_SUFIX = ")";
 
     /**
      * @brief Class Constractor.
@@ -28,6 +30,7 @@ public class TitleArea
      */
     public void appear(String current_date) {
         TextView date_title = (TextView) activity.findViewById(R.id.date_title);
-        date_title.setText(current_date);
+        String day_of_week_str = Utility.getDayOfWeekString(Utility.getDayOfWeek(current_date), this.activity);
+        date_title.setText(current_date + DAY_OF_WEEK_PREFIX + day_of_week_str + DAY_OF_WEEK_SUFIX);
     }
 }

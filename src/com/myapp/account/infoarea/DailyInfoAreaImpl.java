@@ -65,7 +65,8 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
         AccountMasterTableRecord account_master_record = masterTable.getRecord(master_id);
 
         row.setAccountDate(account_record.getInsertDate());
-        row.setCategoryName(account_master_record.getName() );
+        row.setCategoryName(account_master_record.getName());
+        row.setKindId(account_master_record.getKindId());
         String money = String.format("%,d", account_record.getMoney() ) + activity.getText(R.string.money_unit).toString();
         row.setAccountMoney( MONEY_SPACE + money + MONEY_SPACE );
         row.setAccountMemo( account_record.getMemo() );
