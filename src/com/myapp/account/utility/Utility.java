@@ -5,7 +5,7 @@ import java.text.*;
 import android.util.Log;
 
 /**
- * Utility Class.
+ * @brief Utility Class.
  */
 public class Utility {
 
@@ -21,7 +21,7 @@ public class Utility {
     public static final String DATE_DELIMITER = "/";
 
     /**
-     * Is String is NULL.
+     * @brief Is String is NULL.
      * @return true if String Data is NULL.
      */
     public static boolean isStringNULL(String str) {
@@ -32,7 +32,7 @@ public class Utility {
     }
 
     /**
-     * Create Date Format.
+     * @brief Create Date Format.
      * @return Current Date of String Data Type (yyyy/MM/dd).
      */
     public static String createDateFormat(int year, int month, int day) {
@@ -42,7 +42,7 @@ public class Utility {
     }
 
     /**
-     * Get Current Date.
+     * @brief Get Current Date.
      * @return Current Date(String Type).
      */
     public static String getCurrentDate() {
@@ -81,7 +81,7 @@ public class Utility {
     }
 
     /**
-     * Get Current Date.
+     * @brief Get Current Date.
      * @return Current Date and Time(String Type).
      */
     public static String getCurrentDateAndTime() {
@@ -90,20 +90,7 @@ public class Utility {
     }
 
     /**
-     * Get First Date of Current Month.
-     * @return First Date of Month Date(String Type).
-     */
-    public static String getFirstDateOfCurrentMonth() {
-        Calendar cal_date = Calendar.getInstance(TimeZone.getDefault());
-
-        // set first day.
-        cal_date.set(Calendar.DATE, 1);
-
-        return (new SimpleDateFormat(DATE_FORMAT)).format(cal_date.getTime());
-     }
-
-    /**
-     * Get First Date of Target Date.
+     * @brief Get First Date of Target Date.
      * @param target_date Target Date of First Date(yyyy/MM/dd).
      * @return First Date of Month Date(String Type).
      */
@@ -118,22 +105,7 @@ public class Utility {
     }
 
     /**
-     * Get Last Date of Current Month.
-     * @return Last Date of Month Date(String Type).
-     */
-    public static String getLastDateOfCurrentMonth() {
-        Calendar cal_date = Calendar.getInstance(TimeZone.getDefault());
-
-        //  calculate last day of month.
-        cal_date.add(Calendar.MONTH, 1);
-        cal_date.set(Calendar.DAY_OF_MONTH, 1);
-        cal_date.add(Calendar.DAY_OF_MONTH, -1);
-
-        return (new SimpleDateFormat(DATE_FORMAT)).format(cal_date.getTime());
-    }
-
-    /**
-     * Get Last Date of Target Date.
+     * @brief Get Last Date of Target Date.
      * @param target_date Target Date of First Date(yyyy/MM/dd).
      */
     public static String getLastDateOfTargetMonth(String target_date) {
@@ -163,7 +135,7 @@ public class Utility {
     }
 
     /**
-     * Split Target Date into Month and Day.
+     * @brief Split Target Date into Month and Day.
      * @param String Data that Target Date (format is yyyy/MM/dd).
      * @return String Date that Month and Day (format is MM/dd).
      */
@@ -190,7 +162,7 @@ public class Utility {
     }
 
     /**
-     * Split Target Date into Day.
+     * @brief Split Target Date into Day.
      * @param String Data that Target Date (format is yyyy/MM/dd).
      * @return String Date that Day (format is dd).
      */
@@ -199,47 +171,15 @@ public class Utility {
     }
 
     /**
-     * Get Current Year and Month.
-     * return String Data that Current Year and Month (format is yyyy/MM).
+     * @brief Get Current Year and Month.
+     * @return String Data that Current Year and Month (format is yyyy/MM).
      */
     public static String getCurrentYearAndMonth() {
         return getCurrentDate().substring(DATE_YEAR_ST_POS, DATE_MONTH_END_SLASH_POS);
      }
 
     /**
-     * Get Current Year.
-     * @return Current year.
-     */
-    public static String getCurrentYear() {
-        return getCurrentDate().substring(DATE_YEAR_ST_POS, DATE_YEAR_SIZE + DATE_YEAR_ST_POS);
-    }
-
-    /**
-     * Get Current Month.
-     * @return current month.
-     */
-    public static String getCurrentMonth() {
-        return getCurrentDate().substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE);
-    }
-
-    /**
-     * Get Current Day.
-     * @return String Current Day.
-     */
-    public static String getCurrentDay() {
-        return getCurrentDate().substring(DATE_DAY_ST_POS);
-    }
-
-    /**
-     * Get Current Day Of Week.
-     * @return int Current Day of Week.
-     */
-    public static int getCurrentDayOfWeek() {
-        return Calendar.getInstance(TimeZone.getDefault()).get(Calendar.DAY_OF_WEEK);
-    }
-
-    /**
-     * Get Day of Week.
+     * @brief Get Day of Week.
      * @param target date(yyyy/mm/dd).
      * @return int day of week value(Sunday is One).
      */
@@ -256,3 +196,4 @@ public class Utility {
         return target_cal.get(Calendar.DAY_OF_WEEK);
     }
 }
+

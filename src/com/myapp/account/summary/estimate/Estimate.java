@@ -1,4 +1,4 @@
-package com.myapp.account.estimate;
+package com.myapp.account.summary.estimate;
 
 import java.lang.RuntimeException;
 import android.util.Log;
@@ -18,7 +18,7 @@ import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.config.AppConfigurationData;
 
 /**
- * Estimate Class.
+ * @brief Estimate Class.
  */
 public class Estimate {
 
@@ -33,7 +33,7 @@ public class Estimate {
     protected static final int TEXT_FONT_SIZE = 15;
 
     /**
-     * Constractor.
+     * @brief Constractor.
      * @param activity Activity Instance.
      */
     public Estimate(Activity activity) {
@@ -54,7 +54,7 @@ public class Estimate {
     }
 
     /**
-     * Is Estimate Enable.
+     * @brief Is Estimate Enable.
      * @return true if estimate function is enable.
      */
     protected boolean isEstimate() {
@@ -85,7 +85,7 @@ public class Estimate {
     }
 
     /**
-     * Insert Estimate Money.
+     * @brief Insert Estimate Money.
      */
     protected void insertEstimateMoneyIntoTableRow(TableRow table_row) {
         TextView estimate_label = new TextView(activity);
@@ -103,7 +103,7 @@ public class Estimate {
     }
 
     /**
-     * Insert Rest Estimate Money.
+     * @brief Insert Rest Estimate Money.
      */
     protected void insertRestEstimateMoneyIntoTableRow(TableRow table_row) {
         TextView estimate_rest_label = new TextView(activity);
@@ -132,7 +132,7 @@ public class Estimate {
     }
 
     /**
-     * Insert Estimate Money into Database.
+     * @brief Insert Estimate Money into Database.
      * @param estimate_money User inputed Money of Estimate.
      */
     protected void insertEstimateMoney(int estimate_money) throws RuntimeException {

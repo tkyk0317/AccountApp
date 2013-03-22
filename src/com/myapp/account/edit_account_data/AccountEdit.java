@@ -17,7 +17,7 @@ import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.infoarea.DailyInfoRecord;
 
 /**
- * Edit Account Date Class.
+ * @brief Edit Account Date Class.
  */
 public class AccountEdit extends AccountAdd {
 
@@ -25,14 +25,14 @@ public class AccountEdit extends AccountAdd {
     protected static final int BUTTON_WIDTH = 100;
 
     /**
-     * Constractor.
+     * @brief Constractor.
      */
     public AccountEdit(Activity activity) {
         super(activity);
     }
 
     /**
-     * Appear the Account Add Display.
+     * @brief Appear the Account Add Display.
      */
     @Override
     public void appear(String date) {
@@ -40,7 +40,7 @@ public class AccountEdit extends AccountAdd {
     }
 
     /**
-     * Appear the Account Display.
+     * @brief Appear the Account Display.
      * @param record AccoundTableRecord.
      */
     @Override
@@ -56,7 +56,7 @@ public class AccountEdit extends AccountAdd {
     }
 
     /**
-     * Add Delete Button.
+     * @brief Add Delete Button.
      */
     protected void addDeleteButton() {
         Button delete_button = new Button(activity);
@@ -101,14 +101,14 @@ public class AccountEdit extends AccountAdd {
     }
 
     /**
-     * Delete Current Record.
+     * @brief Delete Current Record.
      */
     protected void deleteAccountRecord() {
         accountTable.delete(updateRecord.getAccountRecord().getId());
     }
 
     /**
-     * Set Button Title.
+     * @brief Set Button Title.
      */
     @Override
     protected void setButtonTitle() {
@@ -117,7 +117,7 @@ public class AccountEdit extends AccountAdd {
      }
 
     /**
-     * set Current Data.
+     * @brief set Current Data.
      */
     protected void setCurrentData() {
         EditText current_money = (EditText)layout. findViewById(R.id.money_value);
@@ -130,7 +130,7 @@ public class AccountEdit extends AccountAdd {
     }
 
     /**
-     * Get Category Position in Spinner.
+     * @brief Get Category Position in Spinner.
      */
     protected int getCategoryPositionFromSpinner(String category_name) {
         int pos = 0;
@@ -147,7 +147,7 @@ public class AccountEdit extends AccountAdd {
     }
 
     /**
-     * Insert or Update into Database.
+     * @brief Insert or Update into Database.
      * @param record User input Account Infomation.
      */
     protected void insertOrUpdateIntoDatabase(AccountTableRecord record) {
@@ -159,7 +159,7 @@ public class AccountEdit extends AccountAdd {
     }
 
     /**
-     * Display Complete Message.
+     * @brief Display Complete Message.
      */
     protected void displayCompleteMessage() {
         String message = activity.getText(R.string.modify_msg).toString();
@@ -167,7 +167,7 @@ public class AccountEdit extends AccountAdd {
     }
 
     /**
-     * Display Delete Complete Message.
+     * @brief Display Delete Complete Message.
      */
     protected void displayDeleteCompleteMessage() {
         String message = activity.getText(R.string.delete_msg).toString();

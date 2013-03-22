@@ -8,32 +8,38 @@ import android.view.Gravity;
 import com.myapp.account.R;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
+import com.myapp.account.summary.estimate.Estimate;
 
 /**
- * Summary Class.
+ * @brief Summary Class.
  */
 public class Summary {
 
     protected Activity activity;
+    protected Estimate estimateInfo;
     protected AccountTableAccessor accountTable;
     protected String currentDate;
     protected static final int TEXT_FONT_SIZE = 15;
 
     /**
-     * Constractor.
+     * @brief Constractor.
      * @param activity Activity Instance.
      */
     public Summary(Activity activity) {
         this.activity = activity;
+        this.estimateInfo = new Estimate(this.activity);
         accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
      }
 
     /**
-      * Appear the Summary.
+      * @brief Appear the Summary.
       * @param target_date specify displaied target date(yyyy/mm/dd).
       */
     public void appear(String target_date) {
         this.currentDate = target_date;
+
+        // appear estimate area.
+        this.estimateInfo.appear(this.currentDate);
 
         TableRow table_row = new TableRow(activity.getApplicationContext());
         insertIncomeIntoTableRow(table_row);
@@ -45,7 +51,7 @@ public class Summary {
     }
 
      /**
-     * Insert Income TableRow.
+     * @brief Insert Income TableRow.
      */
     protected void insertIncomeIntoTableRow(TableRow table_row) {
         TextView income_label = new TextView(activity.getApplicationContext());
@@ -66,7 +72,7 @@ public class Summary {
     }
 
     /**
-     * Insert Payment into TableRow.
+     * @brief Insert Payment into TableRow.
      */
     protected void insertPaymentIntoTableRow(TableRow table_row) {
         TextView payment_label = new TextView(activity.getApplicationContext());

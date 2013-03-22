@@ -14,7 +14,7 @@ import com.myapp.account.database.EstimateTableRecord;
 import com.myapp.account.utility.Utility;
 
 /**
- * AppConfigurationData Class.
+ * @brief AppConfigurationData Class.
  */
 public class AppConfigurationData {
 
@@ -28,7 +28,7 @@ public class AppConfigurationData {
     protected final String USER_TARGET_KEY = "target_user_configuration";
 
     /**
-     * Constractor.
+     * @brief Constractor.
      */
     public AppConfigurationData(Context context) {
         this.appConfig = PreferenceManager.getDefaultSharedPreferences(context);
@@ -37,7 +37,7 @@ public class AppConfigurationData {
     }
 
     /**
-     * Read Configuration Data.
+     * @brief Read Configuration Data.
      */
     protected void readConfigurationData() {
         // get configuration value.
@@ -49,7 +49,7 @@ public class AppConfigurationData {
     }
 
     /**
-     * Save Estimate is Enable Parameter.
+     * @brief Save Estimate is Enable Parameter.
      * @param is_estimate Estimate Function is enable/UnEnable.
      * @return true if success save parameter.
      */
@@ -61,7 +61,7 @@ public class AppConfigurationData {
     }
 
     /**
-     * Save Target User Name.
+     * @brief Save Target User Name.
      * @param user_name Target User Name for AccountApp.
      * @return true if success save parameter.
      */
@@ -73,7 +73,7 @@ public class AppConfigurationData {
     }
 
     /**
-     * Save Estimate Money.
+     * @brief Save Estimate Money.
      * @param estimate_money Estimate Money at Current Month.
      */
     public void saveEstimateMoney(int estimate_money) throws RuntimeException {

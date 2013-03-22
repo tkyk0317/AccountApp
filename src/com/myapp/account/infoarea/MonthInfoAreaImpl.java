@@ -16,19 +16,19 @@ import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.infoarea.MonthlyInfoRecord;
 
 /**
- * Month Info Area Class.
+ * @brief Month Info Area Class.
  */
 public class MonthInfoAreaImpl extends AbstractInfoArea {
 
     /**
-     * Constractor.
+     * @brief Constractor.
      */
     public MonthInfoAreaImpl(Activity activity) {
         super(activity);
     }
 
     /**
-     * Get AccountTable Record.
+     * @brief Get AccountTable Record.
      * @return AccounTable record List.
      */
     @Override
@@ -37,7 +37,7 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
     }
 
     /**
-     * Get Table Rayout instansce.
+     * @brief Get Table Rayout instansce.
      * @return TableRayout Instance.
      */
     @Override
@@ -46,7 +46,7 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
     }
 
     /**
-     * Draw Item from AccountTable.
+     * @brief Draw Item from AccountTable.
      * @param layout TableLayout instance.
      * @param account_record AccountTable Record(Displayed Item).
      */

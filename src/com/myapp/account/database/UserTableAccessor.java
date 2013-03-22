@@ -11,7 +11,7 @@ import com.myapp.account.database.UserTableRecord;
 import com.myapp.account.utility.Utility;
 
 /**
- * UserTableAccessor Class.
+ * @brief UserTableAccessor Class.
  */
 public class UserTableAccessor {
 
@@ -20,7 +20,7 @@ public class UserTableAccessor {
     protected static final String TABLE_NAME = "UserTable";
 
     /**
-     * Constractor.
+     * @brief Constractor.
      */
     public UserTableAccessor(SQLiteOpenHelper helper) {
         readDatabase = helper.getReadableDatabase();
@@ -28,7 +28,7 @@ public class UserTableAccessor {
     }
 
     /**
-     * Get Record Specified Key.
+     * @brief Get Record Specified Key.
      * @param key Table key.
      * @return UserTableRecord Instance.
      */
@@ -44,7 +44,7 @@ public class UserTableAccessor {
     }
 
     /**
-     * Get All Record.
+     * @brief Get All Record.
      * @return All UserTableRecord in UserTable.
      */
     public List<UserTableRecord> getAllRecord() {
@@ -63,7 +63,7 @@ public class UserTableAccessor {
     }
 
     /**
-     * Insert Record in UserTable.
+     * @brief Insert Record in UserTable.
      * @param record UserTableRecord Instance.
      * @return Insert Record Key(_id).
      */
@@ -79,7 +79,7 @@ public class UserTableAccessor {
     }
 
     /**
-     * Update Record in UserTable.
+     * @brief Update Record in UserTable.
      * @param record UserTable Instance.
      */
     public int update(UserTableRecord record) {

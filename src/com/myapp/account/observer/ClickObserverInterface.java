@@ -3,22 +3,22 @@ package com.myapp.account.observer;
 import android.view.MotionEvent;
 
 /**
- * ClickObserver Interface.
+ * @brief ClickObserver Interface.
  */
 public interface ClickObserverInterface {
 
     /**
-     * Notify Click.
+     * @brief Notify Click.
      */
     public void notifyClick(Object event);
 
     /**
-     * Notify Long Click.
+     * @brief Notify Long Click.
      */
     public void notifyLongClick(Object event);
 
     /**
-     * Notify Long Click for DailyInfo.
+     * @brief Notify Long Click for DailyInfo.
      */
     public void notifyLongClickForDailyInfo(Object event);
 

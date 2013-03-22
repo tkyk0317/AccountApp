@@ -3,7 +3,7 @@ package com.myapp.account.database;
 import android.database.Cursor;
 
 /**
- * Estimate Table Record Class.
+ * @brief Estimate Table Record Class.
  */
 public class EstimateTableRecord {
 

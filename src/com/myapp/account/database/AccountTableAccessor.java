@@ -11,7 +11,7 @@ import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.utility.Utility;
 
 /**
- * AccountTableAccessor.
+ * @brief AccountTableAccessor.
  */
 public class AccountTableAccessor {
 
@@ -20,7 +20,7 @@ public class AccountTableAccessor {
     protected static final String TABLE_NAME = "AccountTable";
 
     /**
-     * Consturactor.
+     * @brief Consturactor.
      */
     public AccountTableAccessor(SQLiteOpenHelper helper) {
         readDatabase = helper.getReadableDatabase();
@@ -28,7 +28,7 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Get Record Specified Key.
+     * @brief Get Record Specified Key.
      * @param key Table key.
      * @return AccountTableRecord Instance.
      */
@@ -44,7 +44,7 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Get Record with Target Date.
+     * @brief Get Record with Target Date.
      * @param target_date String Target Date.
      * @return AccountTableRecord at Current Date.
      */
@@ -83,7 +83,7 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Get Record With Target Date Group by CategoryId.
+     * @brief Get Record With Target Date Group by CategoryId.
      * @param Target Insert Date.
      * @return AccountTableRecord List at Target Date.
      */
@@ -106,7 +106,7 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Get Record With Target Month Group by CategoryId.
+     * @brief Get Record With Target Month Group by CategoryId.
      * @param Target Insert Date.
      * @return AccountTableRecord List at Target Month.
      */
@@ -131,7 +131,7 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Get All Record.
+     * @brief Get All Record.
      * @return All AccountTableRecord in AccountMasterTable.
      */
     public List<AccountTableRecord> getAllRecord() {
@@ -150,7 +150,7 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Get Income Total Money at Target Month.
+     * @brief Get Income Total Money at Target Month.
      * @param target_date specify target date(yyyy/mm/dd).
      * @return Total Money.
      */
@@ -171,7 +171,7 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Get Payment Total Money at Target Month.
+     * @brief Get Payment Total Money at Target Month.
      * @param target_date specify target date(yyyy/mm/dd).
      * @return Total Money.
      */
@@ -191,7 +191,7 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Insert Record in AccountMasterTable.
+     * @brief Insert Record in AccountMasterTable.
      * @param record AccountTableRecord Instance.
      * @return Insert Record Key(_id).
      */
@@ -211,7 +211,7 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Delete Record from AccountMasterTable.
+     * @brief Delete Record from AccountMasterTable.
      * @param key Delete Target id of AccountTable.
      * @return  deleteted key number.
      */
@@ -221,7 +221,7 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Update Record.
+     * @brief Update Record.
      * @param record AccountTableRecord Instance.
      * @return true if update success.
      */

@@ -1,12 +1,12 @@
 package com.myapp.account.observer;
 
 /**
- * Account Edit Complete Observer Class.
+ * @brief Account Edit Complete Observer Class.
  */
 public interface AccountEditCompleteObserver {
 
     /**
-     * Edit Complete.
+     * @brief Edit Complete.
      */
     public void notifyAccountEditComplete();
 }

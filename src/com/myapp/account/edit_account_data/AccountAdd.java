@@ -24,15 +24,15 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
-import com.myapp.account.dialog.AbstractDialog;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.infoarea.DailyInfoRecord;
 import com.myapp.account.observer.AccountEditCompleteObserver;
+
 /**
- * Add Account Date Class.
+ * @brief Add Account Date Class.
  */
 public class AccountAdd implements OnItemSelectedListener {
 
@@ -48,7 +48,7 @@ public class AccountAdd implements OnItemSelectedListener {
     protected String[] categoryItems;
 
     /**
-     * Constractor.
+     * @brief Constractor.
      */
     public AccountAdd(Activity activity) {
         this.activity = activity;
@@ -57,7 +57,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Attach Observer.
+     * @brief Attach Observer.
      * @param observer AccountEditCompleteObserver Instance.
      */
     public void attachObserver(AccountEditCompleteObserver observer) {
@@ -65,7 +65,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Appear the Account Add Display.
+     * @brief Appear the Account Add Display.
      */
     public void appear(String date) {
         this.insertDate = date;
@@ -75,7 +75,7 @@ public class AccountAdd implements OnItemSelectedListener {
    }
 
     /**
-     * Appear the Account Display.
+     * @brief Appear the Account Display.
      * @param record AccoundTableRecord.
      */
     public void appear(DailyInfoRecord record) {
@@ -83,7 +83,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Initialize.
+     * @brief Initialize.
      */
     protected void initialize() {
         createDialog();
@@ -95,7 +95,7 @@ public class AccountAdd implements OnItemSelectedListener {
      }
 
     /**
-     * Create Alert Dialog.
+     * @brief Create Alert Dialog.
      */
     protected void createDialog() {
         LayoutInflater inflater = LayoutInflater.from(this.activity);
@@ -107,7 +107,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Create Category Spinner.
+     * @brief Create Category Spinner.
      */
     protected void createSpinner() {
        categorySpinner = (Spinner)layout.findViewById(R.id.category_spinner);
@@ -121,7 +121,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Create Category Items.
+     * @brief Create Category Items.
      */
     protected void createCategoryItems() {
         List<AccountMasterTableRecord> record = masterTable.getAll();
@@ -133,7 +133,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Set Title Area.
+     * @brief Set Title Area.
      */
     protected void setTitleArea() {
         TextView title= (TextView)layout.findViewById(R.id.date_title);
@@ -141,7 +141,7 @@ public class AccountAdd implements OnItemSelectedListener {
    }
 
     /**
-     * Set Button Title.
+     * @brief Set Button Title.
      */
     protected void setButtonTitle() {
         Button regist_button = (Button)layout.findViewById(R.id.regist_btn);
@@ -149,7 +149,7 @@ public class AccountAdd implements OnItemSelectedListener {
      }
 
     /**
-     * Rejist Event
+     * @brief Rejist Event
      */
     protected void registEvent() {
         Button regist_btn = (Button)layout.findViewById(R.id.regist_btn);
@@ -162,7 +162,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Insert or Update AccountRecord into AccountTable.
+     * @brief Insert or Update AccountRecord into AccountTable.
      */
     protected void insertOrUpdateAccountRecord() {
         try {
@@ -183,7 +183,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Get Account Information from user's input information.
+     * @brief Get Account Information from user's input information.
      */
     protected AccountTableRecord getInputUserAccountInfo()  throws NumberFormatException {
         EditText edit_money = (EditText)layout. findViewById(R.id.money_value);
@@ -204,7 +204,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Check User Input Data is Enable.
+     * @brief Check User Input Data is Enable.
      * @return true if user input data is enable data.
      */
     protected boolean isEnableInputData(AccountTableRecord input_data) {
@@ -217,7 +217,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Insert or Update into Database.
+     * @brief Insert or Update into Database.
      * @param record User input Account Infomation.
      */
     protected void insertOrUpdateIntoDatabase(AccountTableRecord record) {
@@ -225,7 +225,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Update Use Date of Master Table.
+     * @brief Update Use Date of Master Table.
      * @param Key of master Table.
      */
     protected void updateUseDateOfMaterTable(int key) {
@@ -234,14 +234,14 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Close Input Dialog.
+     * @brief Close Input Dialog.
      */
     protected void closeInputDialog() {
         this.inputDialog.dismiss();
     }
 
     /**
-     * Display Complete Message.
+     * @brief Display Complete Message.
      */
     protected void displayCompleteMessage() {
         String message = activity.getText(R.string.regist_msg).toString();
@@ -249,7 +249,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Display Alert Message.
+     * @brief Display Alert Message.
      */
     protected void displayInputDataAlertMessage() {
         String message = activity.getText(R.string.regist_alert_msg).toString();
@@ -257,7 +257,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Select item on Spinner.
+     * @brief Select item on Spinner.
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id ) {
@@ -266,7 +266,7 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * Non Selected item on Spinner.
+     * @brief Non Selected item on Spinner.
      */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {

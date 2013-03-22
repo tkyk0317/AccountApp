@@ -5,7 +5,7 @@ import java.text.DateFormat;
 import android.database.Cursor;
 
 /**
- * Account Master Table Record Class.
+ * @brief Account Master Table Record Class.
  */
 public class AccountMasterTableRecord {
 
