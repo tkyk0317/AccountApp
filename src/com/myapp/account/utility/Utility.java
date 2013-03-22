@@ -154,6 +154,15 @@ public class Utility {
     }
 
     /**
+     * @brief Split Year And Month from TargetDate.
+     * @param target_date yyyy/mm/dd.
+     * @return Splited Date(yyyy/mm).
+     */
+    public static String splitYearAndMonth(String target_date) {
+        return target_date.substring(DATE_YEAR_ST_POS, DATE_MONTH_END_SLASH_POS);
+    }
+
+    /**
      * Split Target Date into Month and Day.
      * @param String Data that Target Date (format is yyyy/MM/dd).
      * @return String Date that Month and Day (format is MM/dd).

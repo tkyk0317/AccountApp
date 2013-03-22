@@ -62,6 +62,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
       * Regist Event Listner.
       */
     protected void registEvent() {
+        // Estimate Function Enable/UnEnable Event.
         CheckBoxPreference estimate_pref = (CheckBoxPreference)findPreference(appConfiguration.getEstimateKey());
         estimate_pref.setOnPreferenceChangeListener(
                 new OnPreferenceChangeListener() {
@@ -79,6 +80,8 @@ public class AppConfigurationActivity extends PreferenceActivity {
                        return true;
                     }
                 });
+
+        // UserName Changed Event.
         EditTextPreference user_pref = (EditTextPreference)findPreference(appConfiguration.getTargetUserKey());
         user_pref.setOnPreferenceChangeListener(
                 new OnPreferenceChangeListener() {
@@ -94,6 +97,8 @@ public class AppConfigurationActivity extends PreferenceActivity {
                         return true;
                     }
                 });
+
+        // Cahnged Estimate Money Event.
         EditTextPreference estimate_money_pref = (EditTextPreference)findPreference(appConfiguration.getEstimateMoneyKey());
         estimate_money_pref.setOnPreferenceChangeListener(
                 new OnPreferenceChangeListener() {
@@ -101,11 +106,6 @@ public class AppConfigurationActivity extends PreferenceActivity {
                         EditTextPreference estimate_money_config = (EditTextPreference)pref;
                         try {
                             int estimate_money = Integer.valueOf(value.toString());
-
-                            if( 0 >= estimate_money ) {
-                                displayAlertEstimateMoney();
-                                return false;
-                            }
 
                             // save estimate_money.
                             appConfiguration.saveEstimateMoney(estimate_money);
