@@ -195,5 +195,20 @@ public class Utility {
 
         return target_cal.get(Calendar.DAY_OF_WEEK);
     }
+
+    /**
+     * @brief Check Include TargetDate In Current Month.
+     * @param target_date checked date(yyyy/mm/dd).
+     * @return true:include false:not include.
+     */
+    public static boolean isIncludeTargetDateInCurrentMonth(String target_date) {
+        String st_date = Utility.getFirstDateOfTargetMonth(Utility.getCurrentDate());
+        String end_date = Utility.getLastDateOfTargetMonth(Utility.getCurrentDate());
+
+        if( st_date.compareTo(target_date) <= 0 && end_date.compareTo(target_date) >= 0 ) {
+            return true;
+        }
+        return false;
+    }
 }
 

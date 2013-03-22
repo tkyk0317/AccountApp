@@ -47,7 +47,7 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-     * @brief Appear the Calender.
+     * @brief appear the Calender.
      */
     public void appear(String target_date) {
         this.appearDate = target_date;
@@ -204,7 +204,7 @@ public class AccountCalendar implements ClickObserverInterface {
         // focus current cell.
         focusCurrentCell((AccountCalendarCell)event);
 
-       // notify observer.
+        // notify observer.
         if( null != this.observer ) this.observer.notifyClick(event);
     }
 
