@@ -16,7 +16,7 @@ import com.myapp.account.observer.ClickObserverInterface;
 import com.myapp.account.utility.Utility;
 
 /**
- * Account Calendar Cell Class.
+ * @brief Account Calendar Cell Class.
  */
 public class AccountCalendarCell implements OnGestureListener, View.OnTouchListener {
 
@@ -32,7 +32,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     protected static final int HEIGHT = 32;
 
     /**
-     * Constractor.
+     * @brief Constractor.
      */
     public AccountCalendarCell(TextView view, Activity activity) {
         this.textView = view;
@@ -45,7 +45,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     }
 
     /**
-     * Set Observer Instance.
+     * @brief Set Observer Instance.
      * @param observer Observer Instance.
      */
     public void attachObserver(ClickObserverInterface observer) {
@@ -53,7 +53,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     }
 
     /**
-     * Set Date of Cell.
+     * @brief Set Date of Cell.
      * @param int year.
      * @param int month.
      * @param int day.
@@ -68,7 +68,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     }
 
     /**
-     * Set BackgroundColor.
+     * @brief Set BackgroundColor.
      * @param int Background Color.
      */
     public void setBackgroundColor(int color) {
@@ -76,7 +76,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     }
 
     /**
-     * Set Cell Text.
+     * @brief Set Cell Text.
      * @param String setting string data.
      */
     public void setText(String text) {

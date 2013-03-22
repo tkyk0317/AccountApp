@@ -10,7 +10,7 @@ import com.myapp.account.AppConfigurationActivity;
 import com.myapp.account.EditAccountMasterActivity;
 
 /**
- * Application Menu Class.
+ * @brief Application Menu Class.
  */
 public class ApplicationMenu {
 
@@ -27,21 +27,21 @@ public class ApplicationMenu {
     protected Activity activity;
 
     /**
-     * Constractor.
+     * @brief Constractor.
      */
     public ApplicationMenu(Activity activity) {
         this.activity = activity;
     }
 
     /**
-     * Appear the Application Menu.
+     * @brief Appear the Application Menu.
      */
     public void appear(Menu menu) {
         this.activity.getMenuInflater().inflate(R.menu.app_menu,menu);
     }
 
     /**
-     * Display Selected Menu.
+     * @brief Display Selected Menu.
      * @param item_id Selected Item Id.
      * @return true if match item_id.
      */
@@ -63,7 +63,7 @@ public class ApplicationMenu {
     }
 
     /**
-     * Move To Configuration Activity.
+     * @brief Move To Configuration Activity.
      */
     protected void moveToConfig() {
         Intent intent = new Intent( this.activity, AppConfigurationActivity.class);
@@ -71,7 +71,7 @@ public class ApplicationMenu {
     }
 
     /**
-     * Display Edit Dialog.
+     * @brief Display Edit Dialog.
      */
     protected void displayEditDialog() {
         final String[] edit_menus
@@ -90,7 +90,7 @@ public class ApplicationMenu {
     }
 
     /**
-     * Parse Click Event.
+     * @brief Parse Click Event.
      * @param click_index Click List Item Index.
      */
     protected void parseClickEvent(int click_index) {
@@ -102,7 +102,7 @@ public class ApplicationMenu {
     }
 
     /**
-     * Move To Add Category into Master Activity.
+     * @brief Move To Add Category into Master Activity.
      */
     protected void moveToAddCategory() {
         Intent intent = new Intent( this.activity, EditAccountMasterActivity.class);
@@ -110,7 +110,7 @@ public class ApplicationMenu {
     }
 
     /**
-     * Move To Add User into User Table.
+     * @brief Move To Add User into User Table.
      */
     protected void moveToUser() {
     }

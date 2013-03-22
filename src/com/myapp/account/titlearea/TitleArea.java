@@ -15,7 +15,7 @@ public class TitleArea
     protected static final String DATE_FORMAT = "yyyy/MM/dd";
 
     /**
-     * Class Constractor.
+     * @brief Class Constractor.
      * @param activity Activity Instance.
      */
     public TitleArea(Activity activity) {
@@ -23,7 +23,7 @@ public class TitleArea
     }
 
     /**
-     * Appear the Title Area.
+     * @brief Appear the Title Area.
      * @param current_date current_date String(yyyy/MM/dd).
      */
     public void appear(String current_date) {

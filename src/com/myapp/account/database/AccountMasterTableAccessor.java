@@ -10,7 +10,7 @@ import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.utility.Utility;
 
 /**
- * AccountMasterTableAccessor.
+ * @brief AccountMasterTableAccessor.
  */
 public class AccountMasterTableAccessor {
 
@@ -19,7 +19,7 @@ public class AccountMasterTableAccessor {
     protected static final String TABLE_NAME = "AccountMaster";
 
     /**
-      * Consturactor.
+      * @brief Consturactor.
       */
     public AccountMasterTableAccessor(SQLiteOpenHelper helper) {
         readDatabase = helper.getReadableDatabase();
@@ -27,7 +27,7 @@ public class AccountMasterTableAccessor {
     }
 
     /**
-      * Get Record Specified Key.
+      * @brief Get Record Specified Key.
       * @param key Table key.
       * @return AccountMasterTableRecord Instance.
       */
@@ -43,7 +43,7 @@ public class AccountMasterTableAccessor {
     }
 
     /**
-      * Get Record Match the Name.
+      * @brief Get Record Match the Name.
       * @param name AccountMasterTableRecord.name String.
       * @return AccountMasterTableRecord Instance.
       */
@@ -59,7 +59,7 @@ public class AccountMasterTableAccessor {
     }
 
     /**
-     * Get All Record.
+     * @brief Get All Record.
      * @return All AccountMasterTableRecord in AccountMasterTable.
      */
     public List<AccountMasterTableRecord> getAll() {
@@ -79,7 +79,7 @@ public class AccountMasterTableAccessor {
     }
 
     /**
-     * Insert Record in AccountMasterTable.
+     * @brief Insert Record in AccountMasterTable.
      * @param record AccountMasterTableRecord Instance.
      * @return Insert Record Key(_id).
      */
@@ -89,7 +89,7 @@ public class AccountMasterTableAccessor {
     }
 
     /**
-     * Delete Record from AccountMasterTable.
+     * @brief Delete Record from AccountMasterTable.
      * @param key Delete Target id of AccountMasterTable.
      * @return true if delete success.
      */
@@ -98,7 +98,7 @@ public class AccountMasterTableAccessor {
     }
 
     /**
-     * Update Record.
+     * @brief Update Record.
      * @param record AccountMasterTableRecord Instance.
      * @return true if update success.
      */
@@ -114,3 +114,4 @@ public class AccountMasterTableAccessor {
         return true;
     }
 }
+

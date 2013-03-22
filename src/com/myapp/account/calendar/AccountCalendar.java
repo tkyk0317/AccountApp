@@ -20,7 +20,7 @@ import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
 
 /**
- * Account Calendar Class.
+ * @brief Account Calendar Class.
  */
 public class AccountCalendar implements ClickObserverInterface {
 
@@ -37,7 +37,7 @@ public class AccountCalendar implements ClickObserverInterface {
     protected static final int WEEK_OF_SUNDAY = 6;
 
     /**
-     * Constractor.
+     * @brief Constractor.
      */
     public AccountCalendar(Activity activity, LinearLayout layout) {
         this.activity = activity;
@@ -47,7 +47,7 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-     * Appear the Calender.
+     * @brief Appear the Calender.
      */
     public void appear(String target_date) {
         this.appearDate = target_date;
@@ -115,7 +115,7 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-      * Attach Observer.
+      * @brief Attach Observer.
       * @param observer ObserverInterface Instance.
       */
     public void attachObserver(ClickObserverInterface observer) {
@@ -123,7 +123,7 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-      * Create Calendar.
+      * @brief Create Calendar.
       */
     protected void createCalendar() {
         int day = 1;
@@ -158,7 +158,7 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-      * Focus Current Date.
+      * @brief Focus Current Date.
       */
     protected void focusCurrentDate() {
         if( null != currentCell ) {
@@ -174,7 +174,7 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-     * Get Calendar Start Position.
+     * @brief Get Calendar Start Position.
      * @return int Calendar Start Position.
      */
     protected int getStartPosition() {
@@ -183,7 +183,7 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-     * Get Calendar End Position.
+     * @brief Get Calendar End Position.
      * @return int Calendar End Position.
      */
     protected int getEndPosition() {
@@ -194,7 +194,7 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-     * Click Event from AccountCalendarCell Instance.
+     * @brief Click Event from AccountCalendarCell Instance.
      * @param event Account Calendar Cell Instance.
      */
     @Override
@@ -209,7 +209,7 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-     * Long Click Event from AccountCalendarCell Instance.
+     * @brief Long Click Event from AccountCalendarCell Instance.
      * @param event Account Calendar Cell Instance.
      */
     @Override
@@ -234,7 +234,7 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-     * Focus Current Calendar Cell.
+     * @brief Focus Current Calendar Cell.
      */
     protected void focusCurrentCell(AccountCalendarCell current_cell) {
         // previous cell setting.

@@ -5,7 +5,7 @@ import java.text.DateFormat;
 import android.database.Cursor;
 
 /**
- * Account Table Record Class.
+ * @brief Account Table Record Class.
  */
 public class AccountTableRecord {
 

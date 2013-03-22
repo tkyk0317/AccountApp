@@ -7,7 +7,7 @@ import android.widget.TextView;
 import android.view.Gravity;
 
 /**
- * Monthly Info Record Class.
+ * @brief Monthly Info Record Class.
  */
 public class MonthlyInfoRecord extends TableRow {
 
@@ -17,7 +17,7 @@ public class MonthlyInfoRecord extends TableRow {
     protected static final int TEXT_SIZE = 15;
 
     /**
-     * Constractor.
+     * @brief Constractor.
      */
     public MonthlyInfoRecord(Context context) {
         super(context);
@@ -27,7 +27,7 @@ public class MonthlyInfoRecord extends TableRow {
     }
 
     /**
-     * Set Account Date.
+     * @brief Set Account Date.
      * @param String Account Date.
      */
     public void setAccountDate(String account_date) {
@@ -38,7 +38,7 @@ public class MonthlyInfoRecord extends TableRow {
     }
 
     /**
-     * Set Category Name.
+     * @brief Set Category Name.
      * @param String Category Name.
      */
     public void setCategoryName(String category_name) {
@@ -49,7 +49,7 @@ public class MonthlyInfoRecord extends TableRow {
     }
 
     /**
-     * Set Account Money.
+     * @brief Set Account Money.
      * @param String Account Money.
      */
     public void setAccountMoney(String account_money) {

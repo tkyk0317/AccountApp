@@ -11,7 +11,7 @@ import com.myapp.account.database.EstimateTableRecord;
 import com.myapp.account.utility.Utility;
 
 /**
- * EstimateTableImpl Class.
+ * @brief EstimateTableImpl Class.
  */
 public class EstimateTableAccessor {
 
@@ -20,7 +20,7 @@ public class EstimateTableAccessor {
     protected static final String TABLE_NAME = "EstimateTable";
 
     /**
-     * Constractor.
+     * @brief Constractor.
      */
     public EstimateTableAccessor(SQLiteOpenHelper helper) {
         readDatabase = helper.getReadableDatabase();
@@ -28,7 +28,7 @@ public class EstimateTableAccessor {
     }
 
     /**
-     * Get Record With Current Month.
+     * @brief Get Record With Current Month.
      * @return EstimateRecord Instance.
      */
     public EstimateTableRecord getRecordWithCurrentMonth() {
@@ -79,7 +79,7 @@ public class EstimateTableAccessor {
     }
 
     /**
-     * Insert Record in EstimateTable.
+     * @brief Insert Record in EstimateTable.
      * @param record EstimateTableRecord Instance.
      * @return Insert Record Key(_id).
      */
@@ -96,7 +96,7 @@ public class EstimateTableAccessor {
     }
 
     /**
-     * Update Record in EstimateTAble.
+     * @brief Update Record in EstimateTAble.
      * @param record EstimateTableRecord Instance.
      */
     public int update(EstimateTableRecord record) {

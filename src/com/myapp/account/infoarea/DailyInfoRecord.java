@@ -8,7 +8,7 @@ import android.view.Gravity;
 import com.myapp.account.database.AccountTableRecord;
 
 /**
- * Daily Info Record Class.
+ * @brief Daily Info Record Class.
  */
 public class DailyInfoRecord extends TableRow {
 
@@ -28,7 +28,7 @@ public class DailyInfoRecord extends TableRow {
     public String getAccountMemo() { return String.valueOf(accountMemo.getText()); }
 
     /**
-     * Constractor.
+     * @brief Constractor.
      */
     public DailyInfoRecord(Context context) {
         super(context);
@@ -38,7 +38,7 @@ public class DailyInfoRecord extends TableRow {
     }
 
     /**
-     * Set Account Table Record.
+     * @brief Set Account Table Record.
      * @param record AccountTable Record Instance.
      */
     protected void setAccountTableRecord(AccountTableRecord record) {
@@ -46,7 +46,7 @@ public class DailyInfoRecord extends TableRow {
     }
 
     /**
-     * Set Account Date.
+     * @brief Set Account Date.
      * @param String Account Date.
      */
     public void setAccountDate(String account_date) {
@@ -54,7 +54,7 @@ public class DailyInfoRecord extends TableRow {
     }
 
     /**
-     * Set Category Name.
+     * @brief Set Category Name.
      * @param String Category Name.
      */
     public void setCategoryName(String category_name) {
@@ -65,7 +65,7 @@ public class DailyInfoRecord extends TableRow {
     }
 
     /**
-     * Set Account Money.
+     * @brief Set Account Money.
      * @param String Account Money.
      */
     public void setAccountMoney(String account_money) {
@@ -76,7 +76,7 @@ public class DailyInfoRecord extends TableRow {
     }
 
     /**
-     * Set Account Memo.
+     * @brief Set Account Memo.
      * @param String Account Memo.
      */
     public void setAccountMemo(String account_memo) {

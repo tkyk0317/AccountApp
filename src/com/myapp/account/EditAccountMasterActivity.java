@@ -16,7 +16,7 @@ import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.edit_account_master.EditAccountMasterRecord;
 
 /**
- * Main Class in AccountApp Application.
+ * @brief Main Class in AccountApp Application.
  */
 public class EditAccountMasterActivity extends Activity implements OnClickListener, OnLongClickListener {
 

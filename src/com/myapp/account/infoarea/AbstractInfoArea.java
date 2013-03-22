@@ -13,7 +13,7 @@ import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.observer.ClickObserverInterface;
 
 /**
- * AbstractInfoArea Class.
+ * @brief AbstractInfoArea Class.
  */
 public abstract class AbstractInfoArea {
 
@@ -27,7 +27,7 @@ public abstract class AbstractInfoArea {
     protected static final String MONEY_SPACE = " ";
 
     /**
-     * InfoDailyArea Class Constractor.
+     * @brief InfoDailyArea Class Constractor.
      */
     AbstractInfoArea(Activity activity) {
         this.activity = activity;
@@ -37,7 +37,7 @@ public abstract class AbstractInfoArea {
     }
 
     /**
-     * Attach Observer Instance.
+     * @brief Attach Observer Instance.
      * @param observer Observer Instance.
      */
     public void attachObserver(ClickObserverInterface observer) {
@@ -45,7 +45,7 @@ public abstract class AbstractInfoArea {
     }
 
     /**
-     * Appear the Daily Infomation Area.
+     * @brief Appear the Daily Infomation Area.
      */
     public void appear(String display_date) {
         this.displayDate = display_date;
@@ -65,19 +65,19 @@ public abstract class AbstractInfoArea {
     }
 
     /**
-     * Get AccountTable Record.
+     * @brief Get AccountTable Record.
      * @return AccounTable record List.
      */
     abstract List<AccountTableRecord> getAccountRecord();
 
     /**
-     * Get Table Rayout instansce.
+     * @brief Get Table Rayout instansce.
      * @return TableRayout Instance.
      */
     abstract TableLayout getTableLayout();
 
     /**
-     * Draw Item from AccountTable.
+     * @brief Draw Item from AccountTable.
      * @param layout TableLayout instance.
      * @param account_record AccountTable Record(Displayed Item).
      */

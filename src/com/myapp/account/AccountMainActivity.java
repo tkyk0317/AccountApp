@@ -18,7 +18,6 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import com.myapp.account.titlearea.TitleArea;
 import com.myapp.account.utility.Utility;
-import com.myapp.account.estimate.Estimate;
 import com.myapp.account.tabcontent.TabContent;
 import com.myapp.account.summary.Summary;
 import com.myapp.account.config.ApplicationMenu;
@@ -31,12 +30,11 @@ import com.myapp.account.edit_account_data.AccountEdit;
 import com.myapp.account.infoarea.DailyInfoRecord;
 
 /**
- * Main Class in AccountApp Application.
+ * @brief Main Class in AccountApp Application.
  */
 public class AccountMainActivity extends Activity implements ClickObserverInterface, AccountEditCompleteObserver {
 
     protected TitleArea titleArea;
-    protected Estimate estimateInfo;
     protected Summary summary;
     protected TabContent tabContent;
     protected ApplicationMenu applicationMenu;
@@ -52,7 +50,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     protected static final int ANIMATION_DURATION = 300;
 
     /**
-     * Create Activity.
+     * @brief Create Activity.
      * @param savedInstanceState Bundle Instance.
      */
     @Override
@@ -61,7 +59,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * Called Activity Start.
+     * @brief Called Activity Start.
      */
     @Override
     protected void onStart() {
@@ -76,12 +74,11 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * Initialize Member-Variable.
+     * @brief Initialize Member-Variable.
      */
     protected void init() {
         this.viewFlipper = (ViewFlipper)findViewById(R.id.calendar_flipper);
         this.titleArea = new TitleArea(this);
-        this.estimateInfo = new Estimate(this);
         this.tabContent = new TabContent(this);
         this.summary = new Summary(this);
         this.applicationMenu = new ApplicationMenu(this);
@@ -92,8 +89,8 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         // create animation.
         createTranslateAnimation();
 
-        // clear summar/estimate.
-        clearSummaryAndEstimateArea();
+        // clear summary views.
+        clearSummaryViews();
 
         // attach observer.
         this.currentCalendar.attachObserver(this);
@@ -116,18 +113,17 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * Clear Summary and Estimate Area.
+     * @brief Clear Summary Views.
      */
-    protected void clearSummaryAndEstimateArea() {
+    protected void clearSummaryViews() {
         TableLayout summary_estimate_area = (TableLayout)findViewById(R.id.summary_table);
         summary_estimate_area.removeAllViews();
     }
 
     /**
-     * Display Main Content.
+     * @brief Display Main Content.
      */
     protected void displayMainContent() {
-        this.estimateInfo.appear(this.currentDate);
         this.summary.appear(this.currentDate);
         this.titleArea.appear(this.currentDate);
         this.tabContent.appear(this.currentDate);
@@ -136,13 +132,12 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
    }
 
     /**
-     * Called Activity is Destoryed.
+     * @brief Called Activity is Destoryed.
      */
     @Override
     public void onDestroy() {
         super.onDestroy();
         this.titleArea = null;
-        this.estimateInfo = null;
         this.tabContent = null;
         this.summary = null;
         this.applicationMenu = null;
@@ -153,7 +148,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * Called First Create Option menu.
+     * @brief Called First Create Option menu.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -163,7 +158,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-      * Called Option Menu Seelcted.
+      * @brief Called Option Menu Seelcted.
       */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -171,13 +166,12 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * Called User can not see the Activity.
+     * @brief Called User can not see the Activity.
      */
     @Override
     protected void onStop() {
         super.onStop();
         this.titleArea = null;
-        this.estimateInfo = null;
         this.tabContent = null;
         this.summary = null;
         this.applicationMenu = null;
@@ -188,7 +182,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * Notify from Subject(AccountCalendar).
+     * @brief Notify from Subject(AccountCalendar).
      * @param event AccountCalendarCell Instance.
      */
     @Override
@@ -201,7 +195,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * Notify Long Click from Subject(AccountCalendar).
+     * @brief Notify Long Click from Subject(AccountCalendar).
      * @param event AccountCalendarCell Instance.
      */
     @Override
@@ -216,7 +210,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * Notify Long Click from DailyInfoArea.
+     * @brief Notify Long Click from DailyInfoArea.
      * @param event DailyInfoRecord Instance.
      */
     @Override
@@ -280,7 +274,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * Notify AccountEdit Complete.
+     * @brief Notify AccountEdit Complete.
      */
     @Override
     public void notifyAccountEditComplete() {
@@ -291,9 +285,8 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * @brief Reflesh Display.
      */
     protected void refleshDisplay() {
-        clearSummaryAndEstimateArea();
+        clearSummaryViews();
         refleshCalendar();
-        this.estimateInfo.appear(this.currentDate);
         this.summary.appear(this.currentDate);
         this.titleArea.appear(this.currentDate);
         this.tabContent.appear(this.currentDate);

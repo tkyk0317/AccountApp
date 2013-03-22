@@ -12,7 +12,7 @@ import com.myapp.account.infoarea.MonthInfoAreaImpl;
 import com.myapp.account.observer.ClickObserverInterface;
 
 /**
- * TabContent Class.
+ * @brief TabContent Class.
  */
 public class TabContent {
 
@@ -24,7 +24,7 @@ public class TabContent {
     protected static final String MONTHLY_TAB_ID = "monthly_tab";
 
     /**
-     * Constractor.
+     * @brief Constractor.
      */
     public TabContent(Activity activity) {
         this.activity = activity;
@@ -36,7 +36,7 @@ public class TabContent {
      }
 
     /**
-     * Create Tab Content.
+     * @brief Create Tab Content.
      */
     protected void createTabContent() {
         TabHost tab_host = (TabHost)activity.findViewById(R.id.tabhost);
@@ -59,7 +59,7 @@ public class TabContent {
     }
 
     /**
-     * Attach Observer for Daily Info.
+     * @brief Attach Observer for Daily Info.
      * @param observer Observer Instance.
      */
     public void attachObserverForDailyInfo(ClickObserverInterface observer) {
@@ -67,7 +67,7 @@ public class TabContent {
     }
 
     /**
-     * Appear the TabContent.
+     * @brief Appear the TabContent.
      */
     public void appear(String display_date) {
         changeTabHeight();
@@ -76,7 +76,7 @@ public class TabContent {
      }
 
    /**
-    * Create Daily Tab.
+    * @brief Create Daily Tab.
     * @param tab_host TabHost Instance.
     */
    protected void createDailyTab(TabHost tab_host) {
@@ -87,7 +87,7 @@ public class TabContent {
    }
 
    /**
-    * Create Monthly Tab.
+    * @brief Create Monthly Tab.
     * @param tab_host TabHost Instance.
     */
    protected void createMonthlyTab(TabHost tab_host) {
@@ -98,7 +98,7 @@ public class TabContent {
    }
 
    /**
-    * Change TabWidget Height.
+    * @brief Change TabWidget Height.
     */
    protected void changeTabHeight() {
        TabHost tab_host = (TabHost)activity.findViewById(R.id.tabhost);
@@ -107,6 +107,5 @@ public class TabContent {
            tab_widget.getChildTabViewAt(i).getLayoutParams().height = TAB_HEIGHT_SIZE;
        }
    }
-
 }
 

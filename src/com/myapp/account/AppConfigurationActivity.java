@@ -15,14 +15,14 @@ import com.myapp.account.R;
 import com.myapp.account.config.AppConfigurationData;
 
 /**
- * AppConfiguration Activity Class.
+ * @brief AppConfiguration Activity Class.
  */
 public class AppConfigurationActivity extends PreferenceActivity {
 
     protected AppConfigurationData appConfiguration;
 
     /**
-     * Called the Activity is First Created.
+     * @brief Called the Activity is First Created.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,14 +35,14 @@ public class AppConfigurationActivity extends PreferenceActivity {
     }
 
     /**
-     * Initialize.
+     * @brief Initialize.
      */
     protected void init() {
         appConfiguration = new AppConfigurationData(this);
     }
 
     /**
-      * Display Summary.
+      * @brief Display Summary.
       */
     protected void displaySummary() {
         CheckBoxPreference estimate_config = (CheckBoxPreference)findPreference(appConfiguration.getEstimateKey());
@@ -59,7 +59,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
     }
 
     /**
-      * Regist Event Listner.
+      * @brief Regist Event Listner.
       */
     protected void registEvent() {
         // Estimate Function Enable/UnEnable Event.
@@ -119,7 +119,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
      }
 
     /**
-     * Display Alert Estimate Money.
+     * @brief Display Alert Estimate Money.
      */
     protected void displayAlertEstimateMoney() {
         AlertDialog.Builder alert_dialog = new AlertDialog.Builder(this);

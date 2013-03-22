@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * Database Helper Class.
+ * @brief Database Helper Class.
  */
 public class DatabaseHelper extends SQLiteOpenHelper
 {
@@ -34,14 +34,15 @@ public class DatabaseHelper extends SQLiteOpenHelper
     private SQLiteDatabase m_SqliteDatabase;
 
     /**
-     * Class Constructor.
-     **/
+     * @brief Class Constructor.
+     */
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
+
     /**
-     * Called when create database.
-     **/
+     * @brief Called when create database.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d(LOG_TAG,"[DatabaseHelper][START] onCreate");
@@ -50,17 +51,18 @@ public class DatabaseHelper extends SQLiteOpenHelper
         insertDefaultItem(db);
         Log.d(LOG_TAG,"[DatabaseHelper][END] onCreate");
     }
+
     /**
-     * Called when update database.
-     **/
+     * @brief Called when update database.
+     */
     public void onUpgrade(SQLiteDatabase db, int old_version, int new_version ) {
         if( old_version >= new_version ) return;
     }
 
     /**
-     * Create table in database.
+     * @brief Create table in database.
      * @param db SQLiteDatabase Instance.
-     **/
+     */
     private void createTable(SQLiteDatabase db) {
         db.execSQL( CREATE_ACCOUNT_MASTER );
         db.execSQL( CREATE_ACCOUNT_TABLE );
@@ -69,8 +71,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
     }
 
     /**
-     * Insert default item into table.
-     **/
+     * @brief Insert default item into table.
+     */
     private void insertDefaultItem(SQLiteDatabase db) {
         // default item insert for AccountCategoryMaster.
         db.execSQL( "insert into "+ ACCOUNT_MASTER_NAME +
