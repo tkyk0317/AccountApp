@@ -9,6 +9,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.view.Gravity;
 import android.graphics.Color;
+import android.text.InputType;
+import android.text.InputFilter;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
@@ -27,6 +31,7 @@ public class Estimate {
     protected AccountTableAccessor accountTable;
     protected Activity activity;
     protected String currentDate;
+    protected static boolean isAlertFlag = false;
     protected static final int ESTIMATE_MONEY_DIGITS = 9;
     protected static final int TABLE_FIRST_INDEX = 0;
     protected static final int TABLE_SECOND_INDEX = 1;
@@ -49,7 +54,11 @@ public class Estimate {
     public void appear(String target_date) {
         if( isEstimate() ) {
             this.currentDate = target_date;
-            displayEstimateMessage();
+            if( true == isTargetDate(this.currentDate) &&
+                false == isEnableEstimateMoney() ) {
+                displayAlertMessage();
+            }
+            displayEstimate();
         }
     }
 
@@ -59,7 +68,6 @@ public class Estimate {
      */
     protected boolean isEstimate() {
         AppConfigurationData app_config = new AppConfigurationData(activity);
-
         if( app_config.getEstimate() ) {
             return true;
         }
@@ -67,9 +75,34 @@ public class Estimate {
     }
 
     /**
-     * @brief Display Estimate Message.
+     * @brief Check Target Date For Estimate.
+     * @param target_date Specify Checked Date.
+     * @return true:target date false:not target date.
      */
-    protected void displayEstimateMessage() {
+    protected boolean isTargetDate(String target_date) {
+        String target = Utility.splitYearAndMonth(target_date);
+        if( 0 != target.compareTo(Utility.getCurrentYearAndMonth()) ) {
+            return false;
+        }
+        return true;
+    }
+
+     /**
+      * @brief Check Estimate Money Enable.
+      * @return true if estimate money is enable.
+      */
+    protected boolean isEnableEstimateMoney() {
+        EstimateTableRecord record = this.estimateTable.getRecordAtTargetDate(Utility.splitYearAndMonth(this.currentDate));
+        if( 0 == record.getEstimateMoney() ) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @brief Display Estimate.
+     */
+    protected void displayEstimate() {
         this.estimateRecord = this.estimateTable.getRecordAtTargetDate(Utility.splitYearAndMonth(this.currentDate));
 
         // clear all views.
@@ -82,6 +115,22 @@ public class Estimate {
 
         // Create Table.
         summary_table.addView(table_row);
+    }
+
+     /**
+     * Display Alert Estimate Message.
+     */
+    protected void displayAlertMessage() {
+        if( true == Estimate.isAlertFlag ) return;
+
+        // setting dialog.
+        AlertDialog.Builder message_dialog = new AlertDialog.Builder(activity);
+        message_dialog.setTitle(activity.getText(R.string.estimate_title));
+        message_dialog.setPositiveButton("OK", null);
+        message_dialog.show();
+
+        // update flag.
+        Estimate.isAlertFlag = true;
     }
 
     /**
@@ -129,19 +178,6 @@ public class Estimate {
 
         table_row.addView(estimate_rest_label);
         table_row.addView(estimate_rest_value);
-    }
-
-    /**
-     * @brief Insert Estimate Money into Database.
-     * @param estimate_money User inputed Money of Estimate.
-     */
-    protected void insertEstimateMoney(int estimate_money) throws RuntimeException {
-        if( 0 >= estimate_money ) throw new RuntimeException();
-
-        EstimateTableRecord record = new EstimateTableRecord();
-
-        record.setEstimateMoney(estimate_money);
-        estimateTable.insert(record);
     }
 }
 
