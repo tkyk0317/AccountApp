@@ -3,6 +3,8 @@ package com.myapp.account.utility;
 import java.util.*;
 import java.text.*;
 import android.util.Log;
+import com.myapp.account.R;
+import android.app.Activity;
 
 /**
  * @brief Utility Class.
@@ -194,6 +196,41 @@ public class Utility {
         target_cal.set(year, month - 1, day);
 
         return target_cal.get(Calendar.DAY_OF_WEEK);
+    }
+
+    /**
+     * @brief Get DayOfWeek String.
+     * @param date target day of week.
+     * @return Day Of Week String.
+     */
+    public static String getDayOfWeekString(int day_of_week, Activity activity) {
+        String day_of_week_str = "";
+        switch(day_of_week) {
+            case Calendar.SUNDAY:
+                day_of_week_str = activity.getText(R.string.sunday).toString();
+                break;
+            case Calendar.MONDAY:
+                day_of_week_str = activity.getText(R.string.monday).toString();
+                break;
+            case Calendar.TUESDAY:
+                day_of_week_str = activity.getText(R.string.tuesday).toString();
+                break;
+            case Calendar.WEDNESDAY:
+                day_of_week_str = activity.getText(R.string.wednesday).toString();
+                break;
+            case Calendar.THURSDAY:
+                day_of_week_str = activity.getText(R.string.thursday).toString();
+                break;
+            case Calendar.FRIDAY:
+                day_of_week_str = activity.getText(R.string.friday).toString();
+                break;
+            case Calendar.SATURDAY:
+                day_of_week_str = activity.getText(R.string.saturday).toString();
+                break;
+            default:
+                break;
+        }
+        return day_of_week_str;
     }
 
     /**

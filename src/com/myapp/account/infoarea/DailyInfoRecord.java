@@ -5,7 +5,9 @@ import android.widget.TableRow;
 import android.content.Context;
 import android.widget.TextView;
 import android.view.Gravity;
+import android.graphics.Color;
 import com.myapp.account.database.AccountTableRecord;
+import com.myapp.account.database.DatabaseHelper;
 
 /**
  * @brief Daily Info Record Class.
@@ -17,6 +19,7 @@ public class DailyInfoRecord extends TableRow {
     protected TextView categoryName;
     protected TextView accountMoney;
     protected TextView accountMemo;
+    protected int kindId;
     protected static final int TEXT_SIZE = 15;
     protected static final int DISPLAY_MAX_LINE = 1;
 
@@ -32,16 +35,16 @@ public class DailyInfoRecord extends TableRow {
      */
     public DailyInfoRecord(Context context) {
         super(context);
-        categoryName = new TextView(context);
-        accountMoney = new TextView(context);
-        accountMemo = new TextView(context);
+        this.categoryName = new TextView(context);
+        this.accountMoney = new TextView(context);
+        this.accountMemo = new TextView(context);
     }
 
     /**
      * @brief Set Account Table Record.
      * @param record AccountTable Record Instance.
      */
-    protected void setAccountTableRecord(AccountTableRecord record) {
+    public void setAccountTableRecord(AccountTableRecord record) {
         this.accountRecord = record;
     }
 
@@ -50,7 +53,7 @@ public class DailyInfoRecord extends TableRow {
      * @param String Account Date.
      */
     public void setAccountDate(String account_date) {
-        accountDate = account_date;
+        this.accountDate = account_date;
     }
 
     /**
@@ -58,10 +61,34 @@ public class DailyInfoRecord extends TableRow {
      * @param String Category Name.
      */
     public void setCategoryName(String category_name) {
-        categoryName.setText(category_name);
-        categoryName.setTextSize(TEXT_SIZE);
-        categoryName.setGravity(Gravity.RIGHT);
+        this.categoryName.setText(category_name);
+        this.categoryName.setTextSize(TEXT_SIZE);
+        this.categoryName.setGravity(Gravity.RIGHT);
         super.addView(categoryName);
+    }
+
+    /**
+     * @brief Set Kind ID.
+     * @param kind_id Kind Id of category id.
+     */
+    public void setKindId(int kind_id) {
+        this.kindId = kind_id;
+        setTextColor();
+    }
+
+    /**
+     * @brief Set Text Color correspond Kind Id.
+     */
+    protected void setTextColor() {
+        if( this.kindId == DatabaseHelper.INCOME_FLAG ) {
+            this.categoryName.setTextColor(Color.GREEN);
+            this.accountMoney.setTextColor(Color.GREEN);
+            this.accountMemo.setTextColor(Color.GREEN);
+        } else {
+            this.categoryName.setTextColor(Color.RED);
+            this.accountMoney.setTextColor(Color.RED);
+            this.accountMemo.setTextColor(Color.RED);
+        }
     }
 
     /**
@@ -69,9 +96,9 @@ public class DailyInfoRecord extends TableRow {
      * @param String Account Money.
      */
     public void setAccountMoney(String account_money) {
-        accountMoney.setText(account_money);
-        accountMoney.setTextSize(TEXT_SIZE);
-        accountMoney.setGravity(Gravity.RIGHT);
+        this.accountMoney.setText(account_money);
+        this.accountMoney.setTextSize(TEXT_SIZE);
+        this.accountMoney.setGravity(Gravity.RIGHT);
         super.addView(accountMoney);
     }
 
@@ -80,10 +107,10 @@ public class DailyInfoRecord extends TableRow {
      * @param String Account Memo.
      */
     public void setAccountMemo(String account_memo) {
-        accountMemo.setText(account_memo);
-        accountMemo.setTextSize(TEXT_SIZE);
-        accountMemo.setGravity(Gravity.RIGHT);
-        accountMemo.setMaxLines(DISPLAY_MAX_LINE);
+        this.accountMemo.setText(account_memo);
+        this.accountMemo.setTextSize(TEXT_SIZE);
+        this.accountMemo.setGravity(Gravity.RIGHT);
+        this.accountMemo.setMaxLines(DISPLAY_MAX_LINE);
         super.addView(accountMemo);
     }
 }
