@@ -45,6 +45,40 @@ public class EstimateTableAccessor {
     }
 
     /**
+     * @brief Get Record at TargetDate
+     * @param target_date TargetDate(yyyy/mm).
+     * @return EstimateRecord Instance.
+     *
+     */
+    public EstimateTableRecord getRecordAtTargetDate(String target_date) {
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "target_date=?", new String[] {target_date}, null, null, null, null);
+
+        EstimateTableRecord record = new EstimateTableRecord();
+        if( true == cursor.moveToFirst() ) {
+            record.set(cursor);
+        }
+        cursor.close();
+        return record;
+    }
+
+    /**
+     * @brief Check Estimate Record at TargetDate.
+     * @param target_date Specify Checked Date(yyyy/dd).
+     * @return true:exsit false:not exsit.
+     */
+    public boolean isEstimateRecord(String target_date) {
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "target_date=?", new String[] {target_date}, null, null, null, null);
+        cursor.moveToFirst();
+
+        boolean ret = false;
+        if( cursor.getCount() > 0 ) {
+            ret = true;
+        }
+        cursor.close();
+        return ret;
+    }
+
+    /**
      * Insert Record in EstimateTable.
      * @param record EstimateTableRecord Instance.
      * @return Insert Record Key(_id).

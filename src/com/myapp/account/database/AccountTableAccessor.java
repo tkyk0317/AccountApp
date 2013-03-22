@@ -150,12 +150,13 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Get Income Total Money at Current Month.
+     * Get Income Total Money at Target Month.
+     * @param target_date specify target date(yyyy/mm/dd).
      * @return Total Money.
      */
-    public int getTotalIncomeAtCurrentMonth() {
-        String last_date_of_month = Utility.getLastDateOfCurrentMonth();
-        String first_date_of_month = Utility.getFirstDateOfCurrentMonth();
+    public int getTotalIncomeAtTargetMonth(String target_date) {
+        String last_date_of_month = Utility.getLastDateOfTargetMonth(target_date);
+        String first_date_of_month = Utility.getFirstDateOfTargetMonth(target_date);
 
         Cursor cursor = readDatabase.rawQuery("select sum(AccountTable.money) from AccountTable " +
                 "join AccountMaster on AccountTable.category_id=AccountMaster._id " +
@@ -170,12 +171,13 @@ public class AccountTableAccessor {
     }
 
     /**
-     * Get Payment Total Money at Current Month.
+     * Get Payment Total Money at Target Month.
+     * @param target_date specify target date(yyyy/mm/dd).
      * @return Total Money.
      */
-    public int getTotalPaymentAtCurrentMonth() {
-        String last_date_of_month = Utility.getLastDateOfCurrentMonth();
-        String first_date_of_month = Utility.getFirstDateOfCurrentMonth();
+    public int getTotalPaymentAtTargetMonth(String target_date) {
+        String last_date_of_month = Utility.getLastDateOfTargetMonth(target_date);
+        String first_date_of_month = Utility.getFirstDateOfTargetMonth(target_date);
 
         Cursor cursor = readDatabase.rawQuery("select sum(AccountTable.money) from AccountTable " +
                 "join AccountMaster on AccountTable.category_id=AccountMaster._id " +

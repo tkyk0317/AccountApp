@@ -67,13 +67,9 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     protected void onStart() {
         super.onStart();
         setContentView(R.layout.main);
-        this.viewFlipper = (ViewFlipper)findViewById(R.id.calendar_flipper);
 
         // initialize.
         init();
-
-        // appear estimate infomation.
-        estimateInfo.appear();
 
         // display Main Content.
         displayMainContent();
@@ -83,6 +79,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * Initialize Member-Variable.
      */
     protected void init() {
+        this.viewFlipper = (ViewFlipper)findViewById(R.id.calendar_flipper);
         this.titleArea = new TitleArea(this);
         this.estimateInfo = new Estimate(this);
         this.tabContent = new TabContent(this);
@@ -90,6 +87,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.applicationMenu = new ApplicationMenu(this);
         this.currentCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.current_flipper));
         this.nextCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.next_flipper));
+        this.currentDate = Utility.getCurrentDate();
 
         // create animation.
         createTranslateAnimation();
@@ -129,12 +127,11 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * Display Main Content.
      */
     protected void displayMainContent() {
-        currentDate = Utility.getCurrentDate();
-
-        this.summary.appear();
-        this.titleArea.appear(currentDate);
-        this.tabContent.appear(currentDate);
-        this.currentCalendar.appear(currentDate);
+        this.estimateInfo.appear(this.currentDate);
+        this.summary.appear(this.currentDate);
+        this.titleArea.appear(this.currentDate);
+        this.tabContent.appear(this.currentDate);
+        this.currentCalendar.appear(this.currentDate);
         this.currentCalendarIndex = CalendarIndex.CURRENT_ID;
    }
 
@@ -237,9 +234,8 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     @Override
     public void notifyOnFling(Object event, MotionEvent motion_start, MotionEvent motion_end, float velocity_x, float velocity_y) {
-
-        // appear the next calendar.
         setCurrentDate(velocity_x);
+
         if( this.nextCalendar.equals((AccountCalendar)event) ) {
             this.currentCalendar.appear(currentDate);
             this.currentCalendarIndex = CalendarIndex.CURRENT_ID;
@@ -250,8 +246,9 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
 
         // move to next calendar.
         moveCalendar(velocity_x);
-        this.titleArea.appear(this.currentDate);
-        this.tabContent.appear(this.currentDate);
+
+        // reflesh.
+        refleshDisplay();
      }
 
     /**
@@ -287,14 +284,20 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     @Override
     public void notifyAccountEditComplete() {
-        // reflesh display.
+        refleshDisplay();
+    }
+
+    /**
+     * @brief Reflesh Display.
+     */
+    protected void refleshDisplay() {
         clearSummaryAndEstimateArea();
         refleshCalendar();
-        this.estimateInfo.appear();
-        this.summary.appear();
-        this.titleArea.appear(currentDate);
-        this.tabContent.appear(currentDate);
-     }
+        this.estimateInfo.appear(this.currentDate);
+        this.summary.appear(this.currentDate);
+        this.titleArea.appear(this.currentDate);
+        this.tabContent.appear(this.currentDate);
+    }
 
     /**
      * @brief Reflesh Calendar.

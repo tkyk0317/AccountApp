@@ -11,6 +11,7 @@ import android.content.SharedPreferences.Editor;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.EstimateTableAccessor;
 import com.myapp.account.database.EstimateTableRecord;
+import com.myapp.account.utility.Utility;
 
 /**
  * AppConfigurationData Class.
@@ -30,8 +31,8 @@ public class AppConfigurationData {
      * Constractor.
      */
     public AppConfigurationData(Context context) {
-        appConfig = PreferenceManager.getDefaultSharedPreferences(context);
-        estimateTable = new EstimateTableAccessor(new DatabaseHelper(context.getApplicationContext()));
+        this.appConfig = PreferenceManager.getDefaultSharedPreferences(context);
+        this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(context.getApplicationContext()));
         readConfigurationData();
     }
 
@@ -40,11 +41,11 @@ public class AppConfigurationData {
      */
     protected void readConfigurationData() {
         // get configuration value.
-        isEstimate = appConfig.getBoolean(ESTIMATE_KEY, false);
-        userName = appConfig.getString(USER_TARGET_KEY, "default");
+        this.isEstimate = appConfig.getBoolean(ESTIMATE_KEY, false);
+        this.userName = appConfig.getString(USER_TARGET_KEY, "default");
 
-        EstimateTableRecord record = estimateTable.getRecordWithCurrentMonth();
-        estimateMoney = record.getEstimateMoney();
+        EstimateTableRecord record = this.estimateTable.getRecordWithCurrentMonth();
+        this.estimateMoney = record.getEstimateMoney();
     }
 
     /**
@@ -77,19 +78,24 @@ public class AppConfigurationData {
      */
     public void saveEstimateMoney(int estimate_money) throws RuntimeException {
         try {
-            EstimateTableRecord record = estimateTable.getRecordWithCurrentMonth();
-
-            record.setEstimateMoney(estimate_money);
-            estimateTable.update(record);
+            if( this.estimateTable.isEstimateRecord(Utility.getCurrentYearAndMonth()) ) {
+                EstimateTableRecord record = this.estimateTable.getRecordWithCurrentMonth();
+                record.setEstimateMoney(estimate_money);
+                this.estimateTable.update(record);
+            } else {
+                EstimateTableRecord estimate_record = new EstimateTableRecord();
+                estimate_record.setEstimateMoney(estimate_money);
+                this.estimateTable.insert(estimate_record);
+            }
         } catch (RuntimeException error) {
             throw new RuntimeException();
         }
     }
 
     // Getter.
-    public boolean getEstimate() { return isEstimate; }
-    public String getTargetUserName() { return userName; }
-    public int getEstimateMoney() { return estimateMoney; }
+    public boolean getEstimate() { return this.isEstimate; }
+    public String getTargetUserName() { return this.userName; }
+    public int getEstimateMoney() { return this.estimateMoney; }
     public String getEstimateKey() { return ESTIMATE_KEY; }
     public String getTargetUserKey() { return USER_TARGET_KEY; }
     public String getEstimateMoneyKey() { return ESTIMATE_MONEY_KEY; }

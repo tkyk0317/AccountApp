@@ -16,6 +16,7 @@ public class Summary {
 
     protected Activity activity;
     protected AccountTableAccessor accountTable;
+    protected String currentDate;
     protected static final int TEXT_FONT_SIZE = 15;
 
     /**
@@ -29,8 +30,11 @@ public class Summary {
 
     /**
       * Appear the Summary.
+      * @param target_date specify displaied target date(yyyy/mm/dd).
       */
-    public void appear() {
+    public void appear(String target_date) {
+        this.currentDate = target_date;
+
         TableRow table_row = new TableRow(activity.getApplicationContext());
         insertIncomeIntoTableRow(table_row);
         insertPaymentIntoTableRow(table_row);
@@ -47,7 +51,7 @@ public class Summary {
         TextView income_label = new TextView(activity.getApplicationContext());
         TextView income_value = new TextView(activity.getApplicationContext());
 
-        int total = accountTable.getTotalIncomeAtCurrentMonth();
+        int total = accountTable.getTotalIncomeAtTargetMonth(this.currentDate);
 
         income_value.setText(String.format("%,d", total) + activity.getText(R.string.money_unit).toString());
         income_label.setText(activity.getText(R.string.income_label));
@@ -68,7 +72,7 @@ public class Summary {
         TextView payment_label = new TextView(activity.getApplicationContext());
         TextView payment_value = new TextView(activity.getApplicationContext());
 
-        int total = accountTable.getTotalPaymentAtCurrentMonth();
+        int total = accountTable.getTotalPaymentAtTargetMonth(this.currentDate);
 
         payment_value.setText(String.format("%,d", total) + activity.getText(R.string.money_unit).toString());
         payment_label.setText(activity.getText(R.string.payment_label));
