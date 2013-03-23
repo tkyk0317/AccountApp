@@ -5,7 +5,6 @@ import android.widget.TableRow;
 import android.content.Context;
 import android.widget.TextView;
 import android.view.Gravity;
-import android.graphics.Color;
 import com.myapp.account.database.DatabaseHelper;
 
 /**
@@ -68,23 +67,6 @@ public class MonthlyInfoRecord extends TableRow {
      */
     public void setKindId(int kind_id) {
         this.kindId = kind_id;
-        setTextColor();
     }
-
-    /**
-     * @brief Set Text Color correspond Kind Id.
-     */
-    protected void setTextColor() {
-        if( this.kindId == DatabaseHelper.INCOME_FLAG ) {
-            this.accountDate.setTextColor(Color.WHITE);
-            this.categoryName.setTextColor(Color.WHITE);
-            this.accountMoney.setTextColor(Color.WHITE);
-        } else {
-            this.accountDate.setTextColor(Color.RED);
-            this.categoryName.setTextColor(Color.RED);
-            this.accountMoney.setTextColor(Color.RED);
-        }
-    }
-
 }
 
