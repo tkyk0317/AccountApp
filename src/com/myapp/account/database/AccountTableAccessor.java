@@ -66,6 +66,24 @@ public class AccountTableAccessor {
     }
 
     /**
+     * @brief Check Exsit AccountRecord at Target Date.
+     * @param target_date Specified target date.
+     * @return true:exsit false:not exsit.
+     */
+    public boolean isExsitRecordAtTargetDate(String target_date)
+    {
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date=?" , new String[]{target_date}, null, null, "category_id", null);
+        cursor.moveToFirst();
+
+        boolean is_exsit = false;
+        if( 0 < cursor.getCount() ) {
+            is_exsit = true;
+        }
+        cursor.close();
+        return is_exsit;
+    }
+
+    /**
      * @brief Check Exsit Payment AccountRecord at Target Date.
      * @param target_date Specified target date.
      * @return true:exsit false:not exsit.
