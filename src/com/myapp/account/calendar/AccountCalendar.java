@@ -31,6 +31,8 @@ public class AccountCalendar implements ClickObserverInterface {
     protected LinearLayout layout;
     protected String appearDate;
     protected AccountTableAccessor accountTableAccessor;
+    protected String firstDateOfMonth;
+    protected String lastDateOfMonth;
     protected static final int CALENDAR_DAY_OF_WEEK_NUM = 7;
     protected static final int CALENDAR_ROW_NUM = 6;
     protected static final int WEEK_OF_SATURDAY = 5;
@@ -51,6 +53,9 @@ public class AccountCalendar implements ClickObserverInterface {
      */
     public void appear(String target_date) {
         this.appearDate = target_date;
+        this.firstDateOfMonth = Utility.getFirstDateOfTargetMonth(this.appearDate);
+        this.lastDateOfMonth = Utility.getLastDateOfTargetMonth(this.appearDate);
+
         clearCalendarItems();
         createCalendar();
         focusCurrentDate();
@@ -61,8 +66,10 @@ public class AccountCalendar implements ClickObserverInterface {
      */
     protected void clearCalendarItems() {
         for( AccountCalendarCell cell : this.calendarCells ) {
-            cell.setDate(0, 0, 0, 0);
+            cell.setDate(0, 0, 0, 0, null);
             cell.setText("");
+            cell.setCheckedImage(false);
+            cell.setClickable(false);
         }
     }
 
@@ -129,23 +136,22 @@ public class AccountCalendar implements ClickObserverInterface {
         int day = 1;
         int year = Integer.valueOf(Utility.splitYear(this.appearDate));
         int month = Integer.valueOf(Utility.splitMonth(this.appearDate));
+        int st_pos = getStartPosition();
+        int end_pos = getEndPosition();
 
         // Create Calendar.
         for( int row = 0 ; row < CALENDAR_ROW_NUM ; ++row ) {
             for( int week = 0 ; week < CALENDAR_DAY_OF_WEEK_NUM ; ++week ) {
                 AccountCalendarCell cell = calendarCells.get(row * CALENDAR_DAY_OF_WEEK_NUM + week );
                 cell.attachObserver(this);
-                cell.setCheckedImage(false);
-                cell.setClickable(false);
 
-                if( row * CALENDAR_DAY_OF_WEEK_NUM + week >= getStartPosition() &&
-                    row * CALENDAR_DAY_OF_WEEK_NUM + week <= getEndPosition() ) {
+                if( row * CALENDAR_DAY_OF_WEEK_NUM + week >= st_pos && row * CALENDAR_DAY_OF_WEEK_NUM + week <= end_pos ) {
                     String date = Utility.createDateFormat(year, month, day);
                     int day_of_week = Utility.getDayOfWeek(date);
 
                     // setting calendar cell.
                     cell.setText(String.valueOf(day));
-                    cell.setDate(year, month, day++, day_of_week);
+                    cell.setDate(year, month, day++, day_of_week, date);
                     cell.setClickable(true);
 
                     // set checked image.
@@ -161,8 +167,7 @@ public class AccountCalendar implements ClickObserverInterface {
      * @param date Calendar Date.
      */
     protected void setCheckImageAtCell(AccountCalendarCell cell, String date) {
-        if( this.accountTableAccessor.isExsitPaymentRecordAtTargetDate(date) ||
-            this.accountTableAccessor.isExsitIncomeRecordAtTargetDate(date) ) {
+        if( this.accountTableAccessor.isExsitRecordAtTargetDate(date) ) {
             cell.setCheckedImage(true);
         }
     }
@@ -189,7 +194,7 @@ public class AccountCalendar implements ClickObserverInterface {
      */
     protected int getStartPosition() {
         // calednar start if index zero(day of week start is index one).
-        return Utility.getDayOfWeek(Utility.getFirstDateOfTargetMonth(this.appearDate)) - 1;
+        return Utility.getDayOfWeek(this.firstDateOfMonth) - 1;
     }
 
     /**
@@ -198,7 +203,7 @@ public class AccountCalendar implements ClickObserverInterface {
      */
     protected int getEndPosition() {
         int cal_st_pos = getStartPosition();
-        int end_month = Integer.valueOf(Utility.splitDay(Utility.getLastDateOfTargetMonth(this.appearDate)));
+        int end_month = Integer.valueOf(Utility.splitDay(this.lastDateOfMonth));
 
         return cal_st_pos + end_month - 1;
     }

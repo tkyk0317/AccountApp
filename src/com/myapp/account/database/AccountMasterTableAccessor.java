@@ -14,16 +14,16 @@ import com.myapp.account.utility.Utility;
  */
 public class AccountMasterTableAccessor {
 
-    protected SQLiteDatabase readDatabase;
-    protected SQLiteDatabase writeDatabase;
+    protected SQLiteDatabase readDatabase = null;
+    protected SQLiteDatabase writeDatabase = null;
     protected static final String TABLE_NAME = "AccountMaster";
 
     /**
       * @brief Consturactor.
       */
     public AccountMasterTableAccessor(SQLiteOpenHelper helper) {
-        readDatabase = helper.getReadableDatabase();
-        writeDatabase = helper.getWritableDatabase();
+        if( null == this.readDatabase ) this.readDatabase = helper.getReadableDatabase();
+        if( null == this.writeDatabase ) this.writeDatabase = helper.getWritableDatabase();
     }
 
     /**

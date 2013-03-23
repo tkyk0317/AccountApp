@@ -21,6 +21,8 @@ public class Utility {
     public static final int DATE_DAY_SIZE = 2;
     public static final int DATE_MONTH_END_SLASH_POS = 7;
     public static final String DATE_DELIMITER = "/";
+    public static final String ZERO = "0";
+    public static final int NUMBER_THRESHOLD = 10;
 
     /**
      * @brief Is String is NULL.
@@ -38,9 +40,22 @@ public class Utility {
      * @return Current Date of String Data Type (yyyy/MM/dd).
      */
     public static String createDateFormat(int year, int month, int day) {
-        Calendar cal_date = Calendar.getInstance(TimeZone.getDefault());
-        cal_date.set(year, month - 1, day);
-        return (new SimpleDateFormat(DATE_FORMAT)).format(cal_date.getTime());
+        return String.valueOf(year) + DATE_DELIMITER + convertNumberToString(month) + DATE_DELIMITER + convertNumberToString(day);
+    }
+
+    /**
+     * @brief Convert Number To String.
+     * @param number target number.
+     * @return converted number string.
+     */
+    public static String convertNumberToString(int number) {
+        String number_str = "";
+        if( NUMBER_THRESHOLD > number ) {
+            number_str = ZERO + String.valueOf(number);
+        } else {
+            number_str = String.valueOf(number);
+        }
+        return number_str;
     }
 
     /**

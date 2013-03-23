@@ -58,13 +58,14 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
      * @param int month.
      * @param int day.
      * @param int day of week.
+     * @param String date.
      */
-    public void setDate(int year, int month, int day, int day_of_week) {
+    public void setDate(int year, int month, int day, int day_of_week, String date) {
         this.year = year;
         this.month = month;
         this.day = day;
         this.dayOfWeek = day_of_week;
-        this.date = Utility.createDateFormat(year, month, day);
+        this.date = date;
     }
 
     /**

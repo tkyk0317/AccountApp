@@ -294,13 +294,10 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     protected void moveToNextCalendar(float velocity_x) {
 
         if( this.currentCalendarIndex == CalendarIndex.NEXT_ID ) {
-            this.currentCalendar.appear(this.currentDate);
             this.currentCalendarIndex = CalendarIndex.CURRENT_ID;
         } else {
-            this.nextCalendar.appear(this.currentDate);
             this.currentCalendarIndex = CalendarIndex.NEXT_ID;
         }
-
         // Animatio calendar.
         animationCalendar(velocity_x);
 
