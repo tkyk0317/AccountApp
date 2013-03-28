@@ -145,11 +145,11 @@ public class AccountTableAccessor {
     }
 
     /**
-     * @brief Get Record With Target Month Group by CategoryId.
+     * @brief Get Record With Target Month Group by CategoryId and InsertDate.
      * @param Target Insert Date.
      * @return AccountTableRecord List at Target Month.
      */
-    public List<AccountTableRecord> getRecordWithTargetMonthGroupByCategoryId(String target_date) {
+    public List<AccountTableRecord> getRecordWithTargetMonthGroupByCategoryIdAndInsertDate(String target_date) {
         String last_date_of_month = Utility.getLastDateOfTargetMonth(target_date);
         String first_date_of_month = Utility.getFirstDateOfTargetMonth(target_date);
 
@@ -169,6 +169,30 @@ public class AccountTableAccessor {
         return record_list;
     }
 
+    /**
+     * @brief Get Record With Target Month Group by CategoryId.
+     * @param Target Insert Date.
+     * @return AccountTableRecord List at Target Month.
+     */
+    public List<AccountTableRecord> getRecordWithTargetMonthGroupByCategoryId(String target_date) {
+        String last_date_of_month = Utility.getLastDateOfTargetMonth(target_date);
+        String first_date_of_month = Utility.getFirstDateOfTargetMonth(target_date);
+
+        Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
+                                           "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id", null, "insert_date", null);
+        cursor.moveToFirst();
+
+        int record_count = cursor.getCount();
+        List<AccountTableRecord> record_list = new ArrayList<AccountTableRecord>(record_count+1);
+
+        for( int i = 0 ; i < record_count ; i++ ) {
+            record_list.add( new AccountTableRecord() );
+            record_list.get(i).set(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return record_list;
+    }
     /**
      * @brief Check Exsit Record at Target Month.
      * @param target_date Specified Target Date.

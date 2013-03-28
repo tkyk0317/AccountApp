@@ -45,7 +45,6 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
     protected ClickObserverInterface observer;
     protected static final int NODATA_TEXT_SIZE = 30;
     protected static final int GRAPH_TITLE_SIZE = 20;
-    protected static final int GRAPH_LABEL_SIZE = 10;
     protected static final int GRAPH_LEGEND_SIZE = 15;
     protected static final float GRAPH_SCALE = 0.85F;
     protected static final float GRAPH_START_ANGLE = -90.0F;
@@ -144,9 +143,8 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
         this.renderer.setClickEnabled(false);
         this.renderer.setAntialiasing(true);
         this.renderer.setFitLegend(true);
-        this.renderer.setShowLabels(true);
+        this.renderer.setShowLabels(false);
         this.renderer.setShowLegend(true);
-        this.renderer.setLabelsTextSize(GRAPH_LABEL_SIZE);
         this.renderer.setLegendTextSize(GRAPH_LEGEND_SIZE);
         this.renderer.setScale(GRAPH_SCALE);
         this.renderer.setStartAngle(GRAPH_START_ANGLE);

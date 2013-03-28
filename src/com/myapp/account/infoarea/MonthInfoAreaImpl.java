@@ -33,7 +33,7 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
      */
     @Override
     protected List<AccountTableRecord> getAccountRecord() {
-        return accountTable.getRecordWithTargetMonthGroupByCategoryId(displayDate);
+        return accountTable.getRecordWithTargetMonthGroupByCategoryIdAndInsertDate(displayDate);
     }
 
     /**
