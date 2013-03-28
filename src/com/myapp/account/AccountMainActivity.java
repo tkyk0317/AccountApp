@@ -1,8 +1,10 @@
 package com.myapp.account;
 
 import java.util.*;
+import java.lang.ClassCastException;
 import android.util.Log;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
@@ -14,9 +16,11 @@ import android.widget.TableLayout;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 import android.widget.ViewFlipper;
+import android.widget.ImageView;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import com.myapp.account.AccountGraphActivity;
 import com.myapp.account.titlearea.TitleArea;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.tabcontent.TabContent;
@@ -49,6 +53,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     protected Animation rightOutAnimation;
     protected CalendarIndex currentCalendarIndex;
     protected TextView returnCurrentMonthView;
+    protected ImageView graphImage;
     protected static final int ANIMATION_DURATION = 300;
 
     /**
@@ -89,6 +94,9 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.nextCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.next_flipper));
         this.currentDate = Utility.getCurrentDate();
 
+        // init graph image.
+        initGraphImage();
+
         // not display return current month view.
         this.returnCurrentMonthView.setClickable(false);
         this.returnCurrentMonthView.setVisibility(View.INVISIBLE);
@@ -106,6 +114,14 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.currentCalendar.attachObserver(this);
         this.nextCalendar.attachObserver(this);
         this.tabContent.attachObserverForDailyInfo(this);
+    }
+
+    /**
+     * @brief Initalize Graph Image.
+     */
+    protected void initGraphImage() {
+        this.graphImage = (ImageView)findViewById(R.id.account_graph_image);
+        this.graphImage.setImageDrawable(getResources().getDrawable(R.drawable.graph));
     }
 
     /**
@@ -134,7 +150,10 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * @brief Regist Event.
      */
     protected void registEvent() {
+        this.returnCurrentMonthView.setId(ViewId.CALENDAR_VIEW.getId());
+        this.graphImage.setId(ViewId.GRAPH_VIEW.getId());
         this.returnCurrentMonthView.setOnClickListener(this);
+        this.graphImage.setOnClickListener(this);
     }
 
     /**
@@ -143,8 +162,19 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     @Override
     public void onClick(View view) {
-        if( false == this.returnCurrentMonthView.equals((TextView)view) ) return;
+        int id = view.getId();
 
+        if(id == ViewId.CALENDAR_VIEW.getId()) {
+            moveToCurrentCalendar();
+        } else if( id ==  ViewId.GRAPH_VIEW.getId()) {
+            moveToGraphActivity();
+        }
+    }
+
+    /**
+     * @brief Move To Current Calendar.
+     */
+    protected void moveToCurrentCalendar() {
         float velocity_x = 0;
         String current_date = Utility.getCurrentDate();
 
@@ -155,6 +185,15 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         }
         this.currentDate = Utility.getCurrentDate();
         moveToNextCalendar(velocity_x);
+    }
+
+    /**
+     * @brief Move To Graph Activity.
+     */
+    protected void moveToGraphActivity() {
+        Intent intent = new Intent( this, AccountGraphActivity.class);
+        intent.putExtra(AccountGraphActivity.INTENT_VALUE_KEY_CURRENT_DATE, this.currentDate);
+        startActivity(intent);
     }
 
     /**
@@ -195,6 +234,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.currentDate = null;
         this.currentCalendarIndex = null;
         this.returnCurrentMonthView = null;
+        this.graphImage = null;
     }
 
     /**
@@ -370,6 +410,18 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     private enum CalendarIndex {
         CURRENT_ID(), NEXT_ID();
+    }
+
+    /**
+     * @brief View ID Class.
+     */
+    private enum ViewId {
+        CALENDAR_VIEW(0), GRAPH_VIEW(1);
+
+        private final int id;
+
+        private ViewId(int id) { this.id = id; }
+        public int getId() { return this.id; }
     }
 }
 

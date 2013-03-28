@@ -46,4 +46,8 @@
     <string name="thursday">木</string>
     <string name="friday">金</string>
     <string name="saturday">土</string>
+    <string name="payment_graph_title_suffix">月度支出グラフ</string>
+    <string name="income_graph_title_suffix">月度収入グラフ</string>
+    <string name="year_str">年</string>
+    <string name="graph_no_data">データがありません</string>
 </resources>

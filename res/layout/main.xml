@@ -27,11 +27,19 @@
             android:layout_height="wrap_content"
             android:background="@drawable/border_current_month"
             android:text="@string/current_month_title"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_weight="1"
             android:textSize="15px"
             />
+        <ImageView
+            android:id="@+id/account_graph_image"
+            android:layout_width="32px"
+            android:layout_height="32px"
+            android:scaleType="fitCenter"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+             />
     </RelativeLayout>
     <ImageView
         android:src="@android:drawable/divider_horizontal_dark"
