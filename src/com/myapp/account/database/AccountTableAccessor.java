@@ -170,6 +170,28 @@ public class AccountTableAccessor {
     }
 
     /**
+     * @brief Check Exsit Record at Target Month.
+     * @param target_date Specified Target Date.
+     * @return true:exsit false:not exsit.
+     */
+    public boolean isExsitRecordAtTargetMonth(String target_date) {
+        String last_date_of_month = Utility.getLastDateOfTargetMonth(target_date);
+        String first_date_of_month = Utility.getFirstDateOfTargetMonth(target_date);
+
+        Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
+                                           "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id, insert_date", null, "insert_date", null);
+        cursor.moveToFirst();
+
+        boolean is_exsit = false;
+        if( cursor.getCount() > 0 ) {
+            is_exsit = true;
+        }
+        cursor.close();
+
+        return is_exsit;
+    }
+
+    /**
      * @brief Get All Record.
      * @return All AccountTableRecord in AccountMasterTable.
      */
