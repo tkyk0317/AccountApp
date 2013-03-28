@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+
 import com.myapp.account.AccountGraphActivity;
 import com.myapp.account.titlearea.TitleArea;
 import com.myapp.account.utility.Utility;
@@ -217,7 +218,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * @brief TErminate Process.
+     * @brief Terminate Process.
      */
     protected void terminate() {
         this.titleArea = null;

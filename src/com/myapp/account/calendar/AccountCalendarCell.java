@@ -41,7 +41,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
         this.textView.setHeight(HEIGHT);
         this.textView.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.TOP);
         this.textView.setOnTouchListener(this);
-        gestureDetector = new GestureDetector(this.activity, this);
+        this.gestureDetector = new GestureDetector(this.activity, this);
     }
 
     /**

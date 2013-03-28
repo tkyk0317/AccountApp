@@ -1,6 +1,7 @@
 package com.myapp.account.graph;
 
 import android.app.Activity;
+import android.widget.LinearLayout;
 
 import com.myapp.account.R;
 import com.myapp.account.graph.AbstractAccountGraph;
@@ -17,8 +18,8 @@ public class AccountPaymentGraphImpl extends AbstractAccountGraph {
      * @brief Constractor.
      * @param activity Activity Instance.
      */
-    public AccountPaymentGraphImpl(Activity activity) {
-        super(activity);
+    public AccountPaymentGraphImpl(Activity activity, LinearLayout layout) {
+        super(activity, layout);
     }
 
     /**

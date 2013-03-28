@@ -21,10 +21,11 @@
             android:textSize="20px"
             />
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/graph_chart"
+    <ViewFlipper android:id="@+id/graph_flipper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent">
+        <include android:id="@+id/current_flipper" layout="@layout/current_graph" />
+        <include android:id="@+id/next_flipper" layout="@layout/next_graph" />
+    </ViewFlipper>
 </LinearLayout>
 
