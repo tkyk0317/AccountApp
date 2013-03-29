@@ -33,7 +33,7 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
      */
     @Override
     protected List<AccountTableRecord> getAccountRecord() {
-        return accountTable.getRecordWithTargetMonthGroupByCategoryIdAndInsertDate(displayDate);
+        return accountTable.getRecordWithTargetMonthGroupByCategoryId(displayDate);
     }
 
     /**
@@ -60,11 +60,10 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
         int master_id = account_record.getCategoryId();
         AccountMasterTableRecord account_master_record = masterTable.getRecord(master_id);
 
+        row.setCategoryName(account_master_record.getName() );
         row.setKindId(account_master_record.getKindId());
-        row.setAccountDate(Utility.splitMonthAndDay(account_record.getInsertDate()));
         String money = String.format("%,d", account_record.getMoney() ) + activity.getText(R.string.money_unit).toString();
         row.setAccountMoney( MONEY_SPACE + money + MONEY_SPACE );
-        row.setCategoryName(account_master_record.getName() );
 
         layout.addView(row);
     }

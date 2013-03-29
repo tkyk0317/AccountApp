@@ -46,7 +46,7 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
     protected static final int NODATA_TEXT_SIZE = 30;
     protected static final int GRAPH_TITLE_SIZE = 20;
     protected static final int GRAPH_LEGEND_SIZE = 15;
-    protected static final float GRAPH_SCALE = 0.85F;
+    protected static final float GRAPH_SCALE = 1.00F;
     protected static final float GRAPH_START_ANGLE = -90.0F;
     protected static final String SLASH_STRING = "/";
     protected static final String MONEY_DELIMITER = ":";

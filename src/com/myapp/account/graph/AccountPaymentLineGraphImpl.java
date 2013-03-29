@@ -38,6 +38,7 @@ public class AccountPaymentLineGraphImpl extends AbstractAccountGraph {
     protected List<AccountTableRecord> accountRecord;
     protected static final int MIN_Y_VALUE = 0;
     protected static final int MONTH_NUM_IN_YEAR = 12;
+    protected static final int YLABEL_ITEM_NUM = 10;
 
     /**
      * @brief Constractor.
@@ -83,8 +84,6 @@ public class AccountPaymentLineGraphImpl extends AbstractAccountGraph {
      * @brief Set MetaData for Account Graph.
      */
     protected void setGraphMetaData() {
-        this.multipleRenderer.setXTitle(this.activity.getText(R.string.graph_line_x_title).toString());
-        this.multipleRenderer.setYTitle(this.activity.getText(R.string.graph_line_y_title).toString());
         this.multipleRenderer.setYAxisMin(MIN_Y_VALUE);
         this.multipleRenderer.setYAxisMax((double)getMaxMoney());
         this.multipleRenderer.setXLabelsAlign(Align.CENTER);
@@ -92,6 +91,7 @@ public class AccountPaymentLineGraphImpl extends AbstractAccountGraph {
         this.multipleRenderer.setAxesColor(Color.LTGRAY);
         this.multipleRenderer.setShowGrid(true);
         this.multipleRenderer.setXLabels(MONTH_NUM_IN_YEAR);
+        this.multipleRenderer.setYLabels(YLABEL_ITEM_NUM);
     }
 
     /**
