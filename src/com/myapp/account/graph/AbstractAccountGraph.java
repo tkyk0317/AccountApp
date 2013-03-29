@@ -106,7 +106,7 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
         this.chartArea.removeAllViews();
         clearSeriesRender();
 
-        if( true == this.accountTable.isExsitRecordAtTargetMonth(this.targetDate) ) {
+        if( true == isExsitRecord() ) {
             createGraph();
         } else {
             return false;
@@ -154,7 +154,7 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
      * @brief Add Items Into Account Graph.
      */
     protected void addItemsIntoGraph() {
-        List<AccountTableRecord> account_records = this.accountTable.getRecordWithTargetMonthGroupByCategoryId(this.targetDate);
+        List<AccountTableRecord> account_records = getUsedDataInGraph();
         Collections.sort(account_records, new SortAccountRecordByMoney() );
 
         int count = 0;
@@ -179,6 +179,11 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
     }
 
     /**
+     * @brief Get Used Data In Graph.
+     */
+    protected abstract List<AccountTableRecord> getUsedDataInGraph();
+
+    /**
      * @brief Check Target Record Data.
      * @param master_record master table record.
      * @return true:target false:not target.
@@ -186,12 +191,18 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
     protected abstract boolean isTargetAccountRecord(AccountMasterTableRecord master_record);
 
     /**
+     * @brief Check Exsit Record at Target Date.
+     * @return true:exsit false:not exsit.
+     */
+    protected abstract boolean isExsitRecord();
+
+    /**
      * @brief Display Account Graph.
      */
     protected void displayGraph() {
         GraphicalView pie_chart = ChartFactory.getPieChartView(this.activity, this.categorySeries, this.renderer);
         pie_chart.setOnTouchListener(this);
-        chartArea.addView(pie_chart);
+        this.chartArea.addView(pie_chart);
     }
 
     /**

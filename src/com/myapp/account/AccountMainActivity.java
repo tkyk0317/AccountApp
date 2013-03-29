@@ -21,7 +21,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 
-import com.myapp.account.AccountGraphActivity;
+import com.myapp.account.AccountLineGraphActivity;
+import com.myapp.account.AccountPieGraphActivity;
 import com.myapp.account.titlearea.TitleArea;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.tabcontent.TabContent;
@@ -54,7 +55,8 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     protected Animation rightOutAnimation;
     protected CalendarIndex currentCalendarIndex;
     protected TextView returnCurrentMonthView;
-    protected ImageView graphImage;
+    protected ImageView pieGraphImage;
+    protected ImageView lineGraphImage;
     protected static final int ANIMATION_DURATION = 300;
 
     /**
@@ -121,8 +123,10 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * @brief Initalize Graph Image.
      */
     protected void initGraphImage() {
-        this.graphImage = (ImageView)findViewById(R.id.account_graph_image);
-        this.graphImage.setImageDrawable(getResources().getDrawable(R.drawable.graph));
+        this.pieGraphImage = (ImageView)findViewById(R.id.account_pie_chart_image);
+        this.pieGraphImage.setImageDrawable(getResources().getDrawable(R.drawable.pie_chart));
+        this.lineGraphImage = (ImageView)findViewById(R.id.account_line_chart_image);
+        this.lineGraphImage.setImageDrawable(getResources().getDrawable(R.drawable.line_chart));
     }
 
     /**
@@ -152,9 +156,11 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     protected void registEvent() {
         this.returnCurrentMonthView.setId(ViewId.CALENDAR_VIEW.getId());
-        this.graphImage.setId(ViewId.GRAPH_VIEW.getId());
+        this.pieGraphImage.setId(ViewId.PIE_GRAPH_VIEW.getId());
+        this.lineGraphImage.setId(ViewId.LINE_GRAPH_VIEW.getId());
         this.returnCurrentMonthView.setOnClickListener(this);
-        this.graphImage.setOnClickListener(this);
+        this.pieGraphImage.setOnClickListener(this);
+        this.lineGraphImage.setOnClickListener(this);
     }
 
     /**
@@ -167,8 +173,10 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
 
         if(id == ViewId.CALENDAR_VIEW.getId()) {
             moveToCurrentCalendar();
-        } else if( id ==  ViewId.GRAPH_VIEW.getId()) {
-            moveToGraphActivity();
+        } else if(id ==  ViewId.PIE_GRAPH_VIEW.getId()) {
+            moveToPieChartActivity();
+        } else if(id == ViewId.LINE_GRAPH_VIEW.getId()) {
+            moveToLineChartActivity();
         }
     }
 
@@ -189,11 +197,20 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * @brief Move To Graph Activity.
+     * @brief Move To Pie Chart Activity.
      */
-    protected void moveToGraphActivity() {
-        Intent intent = new Intent( this, AccountGraphActivity.class);
-        intent.putExtra(AccountGraphActivity.INTENT_VALUE_KEY_CURRENT_DATE, this.currentDate);
+    protected void moveToPieChartActivity() {
+        Intent intent = new Intent( this, AccountPieGraphActivity.class);
+        intent.putExtra(AccountPieGraphActivity.INTENT_VALUE_KEY_CURRENT_DATE, this.currentDate);
+        startActivity(intent);
+    }
+
+    /**
+     * @brief Move To Line Chart Activity.
+     */
+    protected void moveToLineChartActivity() {
+        Intent intent = new Intent( this, AccountLineGraphActivity.class);
+        intent.putExtra(AccountLineGraphActivity.INTENT_VALUE_KEY_CURRENT_DATE, this.currentDate);
         startActivity(intent);
     }
 
@@ -235,7 +252,8 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.currentDate = null;
         this.currentCalendarIndex = null;
         this.returnCurrentMonthView = null;
-        this.graphImage = null;
+        this.pieGraphImage = null;
+        this.lineGraphImage = null;
     }
 
     /**
@@ -417,7 +435,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * @brief View ID Class.
      */
     private enum ViewId {
-        CALENDAR_VIEW(0), GRAPH_VIEW(1);
+        CALENDAR_VIEW(0), PIE_GRAPH_VIEW(1), LINE_GRAPH_VIEW(2);
 
         private final int id;
 

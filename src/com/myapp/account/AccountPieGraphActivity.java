@@ -14,15 +14,14 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 
 import com.myapp.account.graph.AbstractAccountGraph;
-import com.myapp.account.graph.AccountPaymentGraphImpl;
-import com.myapp.account.graph.AccountIncomeGraphImpl;
+import com.myapp.account.graph.AccountPaymentPieGraphImpl;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.observer.ClickObserverInterface;
 
 /**
- * @brief AccountGraph Activity Class.
+ * @brief AccountPieGraph Activity Class.
  */
-public class AccountGraphActivity extends Activity implements ClickObserverInterface {
+public class AccountPieGraphActivity extends Activity implements ClickObserverInterface {
 
     public static final String INTENT_VALUE_KEY_CURRENT_DATE = "CurrentDate";
     protected AbstractAccountGraph currentGraph;
@@ -67,10 +66,10 @@ public class AccountGraphActivity extends Activity implements ClickObserverInter
      */
     protected void init() {
         Intent intent = getIntent();
-        this.currentDate = intent.getStringExtra(AccountGraphActivity.INTENT_VALUE_KEY_CURRENT_DATE);
+        this.currentDate = intent.getStringExtra(INTENT_VALUE_KEY_CURRENT_DATE);
         this.viewFlipper = (ViewFlipper)findViewById(R.id.graph_flipper);
-        this.currentGraph = new AccountPaymentGraphImpl(this, (LinearLayout)findViewById(R.id.current_flipper));
-        this.nextGraph = new AccountPaymentGraphImpl(this, (LinearLayout)findViewById(R.id.next_flipper));
+        this.currentGraph = new AccountPaymentPieGraphImpl(this, (LinearLayout)findViewById(R.id.current_flipper));
+        this.nextGraph = new AccountPaymentPieGraphImpl(this, (LinearLayout)findViewById(R.id.next_flipper));
 
         // create animation.
         createTranslateAnimation();
@@ -109,7 +108,7 @@ public class AccountGraphActivity extends Activity implements ClickObserverInter
      */
     protected void displayGraphTitle() {
         TextView graph_title = (TextView)findViewById(R.id.graph_title);
-        String title = Utility.splitYearAndMonth(this.currentDate) + getText(R.string.payment_graph_title_suffix).toString();
+        String title = Utility.splitYearAndMonth(this.currentDate) + getText(R.string.payment_pie_chart_title_suffix).toString();
         graph_title.setText(title.replaceAll(SLASH_STRING, getString(R.string.year_str).toString()));
     }
 

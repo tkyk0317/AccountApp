@@ -32,14 +32,28 @@
             android:layout_weight="1"
             android:textSize="15px"
             />
-        <ImageView
-            android:id="@+id/account_graph_image"
-            android:layout_width="32px"
-            android:layout_height="32px"
-            android:scaleType="fitCenter"
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-             />
+            >
+            <ImageView
+                android:id="@+id/account_line_chart_image"
+                android:layout_width="32px"
+                android:layout_height="32px"
+                android:scaleType="fitCenter"
+                android:layout_centerVertical="true"
+                />
+            <ImageView
+                android:id="@+id/account_pie_chart_image"
+                android:layout_width="32px"
+                android:layout_height="32px"
+                android:scaleType="fitCenter"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                />
+        </LinearLayout>
     </RelativeLayout>
     <ImageView
         android:src="@android:drawable/divider_horizontal_dark"

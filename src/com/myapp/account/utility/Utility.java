@@ -23,6 +23,8 @@ public class Utility {
     public static final String DATE_DELIMITER = "/";
     public static final String ZERO = "0";
     public static final int NUMBER_THRESHOLD = 10;
+    public static final String YEAR_OF_FIRST_DATE = "01/01";
+    public static final String YEAR_OF_LAST_DATE = "12/31";
 
     /**
      * @brief Is String is NULL.
@@ -41,6 +43,22 @@ public class Utility {
      */
     public static String createDateFormat(int year, int month, int day) {
         return String.valueOf(year) + DATE_DELIMITER + convertNumberToString(month) + DATE_DELIMITER + convertNumberToString(day);
+    }
+
+    /**
+     * @brief Convert To Date From StringDate.
+     * @param target_str converted string date(yyyy/mm/dd).
+     * @return converted Date instance.
+     */
+    public static Date convertStringDateToDate(String target_str) {
+        Date converted_date = null;
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+        try {
+            converted_date = format.parse(target_str);
+        } catch(ParseException exception) {
+            Log.d("Utility", "convertStringDateToDate Exception");
+        }
+        return converted_date;
     }
 
     /**
@@ -98,6 +116,36 @@ public class Utility {
     }
 
     /**
+     * @brief Get Previous Date.
+     * @return Previous Date(String Type).
+     */
+    public static String getPreviousYearDate(String current_date) {
+        int year = Integer.valueOf(current_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
+        int month = Integer.valueOf(current_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
+        int day = Integer.valueOf(current_date.substring(DATE_DAY_ST_POS));
+
+        Calendar previous_date = Calendar.getInstance(TimeZone.getDefault());
+        previous_date.set(year, month - 1, day);
+        previous_date.add(Calendar.YEAR, -1);
+        return (new SimpleDateFormat(DATE_FORMAT)).format(previous_date.getTime());
+    }
+
+    /**
+     * @brief Get Next Date.
+     * @return Next Date(String Type).
+     */
+     public static String getNextYearDate(String current_date) {
+        int year = Integer.valueOf(current_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
+        int month = Integer.valueOf(current_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
+        int day = Integer.valueOf(current_date.substring(DATE_DAY_ST_POS));
+
+        Calendar previous_date = Calendar.getInstance(TimeZone.getDefault());
+        previous_date.set(year, month - 1, day);
+        previous_date.add(Calendar.YEAR, 1);
+        return (new SimpleDateFormat(DATE_FORMAT)).format(previous_date.getTime());
+    }
+
+    /**
      * @brief Get Current Date.
      * @return Current Date and Time(String Type).
      */
@@ -140,6 +188,24 @@ public class Utility {
         cal_date.add(Calendar.DAY_OF_MONTH, -1);
 
         return (new SimpleDateFormat(DATE_FORMAT)).format(cal_date.getTime());
+    }
+
+    /**
+     * @brief Get First Date At Target Year.
+     * @param target_date spcified target date(yyyy/mm/dd).
+     * @return First Date of Specified Year.
+     */
+    public static String getFirstDateOfTargetYear(String target_date) {
+        return Utility.splitYear(target_date) + DATE_DELIMITER + YEAR_OF_FIRST_DATE;
+    }
+
+    /**
+     * @brief Get Last Date At Target Year.
+     * @param target_date spcified target date(yyyy/mm/dd).
+     * @return Last Date of Specified Year.
+     */
+    public static String getLastDateOfTargetYear(String target_date) {
+        return Utility.splitYear(target_date) + DATE_DELIMITER + YEAR_OF_LAST_DATE;
     }
 
     /**

@@ -193,6 +193,32 @@ public class AccountTableAccessor {
         cursor.close();
         return record_list;
     }
+
+    /**
+     * @brief Get Record With Target Year Group by CategoryId.
+     * @param Target Insert Date.
+     * @return AccountTableRecord List at Target Year.
+     */
+    public List<AccountTableRecord> getRecordWithTargetYearGroupByCategoryId(String target_date) {
+        String last_date_of_year = Utility.getLastDateOfTargetYear(target_date);
+        String first_date_of_year = Utility.getFirstDateOfTargetYear(target_date);
+
+        Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
+                                           "insert_date<=? and insert_date>=?" , new String[]{last_date_of_year, first_date_of_year}, "substr(insert_date,1,7), category_id", null, "category_id,insert_date", null);
+        cursor.moveToFirst();
+
+        int record_count = cursor.getCount();
+        List<AccountTableRecord> record_list = new ArrayList<AccountTableRecord>(record_count+1);
+
+        for( int i = 0 ; i < record_count ; i++ ) {
+            record_list.add( new AccountTableRecord() );
+            record_list.get(i).set(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return record_list;
+    }
+
     /**
      * @brief Check Exsit Record at Target Month.
      * @param target_date Specified Target Date.
@@ -202,8 +228,28 @@ public class AccountTableAccessor {
         String last_date_of_month = Utility.getLastDateOfTargetMonth(target_date);
         String first_date_of_month = Utility.getFirstDateOfTargetMonth(target_date);
 
-        Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
-                                           "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id, insert_date", null, "insert_date", null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id, insert_date", null, "insert_date", null);
+        cursor.moveToFirst();
+
+        boolean is_exsit = false;
+        if( cursor.getCount() > 0 ) {
+            is_exsit = true;
+        }
+        cursor.close();
+
+        return is_exsit;
+    }
+
+    /**
+     * @brief Check Exsit Record at Target Year.
+     * @param target_date Specified Target Date.
+     * @return true:exsit false:not exsit.
+     */
+    public boolean isExsitRecordAtTargetYear(String target_date) {
+        String last_date_of_year = Utility.getLastDateOfTargetYear(target_date);
+        String first_date_of_year = Utility.getFirstDateOfTargetYear(target_date);
+
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date<=? and insert_date>=?" , new String[]{last_date_of_year, first_date_of_year}, "category_id, insert_date", null, "insert_date", null);
         cursor.moveToFirst();
 
         boolean is_exsit = false;
