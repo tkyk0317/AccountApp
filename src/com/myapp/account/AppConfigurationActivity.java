@@ -19,7 +19,7 @@ import com.myapp.account.config.AppConfigurationData;
  */
 public class AppConfigurationActivity extends PreferenceActivity {
 
-    protected AppConfigurationData appConfiguration;
+    private AppConfigurationData appConfiguration;
 
     /**
      * @brief Called the Activity is First Created.
@@ -37,14 +37,14 @@ public class AppConfigurationActivity extends PreferenceActivity {
     /**
      * @brief Initialize.
      */
-    protected void init() {
+    private void init() {
         appConfiguration = new AppConfigurationData(this);
     }
 
     /**
       * @brief Display Summary.
       */
-    protected void displaySummary() {
+    private void displaySummary() {
         CheckBoxPreference estimate_config = (CheckBoxPreference)findPreference(appConfiguration.getEstimateKey());
         EditTextPreference user_config = (EditTextPreference)findPreference(appConfiguration.getTargetUserKey());
         EditTextPreference estimate_money_config = (EditTextPreference)findPreference(appConfiguration.getEstimateMoneyKey());
@@ -61,7 +61,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
     /**
       * @brief Regist Event Listner.
       */
-    protected void registEvent() {
+    private void registEvent() {
         // Estimate Function Enable/UnEnable Event.
         CheckBoxPreference estimate_pref = (CheckBoxPreference)findPreference(appConfiguration.getEstimateKey());
         estimate_pref.setOnPreferenceChangeListener(
@@ -121,7 +121,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
     /**
      * @brief Display Alert Estimate Money.
      */
-    protected void displayAlertEstimateMoney() {
+    private void displayAlertEstimateMoney() {
         AlertDialog.Builder alert_dialog = new AlertDialog.Builder(this);
         alert_dialog.setTitle(getText(R.string.estimate_again_title));
         alert_dialog.setPositiveButton(

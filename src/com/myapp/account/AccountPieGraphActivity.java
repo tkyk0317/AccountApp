@@ -24,17 +24,17 @@ import com.myapp.account.observer.ClickObserverInterface;
 public class AccountPieGraphActivity extends Activity implements ClickObserverInterface {
 
     public static final String INTENT_VALUE_KEY_CURRENT_DATE = "CurrentDate";
-    protected AbstractAccountGraph currentGraph;
-    protected AbstractAccountGraph nextGraph;
-    protected String currentDate;
-    protected ViewFlipper viewFlipper;
-    protected Animation leftInAnimation;
-    protected Animation rightInAnimation;
-    protected Animation leftOutAnimation;
-    protected Animation rightOutAnimation;
-    protected GraphIndex currentGraphIndex;
-    protected static final String SLASH_STRING = "/";
-    protected static final int ANIMATION_DURATION = 0;
+    private AbstractAccountGraph currentGraph;
+    private AbstractAccountGraph nextGraph;
+    private String currentDate;
+    private ViewFlipper viewFlipper;
+    private Animation leftInAnimation;
+    private Animation rightInAnimation;
+    private Animation leftOutAnimation;
+    private Animation rightOutAnimation;
+    private GraphIndex currentGraphIndex;
+    private static final String SLASH_STRING = "/";
+    private static final int ANIMATION_DURATION = 0;
 
     /**
      * @brief Create Activity.
@@ -64,7 +64,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
     /**
      * @brief Initialize.
      */
-    protected void init() {
+    private void init() {
         Intent intent = getIntent();
         this.currentDate = intent.getStringExtra(INTENT_VALUE_KEY_CURRENT_DATE);
         this.viewFlipper = (ViewFlipper)findViewById(R.id.graph_flipper);
@@ -82,7 +82,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
     /**
      * @brief Create Translate Animation.
      */
-    protected void createTranslateAnimation() {
+    private void createTranslateAnimation() {
         this.leftInAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT,-1.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f);
         this.rightInAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT,1.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f);
         this.leftOutAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,-1.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f);
@@ -96,7 +96,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
     /**
      * @brief Display the Graph at Target Date.
      */
-    protected void displayGraph(AbstractAccountGraph graph) {
+    private void displayGraph(AbstractAccountGraph graph) {
         displayGraphTitle();
         graph.appear(this.currentDate);
     }
@@ -104,7 +104,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
     /**
      * @brief Display Graph Title.
      */
-    protected void displayGraphTitle() {
+    private void displayGraphTitle() {
         TextView graph_title = (TextView)findViewById(R.id.graph_title);
         String title = Utility.splitYearAndMonth(this.currentDate) + getText(R.string.payment_pie_chart_title_suffix).toString();
         graph_title.setText(title.replaceAll(SLASH_STRING, getString(R.string.year_str).toString()));
@@ -131,7 +131,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
     /**
      * @brief Ternimate Process.
      */
-    protected void terminate() {
+    private void terminate() {
         this.currentGraph = null;
         this.nextGraph = null;
         this.nextGraph = null;
@@ -154,7 +154,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
      * @brief Set Current Date.
      * @param velocity_x Velocity of X.
      */
-    protected void setCurrentDate(float velocity_x) {
+    private void setCurrentDate(float velocity_x) {
         if( velocity_x < 0 ) {
             this.currentDate = Utility.getNextMonthDate(currentDate);
         } else {
@@ -166,7 +166,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
      * @brief Move To Next Calendar.
      * @param velocit_x Velocity for X.
      */
-    protected void moveToNextGraph(float velocity_x) {
+    private void moveToNextGraph(float velocity_x) {
 
         if( this.currentGraphIndex == GraphIndex.NEXT_ID ) {
             this.currentGraphIndex = GraphIndex.CURRENT_ID;
@@ -183,7 +183,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
      * @brief Animation Graph.
      * @param velocity_x Velocity of X.
      */
-    protected void animationGraph(float velocity_x) {
+    private void animationGraph(float velocity_x) {
         if( velocity_x < 0 ) {
             this.viewFlipper.setInAnimation(rightInAnimation);
             this.viewFlipper.setOutAnimation(leftOutAnimation);

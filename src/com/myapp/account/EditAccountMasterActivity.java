@@ -1,14 +1,21 @@
 package com.myapp.account;
 
 import java.util.*;
+
 import android.util.Log;
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.view.LayoutInflater;
+import android.view.Gravity;
+
 import com.myapp.account.R;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountMasterTableAccessor;
@@ -20,9 +27,12 @@ import com.myapp.account.edit_account_master.EditAccountMasterRecord;
  */
 public class EditAccountMasterActivity extends Activity implements OnClickListener, OnLongClickListener {
 
-    protected AccountMasterTableAccessor accountMasterAccessor;
-    protected TableLayout tableLayout;
-    protected TableRow currentRow;
+    private AccountMasterTableAccessor accountMasterAccessor;
+    private TableLayout tableLayout;
+    private TableRow currentRow;
+    private ImageView addCategoryImage;
+    private AlertDialog addCategoryDialog;
+    private View addCategoryView;
 
     /**
      * @brief Create Activity.
@@ -69,8 +79,13 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
     /**
      * @brief Initialize Class.
      */
-    protected void init() {
+    private void init() {
         this.accountMasterAccessor = new AccountMasterTableAccessor(new DatabaseHelper(getApplicationContext()));
+        this.addCategoryImage = (ImageView)findViewById(R.id.add_master_image);
+        this.addCategoryImage.setImageDrawable(getResources().getDrawable(R.drawable.add_master));
+        this.addCategoryImage.setId(ViewId.ADD_MASTER.getId());
+
+        // init table layout.
         this.tableLayout = (TableLayout)findViewById(R.id.account_master_table);
         this.tableLayout.removeAllViews();
     }
@@ -78,7 +93,7 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
     /**
      * @brief Create EditCategory Display.
      */
-    protected void createDisplay() {
+    private void createDisplay() {
         boolean is_first_row = false;
         List<AccountMasterTableRecord> master_record = this.accountMasterAccessor.getAll();
 
@@ -92,6 +107,7 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
 
             master_table_row.setAccountMasterInfo(record);
             this.tableLayout.addView(master_table_row);
+            master_table_row.setId(ViewId.MASTER_RECORD.getId());
             master_table_row.setOnClickListener(this);
             master_table_row.setOnLongClickListener(this);
         }
@@ -103,14 +119,29 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
      */
     @Override
     public void onClick(View event) {
-        focusCurrentRow((TableRow)event);
+        if(ViewId.MASTER_RECORD.getId() == event.getId()) {
+            focusCurrentRow((TableRow)event);
+        } else if(ViewId.ADD_MASTER.getId() == event.getId()) {
+            displayAddCategoryitemDialog();
+        }
+    }
+
+    /**
+     * @brief Display Add Category.
+     */
+    private void displayAddCategoryitemDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        this.addCategoryDialog = new AlertDialog.Builder(this).create();
+        this.addCategoryDialog.setView(this.addCategoryView);
+        this.addCategoryDialog.getWindow().setGravity(Gravity.TOP);
+        this.addCategoryDialog.show();
     }
 
     /**
      * @brief Focus Current Row.
      * @param current_row TableRow Instance.
      */
-    protected void focusCurrentRow(TableRow current_row) {
+    private void focusCurrentRow(TableRow current_row) {
         if( null != this.currentRow ) {
             this.currentRow.setBackgroundColor(getResources().getColor(R.color.default_background));
         }
@@ -127,6 +158,18 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
     public boolean onLongClick(View event) {
         focusCurrentRow((TableRow)event);
         return true;
+    }
+
+    /**
+     * @brief View ID Class.
+     */
+    private enum ViewId {
+        MASTER_RECORD(0), ADD_MASTER(1);
+
+        private final int id;
+
+        private ViewId(int id) { this.id = id; }
+        public int getId() { return this.id; }
     }
 }
 

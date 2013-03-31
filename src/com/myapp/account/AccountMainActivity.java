@@ -41,23 +41,23 @@ import com.myapp.account.infoarea.DailyInfoRecord;
  */
 public class AccountMainActivity extends Activity implements ClickObserverInterface, AccountEditCompleteObserver, OnClickListener {
 
-    protected TitleArea titleArea;
-    protected Summary summary;
-    protected TabContent tabContent;
-    protected ApplicationMenu applicationMenu;
-    protected AccountCalendar currentCalendar;
-    protected AccountCalendar nextCalendar;
-    protected ViewFlipper viewFlipper;
-    protected String currentDate;
-    protected Animation leftInAnimation;
-    protected Animation rightInAnimation;
-    protected Animation leftOutAnimation;
-    protected Animation rightOutAnimation;
-    protected CalendarIndex currentCalendarIndex;
-    protected TextView returnCurrentMonthView;
-    protected ImageView pieGraphImage;
-    protected ImageView lineGraphImage;
-    protected static final int ANIMATION_DURATION = 300;
+    private TitleArea titleArea;
+    private Summary summary;
+    private TabContent tabContent;
+    private ApplicationMenu applicationMenu;
+    private AccountCalendar currentCalendar;
+    private AccountCalendar nextCalendar;
+    private ViewFlipper viewFlipper;
+    private String currentDate;
+    private Animation leftInAnimation;
+    private Animation rightInAnimation;
+    private Animation leftOutAnimation;
+    private Animation rightOutAnimation;
+    private CalendarIndex currentCalendarIndex;
+    private TextView returnCurrentMonthView;
+    private ImageView pieGraphImage;
+    private ImageView lineGraphImage;
+    private static final int ANIMATION_DURATION = 300;
 
     /**
      * @brief Create Activity.
@@ -86,7 +86,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Initialize Member-Variable.
      */
-    protected void init() {
+    private void init() {
         this.viewFlipper = (ViewFlipper)findViewById(R.id.calendar_flipper);
         this.returnCurrentMonthView = (TextView)findViewById(R.id.return_current_month);
         this.titleArea = new TitleArea(this);
@@ -122,7 +122,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Initalize Graph Image.
      */
-    protected void initGraphImage() {
+    private void initGraphImage() {
         this.pieGraphImage = (ImageView)findViewById(R.id.account_pie_chart_image);
         this.pieGraphImage.setImageDrawable(getResources().getDrawable(R.drawable.pie_chart));
         this.lineGraphImage = (ImageView)findViewById(R.id.account_line_chart_image);
@@ -132,7 +132,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Create Translate Animation.
      */
-    protected void createTranslateAnimation() {
+    private void createTranslateAnimation() {
         this.leftInAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT,-1.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f);
         this.rightInAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT,1.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f);
         this.leftOutAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,-1.0f, Animation.RELATIVE_TO_PARENT,0.0f, Animation.RELATIVE_TO_PARENT,0.0f);
@@ -146,7 +146,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Clear Summary Views.
      */
-    protected void clearSummaryViews() {
+    private void clearSummaryViews() {
         TableLayout summary_estimate_area = (TableLayout)findViewById(R.id.summary_table);
         summary_estimate_area.removeAllViews();
     }
@@ -154,7 +154,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Regist Event.
      */
-    protected void registEvent() {
+    private void registEvent() {
         this.returnCurrentMonthView.setId(ViewId.CALENDAR_VIEW.getId());
         this.pieGraphImage.setId(ViewId.PIE_GRAPH_VIEW.getId());
         this.lineGraphImage.setId(ViewId.LINE_GRAPH_VIEW.getId());
@@ -183,7 +183,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Move To Current Calendar.
      */
-    protected void moveToCurrentCalendar() {
+    private void moveToCurrentCalendar() {
         float velocity_x = 0;
         String current_date = Utility.getCurrentDate();
 
@@ -199,7 +199,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Move To Pie Chart Activity.
      */
-    protected void moveToPieChartActivity() {
+    private void moveToPieChartActivity() {
         Intent intent = new Intent( this, AccountPieGraphActivity.class);
         intent.putExtra(AccountPieGraphActivity.INTENT_VALUE_KEY_CURRENT_DATE, this.currentDate);
         startActivity(intent);
@@ -208,7 +208,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Move To Line Chart Activity.
      */
-    protected void moveToLineChartActivity() {
+    private void moveToLineChartActivity() {
         Intent intent = new Intent( this, AccountLineGraphActivity.class);
         intent.putExtra(AccountLineGraphActivity.INTENT_VALUE_KEY_CURRENT_DATE, this.currentDate);
         startActivity(intent);
@@ -217,7 +217,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Display Main Content.
      */
-    protected void displayMainContent() {
+    private void displayMainContent() {
         this.summary.appear(this.currentDate);
         this.titleArea.appear(this.currentDate);
         this.tabContent.appear(this.currentDate);
@@ -237,7 +237,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Terminate Process.
      */
-    protected void terminate() {
+    private void terminate() {
         this.titleArea = null;
         this.tabContent = null;
         this.summary = null;
@@ -338,7 +338,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * @brief Set Current Date.
      * @param velocity_x Velocity of X.
      */
-    protected void setCurrentDate(float velocity_x) {
+    private void setCurrentDate(float velocity_x) {
         if( velocity_x < 0 ) {
             this.currentDate = Utility.getNextMonthDate(currentDate);
         } else {
@@ -350,7 +350,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * @brief Move To Next Calendar.
      * @param velocit_x Velocity for X.
      */
-    protected void moveToNextCalendar(float velocity_x) {
+    private void moveToNextCalendar(float velocity_x) {
 
         if( this.currentCalendarIndex == CalendarIndex.NEXT_ID ) {
             this.currentCalendarIndex = CalendarIndex.CURRENT_ID;
@@ -368,7 +368,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * @brief Animation Calendar.
      * @param velocity_x Velocity of X.
      */
-    protected void animationCalendar(float velocity_x) {
+    private void animationCalendar(float velocity_x) {
         if( velocity_x < 0 ) {
             this.viewFlipper.setInAnimation(rightInAnimation);
             this.viewFlipper.setOutAnimation(leftOutAnimation);
@@ -391,7 +391,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Reflesh Display.
      */
-    protected void refleshDisplay() {
+    private void refleshDisplay() {
         clearSummaryViews();
         refleshCalendar();
         refleshReturnCurrentMonthView();
@@ -403,7 +403,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Reflesh Calendar.
      */
-    protected void refleshCalendar() {
+    private void refleshCalendar() {
         if( this.currentCalendarIndex == CalendarIndex.CURRENT_ID ) {
             this.currentCalendar.appear(currentDate);
         } else if( this.currentCalendarIndex == CalendarIndex.NEXT_ID ) {
@@ -414,7 +414,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Reflesh Return Current Month View.
      */
-    protected void refleshReturnCurrentMonthView() {
+    private void refleshReturnCurrentMonthView() {
         if( false == Utility.isIncludeTargetDateInCurrentMonth(this.currentDate) ) {
             this.returnCurrentMonthView.setClickable(true);
             this.returnCurrentMonthView.setVisibility(View.VISIBLE);

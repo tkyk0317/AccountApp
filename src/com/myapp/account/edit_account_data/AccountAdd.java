@@ -1,6 +1,7 @@
 package com.myapp.account.edit_account_data;
 
 import java.util.List;
+
 import android.util.Log;
 import android.app.Activity;
 import android.view.Window;
@@ -21,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;

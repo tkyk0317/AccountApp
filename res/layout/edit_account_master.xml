@@ -4,11 +4,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-    <LinearLayout
+    <RelativeLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         >
@@ -17,11 +16,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/menu_master_edit_title"
-            android:gravity="center"
             android:layout_weight="1"
             android:textSize="20px"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             />
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/add_master_image"
+            android:layout_width="32px"
+            android:layout_height="32px"
+            android:scaleType="fitCenter"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            />
+    </RelativeLayout>
     <ImageView
         android:src="@android:drawable/divider_horizontal_dark"
         android:layout_width="fill_parent"
