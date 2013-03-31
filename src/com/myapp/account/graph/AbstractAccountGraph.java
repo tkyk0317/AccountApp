@@ -99,9 +99,8 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
     /**
      * @brief Appear Graph at TargetDate.
      * @param target_date Specified Date.
-     * @return true:success display false:failed display(not exsit data).
      */
-    public boolean appear(String target_date) {
+    public void appear(String target_date) {
         this.targetDate = target_date;
         this.chartArea.removeAllViews();
         clearSeriesRender();
@@ -109,9 +108,8 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
         if( true == isExsitRecord() ) {
             createGraph();
         } else {
-            return false;
+            displayNoDataMessage();
         }
-        return true;
     }
 
     /**
@@ -200,16 +198,23 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
      * @brief Display Account Graph.
      */
     protected void displayGraph() {
+        displaySumMoney();
         GraphicalView pie_chart = ChartFactory.getPieChartView(this.activity, this.categorySeries, this.renderer);
         pie_chart.setOnTouchListener(this);
         this.chartArea.addView(pie_chart);
     }
 
     /**
-     * @brief Display NoData Message.
-     * @param message Display Message.
+     * @brief Display Sum money.
      */
-    public void displayNoDataMessage(String message) {
+    protected void displaySumMoney() {}
+
+    /**
+     * @brief Display NoData Message.
+     */
+    public void displayNoDataMessage() {
+        String message = this.activity.getText(R.string.graph_no_data).toString();
+
         this.chartArea.removeAllViews();
         this.chartArea.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER);
 
@@ -217,6 +222,7 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
         TextView nodata_text = new TextView(this.activity);
         nodata_text.setTextColor(Color.CYAN);
         nodata_text.setTextSize(NODATA_TEXT_SIZE);
+        nodata_text.setGravity(Gravity.CENTER);
         nodata_text.setText(message);
         this.chartArea.setOnTouchListener(this);
 

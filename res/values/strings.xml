@@ -51,4 +51,5 @@
     <string name="year_str">年</string>
     <string name="graph_no_data">データがありません</string>
     <string name="payment_line_chart_title_suffix">年度支出グラフ</string>
+    <string name="payment_sum_title">支出合計</string>
 </resources>

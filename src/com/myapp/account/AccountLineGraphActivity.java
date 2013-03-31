@@ -98,9 +98,7 @@ public class AccountLineGraphActivity extends Activity implements ClickObserverI
      */
     protected void displayGraph(AbstractAccountGraph graph) {
         displayGraphTitle();
-        if( false == graph.appear(this.currentDate) ) {
-            graph.displayNoDataMessage(getText(R.string.graph_no_data).toString());
-        }
+        graph.appear(this.currentDate);
     }
 
     /**
