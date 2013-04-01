@@ -16,20 +16,20 @@
         />
     <ImageView
         android:src="@android:drawable/divider_horizontal_dark"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         />
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20px"
+        android:layout_marginTop="5px"
         >
         <TextView
             android:id="@+id/category_label"
@@ -48,10 +48,10 @@
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15px"
+        android:layout_marginTop="8px"
         >
         <TextView
             android:id="@+id/money_label"
@@ -74,10 +74,10 @@
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15px"
+        android:layout_marginTop="8px"
         >
         <TextView
             android:id="@+id/memo_label"
@@ -108,8 +108,8 @@
             android:layout_width="100px"
             android:layout_height="wrap_content"
             android:text= "@string/regist_btn_label"
-            android:layout_marginTop="10px"
-            android:layout_marginBottom="10px"
+            android:layout_marginTop="8px"
+            android:layout_marginBottom="5px"
             />
     </LinearLayout>
 </LinearLayout>

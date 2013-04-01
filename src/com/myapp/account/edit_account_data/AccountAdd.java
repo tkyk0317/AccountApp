@@ -48,14 +48,16 @@ public class AccountAdd implements OnItemSelectedListener {
     protected Spinner categorySpinner;
     protected String selectedCategoryItem;
     protected String[] categoryItems;
+    protected static final String PREFIX_WEEKDAY = "(";
+    protected static final String SUFFIX_WEEKDAY = ")";
 
     /**
      * @brief Constractor.
      */
     public AccountAdd(Activity activity) {
         this.activity = activity;
-        accountTable = new AccountTableAccessor( new DatabaseHelper(activity.getApplicationContext()) );
-        masterTable = new AccountMasterTableAccessor( new DatabaseHelper(activity.getApplicationContext()) );
+        this.accountTable = new AccountTableAccessor( new DatabaseHelper(this.activity.getApplicationContext()) );
+        this.masterTable = new AccountMasterTableAccessor( new DatabaseHelper(this.activity.getApplicationContext()) );
     }
 
     /**
@@ -101,36 +103,36 @@ public class AccountAdd implements OnItemSelectedListener {
      */
     protected void createDialog() {
         LayoutInflater inflater = LayoutInflater.from(this.activity);
-        layout = inflater.inflate(R.layout.edit_account_record, (ViewGroup)activity.findViewById(R.id.edit_account_record));
-        inputDialog = new AlertDialog.Builder(activity).create();
-        inputDialog.setView(layout);
-        inputDialog.getWindow().setGravity(Gravity.TOP);
-        inputDialog.show();
+        layout = inflater.inflate(R.layout.edit_account_record, (ViewGroup)this.activity.findViewById(R.id.edit_account_record));
+        this.inputDialog = new AlertDialog.Builder(this.activity).create();
+        this.inputDialog.setView(layout);
+        this.inputDialog.getWindow().setGravity(Gravity.TOP);
+        this.inputDialog.show();
     }
 
     /**
      * @brief Create Category Spinner.
      */
     protected void createSpinner() {
-       categorySpinner = (Spinner)layout.findViewById(R.id.category_spinner);
+       this.categorySpinner = (Spinner)layout.findViewById(R.id.category_spinner);
        ArrayAdapter<String> adapter =
-           new ArrayAdapter(activity, android.R.layout.simple_spinner_item, categoryItems);
+           new ArrayAdapter(this.activity, android.R.layout.simple_spinner_item, this.categoryItems);
        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-       categorySpinner.setAdapter(adapter);
+       this.categorySpinner.setAdapter(adapter);
 
        // set event listener.
-       categorySpinner.setOnItemSelectedListener(this);
+       this.categorySpinner.setOnItemSelectedListener(this);
     }
 
     /**
      * @brief Create Category Items.
      */
     protected void createCategoryItems() {
-        List<AccountMasterTableRecord> record = masterTable.getAll();
-        categoryItems = new String[ record.size() ];
+        List<AccountMasterTableRecord> record = this.masterTable.getAll();
+        this.categoryItems = new String[ record.size() ];
 
         for( int i = 0 ; i < record.size() ; i++ ) {
-            categoryItems[i] = record.get(i).getName();
+            this.categoryItems[i] = record.get(i).getName();
         }
     }
 
@@ -138,8 +140,12 @@ public class AccountAdd implements OnItemSelectedListener {
      * @brief Set Title Area.
      */
     protected void setTitleArea() {
-        TextView title= (TextView)layout.findViewById(R.id.date_title);
-        title.setText(this.insertDate);
+        TextView title_view = (TextView)layout.findViewById(R.id.date_title);
+
+        String day_of_week = Utility.getDayOfWeekString(Utility.getDayOfWeek(this.insertDate), this.activity);
+        String title = this.insertDate + PREFIX_WEEKDAY + day_of_week + SUFFIX_WEEKDAY;
+
+        title_view.setText(title);
    }
 
     /**
@@ -147,7 +153,7 @@ public class AccountAdd implements OnItemSelectedListener {
      */
     protected void setButtonTitle() {
         Button regist_button = (Button)layout.findViewById(R.id.regist_btn);
-        regist_button.setText(activity.getText(R.string.regist_btn_label));
+        regist_button.setText(this.activity.getText(R.string.regist_btn_label));
      }
 
     /**
@@ -173,7 +179,7 @@ public class AccountAdd implements OnItemSelectedListener {
             if( isEnableInputData(record) ) {
                 insertOrUpdateIntoDatabase(record);
                 updateUseDateOfMaterTable(record.getCategoryId());
-                observer.notifyAccountEditComplete();
+                this.observer.notifyAccountEditComplete();
                 closeInputDialog();
                 displayCompleteMessage();
             } else {
@@ -191,7 +197,7 @@ public class AccountAdd implements OnItemSelectedListener {
         EditText edit_money = (EditText)layout.findViewById(R.id.money_value);
         EditText edit_memo = (EditText)layout.findViewById(R.id.memo_value);
 
-        AccountMasterTableRecord master_record = masterTable.getRecordMatchName( selectedCategoryItem );
+        AccountMasterTableRecord master_record = this.masterTable.getRecordMatchName(this.selectedCategoryItem);
 
         AccountTableRecord record = new AccountTableRecord();
         try {
@@ -211,7 +217,7 @@ public class AccountAdd implements OnItemSelectedListener {
      */
     protected boolean isEnableInputData(AccountTableRecord input_data) {
         if( 0 == input_data.getMoney() ||
-            true == Utility.isStringNULL(selectedCategoryItem) ||
+            true == Utility.isStringNULL(this.selectedCategoryItem) ||
             true == Utility.isStringNULL(input_data.getInsertDate()) ) {
             return false;
         }
@@ -223,7 +229,7 @@ public class AccountAdd implements OnItemSelectedListener {
      * @param record User input Account Infomation.
      */
     protected void insertOrUpdateIntoDatabase(AccountTableRecord record) {
-        accountTable.insert(record);
+        this.accountTable.insert(record);
     }
 
     /**
@@ -231,8 +237,8 @@ public class AccountAdd implements OnItemSelectedListener {
      * @param Key of master Table.
      */
     protected void updateUseDateOfMaterTable(int key) {
-        AccountMasterTableRecord master_record = masterTable.getRecord(key);
-        masterTable.update(master_record);
+        AccountMasterTableRecord master_record = this.masterTable.getRecord(key);
+        this.masterTable.update(master_record);
     }
 
     /**
@@ -246,16 +252,16 @@ public class AccountAdd implements OnItemSelectedListener {
      * @brief Display Complete Message.
      */
     protected void displayCompleteMessage() {
-        String message = activity.getText(R.string.regist_msg).toString();
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        String message = this.activity.getText(R.string.regist_msg).toString();
+        Toast.makeText(this.activity, message, Toast.LENGTH_SHORT).show();
     }
 
     /**
      * @brief Display Alert Message.
      */
     protected void displayInputDataAlertMessage() {
-        String message = activity.getText(R.string.regist_alert_msg).toString();
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        String message = this.activity.getText(R.string.regist_alert_msg).toString();
+        Toast.makeText(this.activity, message, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -264,7 +270,7 @@ public class AccountAdd implements OnItemSelectedListener {
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id ) {
         Spinner spinner = (Spinner)parent;
-        selectedCategoryItem = (String)spinner.getSelectedItem().toString();
+        this.selectedCategoryItem = (String)spinner.getSelectedItem().toString();
     }
 
     /**
