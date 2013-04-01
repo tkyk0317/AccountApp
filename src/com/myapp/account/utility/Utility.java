@@ -11,6 +11,9 @@ import android.app.Activity;
  */
 public class Utility {
 
+    public static final String HALF_SPACE = " ";
+    public static final String FULL_SPACE = "　";
+    public static final String EMPTY_STRING = "";
     public static final String DATE_FORMAT = "yyyy/MM/dd";
     public static final String DATE_AND_TIME_FORMAT = "yyyy/MM/dd-HH-mm-ss";
     public static final int DATE_YEAR_ST_POS = 0;
@@ -35,6 +38,19 @@ public class Utility {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @brief Delete String.
+     *
+     * @param target_string target string.
+     *
+     * @return deleteted string.
+     */
+    public static String deleteSpace(String target_string) {
+        String deleted_string = target_string.replaceAll(HALF_SPACE, EMPTY_STRING);
+        deleted_string = deleted_string.replaceAll(FULL_SPACE, EMPTY_STRING);
+        return deleted_string;
     }
 
     /**

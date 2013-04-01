@@ -31,7 +31,7 @@ import com.myapp.account.config.ApplicationMenu;
 import com.myapp.account.calendar.AccountCalendar;
 import com.myapp.account.calendar.AccountCalendarCell;
 import com.myapp.account.observer.ClickObserverInterface;
-import com.myapp.account.observer.AccountEditCompleteObserver;
+import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.edit_account_data.AccountEdit;
 import com.myapp.account.infoarea.DailyInfoRecord;
@@ -39,7 +39,7 @@ import com.myapp.account.infoarea.DailyInfoRecord;
 /**
  * @brief Main Class in AccountApp Application.
  */
-public class AccountMainActivity extends Activity implements ClickObserverInterface, AccountEditCompleteObserver, OnClickListener {
+public class AccountMainActivity extends Activity implements ClickObserverInterface, EventCompleteObserver, OnClickListener {
 
     private TitleArea titleArea;
     private Summary summary;
@@ -386,6 +386,12 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     @Override
     public void notifyAccountEditComplete() {
         refleshDisplay();
+    }
+
+    /**
+     * @brief AccountMaster Edit Complete.
+     */
+    public void notifyAccountMasterEditComplete() {
     }
 
     /**

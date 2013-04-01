@@ -59,11 +59,29 @@ public class AccountMasterTableAccessor {
     }
 
     /**
+      * @brief Check Record Match the Name.
+      * @param name AccountMasterTableRecord.name String.
+      * @return true:exsit false:not exsit.
+      */
+    public boolean isExsitRecordMatchName(String name) {
+        Cursor cursor = readDatabase.rawQuery("select * from " + TABLE_NAME + " where name = " + "'" + name + "'" + ";", null);
+
+        AccountMasterTableRecord record = new AccountMasterTableRecord();
+        cursor.moveToFirst();
+
+        boolean is_exsit = false;
+        if( 0 < cursor.getCount() ) {
+            is_exsit = true;
+        }
+        cursor.close();
+        return is_exsit;
+    }
+    /**
      * @brief Get All Record.
      * @return All AccountMasterTableRecord in AccountMasterTable.
      */
     public List<AccountMasterTableRecord> getAll() {
-        Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, "use_date desc", null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, "use_date desc, _id", null);
 
         cursor.moveToFirst();
         int record_count = cursor.getCount();
@@ -83,8 +101,17 @@ public class AccountMasterTableAccessor {
      * @param record AccountMasterTableRecord Instance.
      * @return Insert Record Key(_id).
      */
-    public int insert(AccountMasterTableRecord record) {
-        int key = 0;
+    public long insert(AccountMasterTableRecord record) {
+        ContentValues insert_record = new ContentValues();
+        insert_record.put("kind_id", record.getKindId());
+        insert_record.put("name", record.getName());
+        insert_record.put("use_date", Utility.getCurrentDateAndTime());
+        insert_record.put("update_date", Utility.getCurrentDate());
+        insert_record.put("insert_date", Utility.getCurrentDate());
+
+        // insert item.
+        long key = writeDatabase.insert(TABLE_NAME, null, insert_record);
+
         return key;
     }
 
@@ -93,8 +120,9 @@ public class AccountMasterTableAccessor {
      * @param key Delete Target id of AccountMasterTable.
      * @return true if delete success.
      */
-    public boolean delete(int key) {
-        return true;
+    public int delete(int key) {
+        writeDatabase.delete(TABLE_NAME, "_id=" + String.valueOf(key), null);
+        return key;
     }
 
     /**

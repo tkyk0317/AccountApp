@@ -13,6 +13,7 @@
     <string name="category_label">項目</string>
     <string name="money_label">金額</string>
     <string name="memo_label">メモ</string>
+    <string name="kind_label">種類</string>
     <string name="regist_btn_label">登録</string>
     <string name="modify_btn_label">修正</string>
     <string name="delete_btn_label">削除</string>
@@ -52,4 +53,8 @@
     <string name="graph_no_data">データがありません</string>
     <string name="payment_line_chart_title_suffix">年度支出グラフ</string>
     <string name="payment_sum_title">支出合計</string>
+    <string name="add_category_dialog_title">カテゴリ追加</string>
+    <string name="kind_label_spinner">選択してください</string>
+    <string name="add_category_message">カテゴリを追加しました</string>
+    <string name="add_category_alert_message">正確な項目を入力してください\n(項目重複等を確認してください)</string>
 </resources>

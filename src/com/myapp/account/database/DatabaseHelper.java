@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.myapp.account.R;
+
 /**
  * @brief Database Helper Class.
  */
@@ -45,11 +47,9 @@ public class DatabaseHelper extends SQLiteOpenHelper
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d(LOG_TAG,"[DatabaseHelper][START] onCreate");
         // create table & insert default item.
         createTable(db);
         insertDefaultItem(db);
-        Log.d(LOG_TAG,"[DatabaseHelper][END] onCreate");
     }
 
     /**

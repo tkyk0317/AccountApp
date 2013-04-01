@@ -11,12 +11,11 @@ import android.widget.TableRow;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.view.LayoutInflater;
-import android.view.Gravity;
 
 import com.myapp.account.R;
+import com.myapp.account.dialog.DialogInterface;
+import com.myapp.account.dialog.AddAccountMasterDialogImpl;
+import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
@@ -25,14 +24,13 @@ import com.myapp.account.edit_account_master.EditAccountMasterRecord;
 /**
  * @brief Main Class in AccountApp Application.
  */
-public class EditAccountMasterActivity extends Activity implements OnClickListener, OnLongClickListener {
+public class EditAccountMasterActivity extends Activity implements OnClickListener, OnLongClickListener, EventCompleteObserver {
 
     private AccountMasterTableAccessor accountMasterAccessor;
     private TableLayout tableLayout;
     private TableRow currentRow;
     private ImageView addCategoryImage;
-    private AlertDialog addCategoryDialog;
-    private View addCategoryView;
+    private DialogInterface addAccountMasterDialog;
 
     /**
      * @brief Create Activity.
@@ -80,10 +78,15 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
      * @brief Initialize Class.
      */
     private void init() {
+        this.addAccountMasterDialog = new AddAccountMasterDialogImpl(this);
         this.accountMasterAccessor = new AccountMasterTableAccessor(new DatabaseHelper(getApplicationContext()));
         this.addCategoryImage = (ImageView)findViewById(R.id.add_master_image);
         this.addCategoryImage.setImageDrawable(getResources().getDrawable(R.drawable.add_master));
         this.addCategoryImage.setId(ViewId.ADD_MASTER.getId());
+        this.addCategoryImage.setOnClickListener(this);
+
+        // attach observer.
+        this.addAccountMasterDialog.attachObserver(this);
 
         // init table layout.
         this.tableLayout = (TableLayout)findViewById(R.id.account_master_table);
@@ -122,19 +125,8 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
         if(ViewId.MASTER_RECORD.getId() == event.getId()) {
             focusCurrentRow((TableRow)event);
         } else if(ViewId.ADD_MASTER.getId() == event.getId()) {
-            displayAddCategoryitemDialog();
+            this.addAccountMasterDialog.appear();
         }
-    }
-
-    /**
-     * @brief Display Add Category.
-     */
-    private void displayAddCategoryitemDialog() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        this.addCategoryDialog = new AlertDialog.Builder(this).create();
-        this.addCategoryDialog.setView(this.addCategoryView);
-        this.addCategoryDialog.getWindow().setGravity(Gravity.TOP);
-        this.addCategoryDialog.show();
     }
 
     /**
@@ -159,6 +151,18 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
         focusCurrentRow((TableRow)event);
         return true;
     }
+
+    /**
+     * @brief AccountMaster Edit Complete.
+     */
+    @Override
+    public void notifyAccountMasterEditComplete() {
+        createDisplay();
+    }
+
+    // not support.
+    @Override
+    public void notifyAccountEditComplete() {}
 
     /**
      * @brief View ID Class.

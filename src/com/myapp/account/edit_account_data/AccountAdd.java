@@ -31,7 +31,7 @@ import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.infoarea.DailyInfoRecord;
-import com.myapp.account.observer.AccountEditCompleteObserver;
+import com.myapp.account.observer.EventCompleteObserver;
 
 /**
  * @brief Add Account Date Class.
@@ -44,7 +44,7 @@ public class AccountAdd implements OnItemSelectedListener {
     protected AccountMasterTableAccessor masterTable;
     protected View layout;
     protected String insertDate;
-    protected AccountEditCompleteObserver observer;
+    protected EventCompleteObserver observer;
     protected Spinner categorySpinner;
     protected String selectedCategoryItem;
     protected String[] categoryItems;
@@ -60,9 +60,9 @@ public class AccountAdd implements OnItemSelectedListener {
 
     /**
      * @brief Attach Observer.
-     * @param observer AccountEditCompleteObserver Instance.
+     * @param observer EventCompleteObserver Instance.
      */
-    public void attachObserver(AccountEditCompleteObserver observer) {
+    public void attachObserver(EventCompleteObserver observer) {
         this.observer = observer;
     }
 
@@ -188,7 +188,7 @@ public class AccountAdd implements OnItemSelectedListener {
      * @brief Get Account Information from user's input information.
      */
     protected AccountTableRecord getInputUserAccountInfo()  throws NumberFormatException {
-        EditText edit_money = (EditText)layout. findViewById(R.id.money_value);
+        EditText edit_money = (EditText)layout.findViewById(R.id.money_value);
         EditText edit_memo = (EditText)layout.findViewById(R.id.memo_value);
 
         AccountMasterTableRecord master_record = masterTable.getRecordMatchName( selectedCategoryItem );

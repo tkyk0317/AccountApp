@@ -35,6 +35,8 @@ public class AccountMasterTableRecord {
         update_date = cursor.getString(DatabaseIndex.UPDATE_DATE.getIndex());
         insert_date = cursor.getString(DatabaseIndex.INSERT_DATE.getIndex());
     }
+    public void setName(String name) { this.name = name; }
+    public void setKindId(int id) { this.kind_id = id; }
 
     // Getter.
     public int getId() { return id; }
@@ -43,4 +45,5 @@ public class AccountMasterTableRecord {
     public String getUseDate() { return use_date; }
     public String getUpdateDate() { return update_date; }
     public String getInsertDate() { return insert_date; }
+
 }
