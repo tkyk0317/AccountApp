@@ -44,7 +44,7 @@ public class EditAccountMasterRecord extends TableRow {
 
         this.accountMasterRecord = record;
         this.categoryName.setText(record.getName());
-        this.accountKind.setText(getAccountKind(record.getKindId()));
+        this.accountKind.setText(convertAccountKind(record.getKindId()));
         this.categoryName.setGravity(Gravity.RIGHT);
         this.accountKind.setGravity(Gravity.RIGHT);
 
@@ -54,16 +54,24 @@ public class EditAccountMasterRecord extends TableRow {
     }
 
     /**
-     * @brief Get AccountKind String.
+     * @brief Convert AccountKind String.
      * @param kind_id account kind id.
      * @return Account Kind String.
      */
-    protected String getAccountKind(int kind_id) {
+    private String convertAccountKind(int kind_id) {
         Resources resources = this.activity.getResources();
         if( DatabaseHelper.INCOME_FLAG == kind_id) {
             return resources.getString(R.string.income_label);
         }
         return resources.getString(R.string.payment_label);
     }
+
+    // getter.
+    public int getPrimaryId() { return this.accountMasterRecord.getId(); }
+    public String getName() { return this.accountMasterRecord.getName(); }
+    public int getKindId() { return this.accountMasterRecord.getKindId(); }
+    public String getUseDate() { return this.accountMasterRecord.getUseDate(); }
+    public String getUpdateDate() { return this.accountMasterRecord.getUpdateDate(); }
+    public String getInsertDate() { return this.accountMasterRecord.getInsertDate(); }
 }
 

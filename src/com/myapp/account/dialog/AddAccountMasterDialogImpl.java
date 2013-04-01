@@ -11,28 +11,31 @@ import android.app.Activity;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.EditText;
+import android.widget.TableRow;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
-import com.myapp.account.dialog.DialogInterface;
+import com.myapp.account.dialog.AccountDialogInterface;
 import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.database.DatabaseHelper;
+import com.myapp.account.edit_account_master.EditAccountMasterRecord;
 import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
 
 /**
  * @brief AddAccountMAsterRecord Dialog Class.
  */
-public class AddAccountMasterDialogImpl implements OnItemSelectedListener, DialogInterface, EventCompleteObserver {
+public class AddAccountMasterDialogImpl implements OnItemSelectedListener, AccountDialogInterface, EventCompleteObserver {
 
     private Activity activity;
     private View addCategoryView;
     private AlertDialog addCategoryDialog;
-    private AddAccountRecordCommitEvent commitEvent;
+    private AccountRecordAddEvent addEvent;
     private Spinner kindSpinner;
+    private Button commitButton;
     private EventCompleteObserver observer;
 
     /**
@@ -64,6 +67,13 @@ public class AddAccountMasterDialogImpl implements OnItemSelectedListener, Dialo
     }
 
     /**
+     * @brief Appear Dialog.
+     * @note not supported.
+     */
+    @Override
+    public void appear(EditAccountMasterRecord table_row) {}
+
+    /**
      * @brief Initalize.
      */
     private void init() {
@@ -72,20 +82,30 @@ public class AddAccountMasterDialogImpl implements OnItemSelectedListener, Dialo
                                                  (ViewGroup)this.activity.findViewById(R.id.edit_account_master_dialog));
         this.kindSpinner = (Spinner)this.addCategoryView.findViewById(R.id.kind_spinner);
 
+        // init button.
+        initButton();
+
         // init event instance.
-        this.commitEvent = new AddAccountRecordCommitEvent(this.activity, this.addCategoryView);
-        this.commitEvent.attachObserver(this);
+        this.addEvent = new AccountRecordAddEvent(this.activity, this.addCategoryView);
+        this.addEvent.attachObserver(this);
 
         // regist event.
         registEvent();
     }
 
     /**
+     * @brief Initialize Commit Button.
+     */
+    private void initButton() {
+        this.commitButton = (Button)this.addCategoryView.findViewById(R.id.regist_btn);
+        this.commitButton.setText(this.activity.getText(R.string.regist_btn_label).toString());
+    }
+
+    /**
      * @brief Regist Event.
      */
     private void registEvent() {
-        Button commit_button = (Button)this.addCategoryView.findViewById(R.id.regist_btn);
-        commit_button.setOnClickListener(this.commitEvent);
+        this.commitButton.setOnClickListener(this.addEvent);
         this.kindSpinner.setOnItemSelectedListener(this);
     }
 
@@ -113,7 +133,7 @@ public class AddAccountMasterDialogImpl implements OnItemSelectedListener, Dialo
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id ) {
         Spinner spinner = (Spinner)parent;
-        this.commitEvent.notifySelectedSpinner((String)spinner.getSelectedItem().toString());
+        this.addEvent.notifySelectedSpinner((String)spinner.getSelectedItem().toString());
     }
 
     /**
@@ -138,7 +158,7 @@ public class AddAccountMasterDialogImpl implements OnItemSelectedListener, Dialo
     /**
      * @brief Commit AccountRecord Event.
      */
-    private class AddAccountRecordCommitEvent implements View.OnClickListener {
+    private class AccountRecordAddEvent implements View.OnClickListener {
 
         private Activity activity;
         private View dialogView;
@@ -149,7 +169,7 @@ public class AddAccountMasterDialogImpl implements OnItemSelectedListener, Dialo
         /**
          * @brief Constractor.
          */
-        public AddAccountRecordCommitEvent(Activity activity, View dialog_view) {
+        public AccountRecordAddEvent(Activity activity, View dialog_view) {
             this.observer = null;
             this.activity = activity;
             this.dialogView = dialog_view;

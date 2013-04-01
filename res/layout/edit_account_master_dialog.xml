@@ -84,7 +84,7 @@
             android:id="@+id/regist_btn"
             android:layout_width="100px"
             android:layout_height="wrap_content"
-            android:text= "@string/regist_btn_label"
+            android:text= ""
             android:layout_marginTop="10px"
             android:layout_marginBottom="10px"
             />

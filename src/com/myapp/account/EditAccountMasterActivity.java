@@ -13,8 +13,9 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 
 import com.myapp.account.R;
-import com.myapp.account.dialog.DialogInterface;
+import com.myapp.account.dialog.AccountDialogInterface;
 import com.myapp.account.dialog.AddAccountMasterDialogImpl;
+import com.myapp.account.dialog.EditAccountMasterDialogImpl;
 import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountMasterTableAccessor;
@@ -28,9 +29,10 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
 
     private AccountMasterTableAccessor accountMasterAccessor;
     private TableLayout tableLayout;
-    private TableRow currentRow;
+    private EditAccountMasterRecord currentRow;
     private ImageView addCategoryImage;
-    private DialogInterface addAccountMasterDialog;
+    private AccountDialogInterface addAccountMasterDialog;
+    private AccountDialogInterface editAccountMasterDialog;
 
     /**
      * @brief Create Activity.
@@ -79,6 +81,7 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
      */
     private void init() {
         this.addAccountMasterDialog = new AddAccountMasterDialogImpl(this);
+        this.editAccountMasterDialog = new EditAccountMasterDialogImpl(this);
         this.accountMasterAccessor = new AccountMasterTableAccessor(new DatabaseHelper(getApplicationContext()));
         this.addCategoryImage = (ImageView)findViewById(R.id.add_master_image);
         this.addCategoryImage.setImageDrawable(getResources().getDrawable(R.drawable.add_master));
@@ -87,10 +90,10 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
 
         // attach observer.
         this.addAccountMasterDialog.attachObserver(this);
+        this.editAccountMasterDialog.attachObserver(this);
 
         // init table layout.
         this.tableLayout = (TableLayout)findViewById(R.id.account_master_table);
-        this.tableLayout.removeAllViews();
     }
 
     /**
@@ -98,6 +101,8 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
      */
     private void createDisplay() {
         boolean is_first_row = false;
+        this.tableLayout.removeAllViews();
+
         List<AccountMasterTableRecord> master_record = this.accountMasterAccessor.getAll();
 
         for( AccountMasterTableRecord record : master_record ) {
@@ -123,7 +128,7 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
     @Override
     public void onClick(View event) {
         if(ViewId.MASTER_RECORD.getId() == event.getId()) {
-            focusCurrentRow((TableRow)event);
+            focusCurrentRow((EditAccountMasterRecord)event);
         } else if(ViewId.ADD_MASTER.getId() == event.getId()) {
             this.addAccountMasterDialog.appear();
         }
@@ -131,9 +136,9 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
 
     /**
      * @brief Focus Current Row.
-     * @param current_row TableRow Instance.
+     * @param current_row EditAccountMasterRecord Instance.
      */
-    private void focusCurrentRow(TableRow current_row) {
+    private void focusCurrentRow(EditAccountMasterRecord current_row) {
         if( null != this.currentRow ) {
             this.currentRow.setBackgroundColor(getResources().getColor(R.color.default_background));
         }
@@ -148,7 +153,8 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
      */
     @Override
     public boolean onLongClick(View event) {
-        focusCurrentRow((TableRow)event);
+        focusCurrentRow((EditAccountMasterRecord)event);
+        this.editAccountMasterDialog.appear((EditAccountMasterRecord)event);
         return true;
     }
 

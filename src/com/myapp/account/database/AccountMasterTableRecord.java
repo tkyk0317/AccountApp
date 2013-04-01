@@ -35,8 +35,12 @@ public class AccountMasterTableRecord {
         update_date = cursor.getString(DatabaseIndex.UPDATE_DATE.getIndex());
         insert_date = cursor.getString(DatabaseIndex.INSERT_DATE.getIndex());
     }
+    public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setKindId(int id) { this.kind_id = id; }
+    public void setUseDate(String date) { this.use_date = date; }
+    public void setUpdateDate(String date) { this.update_date = date; }
+    public void setInsertDate(String date) { this.insert_date = date; }
 
     // Getter.
     public int getId() { return id; }

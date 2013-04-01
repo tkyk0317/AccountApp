@@ -66,6 +66,25 @@ public class AccountTableAccessor {
     }
 
     /**
+     * @brief Check Exsit Record at CategoryId.
+     *
+     * @param category_id Category Id.
+     *
+     * @return true:exsit false:not exsit.
+     */
+    public boolean isExsitRecordAtCategoryId(int category_id) {
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , "category_id=?", new String[] {String.valueOf(category_id)}, null, null, null);
+        cursor.moveToFirst();
+
+        boolean is_exsit = false;
+        if( 0 < cursor.getCount() ) {
+            is_exsit = true;
+        }
+        cursor.close();
+        return is_exsit;
+    }
+
+    /**
      * @brief Check Exsit AccountRecord at Target Date.
      * @param target_date Specified target date.
      * @return true:exsit false:not exsit.

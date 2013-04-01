@@ -56,5 +56,7 @@
     <string name="add_category_dialog_title">カテゴリ追加</string>
     <string name="kind_label_spinner">選択してください</string>
     <string name="add_category_message">カテゴリを追加しました</string>
+    <string name="modify_category_message">カテゴリを修正しました</string>
     <string name="add_category_alert_message">正確な項目を入力してください\n(項目重複等を確認してください)</string>
+    <string name="del_category_repletion_message">使用している項目は削除できません</string>
 </resources>

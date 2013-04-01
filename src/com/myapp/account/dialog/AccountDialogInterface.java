@@ -1,16 +1,24 @@
 package com.myapp.account.dialog;
 
+import android.widget.TableRow;
+
 import com.myapp.account.observer.EventCompleteObserver;
+import com.myapp.account.edit_account_master.EditAccountMasterRecord;
 
 /**
  * @brief Dialog Interface Class.
  */
-public interface DialogInterface {
+public interface AccountDialogInterface {
 
     /**
      * @brief Appear Dialog.
      */
     public void appear();
+
+    /**
+     * @brief Appear Dialog.
+     */
+    public void appear(EditAccountMasterRecord table_row);
 
     /**
      * @brief Attach Observer.
