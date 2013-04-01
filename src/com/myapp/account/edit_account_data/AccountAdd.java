@@ -101,7 +101,7 @@ public class AccountAdd implements OnItemSelectedListener {
      */
     protected void createDialog() {
         LayoutInflater inflater = LayoutInflater.from(this.activity);
-        layout = inflater.inflate(R.layout.account_edit, (ViewGroup)activity.findViewById(R.id.account_edit));
+        layout = inflater.inflate(R.layout.edit_account_record, (ViewGroup)activity.findViewById(R.id.edit_account_record));
         inputDialog = new AlertDialog.Builder(activity).create();
         inputDialog.setView(layout);
         inputDialog.getWindow().setGravity(Gravity.TOP);
