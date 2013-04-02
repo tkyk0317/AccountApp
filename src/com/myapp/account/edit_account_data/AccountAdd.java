@@ -4,8 +4,6 @@ import java.util.List;
 
 import android.util.Log;
 import android.app.Activity;
-import android.view.Window;
-import android.content.Context;
 import android.view.Gravity;
 import android.widget.EditText;
 import android.app.AlertDialog;
@@ -13,6 +11,7 @@ import android.content.DialogInterface;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -42,7 +41,7 @@ public class AccountAdd implements OnItemSelectedListener {
     protected AlertDialog inputDialog;
     protected AccountTableAccessor accountTable;
     protected AccountMasterTableAccessor masterTable;
-    protected View layout;
+    protected LinearLayout layout;
     protected String insertDate;
     protected EventCompleteObserver observer;
     protected Spinner categorySpinner;
@@ -103,10 +102,11 @@ public class AccountAdd implements OnItemSelectedListener {
      */
     protected void createDialog() {
         LayoutInflater inflater = LayoutInflater.from(this.activity);
-        layout = inflater.inflate(R.layout.edit_account_record, (ViewGroup)this.activity.findViewById(R.id.edit_account_record));
+        this.layout = (LinearLayout)inflater.inflate(R.layout.edit_account_record, (ViewGroup)this.activity.findViewById(R.id.edit_account_record));
         this.inputDialog = new AlertDialog.Builder(this.activity).create();
-        this.inputDialog.setView(layout);
+        this.inputDialog.setView(this.layout);
         this.inputDialog.getWindow().setGravity(Gravity.TOP);
+
         this.inputDialog.show();
     }
 
@@ -114,7 +114,7 @@ public class AccountAdd implements OnItemSelectedListener {
      * @brief Create Category Spinner.
      */
     protected void createSpinner() {
-       this.categorySpinner = (Spinner)layout.findViewById(R.id.category_spinner);
+       this.categorySpinner = (Spinner)this.layout.findViewById(R.id.category_spinner);
        ArrayAdapter<String> adapter =
            new ArrayAdapter(this.activity, android.R.layout.simple_spinner_item, this.categoryItems);
        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -140,7 +140,7 @@ public class AccountAdd implements OnItemSelectedListener {
      * @brief Set Title Area.
      */
     protected void setTitleArea() {
-        TextView title_view = (TextView)layout.findViewById(R.id.date_title);
+        TextView title_view = (TextView)this.layout.findViewById(R.id.date_title);
 
         String day_of_week = Utility.getDayOfWeekString(Utility.getDayOfWeek(this.insertDate), this.activity);
         String title = this.insertDate + PREFIX_WEEKDAY + day_of_week + SUFFIX_WEEKDAY;
@@ -152,7 +152,7 @@ public class AccountAdd implements OnItemSelectedListener {
      * @brief Set Button Title.
      */
     protected void setButtonTitle() {
-        Button regist_button = (Button)layout.findViewById(R.id.regist_btn);
+        Button regist_button = (Button)this.layout.findViewById(R.id.regist_btn);
         regist_button.setText(this.activity.getText(R.string.regist_btn_label));
      }
 
@@ -160,7 +160,7 @@ public class AccountAdd implements OnItemSelectedListener {
      * @brief Rejist Event
      */
     protected void registEvent() {
-        Button regist_btn = (Button)layout.findViewById(R.id.regist_btn);
+        Button regist_btn = (Button)this.layout.findViewById(R.id.regist_btn);
         regist_btn.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
@@ -194,8 +194,8 @@ public class AccountAdd implements OnItemSelectedListener {
      * @brief Get Account Information from user's input information.
      */
     protected AccountTableRecord getInputUserAccountInfo()  throws NumberFormatException {
-        EditText edit_money = (EditText)layout.findViewById(R.id.money_value);
-        EditText edit_memo = (EditText)layout.findViewById(R.id.memo_value);
+        EditText edit_money = (EditText)this.layout.findViewById(R.id.money_value);
+        EditText edit_memo = (EditText)this.layout.findViewById(R.id.memo_value);
 
         AccountMasterTableRecord master_record = this.masterTable.getRecordMatchName(this.selectedCategoryItem);
 
