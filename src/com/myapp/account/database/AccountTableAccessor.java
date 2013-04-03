@@ -15,16 +15,36 @@ import com.myapp.account.utility.Utility;
  */
 public class AccountTableAccessor {
 
-    protected SQLiteDatabase readDatabase;
-    protected SQLiteDatabase writeDatabase;
+    protected SQLiteDatabase readDatabase = null;
+    protected SQLiteDatabase writeDatabase = null;
     protected static final String TABLE_NAME = "AccountTable";
 
     /**
      * @brief Consturactor.
      */
     public AccountTableAccessor(SQLiteOpenHelper helper) {
-        readDatabase = helper.getReadableDatabase();
-        writeDatabase = helper.getWritableDatabase();
+        if( null == this.readDatabase ) this.readDatabase = helper.getReadableDatabase();
+        if( null == this.writeDatabase ) this.writeDatabase = helper.getWritableDatabase();
+    }
+
+    /**
+     * @brief Finalize Process.
+     */
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            super.finalize();
+        } finally {
+            terminate();
+        }
+    }
+
+    /**
+     * @brief Terminate process.
+     */
+    public void terminate() {
+        this.readDatabase.close();
+        this.writeDatabase.close();
     }
 
     /**
@@ -74,11 +94,12 @@ public class AccountTableAccessor {
      */
     public boolean isExsitRecordAtCategoryId(int category_id) {
         Cursor cursor = readDatabase.query(TABLE_NAME, null , "category_id=?", new String[] {String.valueOf(category_id)}, null, null, null);
-        cursor.moveToFirst();
 
         boolean is_exsit = false;
-        if( 0 < cursor.getCount() ) {
-            is_exsit = true;
+        if( true == cursor.moveToFirst() ) {
+            if( 0 < cursor.getCount() ) {
+                is_exsit = true;
+            }
         }
         cursor.close();
         return is_exsit;
@@ -92,11 +113,34 @@ public class AccountTableAccessor {
     public boolean isExsitRecordAtTargetDate(String target_date)
     {
         Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date=?" , new String[]{target_date}, null, null, "category_id", null);
-        cursor.moveToFirst();
 
         boolean is_exsit = false;
-        if( 0 < cursor.getCount() ) {
-            is_exsit = true;
+        if( true == cursor.moveToFirst() ) {
+            if( 0 < cursor.getCount() ) {
+                is_exsit = true;
+            }
+        }
+        cursor.close();
+        return is_exsit;
+    }
+
+    /**
+     * @brief Check Exsit AccountRecord at Target Date.
+     *
+     * @param start_date start date.
+     * @param end_date end date.
+     *
+     * @return true:exsit false:not exsit.
+     */
+    public boolean isExsitRecordBetweenStartDateAndEndDate(String start_date, String end_date)
+    {
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date>=? and insert_date<=?" , new String[]{start_date, end_date}, null, null, "category_id", null);
+
+        boolean is_exsit = false;
+        if( true == cursor.moveToFirst() ) {
+            if( 0 < cursor.getCount() ) {
+                is_exsit = true;
+            }
         }
         cursor.close();
         return is_exsit;
@@ -111,11 +155,12 @@ public class AccountTableAccessor {
         Cursor cursor = readDatabase.rawQuery("select AccountTable.* from AccountTable " +
                 "join AccountMaster on AccountTable.category_id=AccountMaster._id " +
                 "where AccountMaster.kind_id=1 and AccountTable.insert_date=" + "'" + target_date + "';", null);
-        cursor.moveToFirst();
 
         boolean is_exsit = false;
-        if( 0 < cursor.getCount() ) {
-            is_exsit = true;
+        if( true == cursor.moveToFirst() ) {
+            if( 0 < cursor.getCount() ) {
+                is_exsit = true;
+            }
         }
         cursor.close();
         return is_exsit;
@@ -130,13 +175,36 @@ public class AccountTableAccessor {
         Cursor cursor = readDatabase.rawQuery("select AccountTable.* from AccountTable " +
                 "join AccountMaster on AccountTable.category_id=AccountMaster._id " +
                 "where AccountMaster.kind_id=0 and AccountTable.insert_date=" + "'" + target_date + "';", null);
-        cursor.moveToFirst();
 
         boolean is_exsit = false;
-        if( 0 < cursor.getCount() ) {
-            is_exsit = true;
+        if( true == cursor.moveToFirst() ) {
+            if( 0 < cursor.getCount() ) {
+                is_exsit = true;
+            }
         }
         cursor.close();
+        return is_exsit;
+    }
+
+    /**
+     * @brief Check Exsit Record at Target Year.
+     * @param target_date Specified Target Date.
+     * @return true:exsit false:not exsit.
+     */
+    public boolean isExsitRecordAtTargetYear(String target_date) {
+        String last_date_of_year = Utility.getLastDateOfTargetYear(target_date);
+        String first_date_of_year = Utility.getFirstDateOfTargetYear(target_date);
+
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date<=? and insert_date>=?" , new String[]{last_date_of_year, first_date_of_year}, "category_id, insert_date", null, "insert_date", null);
+
+        boolean is_exsit = false;
+        if( true == cursor.moveToFirst() ) {
+            if( cursor.getCount() > 0 ) {
+                is_exsit = true;
+            }
+        }
+        cursor.close();
+
         return is_exsit;
     }
 
@@ -164,41 +232,13 @@ public class AccountTableAccessor {
     }
 
     /**
-     * @brief Get Record With Target Month Group by CategoryId and InsertDate.
-     * @param Target Insert Date.
-     * @return AccountTableRecord List at Target Month.
-     */
-    public List<AccountTableRecord> getRecordWithTargetMonthGroupByCategoryIdAndInsertDate(String target_date) {
-        String last_date_of_month = Utility.getLastDateOfTargetMonth(target_date);
-        String first_date_of_month = Utility.getFirstDateOfTargetMonth(target_date);
-
-        Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
-                                           "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id, insert_date", null, "insert_date", null);
-        cursor.moveToFirst();
-
-        int record_count = cursor.getCount();
-        List<AccountTableRecord> record_list = new ArrayList<AccountTableRecord>(record_count+1);
-
-        for( int i = 0 ; i < record_count ; i++ ) {
-            record_list.add( new AccountTableRecord() );
-            record_list.get(i).set(cursor);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return record_list;
-    }
-
-    /**
      * @brief Get Record With Target Month Group by CategoryId.
      * @param Target Insert Date.
      * @return AccountTableRecord List at Target Month.
      */
-    public List<AccountTableRecord> getRecordWithTargetMonthGroupByCategoryId(String target_date) {
-        String last_date_of_month = Utility.getLastDateOfTargetMonth(target_date);
-        String first_date_of_month = Utility.getFirstDateOfTargetMonth(target_date);
-
+    public List<AccountTableRecord> getRecordWithTargetMonthGroupByCategoryId(String start_date, String end_date) {
         Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
-                                           "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id", null, "insert_date", null);
+                                           "insert_date<=? and insert_date>=?" , new String[]{end_date, start_date}, "category_id", null, "insert_date", null);
         cursor.moveToFirst();
 
         int record_count = cursor.getCount();
@@ -239,48 +279,6 @@ public class AccountTableAccessor {
     }
 
     /**
-     * @brief Check Exsit Record at Target Month.
-     * @param target_date Specified Target Date.
-     * @return true:exsit false:not exsit.
-     */
-    public boolean isExsitRecordAtTargetMonth(String target_date) {
-        String last_date_of_month = Utility.getLastDateOfTargetMonth(target_date);
-        String first_date_of_month = Utility.getFirstDateOfTargetMonth(target_date);
-
-        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date<=? and insert_date>=?" , new String[]{last_date_of_month, first_date_of_month}, "category_id, insert_date", null, "insert_date", null);
-        cursor.moveToFirst();
-
-        boolean is_exsit = false;
-        if( cursor.getCount() > 0 ) {
-            is_exsit = true;
-        }
-        cursor.close();
-
-        return is_exsit;
-    }
-
-    /**
-     * @brief Check Exsit Record at Target Year.
-     * @param target_date Specified Target Date.
-     * @return true:exsit false:not exsit.
-     */
-    public boolean isExsitRecordAtTargetYear(String target_date) {
-        String last_date_of_year = Utility.getLastDateOfTargetYear(target_date);
-        String first_date_of_year = Utility.getFirstDateOfTargetYear(target_date);
-
-        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date<=? and insert_date>=?" , new String[]{last_date_of_year, first_date_of_year}, "category_id, insert_date", null, "insert_date", null);
-        cursor.moveToFirst();
-
-        boolean is_exsit = false;
-        if( cursor.getCount() > 0 ) {
-            is_exsit = true;
-        }
-        cursor.close();
-
-        return is_exsit;
-    }
-
-    /**
      * @brief Get All Record.
      * @return All AccountTableRecord in AccountMasterTable.
      */
@@ -300,18 +298,16 @@ public class AccountTableAccessor {
     }
 
     /**
-     * @brief Get Income Total Money at Target Month.
-     * @param target_date specify target date(yyyy/mm/dd).
+     * @brief Get Income Total Money at Target Date.
+     * @param start specify start date(yyyy/mm/dd).
+     * @param end_date specify end date(yyyy/mm/dd).
      * @return Total Money.
      */
-    public int getTotalIncomeAtTargetMonth(String target_date) {
-        String last_date_of_month = Utility.getLastDateOfTargetMonth(target_date);
-        String first_date_of_month = Utility.getFirstDateOfTargetMonth(target_date);
-
+    public int getTotalIncomeAtTargetDate(String start_date, String end_date) {
         Cursor cursor = readDatabase.rawQuery("select sum(AccountTable.money) from AccountTable " +
                 "join AccountMaster on AccountTable.category_id=AccountMaster._id " +
-                "where AccountMaster.kind_id=0 and AccountTable.insert_date>=" + "'" + first_date_of_month + "'" +
-                " and AccountTable.insert_date<=" + "'" + last_date_of_month + "'" + " ;", null);
+                "where AccountMaster.kind_id=0 and AccountTable.insert_date>=" + "'" + start_date + "'" +
+                " and AccountTable.insert_date<=" + "'" + end_date + "'" + " ;", null);
         cursor.moveToFirst();
 
         int total = cursor.getInt(0);
@@ -321,18 +317,16 @@ public class AccountTableAccessor {
     }
 
     /**
-     * @brief Get Payment Total Money at Target Month.
-     * @param target_date specify target date(yyyy/mm/dd).
+     * @brief Get Payment Total Money at Target Date.
+     * @param start_date specify start date(yyyy/mm/dd).
+     * @param end_date specify end date(yyyy/mm/dd).
      * @return Total Money.
      */
-    public int getTotalPaymentAtTargetMonth(String target_date) {
-        String last_date_of_month = Utility.getLastDateOfTargetMonth(target_date);
-        String first_date_of_month = Utility.getFirstDateOfTargetMonth(target_date);
-
+    public int getTotalPaymentAtTargetDate(String start_date, String end_date) {
         Cursor cursor = readDatabase.rawQuery("select sum(AccountTable.money) from AccountTable " +
                 "join AccountMaster on AccountTable.category_id=AccountMaster._id " +
-                "where AccountMaster.kind_id=1 and AccountTable.insert_date>=" + "'" + first_date_of_month + "'" +
-                " and AccountTable.insert_date<=" + "'" + last_date_of_month + "'" + " ;", null);
+                "where AccountMaster.kind_id=1 and AccountTable.insert_date>=" + "'" + start_date + "'" +
+                " and AccountTable.insert_date<=" + "'" + end_date + "'" + " ;", null);
         cursor.moveToFirst();
 
         int total = cursor.getInt(0);

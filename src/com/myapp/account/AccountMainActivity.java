@@ -28,6 +28,7 @@ import com.myapp.account.utility.Utility;
 import com.myapp.account.tabcontent.TabContent;
 import com.myapp.account.summary.Summary;
 import com.myapp.account.config.ApplicationMenu;
+import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.calendar.AccountCalendar;
 import com.myapp.account.calendar.AccountCalendarCell;
 import com.myapp.account.observer.ClickObserverInterface;
@@ -57,6 +58,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     private TextView returnCurrentMonthView;
     private ImageView pieGraphImage;
     private ImageView lineGraphImage;
+    private AppConfigurationData appConfigData;
     private static final int ANIMATION_DURATION = 300;
 
     /**
@@ -96,6 +98,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.currentCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.current_flipper));
         this.nextCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.next_flipper));
         this.currentDate = Utility.getCurrentDate();
+        this.appConfigData = new AppConfigurationData(this);
 
         // init graph image.
         initGraphImage();
@@ -254,6 +257,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.returnCurrentMonthView = null;
         this.pieGraphImage = null;
         this.lineGraphImage = null;
+        this.appConfigData = null;
     }
 
     /**
@@ -291,9 +295,36 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     public void notifyClick(Object event) {
         AccountCalendarCell cell = (AccountCalendarCell)event;
 
+        // check reflesh timing.
+        if( true == isSummaryReflesh(cell) ) {
+            clearSummaryViews();
+            this.summary.appear(cell.getDate());
+        }
         this.currentDate = cell.getDate();
-        this.titleArea.appear(currentDate);
-        this.tabContent.appear(currentDate);
+        this.titleArea.appear(this.currentDate);
+        this.tabContent.appear(this.currentDate);
+    }
+
+    /**
+     * @brief Check Reflesh Summary.
+     *
+     * @param cell AccountCalendarCell instance.
+     *
+     * @return true:reflesh false:not reflesh.
+     */
+    private boolean isSummaryReflesh(AccountCalendarCell cell) {
+        int start_day = this.appConfigData.getStartDay();
+        int cell_day = Integer.valueOf(Utility.splitDay(cell.getDate()));
+        int current_day = Integer.valueOf(Utility.splitDay(this.currentDate));
+
+        if( current_day < start_day && start_day <= cell_day ) {
+            Log.d("AccountMain", "Reflesh Timing");
+            return true;
+        }
+        if( current_day >= start_day && cell_day < start_day ) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -340,9 +371,9 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     private void setCurrentDate(float velocity_x) {
         if( velocity_x < 0 ) {
-            this.currentDate = Utility.getNextMonthDate(currentDate);
+            this.currentDate = Utility.getNextMonthDate(this.currentDate);
         } else {
-            this.currentDate = Utility.getPreviousMonthDate(currentDate);
+            this.currentDate = Utility.getPreviousMonthDate(this.currentDate);
         }
     }
 

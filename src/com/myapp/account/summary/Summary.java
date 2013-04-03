@@ -5,7 +5,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.view.Gravity;
+
 import com.myapp.account.R;
+import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.summary.estimate.Estimate;
@@ -15,11 +17,11 @@ import com.myapp.account.summary.estimate.Estimate;
  */
 public class Summary {
 
-    protected Activity activity;
-    protected Estimate estimateInfo;
-    protected AccountTableAccessor accountTable;
-    protected String currentDate;
-    protected static final int TEXT_FONT_SIZE = 15;
+    private Activity activity;
+    private Estimate estimateInfo;
+    private AccountTableAccessor accountTable;
+    private String currentDate;
+    private static final int TEXT_FONT_SIZE = 15;
 
     /**
      * @brief Constractor.
@@ -28,7 +30,7 @@ public class Summary {
     public Summary(Activity activity) {
         this.activity = activity;
         this.estimateInfo = new Estimate(this.activity);
-        accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
+        this.accountTable = new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
      }
 
     /**
@@ -41,26 +43,26 @@ public class Summary {
         // appear estimate area.
         this.estimateInfo.appear(this.currentDate);
 
-        TableRow table_row = new TableRow(activity.getApplicationContext());
+        TableRow table_row = new TableRow(this.activity.getApplicationContext());
         insertIncomeIntoTableRow(table_row);
         insertPaymentIntoTableRow(table_row);
 
         // Create Table.
-        TableLayout summary_table = (TableLayout) activity.findViewById(R.id.summary_table);
+        TableLayout summary_table = (TableLayout)this.activity.findViewById(R.id.summary_table);
         summary_table.addView(table_row);
     }
 
      /**
      * @brief Insert Income TableRow.
      */
-    protected void insertIncomeIntoTableRow(TableRow table_row) {
-        TextView income_label = new TextView(activity.getApplicationContext());
-        TextView income_value = new TextView(activity.getApplicationContext());
+    private void insertIncomeIntoTableRow(TableRow table_row) {
+        TextView income_label = new TextView(this.activity.getApplicationContext());
+        TextView income_value = new TextView(this.activity.getApplicationContext());
 
-        int total = accountTable.getTotalIncomeAtTargetMonth(this.currentDate);
+        int total = getIncomeTotalMoney();
 
-        income_value.setText(String.format("%,d", total) + activity.getText(R.string.money_unit).toString());
-        income_label.setText(activity.getText(R.string.income_label));
+        income_value.setText(String.format("%,d", total) + this.activity.getText(R.string.money_unit).toString());
+        income_label.setText(this.activity.getText(R.string.income_label));
         income_label.setTextSize(TEXT_FONT_SIZE);
         income_value.setTextSize(TEXT_FONT_SIZE);
         income_label.setGravity(Gravity.RIGHT);
@@ -74,14 +76,14 @@ public class Summary {
     /**
      * @brief Insert Payment into TableRow.
      */
-    protected void insertPaymentIntoTableRow(TableRow table_row) {
-        TextView payment_label = new TextView(activity.getApplicationContext());
-        TextView payment_value = new TextView(activity.getApplicationContext());
+    private void insertPaymentIntoTableRow(TableRow table_row) {
+        TextView payment_label = new TextView(this.activity.getApplicationContext());
+        TextView payment_value = new TextView(this.activity.getApplicationContext());
 
-        int total = accountTable.getTotalPaymentAtTargetMonth(this.currentDate);
+        int total = getPaymentTotalMoney();
 
-        payment_value.setText(String.format("%,d", total) + activity.getText(R.string.money_unit).toString());
-        payment_label.setText(activity.getText(R.string.payment_label));
+        payment_value.setText(String.format("%,d", total) + this.activity.getText(R.string.money_unit).toString());
+        payment_label.setText(this.activity.getText(R.string.payment_label));
         payment_label.setTextSize(TEXT_FONT_SIZE);
         payment_value.setTextSize(TEXT_FONT_SIZE);
         payment_label.setGravity(Gravity.RIGHT);
@@ -89,6 +91,45 @@ public class Summary {
 
         table_row.addView(payment_label);
         table_row.addView(payment_value);
+    }
+
+    /**
+     * @brief Get Total Income Money.
+     *
+     * @return Income Total Money.
+     */
+    private int getIncomeTotalMoney() {
+        String start_date = getStartDateOfMonth();
+        String end_date = getEndDateOfMonth();
+        return this.accountTable.getTotalIncomeAtTargetDate(start_date, end_date);
+    }
+    /**
+     * @brief Get Total Payment Money.
+     *
+     * @return Payment Total Money.
+     */
+    private int getPaymentTotalMoney() {
+        String start_date = getStartDateOfMonth();
+        String end_date = getEndDateOfMonth();
+        return this.accountTable.getTotalPaymentAtTargetDate(start_date, end_date);
+    }
+
+    /**
+     * @brief Get Start Date of Month.
+     *
+     * @return start_date.
+     */
+    private String getStartDateOfMonth() {
+        return Utility.getStartDateOfMonth(this.activity, this.currentDate);
+    }
+
+    /**
+     * @brief Get End Date of Month.
+     *
+     * @return end date.
+     */
+    private String getEndDateOfMonth() {
+        return Utility.getEndDateOfMonth(this.activity, this.currentDate);
     }
 }
 

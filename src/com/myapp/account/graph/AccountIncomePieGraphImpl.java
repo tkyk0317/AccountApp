@@ -28,14 +28,18 @@ public class AccountIncomePieGraphImpl extends AbstractAccountGraph {
      * @return true:exsit false:not exsit.
      */
     protected boolean isExsitRecord() {
-        return this.accountTable.isExsitRecordAtTargetMonth(this.targetDate);
+        String start_date = getStartDateOfMonth();
+        String end_date = getEndDateOfMonth();
+        return this.accountTable.isExsitRecordBetweenStartDateAndEndDate(start_date, end_date);
     }
 
     /**
      * @brief Get Used Data In Graph.
      */
     protected List<AccountTableRecord> getUsedDataInGraph() {
-        return this.accountTable.getRecordWithTargetMonthGroupByCategoryId(this.targetDate);
+        String start_date = getStartDateOfMonth();
+        String end_date = getEndDateOfMonth();
+        return this.accountTable.getRecordWithTargetMonthGroupByCategoryId(start_date, end_date);
     }
 
     /**

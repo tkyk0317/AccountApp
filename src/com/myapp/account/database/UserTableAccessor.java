@@ -15,16 +15,36 @@ import com.myapp.account.utility.Utility;
  */
 public class UserTableAccessor {
 
-    protected SQLiteDatabase readDatabase;
-    protected SQLiteDatabase writeDatabase;
+    protected SQLiteDatabase readDatabase = null;
+    protected SQLiteDatabase writeDatabase = null;
     protected static final String TABLE_NAME = "UserTable";
 
     /**
      * @brief Constractor.
      */
     public UserTableAccessor(SQLiteOpenHelper helper) {
-        readDatabase = helper.getReadableDatabase();
-        writeDatabase = helper.getWritableDatabase();
+        if( null == this.readDatabase ) this.readDatabase = helper.getReadableDatabase();
+        if( null == this.writeDatabase ) this.writeDatabase = helper.getWritableDatabase();
+    }
+
+    /**
+     * @brief Finalize Process.
+     */
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            super.finalize();
+        } finally {
+            terminate();
+        }
+    }
+
+    /**
+     * @brief Terminate process.
+     */
+    public void terminate() {
+        this.readDatabase.close();
+        this.writeDatabase.close();
     }
 
     /**

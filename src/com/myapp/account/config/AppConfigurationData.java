@@ -2,12 +2,15 @@ package com.myapp.account.config;
 
 import java.util.*;
 import java.lang.RuntimeException;
+
 import android.util.Log;
+import android.app.Activity;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.content.SharedPreferences;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
+
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.EstimateTableAccessor;
 import com.myapp.account.database.EstimateTableRecord;
@@ -18,21 +21,23 @@ import com.myapp.account.utility.Utility;
  */
 public class AppConfigurationData {
 
+    private Activity activity;
     private SharedPreferences appConfig;
     private boolean isEstimate;
     private String userName;
-    private int estimateStartDay;
+    private int startDayOfMonth;
     private int estimateMoney;
     private EstimateTableAccessor estimateTable;
     private final String ESTIMATE_KEY = "estimate_configuration";
     private final String ESTIMATE_MONEY_KEY = "estimate_money_configuration";
-    private final String ESTIMATE_START_DAY_KEY = "estimate_start_day_configuration";
+    private final String START_DAY_KEY = "start_day_configuration";
     private final String USER_TARGET_KEY = "target_user_configuration";
 
     /**
      * @brief Constractor.
      */
     public AppConfigurationData(Context context) {
+        this.activity = (Activity)context;
         this.appConfig = PreferenceManager.getDefaultSharedPreferences(context);
         this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(context.getApplicationContext()));
         readConfigurationData();
@@ -45,7 +50,7 @@ public class AppConfigurationData {
         // get configuration value.
         this.isEstimate = this.appConfig.getBoolean(ESTIMATE_KEY, false);
         this.userName = this.appConfig.getString(USER_TARGET_KEY, "default");
-        this.estimateStartDay = Integer.valueOf(this.appConfig.getString(ESTIMATE_START_DAY_KEY, "1"));
+        this.startDayOfMonth = Integer.valueOf(this.appConfig.getString(START_DAY_KEY, "1"));
 
         EstimateTableRecord record = this.estimateTable.getRecordWithCurrentMonth();
         this.estimateMoney = record.getEstimateMoney();
@@ -78,8 +83,12 @@ public class AppConfigurationData {
      */
     public void saveEstimateMoney(int estimate_money) throws RuntimeException {
         try {
-            if( this.estimateTable.isEstimateRecord(Utility.getCurrentYearAndMonth()) ) {
-                EstimateTableRecord record = this.estimateTable.getRecordWithCurrentMonth();
+            String start_date = Utility.getStartDateOfMonth(this.activity, Utility.getCurrentDate());
+            String estimate_target_date = Utility.getEstimateTargetDate(this.activity, start_date);
+
+            // Check Exsit Record.
+            if( this.estimateTable.isEstimateRecord(estimate_target_date) ) {
+                EstimateTableRecord record = this.estimateTable.getRecordAtTargetDate(estimate_target_date);
                 record.setEstimateMoney(estimate_money);
                 this.estimateTable.update(record);
             } else {
@@ -93,13 +102,13 @@ public class AppConfigurationData {
     }
 
     /**
-     * @brief Save Estimate Start Day.
+     * @brief Save Start Day.
      *
-     * @param start_day estimate start day.
+     * @param start_day start day of month.
      */
-    public void savaEstimateStartDay(String start_day) {
+    public void savaStartDay(String start_day) {
         Editor edit_config = this.appConfig.edit();
-        edit_config.putString(ESTIMATE_START_DAY_KEY, start_day);
+        edit_config.putString(START_DAY_KEY, start_day);
         edit_config.commit();
     }
 
@@ -107,10 +116,10 @@ public class AppConfigurationData {
     public boolean getEstimate() { return this.isEstimate; }
     public String getTargetUserName() { return this.userName; }
     public int getEstimateMoney() { return this.estimateMoney; }
-    public int getEstimateStartDay() { return this.estimateStartDay; }
+    public int getStartDay() { return this.startDayOfMonth; }
     public String getEstimateKey() { return ESTIMATE_KEY; }
     public String getTargetUserKey() { return USER_TARGET_KEY; }
     public String getEstimateMoneyKey() { return ESTIMATE_MONEY_KEY; }
-    public String getEstimateStartDayKey() { return ESTIMATE_START_DAY_KEY; }
+    public String getStartDayKey() { return START_DAY_KEY; }
 }
 

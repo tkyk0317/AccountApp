@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="estimate_start_day_array">
+    <string-array name="start_day_array">
         <item>1日</item>
         <item>2日</item>
         <item>3日</item>
@@ -33,7 +33,7 @@
         <item>30日</item>
         <item>31日</item>
     </string-array>
-    <string-array name="estimate_start_day_value_array">
+    <string-array name="start_day_value_array">
         <item>1</item>
         <item>2</item>
         <item>3</item>

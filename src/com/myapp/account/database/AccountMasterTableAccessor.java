@@ -27,6 +27,26 @@ public class AccountMasterTableAccessor {
     }
 
     /**
+     * @brief Finalize Process.
+     */
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            super.finalize();
+        } finally {
+            terminate();
+        }
+    }
+
+    /**
+     * @brief Terminate process.
+     */
+    public void terminate() {
+        this.readDatabase.close();
+        this.writeDatabase.close();
+    }
+
+    /**
       * @brief Get Record Specified Key.
       * @param key Table key.
       * @return AccountMasterTableRecord Instance.

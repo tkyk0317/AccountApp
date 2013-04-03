@@ -231,6 +231,24 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
     }
 
     /**
+     * @brief Get Start Date of Month.
+     *
+     * @return start_date.
+     */
+    protected String getStartDateOfMonth() {
+        return Utility.getStartDateOfMonth(this.activity, this.targetDate);
+    }
+
+    /**
+     * @brief Get End Date of Month.
+     *
+     * @return end date.
+     */
+    protected String getEndDateOfMonth() {
+        return Utility.getEndDateOfMonth(this.activity, this.targetDate);
+    }
+
+    /**
      * @brief OnTouchEvent.
      * @return true:handle the event false:not handle the event.
      */

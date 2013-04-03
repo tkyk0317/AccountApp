@@ -2,12 +2,14 @@ package com.myapp.account.graph;
 
 import java.util.List;
 
+import android.util.Log;
 import android.app.Activity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.view.Gravity;
 
 import com.myapp.account.R;
+import com.myapp.account.utility.Utility;
 import com.myapp.account.graph.AbstractAccountGraph;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountMasterTableRecord;
@@ -36,14 +38,18 @@ public class AccountPaymentPieGraphImpl extends AbstractAccountGraph {
      * @return true:exsit false:not exsit.
      */
     protected boolean isExsitRecord() {
-        return this.accountTable.isExsitRecordAtTargetMonth(this.targetDate);
+        String start_date = getStartDateOfMonth();
+        String end_date = getEndDateOfMonth();
+        return this.accountTable.isExsitRecordBetweenStartDateAndEndDate(start_date, end_date);
     }
 
     /**
      * @brief Get Used Data In Graph.
      */
     protected List<AccountTableRecord> getUsedDataInGraph() {
-        return this.accountTable.getRecordWithTargetMonthGroupByCategoryId(this.targetDate);
+        String start_date = getStartDateOfMonth();
+        String end_date = getEndDateOfMonth();
+        return this.accountTable.getRecordWithTargetMonthGroupByCategoryId(start_date, end_date);
     }
 
     /**
@@ -61,7 +67,7 @@ public class AccountPaymentPieGraphImpl extends AbstractAccountGraph {
      */
     protected void displaySumMoney() {
         TextView sum_money_text = new TextView(this.activity);
-        int sum_money = this.accountTable.getTotalPaymentAtTargetMonth(this.targetDate);
+        int sum_money = getTotalPaymentMoney();
 
         // setting sum money.
         sum_money_text.setGravity(Gravity.CENTER);
@@ -72,6 +78,17 @@ public class AccountPaymentPieGraphImpl extends AbstractAccountGraph {
         sum_money_text.setText(display_text);
 
         this.chartArea.addView(sum_money_text);
+    }
+
+    /**
+     * @brief Get Total Payment Money.
+     *
+     * @return Payment Total Money.
+     */
+    private int getTotalPaymentMoney() {
+        String start_date = getStartDateOfMonth();
+        String end_date = getEndDateOfMonth();
+        return this.accountTable.getTotalPaymentAtTargetDate(start_date, end_date);
     }
 }
 

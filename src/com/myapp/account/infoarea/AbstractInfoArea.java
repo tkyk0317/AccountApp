@@ -5,7 +5,9 @@ import android.util.Log;
 import android.app.Activity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+
 import com.myapp.account.R;
+import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
@@ -64,6 +66,23 @@ public abstract class AbstractInfoArea {
         }
     }
 
+    /**
+     * @brief Get Start Date of Month.
+     *
+     * @return start_date.
+     */
+    protected String getStartDateOfMonth() {
+        return Utility.getStartDateOfMonth(this.activity, this.displayDate);
+    }
+
+    /**
+     * @brief Get End Date of Month.
+     *
+     * @return end date.
+     */
+    protected String getEndDateOfMonth() {
+        return Utility.getEndDateOfMonth(this.activity, this.displayDate);
+    }
     /**
      * @brief Get AccountTable Record.
      * @return AccounTable record List.

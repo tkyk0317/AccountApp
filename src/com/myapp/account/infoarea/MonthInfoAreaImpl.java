@@ -7,6 +7,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.view.Gravity;
+
 import com.myapp.account.R;
 import com.myapp.account.infoarea.AbstractInfoArea;
 import com.myapp.account.database.AccountTableAccessor;
@@ -33,7 +34,9 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
      */
     @Override
     protected List<AccountTableRecord> getAccountRecord() {
-        return accountTable.getRecordWithTargetMonthGroupByCategoryId(displayDate);
+        String start_date = getStartDateOfMonth();
+        String end_date = getEndDateOfMonth();
+        return this.accountTable.getRecordWithTargetMonthGroupByCategoryId(start_date, end_date);
     }
 
     /**
@@ -42,7 +45,7 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
      */
     @Override
     protected TableLayout getTableLayout() {
-        return (TableLayout) activity.findViewById(R.id.month_item_table);
+        return (TableLayout)this.activity.findViewById(R.id.month_item_table);
     }
 
     /**
@@ -58,7 +61,7 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
 
         // get item name from AccountMaster.
         int master_id = account_record.getCategoryId();
-        AccountMasterTableRecord account_master_record = masterTable.getRecord(master_id);
+        AccountMasterTableRecord account_master_record = this.masterTable.getRecord(master_id);
 
         row.setCategoryName(account_master_record.getName() );
         row.setKindId(account_master_record.getKindId());
@@ -67,5 +70,6 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
 
         layout.addView(row);
     }
+
 }
 

@@ -16,14 +16,13 @@
             android:dependency="estimate_configuration"
             />
         <ListPreference
-            android:key="estimate_start_day_configuration"
-            android:title="@string/start_estimate_day_title"
+            android:key="start_day_configuration"
+            android:title="@string/start_day_title"
             android:inputType="number"
             android:digits="0123456789"
             android:maxLength="2"
-            android:dependency="estimate_configuration"
-            android:entries="@array/estimate_start_day_array"
-            android:entryValues="@array/estimate_start_day_value_array"
+            android:entries="@array/start_day_array"
+            android:entryValues="@array/start_day_value_array"
             />
         <EditTextPreference
             android:key="target_user_configuration"

@@ -15,16 +15,36 @@ import com.myapp.account.utility.Utility;
  */
 public class EstimateTableAccessor {
 
-    protected SQLiteDatabase readDatabase;
-    protected SQLiteDatabase writeDatabase;
+    protected SQLiteDatabase readDatabase = null;
+    protected SQLiteDatabase writeDatabase = null;
     protected static final String TABLE_NAME = "EstimateTable";
 
     /**
      * @brief Constractor.
      */
     public EstimateTableAccessor(SQLiteOpenHelper helper) {
-        readDatabase = helper.getReadableDatabase();
-        writeDatabase = helper.getWritableDatabase();
+        if( null == this.readDatabase ) this.readDatabase = helper.getReadableDatabase();
+        if( null == this.writeDatabase ) this.writeDatabase = helper.getWritableDatabase();
+    }
+
+    /**
+     * @brief Finalize Process.
+     */
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            super.finalize();
+        } finally {
+            terminate();
+        }
+    }
+
+    /**
+     * @brief Terminate process.
+     */
+    public void terminate() {
+        this.readDatabase.close();
+        this.writeDatabase.close();
     }
 
     /**
@@ -68,11 +88,12 @@ public class EstimateTableAccessor {
      */
     public boolean isEstimateRecord(String target_date) {
         Cursor cursor = readDatabase.query(TABLE_NAME, null, "target_date=?", new String[] {target_date}, null, null, null, null);
-        cursor.moveToFirst();
 
         boolean ret = false;
-        if( cursor.getCount() > 0 ) {
-            ret = true;
+        if( true == cursor.moveToFirst() ) {
+            if( cursor.getCount() > 0 ) {
+                ret = true;
+            }
         }
         cursor.close();
         return ret;

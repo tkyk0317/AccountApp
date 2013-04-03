@@ -59,6 +59,7 @@
     <string name="modify_category_message">カテゴリを修正しました</string>
     <string name="add_category_alert_message">入力内容を確認して下さい\n(項目重複等を確認してください)</string>
     <string name="del_category_repletion_message">使用している項目は削除できません</string>
-    <string name="start_estimate_day_title">予算開始日</string>
+    <string name="start_day_title">月の開始日</string>
     <string name="day_unit_string">日</string>
+    <string name="account_title_suffix">月度</string>
 </resources>

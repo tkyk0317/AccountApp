@@ -12,9 +12,10 @@ import com.myapp.account.utility.Utility;
  */
 public class TitleArea
 {
-    protected Activity activity;
-    protected static final String DAY_OF_WEEK_PREFIX = "(";
-    protected static final String DAY_OF_WEEK_SUFIX = ")";
+    private Activity activity;
+    private String currentDate;
+    private static final String DAY_OF_WEEK_PREFIX = "(";
+    private static final String DAY_OF_WEEK_SUFIX = ")";
 
     /**
      * @brief Class Constractor.
@@ -29,8 +30,26 @@ public class TitleArea
      * @param current_date current_date String(yyyy/MM/dd).
      */
     public void appear(String current_date) {
+        this.currentDate = current_date;
+        displayTitle();
+    }
+
+    /**
+     * @brief Display Title.
+     */
+    private void displayTitle() {
         TextView date_title = (TextView) activity.findViewById(R.id.date_title);
-        String day_of_week_str = Utility.getDayOfWeekString(Utility.getDayOfWeek(current_date), this.activity);
-        date_title.setText(current_date + DAY_OF_WEEK_PREFIX + day_of_week_str + DAY_OF_WEEK_SUFIX);
+        String title = (Utility.splitYear(this.currentDate) + this.activity.getText(R.string.year_str).toString());
+        title += (Utility.splitMonth(this.currentDate) + this.activity.getText(R.string.account_title_suffix).toString());
+        date_title.setText(title);
+    }
+
+    /**
+     * @brief Get Estimate Target Date.
+     *
+     * @return estimate target date.
+     */
+    private String getEstimateTargetDate() {
+        return Utility.getEstimateTargetDate(this.activity, this.currentDate);
     }
 }

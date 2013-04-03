@@ -50,7 +50,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
         CheckBoxPreference estimate_config = (CheckBoxPreference)findPreference(this.appConfiguration.getEstimateKey());
         EditTextPreference user_config = (EditTextPreference)findPreference(this.appConfiguration.getTargetUserKey());
         EditTextPreference estimate_money_config = (EditTextPreference)findPreference(this.appConfiguration.getEstimateMoneyKey());
-        ListPreference estimate_start_day_config = (ListPreference)findPreference(this.appConfiguration.getEstimateStartDayKey());
+        ListPreference start_day_config = (ListPreference)findPreference(this.appConfiguration.getStartDayKey());
 
         if( this.appConfiguration.getEstimate() ) {
             estimate_config.setSummary(getText(R.string.estimate_configuration_enable));
@@ -59,7 +59,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
         }
         user_config.setSummary(this.appConfiguration.getTargetUserName());
         estimate_money_config.setSummary(String.format("%,d", this.appConfiguration.getEstimateMoney()));
-        estimate_start_day_config.setSummary(String.valueOf(this.appConfiguration.getEstimateStartDay()) + getText(R.string.day_unit_string).toString());
+        start_day_config.setSummary(String.valueOf(this.appConfiguration.getStartDay()) + getText(R.string.day_unit_string).toString());
     }
 
     /**
@@ -121,16 +121,16 @@ public class AppConfigurationActivity extends PreferenceActivity {
                     }
                 });
 
-        // Change Estimate Start Day Event.
-        ListPreference estimate_start_day_pref = (ListPreference)findPreference(this.appConfiguration.getEstimateStartDayKey());
-        estimate_start_day_pref.setOnPreferenceChangeListener(
+        // Change Start Day Event.
+        ListPreference start_day_pref = (ListPreference)findPreference(this.appConfiguration.getStartDayKey());
+        start_day_pref.setOnPreferenceChangeListener(
             new OnPreferenceChangeListener() {
                 public boolean onPreferenceChange(Preference pref, Object value) {
-                    ListPreference estimate_start_day_pref = (ListPreference)pref;
+                    ListPreference start_day_pref = (ListPreference)pref;
 
-                    // save estimate start day.
-                    appConfiguration.savaEstimateStartDay(value.toString());
-                    estimate_start_day_pref.setSummary(value.toString() + getText(R.string.day_unit_string).toString());
+                    // save start day.
+                    appConfiguration.savaStartDay(value.toString());
+                    start_day_pref.setSummary(value.toString() + getText(R.string.day_unit_string).toString());
 
                     return true;
                 }
