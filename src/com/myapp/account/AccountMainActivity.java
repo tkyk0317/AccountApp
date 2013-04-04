@@ -318,7 +318,6 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         int current_day = Integer.valueOf(Utility.splitDay(this.currentDate));
 
         if( current_day < start_day && start_day <= cell_day ) {
-            Log.d("AccountMain", "Reflesh Timing");
             return true;
         }
         if( current_day >= start_day && cell_day < start_day ) {

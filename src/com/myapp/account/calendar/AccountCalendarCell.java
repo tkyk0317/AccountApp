@@ -1,9 +1,14 @@
 package com.myapp.account.calendar;
 
 import java.util.*;
+
 import android.app.Activity;
-import android.widget.TextView;
 import android.util.Log;
+import android.graphics.Color;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.ImageView;
+import android.text.TextPaint;
 import android.view.View;
 import android.view.Gravity;
 import android.view.GestureDetector;
@@ -11,36 +16,47 @@ import android.view.MotionEvent;
 import android.view.GestureDetector.OnGestureListener;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.widget.LinearLayout;
+
 import com.myapp.account.R;
-import com.myapp.account.observer.ClickObserverInterface;
 import com.myapp.account.utility.Utility;
+import com.myapp.account.observer.ClickObserverInterface;
 
 /**
  * @brief Account Calendar Cell Class.
  */
 public class AccountCalendarCell implements OnGestureListener, View.OnTouchListener {
 
-    protected Activity activity;
-    protected TextView textView;
-    protected int year;
-    protected int month;
-    protected int day;
-    protected int dayOfWeek;
-    protected String date;
-    protected ClickObserverInterface observer;
-    protected GestureDetector gestureDetector;
-    protected static final int HEIGHT = 32;
+    private Activity activity = null;
+    private LinearLayout layout = null;
+    private LinearLayout image_layout = null;
+    private TextView textView = null;
+    private int year = 0;
+    private int month = 0;
+    private int day = 0;
+    private int dayOfWeek = 0;
+    private String date = null;
+    private ClickObserverInterface observer = null;
+    private GestureDetector gestureDetector = null;
+    private static final int IMAGE_WIDTH = 16;
+    private static final int IMAGE_HEIGHT = 16;
+    private static final int TEXT_ONLY_HEIGHT = 32;
 
     /**
      * @brief Constractor.
      */
-    public AccountCalendarCell(TextView view, Activity activity) {
-        this.textView = view;
+    public AccountCalendarCell(LinearLayout layout, Activity activity) {
+        this.layout = layout;
+        this.layout.setClickable(false);
         this.activity = activity;
-        this.textView.setClickable(false);
-        this.textView.setHeight(HEIGHT);
-        this.textView.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.TOP);
+
+        this.textView = new TextView(this.activity);
+        this.layout.addView(this.textView);
+        this.textView.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+        this.textView.setHeight(TEXT_ONLY_HEIGHT);
+        this.textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         this.textView.setOnTouchListener(this);
+
         this.gestureDetector = new GestureDetector(this.activity, this);
     }
 
@@ -66,6 +82,54 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
         this.day = day;
         this.dayOfWeek = day_of_week;
         this.date = date;
+
+        // set holiday color.
+        setHolidayColor();
+    }
+
+    /**
+     * @brief Set Holiday Color(SunDay=Red SaturDay=Blue).
+     */
+    private void setHolidayColor() {
+        switch(this.dayOfWeek) {
+            case Calendar.SUNDAY:
+                this.textView.setTextColor(Color.RED);
+                break;
+            case Calendar.SATURDAY:
+                this.textView.setTextColor(Color.BLUE);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * @brief set underline.
+     */
+    public void setUnderline(boolean is_underline) {
+        TextPaint text_paint = this.textView.getPaint();
+        text_paint.setUnderlineText(is_underline);
+    }
+
+    /**
+     * @brief Set Marker to start day.
+     */
+    public void setStartDayMarker() {
+        // create image layout.
+        createLinearLayoutForImageView();
+
+        Resources resources = this.activity.getResources();
+        Drawable mark_image = resources.getDrawable(R.drawable.start_sign);
+
+        ImageView mark_image_view = new ImageView(this.activity);
+        mark_image_view.setImageDrawable(mark_image);
+        this.image_layout.addView(mark_image_view);
+
+        mark_image_view.setLayoutParams(new LinearLayout.LayoutParams(IMAGE_WIDTH, IMAGE_HEIGHT));
+        mark_image_view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        // change text height.
+        this.textView.setHeight(IMAGE_HEIGHT);
     }
 
     /**
@@ -73,7 +137,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
      * @param int Background Color.
      */
     public void setBackgroundColor(int color) {
-        this.textView.setBackgroundColor(color);
+        this.layout.setBackgroundColor(color);
     }
 
     /**
@@ -97,12 +161,41 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
      * @param is_checked Specified Check Status.
      */
     public void setCheckedImage(boolean is_checked) {
-        Drawable check_image = null;
+
         if( is_checked ) {
-            Resources resources = activity.getResources();
-            check_image = resources.getDrawable(R.drawable.circle_red);
+            // create linear layout for image view.
+            createLinearLayoutForImageView();
+
+            Resources resources = this.activity.getResources();
+            Drawable check_image = resources.getDrawable(R.drawable.circle_red);
+
+            // create view image.
+            ImageView check_image_view = new ImageView(this.activity);
+            check_image_view.setImageDrawable(check_image);
+            this.image_layout.addView(check_image_view);
+
+            check_image_view.setLayoutParams(new LinearLayout.LayoutParams(IMAGE_WIDTH, IMAGE_HEIGHT));
+            check_image_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+            // change text height.
+            this.textView.setHeight(IMAGE_HEIGHT);
+        } else {
+            if( null != this.image_layout ) this.image_layout.removeAllViews();
         }
-        this.textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, check_image);
+    }
+
+    /**
+     * @brief Create LinearLayout for ImageView.
+     */
+    private void createLinearLayoutForImageView() {
+        if( null != this.image_layout ) return;
+
+        this.image_layout = new LinearLayout(this.activity);
+        this.layout.addView(this.image_layout);
+        this.image_layout.setOrientation(0);
+        this.image_layout.setGravity(Gravity.CENTER_HORIZONTAL);
+        this.image_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                                                                        LinearLayout.LayoutParams.WRAP_CONTENT));
     }
 
     // Getter.

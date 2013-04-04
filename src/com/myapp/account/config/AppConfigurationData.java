@@ -83,8 +83,7 @@ public class AppConfigurationData {
      */
     public void saveEstimateMoney(int estimate_money) throws RuntimeException {
         try {
-            String start_date = Utility.getStartDateOfMonth(this.activity, Utility.getCurrentDate());
-            String estimate_target_date = Utility.getEstimateTargetDate(this.activity, start_date);
+            String estimate_target_date = Utility.getEstimateTargetDate(this.activity, getCurrentDate());
 
             // Check Exsit Record.
             if( this.estimateTable.isEstimateRecord(estimate_target_date) ) {
@@ -110,6 +109,13 @@ public class AppConfigurationData {
         Editor edit_config = this.appConfig.edit();
         edit_config.putString(START_DAY_KEY, start_day);
         edit_config.commit();
+    }
+
+    /**
+     * @brief Get Current Date.
+     */
+    private String getCurrentDate() {
+        return Utility.getCurrentDate();
     }
 
     // Getter.

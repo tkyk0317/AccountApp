@@ -2,19 +2,22 @@ package com.myapp.account.calendar;
 
 import java.util.*;
 import java.text.*;
+
 import android.util.Log;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.graphics.Color;
+import android.widget.ImageView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.view.MotionEvent;
+
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.calendar.AccountCalendarCell;
+import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.observer.ClickObserverInterface;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
@@ -24,19 +27,20 @@ import com.myapp.account.database.AccountTableAccessor;
  */
 public class AccountCalendar implements ClickObserverInterface {
 
-    protected Activity activity;
-    protected List<AccountCalendarCell> calendarCells = new ArrayList<AccountCalendarCell>(CALENDAR_DAY_OF_WEEK_NUM*CALENDAR_ROW_NUM);
-    protected ClickObserverInterface observer;
-    protected AccountCalendarCell currentCell;
-    protected LinearLayout layout;
-    protected String appearDate;
-    protected AccountTableAccessor accountTableAccessor;
-    protected String firstDateOfMonth;
-    protected String lastDateOfMonth;
-    protected static final int CALENDAR_DAY_OF_WEEK_NUM = 7;
-    protected static final int CALENDAR_ROW_NUM = 6;
-    protected static final int WEEK_OF_SATURDAY = 5;
-    protected static final int WEEK_OF_SUNDAY = 6;
+    private Activity activity;
+    private List<AccountCalendarCell> calendarCells = new ArrayList<AccountCalendarCell>(CALENDAR_DAY_OF_WEEK_NUM*CALENDAR_ROW_NUM);
+    private ClickObserverInterface observer;
+    private AccountCalendarCell currentCell;
+    private LinearLayout layout;
+    private AppConfigurationData appConfigData;
+    private String appearDate;
+    private AccountTableAccessor accountTableAccessor;
+    private String firstDateOfMonth;
+    private String lastDateOfMonth;
+    private static final int CALENDAR_DAY_OF_WEEK_NUM = 7;
+    private static final int CALENDAR_ROW_NUM = 6;
+    private static final int WEEK_OF_SATURDAY = 5;
+    private static final int WEEK_OF_SUNDAY = 6;
 
     /**
      * @brief Constractor.
@@ -44,6 +48,7 @@ public class AccountCalendar implements ClickObserverInterface {
     public AccountCalendar(Activity activity, LinearLayout layout) {
         this.activity = activity;
         this.layout = layout;
+        this.appConfigData = new AppConfigurationData(this.activity);
         this.accountTableAccessor = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
         getCalendarItems();
     }
@@ -58,67 +63,70 @@ public class AccountCalendar implements ClickObserverInterface {
 
         clearCalendarItems();
         createCalendar();
+        setStartDayMarker();
+        setUnderlineToCurrentDay();
         focusCurrentDate();
     }
 
     /**
      * @brief Clear Calendar Items.
      */
-    protected void clearCalendarItems() {
+    private void clearCalendarItems() {
         for( AccountCalendarCell cell : this.calendarCells ) {
             cell.setDate(0, 0, 0, 0, null);
             cell.setText("");
             cell.setCheckedImage(false);
             cell.setClickable(false);
+            cell.setUnderline(false);
         }
     }
 
     /**
      * @brief Get CalendarItems.
      */
-    protected void getCalendarItems() {
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_0), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_1), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_2), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_3), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_4), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_5), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_6), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_7), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_8), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_9), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_10), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_11), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_12), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_13), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_14), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_15), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_16), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_17), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_18), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_19), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_20), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_21), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_22), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_23), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_24), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_25), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_26), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_27), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_28), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_29), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_30), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_31), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_32), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_33), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_34), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_35), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_36), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_37), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_38), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_39), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_40), this.activity) );
-        calendarCells.add( new AccountCalendarCell( (TextView)this.layout.findViewById(R.id.calendar_cell_41), this.activity) );
+    private void getCalendarItems() {
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_0), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_1), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_2), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_3), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_4), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_5), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_6), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_7), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_8), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_9), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_10), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_11), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_12), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_13), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_14), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_15), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_16), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_17), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_18), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_19), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_20), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_21), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_22), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_23), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_24), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_25), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_26), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_27), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_28), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_29), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_30), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_31), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_32), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_33), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_34), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_35), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_36), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_37), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_38), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_39), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_40), this.activity) );
+        this.calendarCells.add( new AccountCalendarCell( (LinearLayout)this.layout.findViewById(R.id.calendar_cell_layout_41), this.activity) );
     }
 
     /**
@@ -132,7 +140,7 @@ public class AccountCalendar implements ClickObserverInterface {
     /**
       * @brief Create Calendar.
       */
-    protected void createCalendar() {
+    private void createCalendar() {
         int day = 1;
         int year = Integer.valueOf(Utility.splitYear(this.appearDate));
         int month = Integer.valueOf(Utility.splitMonth(this.appearDate));
@@ -142,7 +150,7 @@ public class AccountCalendar implements ClickObserverInterface {
         // Create Calendar.
         for( int row = 0 ; row < CALENDAR_ROW_NUM ; ++row ) {
             for( int week = 0 ; week < CALENDAR_DAY_OF_WEEK_NUM ; ++week ) {
-                AccountCalendarCell cell = calendarCells.get(row * CALENDAR_DAY_OF_WEEK_NUM + week );
+                AccountCalendarCell cell = this.calendarCells.get(row * CALENDAR_DAY_OF_WEEK_NUM + week );
                 cell.attachObserver(this);
 
                 if( row * CALENDAR_DAY_OF_WEEK_NUM + week >= st_pos && row * CALENDAR_DAY_OF_WEEK_NUM + week <= end_pos ) {
@@ -162,11 +170,42 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
+     * @brief Set Marker to Start Day.
+     */
+    private void setStartDayMarker() {
+        int start_position = getStartPosition();
+        int last_day = Integer.valueOf(Utility.splitDay(Utility.getLastDateOfTargetMonth(this.appearDate)));
+        int start_day = this.appConfigData.getStartDay();
+
+        if( start_day > last_day ) start_day = last_day;
+
+        // set marker.
+        this.calendarCells.get(start_position + start_day - 1).setStartDayMarker();
+    }
+
+    /**
+     * @brief Set Underline to Current Day.
+     */
+    private void setUnderlineToCurrentDay() {
+        String current_date = Utility.getCurrentDate();
+        String appear_year_month = Utility.splitYearAndMonth(this.appearDate);
+        String current_year_month = Utility.splitYearAndMonth(current_date);
+
+        if( true == appear_year_month.equals(current_year_month) ) {
+            int current_day = Integer.valueOf(Utility.splitDay(current_date));
+            int start_position = getStartPosition();
+
+            // set marker to current day.
+            this.calendarCells.get(current_day + start_position - 1).setUnderline(true);
+        }
+    }
+
+    /**
      * @brief Set Checked Image at Calendar Cell.
      * @param cell AccountCalendarCell Instance.
      * @param date Calendar Date.
      */
-    protected void setCheckImageAtCell(AccountCalendarCell cell, String date) {
+    private void setCheckImageAtCell(AccountCalendarCell cell, String date) {
         if( this.accountTableAccessor.isExsitRecordAtTargetDate(date) ) {
             cell.setCheckedImage(true);
         }
@@ -175,24 +214,24 @@ public class AccountCalendar implements ClickObserverInterface {
     /**
       * @brief Focus Current Date.
       */
-    protected void focusCurrentDate() {
-        if( null != currentCell ) {
+    private void focusCurrentDate() {
+        if( null != this.currentCell ) {
             Resources resources = activity.getResources();
-            currentCell.setBackgroundColor(resources.getColor(R.color.default_background));
+            this.currentCell.setBackgroundColor(resources.getColor(R.color.default_background));
         }
 
-        currentCell = calendarCells.get(getStartPosition() + Integer.valueOf(Utility.splitDay(this.appearDate)) - 1);
+        this.currentCell = this.calendarCells.get(getStartPosition() + Integer.valueOf(Utility.splitDay(this.appearDate)) - 1);
 
         // color setting.
         Resources resources = activity.getResources();
-        currentCell.setBackgroundColor(resources.getColor(R.color.focus_background));
+        this.currentCell.setBackgroundColor(resources.getColor(R.color.focus_background));
     }
 
     /**
      * @brief Get Calendar Start Position.
      * @return int Calendar Start Position.
      */
-    protected int getStartPosition() {
+    private int getStartPosition() {
         // calednar start if index zero(day of week start is index one).
         return Utility.getDayOfWeek(this.firstDateOfMonth) - 1;
     }
@@ -201,7 +240,7 @@ public class AccountCalendar implements ClickObserverInterface {
      * @brief Get Calendar End Position.
      * @return int Calendar End Position.
      */
-    protected int getEndPosition() {
+    private int getEndPosition() {
         int cal_st_pos = getStartPosition();
         int end_month = Integer.valueOf(Utility.splitDay(this.lastDateOfMonth));
 
@@ -251,14 +290,14 @@ public class AccountCalendar implements ClickObserverInterface {
     /**
      * @brief Focus Current Calendar Cell.
      */
-    protected void focusCurrentCell(AccountCalendarCell current_cell) {
+    private void focusCurrentCell(AccountCalendarCell current_cell) {
         // previous cell setting.
         Resources resources = activity.getResources();
-        currentCell.setBackgroundColor(resources.getColor(R.color.default_background));
+        this.currentCell.setBackgroundColor(resources.getColor(R.color.default_background));
 
         // current cell setteing.
-        currentCell = current_cell;
-        currentCell.setBackgroundColor(resources.getColor(R.color.focus_background));
+        this.currentCell = current_cell;
+        this.currentCell.setBackgroundColor(resources.getColor(R.color.focus_background));
     }
 
     // not implement.

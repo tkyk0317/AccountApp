@@ -40,7 +40,7 @@ public class TitleArea
     private void displayTitle() {
         TextView date_title = (TextView) activity.findViewById(R.id.date_title);
         String title = (Utility.splitYear(this.currentDate) + this.activity.getText(R.string.year_str).toString());
-        title += (Utility.splitMonth(this.currentDate) + this.activity.getText(R.string.account_title_suffix).toString());
+        title += (Utility.splitMonth(this.currentDate) + this.activity.getText(R.string.month_str).toString());
         date_title.setText(title);
     }
 
