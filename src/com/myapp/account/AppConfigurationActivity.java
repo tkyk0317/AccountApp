@@ -1,8 +1,10 @@
 package com.myapp.account;
 
 import java.util.*;
+import java.lang.CharSequence;
 import java.lang.NumberFormatException;
 import java.lang.RuntimeException;
+
 import android.os.Bundle;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -14,6 +16,9 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 
 import com.myapp.account.R;
+import com.myapp.account.database.DatabaseHelper;
+import com.myapp.account.database.UserTableAccessor;
+import com.myapp.account.database.UserTableRecord;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.config.AppConfigurationData;
 
@@ -22,7 +27,8 @@ import com.myapp.account.config.AppConfigurationData;
  */
 public class AppConfigurationActivity extends PreferenceActivity {
 
-    private AppConfigurationData appConfiguration;
+    private AppConfigurationData appConfiguration = null;
+    private UserTableAccessor userTable = null;
 
     /**
      * @brief Called the Activity is First Created.
@@ -33,6 +39,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
 
         init();
         addPreferencesFromResource(R.xml.configuration);
+        createUserNameListPreference();
         displaySummary();
         registEvent();
     }
@@ -42,6 +49,32 @@ public class AppConfigurationActivity extends PreferenceActivity {
      */
     private void init() {
         this.appConfiguration = new AppConfigurationData(this);
+        this.userTable = new UserTableAccessor(new DatabaseHelper(this.getApplicationContext()));
+    }
+
+    /**
+     * @brief Create Preference for UserName.
+     */
+    private void createUserNameListPreference() {
+        ListPreference user_name_list_preference = (ListPreference)findPreference(this.appConfiguration.getTargetUserKey());
+        List<UserTableRecord> user_records = this.userTable.getAllRecord();
+
+        // add entry values.
+        ArrayList<CharSequence> entriesList = new ArrayList<CharSequence>();
+        ArrayList<CharSequence> entryValuesList = new ArrayList<CharSequence>();
+
+        for( UserTableRecord record : user_records ) {
+            String user_name = record.getName();
+            entriesList.add(user_name.subSequence(0, user_name.length()));
+            entryValuesList.add(user_name.subSequence(0, user_name.length()));
+        }
+
+        // set entry.
+        CharSequence[] entries = entriesList.toArray(new CharSequence[] {});
+        CharSequence[] entryValues = entryValuesList.toArray(new CharSequence[] {});
+
+        user_name_list_preference.setEntries(entries);
+        user_name_list_preference.setEntryValues(entryValues);
     }
 
     /**
@@ -49,7 +82,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
       */
     private void displaySummary() {
         CheckBoxPreference estimate_config = (CheckBoxPreference)findPreference(this.appConfiguration.getEstimateKey());
-        EditTextPreference user_config = (EditTextPreference)findPreference(this.appConfiguration.getTargetUserKey());
+        ListPreference user_config = (ListPreference)findPreference(this.appConfiguration.getTargetUserKey());
         ListPreference start_day_config = (ListPreference)findPreference(this.appConfiguration.getStartDayKey());
 
         if( this.appConfiguration.getEstimate() ) {
@@ -100,18 +133,18 @@ public class AppConfigurationActivity extends PreferenceActivity {
                 });
 
         // UserName Changed Event.
-        EditTextPreference user_pref = (EditTextPreference)findPreference(this.appConfiguration.getTargetUserKey());
+        ListPreference user_pref = (ListPreference)findPreference(this.appConfiguration.getTargetUserKey());
         user_pref.setOnPreferenceChangeListener(
                 new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference pref, Object value) {
-                        EditTextPreference user_config = (EditTextPreference)pref;
+                        ListPreference user_name_pref = (ListPreference)pref;
                         String user_name = value.toString();
 
                         // save target user name.
                         appConfiguration.saveUserName(user_name);
 
                         // display summary.
-                        user_config.setSummary(user_name);
+                        user_name_pref.setSummary(user_name);
                         return true;
                     }
                 });

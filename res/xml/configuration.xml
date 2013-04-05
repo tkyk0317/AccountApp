@@ -25,11 +25,10 @@
             android:entries="@array/start_day_array"
             android:entryValues="@array/start_day_value_array"
             />
-        <EditTextPreference
+        <ListPreference
             android:key="target_user_configuration"
             android:title="@string/target_user_configuration_title"
             android:summary=""
-            android:defaultValue="default"
             />
     </PreferenceCategory>
 </PreferenceScreen>

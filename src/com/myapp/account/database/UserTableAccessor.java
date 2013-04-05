@@ -17,14 +17,14 @@ public class UserTableAccessor {
 
     protected SQLiteDatabase readDatabase = null;
     protected SQLiteDatabase writeDatabase = null;
+    protected SQLiteOpenHelper helper = null;
     protected static final String TABLE_NAME = "UserTable";
 
     /**
      * @brief Constractor.
      */
     public UserTableAccessor(SQLiteOpenHelper helper) {
-        if( null == this.readDatabase ) this.readDatabase = helper.getReadableDatabase();
-        if( null == this.writeDatabase ) this.writeDatabase = helper.getWritableDatabase();
+        this.helper = helper;
     }
 
     /**
@@ -35,16 +35,24 @@ public class UserTableAccessor {
         try {
             super.finalize();
         } finally {
-            terminate();
+            close();
         }
     }
 
     /**
-     * @brief Terminate process.
+     * @brief close process.
      */
-    public void terminate() {
-        this.readDatabase.close();
-        this.writeDatabase.close();
+    public void close() {
+        if( null != this.readDatabase ) this.readDatabase.close(); this.readDatabase = null;
+        if( null != this.writeDatabase ) this.writeDatabase.close(); this.writeDatabase = null;
+    }
+
+    /**
+     * @brief open Database.
+     */
+    private void open() {
+        if( null == this.readDatabase ) this.readDatabase = this.helper.getReadableDatabase();
+        if( null == this.writeDatabase ) this.writeDatabase = this.helper.getWritableDatabase();
     }
 
     /**
@@ -53,6 +61,7 @@ public class UserTableAccessor {
      * @return UserTableRecord Instance.
      */
     public UserTableRecord getRecord(int key) {
+        open();
         Cursor cursor = readDatabase.query(TABLE_NAME, null , "_id=?", new String[] {String.valueOf(key)}, null, null, null);
 
         UserTableRecord record = new UserTableRecord();
@@ -60,6 +69,7 @@ public class UserTableAccessor {
             record.set(cursor);
         }
         cursor.close();
+        close();
         return record;
     }
 
@@ -68,6 +78,7 @@ public class UserTableAccessor {
      * @return All UserTableRecord in UserTable.
      */
     public List<UserTableRecord> getAllRecord() {
+        open();
         Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, null, null);
         cursor.moveToFirst();
         int record_count = cursor.getCount();
@@ -79,6 +90,7 @@ public class UserTableAccessor {
             cursor.moveToNext();
         }
         cursor.close();
+        close();
         return record_list;
     }
 
@@ -88,6 +100,7 @@ public class UserTableAccessor {
      * @return Insert Record Key(_id).
      */
     public long insert(UserTableRecord record) {
+        open();
         ContentValues insert_record = new ContentValues();
 
         insert_record.put("name", record.getName() );
@@ -95,7 +108,10 @@ public class UserTableAccessor {
         insert_record.put("insert_date", Utility.getCurrentDate() );
 
         // insert record.
-        return writeDatabase.insert(TABLE_NAME, null, insert_record);
+        long key = writeDatabase.insert(TABLE_NAME, null, insert_record);
+
+        close();
+        return key;
     }
 
     /**
@@ -108,7 +124,10 @@ public class UserTableAccessor {
         update_record.put("update_date", record.getUpdateDate());
         update_record.put("insert_date", record.getInsertDate());
 
-        return writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
+        int key = writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
+
+        close();
+        return key;
     }
 }
 
