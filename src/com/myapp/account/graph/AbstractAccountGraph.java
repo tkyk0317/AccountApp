@@ -49,7 +49,6 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
     protected static final int GRAPH_LEGEND_SIZE = 15;
     protected static final float GRAPH_SCALE = 1.00F;
     protected static final float GRAPH_START_ANGLE = -90.0F;
-    protected static final String SLASH_STRING = "/";
     protected static final String MONEY_DELIMITER = ":";
 
     /**
@@ -238,7 +237,7 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
      */
     protected String getStartDateOfMonth() {
         AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        return Utility.getStartDateOfMonth(this.activity, this.targetDate, app_config.getStartDay());
+        return Utility.getStartDateOfMonth(this.targetDate, app_config.getStartDay());
     }
 
     /**
@@ -248,7 +247,7 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
      */
     protected String getEndDateOfMonth() {
         AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        return Utility.getEndDateOfMonth(this.activity, this.targetDate, app_config.getStartDay());
+        return Utility.getEndDateOfMonth(this.targetDate, app_config.getStartDay());
     }
 
     /**

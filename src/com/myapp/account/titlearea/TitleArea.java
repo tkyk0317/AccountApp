@@ -40,10 +40,9 @@ public class TitleArea
      * @brief Display Title.
      */
     private void displayTitle() {
-        TextView date_title = (TextView) activity.findViewById(R.id.date_title);
-        String title = (Utility.splitYear(this.currentDate) + this.activity.getText(R.string.year_str).toString());
-        title += (Utility.splitMonth(this.currentDate) + this.activity.getText(R.string.month_str).toString());
-        date_title.setText(title);
+        TextView date_title = (TextView)this.activity.findViewById(R.id.date_title);
+        String day_of_week_str = Utility.getDayOfWeekString(Utility.getDayOfWeek(this.currentDate), this.activity);
+        date_title.setText(this.currentDate + DAY_OF_WEEK_PREFIX + day_of_week_str + DAY_OF_WEEK_SUFIX);        String title = (Utility.splitYear(this.currentDate) + this.activity.getText(R.string.year_str).toString());
     }
 
     /**
@@ -53,6 +52,6 @@ public class TitleArea
      */
     private String getEstimateTargetDate() {
         AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        return Utility.getEstimateTargetDate(this.activity, this.currentDate, app_config.getStartDay());
+        return Utility.getEstimateTargetDate(this.currentDate, app_config.getStartDay());
     }
 }

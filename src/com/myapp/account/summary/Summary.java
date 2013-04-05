@@ -122,7 +122,7 @@ public class Summary {
      */
     private String getStartDateOfMonth() {
         AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        return Utility.getStartDateOfMonth(this.activity, this.currentDate, app_config.getStartDay());
+        return Utility.getStartDateOfMonth(this.currentDate, app_config.getStartDay());
     }
 
     /**
@@ -132,7 +132,7 @@ public class Summary {
      */
     private String getEndDateOfMonth() {
         AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        return Utility.getEndDateOfMonth(this.activity, this.currentDate, app_config.getStartDay());
+        return Utility.getEndDateOfMonth(this.currentDate, app_config.getStartDay());
     }
 }
 

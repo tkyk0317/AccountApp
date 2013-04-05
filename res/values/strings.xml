@@ -50,10 +50,10 @@
     <string name="payment_pie_chart_title_suffix">月度支出グラフ</string>
     <string name="income_graph_title_suffix">月度収入グラフ</string>
     <string name="year_str">年</string>
-    <string name="month_str">月度</string>
+    <string name="month_str">月</string>
     <string name="graph_no_data">データがありません</string>
     <string name="payment_line_chart_title_suffix">年度支出グラフ</string>
-    <string name="payment_sum_title">支出合計</string>
+    <string name="payment_sum_title">合計</string>
     <string name="add_category_dialog_title">カテゴリ追加</string>
     <string name="kind_label_spinner">選択してください</string>
     <string name="add_category_message">カテゴリを追加しました</string>
@@ -63,4 +63,5 @@
     <string name="start_day_title">月の開始日</string>
     <string name="day_unit_string">日</string>
     <string name="estimate_money_summary_suffix">月度予算：</string>
+    <string name="payment_period">期間</string>
 </resources>

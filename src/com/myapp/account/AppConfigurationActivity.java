@@ -176,7 +176,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
      */
     private String getEstimateTargetDate() {
         String current_date = Utility.getCurrentDate();
-        return Utility.getEstimateTargetDate(this, current_date, appConfiguration.getStartDay());
+        return Utility.getEstimateTargetDate(current_date, appConfiguration.getStartDay());
     }
 }
 

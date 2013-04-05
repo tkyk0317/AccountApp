@@ -21,9 +21,11 @@ import com.myapp.account.database.AccountTableRecord;
  */
 public class AccountPaymentPieGraphImpl extends AbstractAccountGraph {
 
-    private static final String SUM_MONEY_TITLE_DELIMITER = ":";
-    private static final String SUM_MONEY_TITLE_BEFORE_STRING = "[";
-    private static final String SUM_MONEY_TITLE_AFTER_STRING = "]";
+    private static final String SPACE = "　";
+    private static final String PERIOD_DELIMITER = "-";
+    private static final String SUMMARY_TITLE_DELIMITER = ":";
+    private static final String SUMMARY_TITLE_BEFORE_STRING = "[";
+    private static final String SUMMARY_TITLE_AFTER_STRING = "]";
 
     /**
      * @brief Constractor.
@@ -66,18 +68,25 @@ public class AccountPaymentPieGraphImpl extends AbstractAccountGraph {
      * @brief Display Sum money.
      */
     protected void displaySumMoney() {
-        TextView sum_money_text = new TextView(this.activity);
+        TextView summary_text = new TextView(this.activity);
         int sum_money = getTotalPaymentMoney();
 
-        // setting sum money.
-        sum_money_text.setGravity(Gravity.CENTER);
-        String display_text = SUM_MONEY_TITLE_BEFORE_STRING;
-        display_text += (this.activity.getText(R.string.payment_sum_title).toString() + SUM_MONEY_TITLE_DELIMITER);
-        display_text += (String.format("%,d", sum_money) + this.activity.getText(R.string.money_unit).toString());
-        display_text += SUM_MONEY_TITLE_AFTER_STRING;
-        sum_money_text.setText(display_text);
+        // setting period.
+        String display_text = SUMMARY_TITLE_BEFORE_STRING;
+        display_text += (this.activity.getText(R.string.payment_period).toString() + SUMMARY_TITLE_DELIMITER);
+        display_text += Utility.splitMonthAndDay(getStartDateOfMonth());
+        display_text += PERIOD_DELIMITER;
+        display_text += Utility.splitMonthAndDay(getEndDateOfMonth());
+        display_text += SPACE;
 
-        this.chartArea.addView(sum_money_text);
+        // setting sum money.
+        summary_text.setGravity(Gravity.CENTER);
+        display_text += (this.activity.getText(R.string.payment_sum_title).toString() + SUMMARY_TITLE_DELIMITER);
+        display_text += (String.format("%,d", sum_money) + this.activity.getText(R.string.money_unit).toString());
+        display_text += SUMMARY_TITLE_AFTER_STRING;
+        summary_text.setText(display_text);
+
+        this.chartArea.addView(summary_text);
     }
 
     /**

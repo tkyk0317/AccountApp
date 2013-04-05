@@ -13,9 +13,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 
+import com.myapp.account.utility.Utility;
+import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.graph.AbstractAccountGraph;
 import com.myapp.account.graph.AccountPaymentPieGraphImpl;
-import com.myapp.account.utility.Utility;
 import com.myapp.account.observer.ClickObserverInterface;
 
 /**
@@ -106,7 +107,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
      */
     private void displayGraphTitle() {
         TextView graph_title = (TextView)findViewById(R.id.graph_title);
-        String title = Utility.splitYearAndMonth(this.currentDate) + getText(R.string.payment_pie_chart_title_suffix).toString();
+        String title = Utility.splitYearAndMonth(getStartDateOfMonth(this.currentDate)) + getText(R.string.payment_pie_chart_title_suffix).toString();
         graph_title.setText(title.replaceAll(SLASH_STRING, getString(R.string.year_str).toString()));
     }
 
@@ -156,9 +157,9 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
      */
     private void setCurrentDate(float velocity_x) {
         if( velocity_x < 0 ) {
-            this.currentDate = Utility.getNextMonthDate(currentDate);
+            this.currentDate = getNextMonthDate(this.currentDate);
         } else {
-            this.currentDate = Utility.getPreviousMonthDate(currentDate);
+            this.currentDate = getPreviousMonthDate(this.currentDate);
         }
     }
 
@@ -185,14 +186,48 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
      */
     private void animationGraph(float velocity_x) {
         if( velocity_x < 0 ) {
-            this.viewFlipper.setInAnimation(rightInAnimation);
-            this.viewFlipper.setOutAnimation(leftOutAnimation);
+            this.viewFlipper.setInAnimation(this.rightInAnimation);
+            this.viewFlipper.setOutAnimation(this.leftOutAnimation);
             this.viewFlipper.showNext();
         } else {
-            this.viewFlipper.setInAnimation(leftInAnimation);
-            this.viewFlipper.setOutAnimation(rightOutAnimation);
+            this.viewFlipper.setInAnimation(this.leftInAnimation);
+            this.viewFlipper.setOutAnimation(this.rightOutAnimation);
             this.viewFlipper.showPrevious();
         }
+    }
+
+    /**
+     * @brief Get Start Date of Month.
+     *
+     * @param target_date start date of month.
+     *
+     * @return
+     */
+    private String getStartDateOfMonth(String target_date) {
+        AppConfigurationData app_config = new AppConfigurationData(this);
+        return Utility.getStartDateOfMonth(target_date, app_config.getStartDay());
+    }
+
+    /**
+     * @brief Get Next Month Date.
+     *
+     * @param target_date target date of next month.
+     *
+     * @return next month date.
+     */
+    private String getNextMonthDate(String target_date) {
+        return Utility.getNextMonthDate(target_date);
+    }
+
+    /**
+     * @brief Get Previous Month Date.
+     *
+     * @param target_date target date of previous month.
+     *
+     * @return previous month date.
+     */
+    private String getPreviousMonthDate(String target_date) {
+        return Utility.getPreviousMonthDate(target_date);
     }
 
     // not support.

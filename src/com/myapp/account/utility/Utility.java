@@ -242,51 +242,56 @@ public class Utility {
     /**
      * @brief Get Start Date of Month.
      *
-     * @param activity Activity Instance.
      * @param target_date target date.
+     * @param start_day start day of month.
      *
      * @return start date.
      */
-    public static String getStartDateOfMonth(Activity activity, String target_date, int start_day) {
-        Calendar start_date = Calendar.getInstance(TimeZone.getDefault());
+    public static String getStartDateOfMonth(String target_date, int start_day) {
+        Calendar start_date_cal = Calendar.getInstance(TimeZone.getDefault());
         int year = Integer.valueOf(target_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
         int month = Integer.valueOf(target_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
         int day = Integer.valueOf(target_date.substring(DATE_DAY_ST_POS));
 
-        start_date.set(year, month - 1, day);
+        start_date_cal.set(year, month - 1, day);
 
         // check last day of current month.
-        String last_date_of_month = getLastDateOfTargetMonth(target_date);
+        int original_start_day = start_day;
+        String start_date = new SimpleDateFormat(DATE_FORMAT).format(start_date_cal.getTime());
+        String last_date_of_month = getLastDateOfTargetMonth(start_date);
         int last_day_of_month = Integer.valueOf(splitDay(last_date_of_month));
         if( start_day > last_day_of_month ) {
             start_day = last_day_of_month;
         }
 
         // check start day and current day.
-        if( start_day > start_date.get(Calendar.DAY_OF_MONTH) ) {
-            start_date.add(Calendar.MONTH, -1);
+        if( start_day > start_date_cal.get(Calendar.DAY_OF_MONTH) ) {
+            // recovery start day.
+            start_day = original_start_day;
+            start_date_cal.add(Calendar.MONTH, -1);
 
-            // check last day and start day.
-            String last_date = new SimpleDateFormat(DATE_FORMAT).format(start_date.getTime());
-            int last_day = Integer.valueOf(splitDay(getLastDateOfTargetMonth(last_date)));
-            if( start_day > last_day ) start_day = last_day;
+            // check last day of current month again.
+            start_date = new SimpleDateFormat(DATE_FORMAT).format(start_date_cal.getTime());
+            last_date_of_month = getLastDateOfTargetMonth(start_date);
+            last_day_of_month = Integer.valueOf(splitDay(last_date_of_month));
+            if( start_day >= last_day_of_month ) {
+                start_day = last_day_of_month;
+            }
         }
-        start_date.set(Calendar.DAY_OF_MONTH, start_day);
-
-        return (new SimpleDateFormat(DATE_FORMAT)).format(start_date.getTime());
+        start_date_cal.set(Calendar.DAY_OF_MONTH, start_day);
+        return (new SimpleDateFormat(DATE_FORMAT)).format(start_date_cal.getTime());
     }
 
     /**
      * @brief Get End Date of Month.
      *
-     * @param activity Activity Instance.
      * @param current_date current date(yyyy/mm/dd).
      * @param start_day start day of month.
      *
      * @return end date.
      */
-    public static String getEndDateOfMonth(Activity activity, String current_date, int start_day) {
-        String start_date = Utility.getStartDateOfMonth(activity, current_date, start_day);
+    public static String getEndDateOfMonth(String current_date, int start_day) {
+        String start_date = Utility.getStartDateOfMonth(current_date, start_day);
         Calendar end_date = Calendar.getInstance(TimeZone.getDefault());
 
         int year = Integer.valueOf(start_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
@@ -298,13 +303,14 @@ public class Utility {
 
         // calculate estimate end date.
         end_date.add(Calendar.MONTH, 1);
-        end_date.add(Calendar.DAY_OF_MONTH, -1);
 
         // check start_day and calculated day.
         String last_date = new SimpleDateFormat(DATE_FORMAT).format(end_date.getTime());
         last_date = getLastDateOfTargetMonth(last_date);
         int last_day = Integer.valueOf(splitDay(last_date));
-        if( start_day - 1 < last_day ) end_date.set(Calendar.DAY_OF_MONTH, start_day - 1);
+        if( start_day - 1 < last_day ) last_day = start_day - 1;
+
+        end_date.set(Calendar.DAY_OF_MONTH, last_day);
 
         return (new SimpleDateFormat(DATE_FORMAT)).format(end_date.getTime());
     }
@@ -312,14 +318,13 @@ public class Utility {
     /**
      * @brief Get Estimate Target Date.
      *
-     * @param activity activity instance.
      * @param target_date spcified date(yyyy/mm/dd).
      * @param start_day start day of month.
      *
      * @return estimate target date(yyyy/mm/dd).
      */
-    public static String getEstimateTargetDate(Activity activity, String target_date, int start_day) {
-        String estimate_target_date = Utility.getStartDateOfMonth(activity, target_date, start_day);
+    public static String getEstimateTargetDate(String target_date, int start_day) {
+        String estimate_target_date = Utility.getStartDateOfMonth(target_date, start_day);
         return Utility.splitYearAndMonth(estimate_target_date) + DATE_DELIMITER + MONTH_OF_FIRST_DAY;
     }
 

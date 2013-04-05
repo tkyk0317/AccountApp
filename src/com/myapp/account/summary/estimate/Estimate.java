@@ -133,7 +133,7 @@ public class Estimate {
         this.estimateRecord = this.estimateTable.getRecordAtTargetDate(Utility.splitYearAndMonth(estimate_target_date));
 
         // clear all views.
-        TableLayout summary_table = (TableLayout) activity.findViewById(R.id.summary_table);
+        TableLayout summary_table = (TableLayout)activity.findViewById(R.id.summary_table);
         summary_table.removeAllViews();
 
         TableRow table_row = new TableRow(activity);
@@ -226,7 +226,7 @@ public class Estimate {
      * @return start date.
      */
     private String getStartDateOfMonth(String target_date) {
-        return Utility.getStartDateOfMonth(this.activity, target_date, this.appConfigData.getStartDay());
+        return Utility.getStartDateOfMonth(target_date, this.appConfigData.getStartDay());
     }
 
     /**
@@ -237,7 +237,7 @@ public class Estimate {
      * @return end date.
      */
     private String getEndDateOfMonth(String target_date) {
-        return Utility.getEndDateOfMonth(this.activity, target_date, this.appConfigData.getStartDay());
+        return Utility.getEndDateOfMonth(target_date, this.appConfigData.getStartDay());
     }
 
     /**
@@ -248,7 +248,7 @@ public class Estimate {
      * @return target date.
      */
     private String getEstimateTargetDate(String target_date) {
-        return Utility.getEstimateTargetDate(this.activity, target_date, this.appConfigData.getStartDay());
+        return Utility.getEstimateTargetDate(target_date, this.appConfigData.getStartDay());
     }
 
     /**

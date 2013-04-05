@@ -74,7 +74,7 @@ public abstract class AbstractInfoArea {
      */
     protected String getStartDateOfMonth() {
         AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        return Utility.getStartDateOfMonth(this.activity, this.displayDate, app_config.getStartDay());
+        return Utility.getStartDateOfMonth(this.displayDate, app_config.getStartDay());
     }
 
     /**
@@ -84,7 +84,7 @@ public abstract class AbstractInfoArea {
      */
     protected String getEndDateOfMonth() {
         AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        return Utility.getEndDateOfMonth(this.activity, this.displayDate, app_config.getStartDay());
+        return Utility.getEndDateOfMonth(this.displayDate, app_config.getStartDay());
     }
 
     /**

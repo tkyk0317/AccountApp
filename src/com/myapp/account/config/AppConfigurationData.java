@@ -64,6 +64,7 @@ public class AppConfigurationData {
         Editor edit_config = this.appConfig.edit();
         edit_config.putBoolean(ESTIMATE_KEY, is_estimate);
         edit_config.commit();
+        readConfigurationData();
     }
 
     /**
@@ -74,6 +75,7 @@ public class AppConfigurationData {
         Editor edit_config = this.appConfig.edit();
         edit_config.putString(USER_TARGET_KEY, user_name);
         edit_config.commit();
+        readConfigurationData();
     }
 
     /**
@@ -96,6 +98,7 @@ public class AppConfigurationData {
                 estimate_record.setEstimateTargetDate(Utility.splitYearAndMonth(estimate_target_date));
                 this.estimateTable.insert(estimate_record);
             }
+            readConfigurationData();
         } catch (RuntimeException error) {
             throw new RuntimeException();
         }
@@ -110,6 +113,7 @@ public class AppConfigurationData {
         Editor edit_config = this.appConfig.edit();
         edit_config.putString(START_DAY_KEY, start_day);
         edit_config.commit();
+        readConfigurationData();
     }
 
     /**
@@ -126,7 +130,7 @@ public class AppConfigurationData {
      */
     private String getEstimateTargetDate() {
         String current_date = getCurrentDate();
-        return Utility.getEstimateTargetDate(this.activity, current_date, getStartDay());
+        return Utility.getEstimateTargetDate(current_date, getStartDay());
     }
 
     // Getter.

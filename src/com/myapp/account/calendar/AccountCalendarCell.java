@@ -186,6 +186,8 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
      * @param is_checked Specified Check Status.
      */
     public void setCheckedImage(boolean is_checked) {
+        // set text only size.
+        this.textView.setHeight(TEXT_ONLY_HEIGHT);
 
         if( is_checked ) {
             // create linear layout for image view.
