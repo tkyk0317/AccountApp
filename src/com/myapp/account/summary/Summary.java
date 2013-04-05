@@ -1,10 +1,12 @@
 package com.myapp.account.summary;
 
+import android.util.Log;
 import android.app.Activity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.view.Gravity;
+import android.widget.LinearLayout;
 
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
@@ -22,6 +24,10 @@ public class Summary {
     private Estimate estimateInfo;
     private AccountTableAccessor accountTable;
     private String currentDate;
+    private static final String PERIOD_BEFORE_STRING = "[";
+    private static final String PERIOD_AFTER_STRING = "]";
+    private static final String PERIOD_DELIMITER = "-";
+    private static final String PERIOD_COLON = ":";
     private static final int TEXT_FONT_SIZE = 15;
 
     /**
@@ -41,9 +47,44 @@ public class Summary {
     public void appear(String target_date) {
         this.currentDate = target_date;
 
+        // create start and date info.
+        createStartAndEndDateInfo();
+
         // appear estimate area.
         this.estimateInfo.appear(this.currentDate);
 
+        // create summary info.
+        createSummaryInfo();
+    }
+
+    /**
+     * @brief Create Start and End Date of Month Infomation.
+     */
+    private void createStartAndEndDateInfo() {
+        String start_date = Utility.splitMonthAndDay(getStartDateOfMonth());
+        String end_date = Utility.splitMonthAndDay(getEndDateOfMonth());
+        String info_text = PERIOD_BEFORE_STRING;
+        info_text += (this.activity.getText(R.string.payment_period).toString() + PERIOD_COLON);
+        info_text += (start_date + PERIOD_DELIMITER + end_date);
+        info_text += PERIOD_AFTER_STRING;
+
+        // set text view.
+        TextView info_text_view = new TextView(this.activity);
+        info_text_view.setTextSize(TEXT_FONT_SIZE);
+        info_text_view.setGravity(Gravity.CENTER);
+        info_text_view.setText(info_text);
+
+        // Create Table.
+        LinearLayout layout = (LinearLayout)this.activity.findViewById(R.id.summary_period_info_area);
+        layout.removeAllViews();
+        layout.addView(info_text_view, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                                                     LinearLayout.LayoutParams.WRAP_CONTENT));
+    }
+
+    /**
+     * @brief Create Summary Infomation.
+     */
+    private void createSummaryInfo() {
         TableRow table_row = new TableRow(this.activity.getApplicationContext());
         insertIncomeIntoTableRow(table_row);
         insertPaymentIntoTableRow(table_row);

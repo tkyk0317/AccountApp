@@ -134,7 +134,6 @@ public class Estimate {
 
         // clear all views.
         TableLayout summary_table = (TableLayout)activity.findViewById(R.id.summary_table);
-        summary_table.removeAllViews();
 
         TableRow table_row = new TableRow(activity);
         insertEstimateMoneyIntoTableRow(table_row);

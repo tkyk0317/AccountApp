@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp"
         >
         <TextView
             android:id="@+id/date_title"
@@ -70,12 +69,19 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingBottom="5dp"
-        android:paddingTop="5dp"
+        android:paddingTop="2dp"
+        />
+    <LinearLayout
+        android:id="@+id/summary_period_info_area"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="3dp"
         >
         <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/summary_table"
@@ -85,16 +91,6 @@
             >
         </TableLayout>
     </LinearLayout>
-    <ImageView
-        android:src="@android:drawable/divider_horizontal_dark"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        />
     <ViewFlipper android:id="@+id/calendar_flipper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
