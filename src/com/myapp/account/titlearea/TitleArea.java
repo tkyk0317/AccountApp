@@ -4,8 +4,10 @@ import java.util.*;
 import android.app.Activity;
 import android.widget.TextView;
 import android.content.Context;
+
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
+import com.myapp.account.config.AppConfigurationData;
 
 /**
  * @brief TitleArea Class
@@ -50,6 +52,7 @@ public class TitleArea
      * @return estimate target date.
      */
     private String getEstimateTargetDate() {
-        return Utility.getEstimateTargetDate(this.activity, this.currentDate);
+        AppConfigurationData app_config = new AppConfigurationData(this.activity);
+        return Utility.getEstimateTargetDate(this.activity, this.currentDate, app_config.getStartDay());
     }
 }

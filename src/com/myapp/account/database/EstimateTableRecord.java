@@ -31,13 +31,14 @@ public class EstimateTableRecord {
         update_date = cursor.getString(DatabaseIndex.UPDATE_DATE.getIndex());
         insert_date = cursor.getString(DatabaseIndex.INSERT_DATE.getIndex());
     }
-    public void setEstimateMoney(int money) { estimate_money = money; }
+    public void setEstimateMoney(int money) { this.estimate_money = money; }
+    public void setEstimateTargetDate(String date) { this.target_date = date; }
 
     // Getter.
-    public int getId() { return id; }
-    public int getEstimateMoney() { return estimate_money; }
-    public String getTargetDate() { return target_date; }
-    public String getUpdateDate() { return update_date; }
-    public String getInsertDate() { return insert_date; }
+    public int getId() { return this.id; }
+    public int getEstimateMoney() { return this.estimate_money; }
+    public String getTargetDate() { return this.target_date; }
+    public String getUpdateDate() { return this.update_date; }
+    public String getInsertDate() { return this.insert_date; }
 }
 

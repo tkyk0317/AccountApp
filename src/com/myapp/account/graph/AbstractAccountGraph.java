@@ -18,6 +18,7 @@ import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
+import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.observer.ClickObserverInterface;
 
@@ -236,7 +237,8 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
      * @return start_date.
      */
     protected String getStartDateOfMonth() {
-        return Utility.getStartDateOfMonth(this.activity, this.targetDate);
+        AppConfigurationData app_config = new AppConfigurationData(this.activity);
+        return Utility.getStartDateOfMonth(this.activity, this.targetDate, app_config.getStartDay());
     }
 
     /**
@@ -245,7 +247,8 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
      * @return end date.
      */
     protected String getEndDateOfMonth() {
-        return Utility.getEndDateOfMonth(this.activity, this.targetDate);
+        AppConfigurationData app_config = new AppConfigurationData(this.activity);
+        return Utility.getEndDateOfMonth(this.activity, this.targetDate, app_config.getStartDay());
     }
 
     /**

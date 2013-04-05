@@ -13,6 +13,7 @@ import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.observer.ClickObserverInterface;
+import com.myapp.account.config.AppConfigurationData;
 
 /**
  * @brief AbstractInfoArea Class.
@@ -72,7 +73,8 @@ public abstract class AbstractInfoArea {
      * @return start_date.
      */
     protected String getStartDateOfMonth() {
-        return Utility.getStartDateOfMonth(this.activity, this.displayDate);
+        AppConfigurationData app_config = new AppConfigurationData(this.activity);
+        return Utility.getStartDateOfMonth(this.activity, this.displayDate, app_config.getStartDay());
     }
 
     /**
@@ -81,8 +83,10 @@ public abstract class AbstractInfoArea {
      * @return end date.
      */
     protected String getEndDateOfMonth() {
-        return Utility.getEndDateOfMonth(this.activity, this.displayDate);
+        AppConfigurationData app_config = new AppConfigurationData(this.activity);
+        return Utility.getEndDateOfMonth(this.activity, this.displayDate, app_config.getStartDay());
     }
+
     /**
      * @brief Get AccountTable Record.
      * @return AccounTable record List.

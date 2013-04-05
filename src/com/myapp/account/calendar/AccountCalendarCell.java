@@ -17,6 +17,7 @@ import android.view.GestureDetector.OnGestureListener;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
@@ -29,7 +30,9 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
 
     private Activity activity = null;
     private LinearLayout layout = null;
-    private LinearLayout image_layout = null;
+    private RelativeLayout image_layout = null;
+    private ImageView startMarkerImage = null;
+    private ImageView exsitRecordImage = null;
     private TextView textView = null;
     private int year = 0;
     private int month = 0;
@@ -38,9 +41,9 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     private String date = null;
     private ClickObserverInterface observer = null;
     private GestureDetector gestureDetector = null;
-    private static final int IMAGE_WIDTH = 16;
-    private static final int IMAGE_HEIGHT = 16;
-    private static final int TEXT_ONLY_HEIGHT = 32;
+    private static final int IMAGE_WIDTH = 12;
+    private static final int IMAGE_HEIGHT = 18;
+    private static final int TEXT_ONLY_HEIGHT = IMAGE_HEIGHT * 2;
 
     /**
      * @brief Constractor.
@@ -56,6 +59,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
         this.textView.setHeight(TEXT_ONLY_HEIGHT);
         this.textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         this.textView.setOnTouchListener(this);
+
 
         this.gestureDetector = new GestureDetector(this.activity, this);
     }
@@ -121,12 +125,24 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
         Resources resources = this.activity.getResources();
         Drawable mark_image = resources.getDrawable(R.drawable.start_sign);
 
-        ImageView mark_image_view = new ImageView(this.activity);
-        mark_image_view.setImageDrawable(mark_image);
-        this.image_layout.addView(mark_image_view);
+        this.startMarkerImage = new ImageView(this.activity);
+        this.startMarkerImage.setId(ImageId.START_DAY_IMAGE.getId());
+        this.startMarkerImage.setImageDrawable(mark_image);
+        this.startMarkerImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        mark_image_view.setLayoutParams(new LinearLayout.LayoutParams(IMAGE_WIDTH, IMAGE_HEIGHT));
-        mark_image_view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        // add view.
+        RelativeLayout.LayoutParams layout_params = new RelativeLayout.LayoutParams(IMAGE_WIDTH, IMAGE_HEIGHT);
+
+        // check layout item num.
+        if( 0 < this.image_layout.getChildCount() ) {
+            // add again exsit image.
+            RelativeLayout.LayoutParams exsit_image_param = (RelativeLayout.LayoutParams)this.exsitRecordImage.getLayoutParams();
+            exsit_image_param.addRule(RelativeLayout.LEFT_OF, ImageId.RELATIVE_LAYOUT.getId());
+            layout_params.addRule(RelativeLayout.RIGHT_OF, ImageId.EXSIT_ACCOUNT_DATA_IMAGE.getId());
+        } else {
+            layout_params.addRule(RelativeLayout.CENTER_HORIZONTAL, ImageId.RELATIVE_LAYOUT.getId());
+        }
+        this.image_layout.addView(this.startMarkerImage, layout_params);
 
         // change text height.
         this.textView.setHeight(IMAGE_HEIGHT);
@@ -157,6 +173,15 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     }
 
     /**
+     * @brief Clear Image.
+     */
+    public void clearImage() {
+        if( null != this.image_layout ) this.image_layout.removeAllViews();
+        this.startMarkerImage = null;
+        this.exsitRecordImage = null;
+    }
+
+    /**
      * @brief Set Checked Image.
      * @param is_checked Specified Check Status.
      */
@@ -170,17 +195,18 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
             Drawable check_image = resources.getDrawable(R.drawable.circle_red);
 
             // create view image.
-            ImageView check_image_view = new ImageView(this.activity);
-            check_image_view.setImageDrawable(check_image);
-            this.image_layout.addView(check_image_view);
+            this.exsitRecordImage = new ImageView(this.activity);
+            this.exsitRecordImage.setId(ImageId.EXSIT_ACCOUNT_DATA_IMAGE.getId());
+            this.exsitRecordImage.setImageDrawable(check_image);
+            this.exsitRecordImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
-            check_image_view.setLayoutParams(new LinearLayout.LayoutParams(IMAGE_WIDTH, IMAGE_HEIGHT));
-            check_image_view.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            // add view.
+            RelativeLayout.LayoutParams layout_params = new RelativeLayout.LayoutParams(IMAGE_WIDTH, IMAGE_HEIGHT);
+            layout_params.addRule(RelativeLayout.CENTER_HORIZONTAL, ImageId.RELATIVE_LAYOUT.getId());
+            this.image_layout.addView(this.exsitRecordImage, layout_params);
 
             // change text height.
             this.textView.setHeight(IMAGE_HEIGHT);
-        } else {
-            if( null != this.image_layout ) this.image_layout.removeAllViews();
         }
     }
 
@@ -190,11 +216,11 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     private void createLinearLayoutForImageView() {
         if( null != this.image_layout ) return;
 
-        this.image_layout = new LinearLayout(this.activity);
+        this.image_layout = new RelativeLayout(this.activity);
+        this.image_layout.setId(ImageId.RELATIVE_LAYOUT.getId());
         this.layout.addView(this.image_layout);
-        this.image_layout.setOrientation(0);
         this.image_layout.setGravity(Gravity.CENTER_HORIZONTAL);
-        this.image_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+        this.image_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                                                                         LinearLayout.LayoutParams.WRAP_CONTENT));
     }
 
@@ -223,15 +249,6 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     }
 
     /**
-     * @brief Long Click Event.
-     * @return true:handle the event false:not handle the event.
-     */
-    @Override
-    public void onLongPress(MotionEvent e) {
-        if( null != this.observer ) this.observer.notifyLongClick(this);
-    }
-
-    /**
      * @brief Flick Event.
      * @return true:handle the event false:not handle the event.
      */
@@ -248,6 +265,20 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     public void onShowPress(MotionEvent e) {}
     @Override
     public boolean onSingleTapUp(MotionEvent e) { return false; }
+    @Override
+    public void onLongPress(MotionEvent e) {}
+
+    /**
+     * @brief Image ID Class.
+     */
+    private enum ImageId {
+        START_DAY_IMAGE(0), EXSIT_ACCOUNT_DATA_IMAGE(1), RELATIVE_LAYOUT(2);
+
+        private final int id;
+
+        private ImageId(int id) { this.id = id; }
+        public int getId() { return this.id; }
+    }
 }
 
 

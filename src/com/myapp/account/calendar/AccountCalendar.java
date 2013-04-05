@@ -76,7 +76,7 @@ public class AccountCalendar implements ClickObserverInterface {
             cell.setDate(0, 0, 0, 0, null);
             cell.setText("");
             cell.setCheckedImage(false);
-            cell.setClickable(false);
+            cell.clearImage();
             cell.setUnderline(false);
         }
     }
@@ -263,20 +263,6 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-     * @brief Long Click Event from AccountCalendarCell Instance.
-     * @param event Account Calendar Cell Instance.
-     */
-    @Override
-    public void notifyLongClick(Object event) {
-        if( true == Utility.isStringNULL(((AccountCalendarCell)event).getDate()) ) return;
-
-        // focus current cell.
-        focusCurrentCell((AccountCalendarCell)event);
-
-        if( null != this.observer ) this.observer.notifyLongClick(event);
-    }
-
-    /**
      * @brief Onfiling Event.
      */
     @Override
@@ -300,9 +286,10 @@ public class AccountCalendar implements ClickObserverInterface {
         this.currentCell.setBackgroundColor(resources.getColor(R.color.focus_background));
     }
 
-    // not implement.
+    // not supported.
     @Override
-    public void notifyLongClickForDailyInfo(Object event) {}
+    public void notifyLongClick(Object event) {
+    }
 }
 
 

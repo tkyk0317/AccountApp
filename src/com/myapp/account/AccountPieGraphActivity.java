@@ -198,7 +198,6 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
     // not support.
     public void notifyClick(Object event) {}
     public void notifyLongClick(Object event) {}
-    public void notifyLongClickForDailyInfo(Object event) {}
 
     /**
      * @brief Graph Index Enum.

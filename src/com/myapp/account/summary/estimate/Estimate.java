@@ -13,6 +13,7 @@ import android.text.InputType;
 import android.text.InputFilter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
@@ -31,6 +32,7 @@ public class Estimate {
     private AccountTableAccessor accountTable;
     private Activity activity;
     private String currentDate;
+    private AppConfigurationData appConfigData;
     private static boolean isAlertFlag = false;
     private static final int ESTIMATE_MONEY_DIGITS = 9;
     private static final int TABLE_FIRST_INDEX = 0;
@@ -43,8 +45,9 @@ public class Estimate {
      */
     public Estimate(Activity activity) {
         this.activity = activity;
-        estimateTable = new EstimateTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
-        accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
+        this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
+        this.accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
+        this.appConfigData= new AppConfigurationData(this.activity);
     }
 
     /**
@@ -56,7 +59,7 @@ public class Estimate {
             this.currentDate = target_date;
             if( true == isTargetDate(this.currentDate) &&
                 false == isEnableEstimateMoney() &&
-                true == Utility.getCurrentDate().equals(this.currentDate) ) {
+                true == equalsCurrentDateAndTargetDate() ) {
                 displayAlertMessage();
             }
             displayEstimate();
@@ -68,8 +71,7 @@ public class Estimate {
      * @return true if estimate function is enable.
      */
     private boolean isEstimate() {
-        AppConfigurationData app_config = new AppConfigurationData(activity);
-        if( app_config.getEstimate() ) {
+        if( this.appConfigData.getEstimate() ) {
             return true;
         }
         return false;
@@ -81,8 +83,8 @@ public class Estimate {
      * @return true:target date false:not target date.
      */
     private boolean isTargetDate(String target_date) {
-        String start_date = getStartDateOfMonth();
-        String end_date = getEndDateOfMonth();
+        String start_date = getStartDateOfMonth(getCurrentDate());
+        String end_date = getEndDateOfMonth(getCurrentDate());
 
         // same start_date or end_date.
         if( start_date.compareTo(target_date) == 0 || end_date.compareTo(target_date) == 0 ) {
@@ -100,7 +102,7 @@ public class Estimate {
       * @return true if estimate money is enable.
       */
     private boolean isEnableEstimateMoney() {
-        String estimate_target_date = getEstimateTargetDate();
+        String estimate_target_date = getEstimateTargetDate(getCurrentDate());
         EstimateTableRecord record = this.estimateTable.getRecordAtTargetDate(Utility.splitYearAndMonth(estimate_target_date));
         if( 0 == record.getEstimateMoney() ) {
             return false;
@@ -109,10 +111,25 @@ public class Estimate {
     }
 
     /**
+    * @brief Check equals current date and target date.
+    *
+    * @return true:equal false:not equal.
+    */
+    private boolean equalsCurrentDateAndTargetDate() {
+        String current_year_month = Utility.splitYearAndMonth(getCurrentDate());
+        String target_year_month = Utility.splitYearAndMonth(getEstimateTargetDate(this.currentDate));
+
+        if( true == current_year_month.equals(target_year_month) ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * @brief Display Estimate.
      */
     private void displayEstimate() {
-        String estimate_target_date = getEstimateTargetDate();
+        String estimate_target_date = getEstimateTargetDate(this.currentDate);
         this.estimateRecord = this.estimateTable.getRecordAtTargetDate(Utility.splitYearAndMonth(estimate_target_date));
 
         // clear all views.
@@ -196,37 +213,51 @@ public class Estimate {
      * @return Payment Total Money.
      */
     private int getPaymentTotalMoney() {
-        String start_date = getStartDateOfMonth();
-        String end_date = getEndDateOfMonth();
+        String start_date = getStartDateOfMonth(this.currentDate);
+        String end_date = getEndDateOfMonth(this.currentDate);
         return this.accountTable.getTotalPaymentAtTargetDate(start_date, end_date);
     }
 
     /**
      * @brief Get Start Date Of Month.
      *
+     * @param target_date target_date of start date.
+     *
      * @return start date.
      */
-    private String getStartDateOfMonth() {
-        return Utility.getStartDateOfMonth(this.activity, this.currentDate);
+    private String getStartDateOfMonth(String target_date) {
+        return Utility.getStartDateOfMonth(this.activity, target_date, this.appConfigData.getStartDay());
     }
 
     /**
      * @brief Get End Date Of Month.
      *
+     * @param target_date target_date of end date.
+     *
      * @return end date.
      */
-    private String getEndDateOfMonth() {
-        return Utility.getEndDateOfMonth(this.activity, this.currentDate);
+    private String getEndDateOfMonth(String target_date) {
+        return Utility.getEndDateOfMonth(this.activity, target_date, this.appConfigData.getStartDay());
     }
 
     /**
      * @brief Get Estimate TargetDate.
      *
+     * @param target_date estimate target date.
+     *
      * @return target date.
      */
-    private String getEstimateTargetDate() {
-        return Utility.getEstimateTargetDate(this.activity, this.currentDate);
+    private String getEstimateTargetDate(String target_date) {
+        return Utility.getEstimateTargetDate(this.activity, target_date, this.appConfigData.getStartDay());
     }
 
+    /**
+     * @brief Get Current Date.
+     *
+     * @return current date string.
+     */
+    private String getCurrentDate() {
+        return Utility.getCurrentDate();
+    }
 }
 

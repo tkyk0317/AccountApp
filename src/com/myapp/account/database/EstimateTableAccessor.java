@@ -17,14 +17,14 @@ public class EstimateTableAccessor {
 
     protected SQLiteDatabase readDatabase = null;
     protected SQLiteDatabase writeDatabase = null;
+    protected SQLiteOpenHelper helper = null;
     protected static final String TABLE_NAME = "EstimateTable";
 
     /**
      * @brief Constractor.
      */
     public EstimateTableAccessor(SQLiteOpenHelper helper) {
-        if( null == this.readDatabase ) this.readDatabase = helper.getReadableDatabase();
-        if( null == this.writeDatabase ) this.writeDatabase = helper.getWritableDatabase();
+        this.helper = helper;
     }
 
     /**
@@ -35,16 +35,24 @@ public class EstimateTableAccessor {
         try {
             super.finalize();
         } finally {
-            terminate();
+            close();
         }
     }
 
     /**
-     * @brief Terminate process.
+     * @brief close process.
      */
-    public void terminate() {
-        this.readDatabase.close();
-        this.writeDatabase.close();
+    public void close() {
+        if( null != this.readDatabase ) this.readDatabase.close(); this.readDatabase = null;
+        if( null != this.writeDatabase ) this.writeDatabase.close(); this.writeDatabase = null;
+    }
+
+    /**
+     * @brief open Database.
+     */
+    private void open() {
+        if( null == this.readDatabase ) this.readDatabase = this.helper.getReadableDatabase();
+        if( null == this.writeDatabase ) this.writeDatabase = this.helper.getWritableDatabase();
     }
 
     /**
@@ -52,15 +60,17 @@ public class EstimateTableAccessor {
      * @return EstimateRecord Instance.
      */
     public EstimateTableRecord getRecordWithCurrentMonth() {
+        open();
+
         String current_year_month = Utility.getCurrentYearAndMonth();
-        Cursor cursor =
-            readDatabase.query(TABLE_NAME, null, "target_date=?", new String[] {current_year_month}, null, null, null, null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "target_date=?", new String[] {current_year_month}, null, null, null, null);
 
         EstimateTableRecord record = new EstimateTableRecord();
         if( true == cursor.moveToFirst() ) {
             record.set(cursor);
         }
         cursor.close();
+        close();
         return record;
     }
 
@@ -71,6 +81,7 @@ public class EstimateTableAccessor {
      *
      */
     public EstimateTableRecord getRecordAtTargetDate(String target_date) {
+        open();
         Cursor cursor = readDatabase.query(TABLE_NAME, null, "target_date=?", new String[] {target_date}, null, null, null, null);
 
         EstimateTableRecord record = new EstimateTableRecord();
@@ -78,6 +89,7 @@ public class EstimateTableAccessor {
             record.set(cursor);
         }
         cursor.close();
+        close();
         return record;
     }
 
@@ -87,6 +99,7 @@ public class EstimateTableAccessor {
      * @return true:exsit false:not exsit.
      */
     public boolean isEstimateRecord(String target_date) {
+        open();
         Cursor cursor = readDatabase.query(TABLE_NAME, null, "target_date=?", new String[] {target_date}, null, null, null, null);
 
         boolean ret = false;
@@ -96,6 +109,7 @@ public class EstimateTableAccessor {
             }
         }
         cursor.close();
+        close();
         return ret;
     }
 
@@ -105,15 +119,18 @@ public class EstimateTableAccessor {
      * @return Insert Record Key(_id).
      */
     public long insert(EstimateTableRecord record) {
+        open();
         ContentValues insert_record = new ContentValues();
 
         insert_record.put("money", record.getEstimateMoney() );
-        insert_record.put("target_date", Utility.getCurrentYearAndMonth() );
+        insert_record.put("target_date", record.getTargetDate() );
         insert_record.put("update_date", Utility.getCurrentDate() );
         insert_record.put("insert_date", Utility.getCurrentDate() );
 
         // insert record.
-        return writeDatabase.insert(TABLE_NAME, null, insert_record);
+        long is_insert = writeDatabase.insert(TABLE_NAME, null, insert_record);
+        close();
+        return is_insert;
     }
 
     /**
@@ -121,13 +138,17 @@ public class EstimateTableAccessor {
      * @param record EstimateTableRecord Instance.
      */
     public int update(EstimateTableRecord record) {
+        open();
+
         ContentValues update_record = new ContentValues();
         update_record.put("money", record.getEstimateMoney());
         update_record.put("target_date", record.getTargetDate());
         update_record.put("update_date", record.getUpdateDate());
         update_record.put("insert_date", record.getInsertDate());
 
-        return writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
+        int is_update = writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
+        close();
+        return is_update;
     }
 }
 

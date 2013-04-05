@@ -58,6 +58,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     private TextView returnCurrentMonthView;
     private ImageView pieGraphImage;
     private ImageView lineGraphImage;
+    private ImageView addAccountImage;
     private AppConfigurationData appConfigData;
     private static final int ANIMATION_DURATION = 300;
 
@@ -97,11 +98,11 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.applicationMenu = new ApplicationMenu(this);
         this.currentCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.current_flipper));
         this.nextCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.next_flipper));
-        this.currentDate = Utility.getCurrentDate();
+        this.currentDate = getCurrentDate();
         this.appConfigData = new AppConfigurationData(this);
 
-        // init graph image.
-        initGraphImage();
+        // init image.
+        initImage();
 
         // not display return current month view.
         this.returnCurrentMonthView.setClickable(false);
@@ -123,13 +124,15 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * @brief Initalize Graph Image.
+     * @brief Initalize Image.
      */
-    private void initGraphImage() {
+    private void initImage() {
         this.pieGraphImage = (ImageView)findViewById(R.id.account_pie_chart_image);
         this.pieGraphImage.setImageDrawable(getResources().getDrawable(R.drawable.pie_chart));
         this.lineGraphImage = (ImageView)findViewById(R.id.account_line_chart_image);
         this.lineGraphImage.setImageDrawable(getResources().getDrawable(R.drawable.line_chart));
+        this.addAccountImage = (ImageView)findViewById(R.id.add_account_image);
+        this.addAccountImage.setImageDrawable(getResources().getDrawable(R.drawable.add_master));
     }
 
     /**
@@ -161,9 +164,11 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.returnCurrentMonthView.setId(ViewId.CALENDAR_VIEW.getId());
         this.pieGraphImage.setId(ViewId.PIE_GRAPH_VIEW.getId());
         this.lineGraphImage.setId(ViewId.LINE_GRAPH_VIEW.getId());
+        this.addAccountImage.setId(ViewId.ADD_ACCOUNT_VIEW.getId());
         this.returnCurrentMonthView.setOnClickListener(this);
         this.pieGraphImage.setOnClickListener(this);
         this.lineGraphImage.setOnClickListener(this);
+        this.addAccountImage.setOnClickListener(this);
     }
 
     /**
@@ -180,6 +185,8 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
             moveToPieChartActivity();
         } else if(id == ViewId.LINE_GRAPH_VIEW.getId()) {
             moveToLineChartActivity();
+        } else if(id == ViewId.ADD_ACCOUNT_VIEW.getId()) {
+            appearAddAccountDialog();
         }
     }
 
@@ -188,14 +195,14 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     private void moveToCurrentCalendar() {
         float velocity_x = 0;
-        String current_date = Utility.getCurrentDate();
+        String current_date = getCurrentDate();
 
         if( this.currentDate.compareTo(current_date) < 0 ) {
             velocity_x = -1; // past than current.
         } else {
             velocity_x = 1; // future than current.
         }
-        this.currentDate = Utility.getCurrentDate();
+        this.currentDate = current_date;
         moveToNextCalendar(velocity_x);
     }
 
@@ -215,6 +222,15 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         Intent intent = new Intent( this, AccountLineGraphActivity.class);
         intent.putExtra(AccountLineGraphActivity.INTENT_VALUE_KEY_CURRENT_DATE, this.currentDate);
         startActivity(intent);
+    }
+
+    /**
+     * @brief Appear Account Add Dialog.
+     */
+    private void appearAddAccountDialog() {
+        AccountAdd account_add = new AccountAdd(this);
+        account_add.attachObserver(this);
+        account_add.appear(this.currentDate);
     }
 
     /**
@@ -257,6 +273,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.returnCurrentMonthView = null;
         this.pieGraphImage = null;
         this.lineGraphImage = null;
+        this.addAccountImage = null;
         this.appConfigData = null;
     }
 
@@ -314,39 +331,30 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     private boolean isSummaryReflesh(AccountCalendarCell cell) {
         int start_day = this.appConfigData.getStartDay();
-        int cell_day = Integer.valueOf(Utility.splitDay(cell.getDate()));
-        int current_day = Integer.valueOf(Utility.splitDay(this.currentDate));
+        int last_day = Integer.valueOf(Utility.splitDay(getLastDateOfTargetMonth(cell.getDate())));
 
-        if( current_day < start_day && start_day <= cell_day ) {
+        // check lastday and current day.
+        if( start_day > last_day ) start_day = last_day;
+
+        int current_day = Integer.valueOf(Utility.splitDay(cell.getDate()));
+        int previous_day = Integer.valueOf(Utility.splitDay(this.currentDate));
+
+        // check reflesh timing.
+        if( previous_day < start_day && start_day <= current_day ) {
             return true;
         }
-        if( current_day >= start_day && cell_day < start_day ) {
+        if( previous_day >= start_day && current_day < start_day ) {
             return true;
         }
         return false;
     }
 
     /**
-     * @brief Notify Long Click from Subject(AccountCalendar).
-     * @param event AccountCalendarCell Instance.
-     */
-    @Override
-    public void notifyLongClick(Object event) {
-        AccountCalendarCell cell = (AccountCalendarCell)event;
-
-        // AccountAdd Displayed.
-        this.currentDate = cell.getDate();
-        AccountAdd account_add = new AccountAdd(this);
-        account_add.attachObserver(this);
-        account_add.appear(currentDate);
-    }
-
-    /**
-     * @brief Notify Long Click from DailyInfoArea.
+     * @brief Notify Long Click.
      * @param event DailyInfoRecord Instance.
      */
     @Override
-    public void notifyLongClickForDailyInfo(Object event) {
+    public void notifyLongClick(Object event) {
         this.currentDate = ((DailyInfoRecord)event).getAccountDate();
 
         // Modify dialog Display.
@@ -370,9 +378,9 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     private void setCurrentDate(float velocity_x) {
         if( velocity_x < 0 ) {
-            this.currentDate = Utility.getNextMonthDate(this.currentDate);
+            this.currentDate = getNextMonthDate(this.currentDate);
         } else {
-            this.currentDate = Utility.getPreviousMonthDate(this.currentDate);
+            this.currentDate = getPreviousMonthDate(this.currentDate);
         }
     }
 
@@ -461,6 +469,48 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
+     * @brief Get Next Month Date.
+     *
+     * @param target_date target date of next month.
+     *
+     * @return next month date.
+     */
+    private String getNextMonthDate(String target_date) {
+        return Utility.getNextMonthDate(target_date);
+    }
+
+    /**
+     * @brief Get Previous Month Date.
+     *
+     * @param target_date target date of previous month.
+     *
+     * @return previous month date.
+     */
+    private String getPreviousMonthDate(String target_date) {
+        return Utility.getPreviousMonthDate(target_date);
+    }
+
+    /**
+     * @brief Get Current Date.
+     *
+     * @return current date.
+     */
+    private String getCurrentDate() {
+        return Utility.getCurrentDate();
+    }
+
+    /**
+     * @brief Get Last Date of Month.
+     *
+     * @param target_date target_date of month.
+     *
+     * @return last date.
+     */
+    private String getLastDateOfTargetMonth(String target_date) {
+        return Utility.getLastDateOfTargetMonth(target_date);
+    }
+
+    /**
      * @brief Calendar Index Enum.
      */
     private enum CalendarIndex {
@@ -471,7 +521,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * @brief View ID Class.
      */
     private enum ViewId {
-        CALENDAR_VIEW(0), PIE_GRAPH_VIEW(1), LINE_GRAPH_VIEW(2);
+        CALENDAR_VIEW(0), PIE_GRAPH_VIEW(1), LINE_GRAPH_VIEW(2), ADD_ACCOUNT_VIEW(3);
 
         private final int id;
 

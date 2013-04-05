@@ -11,6 +11,7 @@ import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.summary.estimate.Estimate;
+import com.myapp.account.config.AppConfigurationData;
 
 /**
  * @brief Summary Class.
@@ -120,7 +121,8 @@ public class Summary {
      * @return start_date.
      */
     private String getStartDateOfMonth() {
-        return Utility.getStartDateOfMonth(this.activity, this.currentDate);
+        AppConfigurationData app_config = new AppConfigurationData(this.activity);
+        return Utility.getStartDateOfMonth(this.activity, this.currentDate, app_config.getStartDay());
     }
 
     /**
@@ -129,7 +131,8 @@ public class Summary {
      * @return end date.
      */
     private String getEndDateOfMonth() {
-        return Utility.getEndDateOfMonth(this.activity, this.currentDate);
+        AppConfigurationData app_config = new AppConfigurationData(this.activity);
+        return Utility.getEndDateOfMonth(this.activity, this.currentDate, app_config.getStartDay());
     }
 }
 

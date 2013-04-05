@@ -31,7 +31,7 @@
     <string name="estimate_again_title">適切な予算を入力してください</string>
     <string name="configuration_title">アプリケーション設定</string>
     <string name="estimate_configuration_title">予算機能</string>
-    <string name="estimate_money_configuration_title">予算金額(今月)</string>
+    <string name="estimate_money_configuration_title">予算金額</string>
     <string name="target_user_configuration_title">対象ユーザー</string>
     <string name="menu_configuration_title">設定</string>
     <string name="menu_account_data_edit_title">編集</string>
@@ -62,4 +62,5 @@
     <string name="del_category_repletion_message">使用している項目は削除できません</string>
     <string name="start_day_title">月の開始日</string>
     <string name="day_unit_string">日</string>
+    <string name="estimate_money_summary_suffix">月度予算：</string>
 </resources>

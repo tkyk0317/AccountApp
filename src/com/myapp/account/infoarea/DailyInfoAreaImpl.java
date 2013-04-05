@@ -78,7 +78,7 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
                 focusCurrentRow((TableRow)event);
 
                 if( null != observer ) {
-                    observer.notifyLongClickForDailyInfo(event);
+                    observer.notifyLongClick(event);
                 }
                 return true;
             }

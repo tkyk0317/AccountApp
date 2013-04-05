@@ -1,11 +1,11 @@
 package com.myapp.account.config;
 
 import java.util.*;
+import java.text.*;
 import java.lang.RuntimeException;
 
 import android.util.Log;
 import android.app.Activity;
-import android.content.Context;
 import android.preference.PreferenceManager;
 import android.content.SharedPreferences;
 import android.content.Context;
@@ -21,13 +21,13 @@ import com.myapp.account.utility.Utility;
  */
 public class AppConfigurationData {
 
-    private Activity activity;
-    private SharedPreferences appConfig;
-    private boolean isEstimate;
-    private String userName;
-    private int startDayOfMonth;
-    private int estimateMoney;
-    private EstimateTableAccessor estimateTable;
+    static private SharedPreferences appConfig = null;
+    private Activity activity = null;
+    private boolean isEstimate = false;
+    private String userName = null;
+    private int startDayOfMonth = 0;
+    private int estimateMoney = 0;
+    private EstimateTableAccessor estimateTable = null;
     private final String ESTIMATE_KEY = "estimate_configuration";
     private final String ESTIMATE_MONEY_KEY = "estimate_money_configuration";
     private final String START_DAY_KEY = "start_day_configuration";
@@ -36,10 +36,10 @@ public class AppConfigurationData {
     /**
      * @brief Constractor.
      */
-    public AppConfigurationData(Context context) {
-        this.activity = (Activity)context;
-        this.appConfig = PreferenceManager.getDefaultSharedPreferences(context);
-        this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(context.getApplicationContext()));
+    public AppConfigurationData(Activity activity) {
+        this.activity = activity;
+        if( null == this.appConfig ) this.appConfig = PreferenceManager.getDefaultSharedPreferences(this.activity);
+        this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
         readConfigurationData();
     }
 
@@ -52,7 +52,7 @@ public class AppConfigurationData {
         this.userName = this.appConfig.getString(USER_TARGET_KEY, "default");
         this.startDayOfMonth = Integer.valueOf(this.appConfig.getString(START_DAY_KEY, "1"));
 
-        EstimateTableRecord record = this.estimateTable.getRecordWithCurrentMonth();
+        EstimateTableRecord record = this.estimateTable.getRecordAtTargetDate(Utility.splitYearAndMonth(getEstimateTargetDate()));
         this.estimateMoney = record.getEstimateMoney();
     }
 
@@ -83,7 +83,7 @@ public class AppConfigurationData {
      */
     public void saveEstimateMoney(int estimate_money) throws RuntimeException {
         try {
-            String estimate_target_date = Utility.getEstimateTargetDate(this.activity, getCurrentDate());
+            String estimate_target_date = getEstimateTargetDate();
 
             // Check Exsit Record.
             if( this.estimateTable.isEstimateRecord(estimate_target_date) ) {
@@ -93,6 +93,7 @@ public class AppConfigurationData {
             } else {
                 EstimateTableRecord estimate_record = new EstimateTableRecord();
                 estimate_record.setEstimateMoney(estimate_money);
+                estimate_record.setEstimateTargetDate(Utility.splitYearAndMonth(estimate_target_date));
                 this.estimateTable.insert(estimate_record);
             }
         } catch (RuntimeException error) {
@@ -116,6 +117,16 @@ public class AppConfigurationData {
      */
     private String getCurrentDate() {
         return Utility.getCurrentDate();
+    }
+
+    /**
+     * @brief Get EstimateTarget Date.
+     *
+     * @return estimate target date.
+     */
+    private String getEstimateTargetDate() {
+        String current_date = getCurrentDate();
+        return Utility.getEstimateTargetDate(this.activity, current_date, getStartDay());
     }
 
     // Getter.

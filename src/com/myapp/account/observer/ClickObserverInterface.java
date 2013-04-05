@@ -13,14 +13,9 @@ public interface ClickObserverInterface {
     public void notifyClick(Object event);
 
     /**
-     * @brief Notify Long Click.
-     */
-    public void notifyLongClick(Object event);
-
-    /**
      * @brief Notify Long Click for DailyInfo.
      */
-    public void notifyLongClickForDailyInfo(Object event);
+    public void notifyLongClick(Object event);
 
     /**
      * @brief Notify onFiling Event.
