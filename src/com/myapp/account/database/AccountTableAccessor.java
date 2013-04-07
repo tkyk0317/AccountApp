@@ -372,6 +372,28 @@ public class AccountTableAccessor {
     }
 
     /**
+     * @brief Get All Record(specified user_id).
+     * @return All AccountTableRecord in AccountMasterTable.
+     */
+    public List<AccountTableRecord> getAllRecordSpecifiedUserId(int user_id) {
+        open();
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , "user_id=?", new String[]{String.valueOf(user_id)},
+                                           null, null, null, null);
+        cursor.moveToFirst();
+        int record_count = cursor.getCount();
+        List<AccountTableRecord> record_list = new ArrayList<AccountTableRecord>(record_count+1);
+
+        for( int i = 0 ; i < record_count ; i++ ) {
+            record_list.add( new AccountTableRecord() );
+            record_list.get(i).set(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        close();
+        return record_list;
+    }
+
+    /**
      * @brief Get Income Total Money at Target Date.
      * @param start specify start date(yyyy/mm/dd).
      * @param end_date specify end date(yyyy/mm/dd).

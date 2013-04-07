@@ -99,17 +99,17 @@ public class AccountMasterTableAccessor {
         open();
         Cursor cursor = readDatabase.rawQuery("select * from " + TABLE_NAME + " where name = " + "'" + name + "'" + ";", null);
 
-        AccountMasterTableRecord record = new AccountMasterTableRecord();
-        cursor.moveToFirst();
-
         boolean is_exsit = false;
-        if( 0 < cursor.getCount() ) {
-            is_exsit = true;
+        if( true == cursor.moveToFirst() ) {
+            if( 0 < cursor.getCount() ) {
+                is_exsit = true;
+            }
         }
         cursor.close();
         close();
         return is_exsit;
     }
+
     /**
      * @brief Get All Record.
      * @return All AccountMasterTableRecord in AccountMasterTable.

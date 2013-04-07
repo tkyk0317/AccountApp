@@ -2,11 +2,13 @@ package com.myapp.account.database;
 
 import java.util.*;
 import java.text.*;
+
 import android.util.Log;
 import android.database.Cursor;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
+
 import com.myapp.account.database.UserTableRecord;
 import com.myapp.account.utility.Utility;
 
@@ -95,6 +97,26 @@ public class UserTableAccessor {
     }
 
     /**
+      * @brief Check Record Match the Name.
+      * @param name UserTableRecord.name String.
+      * @return true:exsit false:not exsit.
+      */
+    public boolean isExsitRecordMatchName(String name) {
+        open();
+        Cursor cursor = readDatabase.rawQuery("select * from " + TABLE_NAME + " where name = " + "'" + name + "'" + ";", null);
+
+        boolean is_exsit = false;
+        if( true == cursor.moveToFirst() ) {
+            if( 0 < cursor.getCount() ) {
+                is_exsit = true;
+            }
+        }
+        cursor.close();
+        close();
+        return is_exsit;
+    }
+
+    /**
      * @brief Insert Record in UserTable.
      * @param record UserTableRecord Instance.
      * @return Insert Record Key(_id).
@@ -108,7 +130,7 @@ public class UserTableAccessor {
         insert_record.put("insert_date", Utility.getCurrentDate() );
 
         // insert record.
-        long key = writeDatabase.insert(TABLE_NAME, null, insert_record);
+        long key = this.writeDatabase.insert(TABLE_NAME, null, insert_record);
 
         close();
         return key;
@@ -119,15 +141,32 @@ public class UserTableAccessor {
      * @param record UserTable Instance.
      */
     public int update(UserTableRecord record) {
+        open();
         ContentValues update_record = new ContentValues();
         update_record.put("name", record.getName());
         update_record.put("update_date", record.getUpdateDate());
         update_record.put("insert_date", record.getInsertDate());
 
-        int key = writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
+        Log.d("UserTableAccessor", "UserTable Primary Id : " + record.getId());
+        int key = this.writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
 
         close();
         return key;
     }
+
+    /*
+     * @brief Delete Record.
+     *
+     * @param key Delete Target id of UserTable.
+     *
+     * @return  deleteted key number.
+     */
+    public int delete(int key) {
+        open();
+        writeDatabase.delete(TABLE_NAME, "_id=" + String.valueOf(key), null);
+        close();
+        return key;
+    }
+
 }
 

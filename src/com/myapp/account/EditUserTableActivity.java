@@ -18,6 +18,8 @@ import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.UserTableAccessor;
 import com.myapp.account.database.UserTableRecord;
 import com.myapp.account.edit_user_table.EditUserTableRecord;
+import com.myapp.account.dialog.AddUserTableDialogImpl;
+import com.myapp.account.dialog.EditUserTableDialogImpl;
 
 /**
  * @brief Edit UserTable Activity.
@@ -28,6 +30,8 @@ public class EditUserTableActivity extends Activity implements OnClickListener, 
     private TableLayout tableLayout = null;
     private EditUserTableRecord currentRow = null;
     private ImageView addUserImage = null;
+    private AddUserTableDialogImpl addUserTableDialog = null;
+    private EditUserTableDialogImpl editUserTableDialog = null;
 
     /**
      * @brief Create Activity.
@@ -80,6 +84,12 @@ public class EditUserTableActivity extends Activity implements OnClickListener, 
         this.addUserImage.setImageDrawable(getResources().getDrawable(R.drawable.add_button));
         this.addUserImage.setId(ViewId.ADD_USER_TABLE.getId());
         this.addUserImage.setOnClickListener(this);
+        this.addUserTableDialog = new AddUserTableDialogImpl(this);
+        this.editUserTableDialog = new EditUserTableDialogImpl(this);
+
+        // attach observer.
+        this.addUserTableDialog.attachObserver(this);
+        this.editUserTableDialog.attachObserver(this);
 
         // init table layout.
         this.tableLayout = (TableLayout)findViewById(R.id.user_table_layout);
@@ -118,6 +128,7 @@ public class EditUserTableActivity extends Activity implements OnClickListener, 
         if(ViewId.USER_RECORD.getId() == event.getId()) {
             focusCurrentRow((EditUserTableRecord)event);
         } else if(ViewId.ADD_USER_TABLE.getId() == event.getId()) {
+            this.addUserTableDialog.appear();
         }
     }
 
@@ -141,6 +152,7 @@ public class EditUserTableActivity extends Activity implements OnClickListener, 
     @Override
     public boolean onLongClick(View event) {
         focusCurrentRow((EditUserTableRecord)event);
+        this.editUserTableDialog.appear((EditUserTableRecord)event);
         return true;
     }
 

@@ -33,11 +33,11 @@ public class AppConfigurationData {
     private int userNameId = 0;
     private EstimateTableAccessor estimateTable = null;
     private UserTableAccessor userTable = null;
-    private final String ESTIMATE_KEY = "estimate_configuration";
-    private final String ESTIMATE_MONEY_KEY = "estimate_money_configuration";
-    private final String START_DAY_KEY = "start_day_configuration";
-    private final String USER_TARGET_KEY = "target_user_configuration";
-    private final String USER_NAME_ID_DEFAULT = "1";
+    private static final String ESTIMATE_KEY = "estimate_configuration";
+    private static final String ESTIMATE_MONEY_KEY = "estimate_money_configuration";
+    private static final String START_DAY_KEY = "start_day_configuration";
+    private static final String USER_TARGET_KEY = "target_user_configuration";
+    public static final String USER_NAME_ID_DEFAULT = "1";
 
     /**
      * @brief Constractor.
