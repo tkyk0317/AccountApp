@@ -20,13 +20,14 @@ import com.myapp.account.config.AppConfigurationData;
  */
 public abstract class AbstractInfoArea {
 
-    protected Activity activity;
-    protected AccountTableAccessor accountTable;
-    protected AccountMasterTableAccessor masterTable;
-    protected String displayDate;
+    protected Activity activity = null;
+    protected AccountTableAccessor accountTable = null;
+    protected AccountMasterTableAccessor masterTable = null;
+    protected String displayDate = null;
+    protected ClickObserverInterface observer = null;
+    protected TableRow currentRow = null;
+    protected AppConfigurationData appConfig = null;
     protected static int TEXT_SIZE = 15;
-    protected ClickObserverInterface observer;
-    protected TableRow currentRow;
     protected static final String MONEY_SPACE = " ";
 
     /**
@@ -34,8 +35,9 @@ public abstract class AbstractInfoArea {
      */
     AbstractInfoArea(Activity activity) {
         this.activity = activity;
+        this.appConfig = new AppConfigurationData(this.activity);
         DatabaseHelper db_helper = new DatabaseHelper(this.activity.getApplicationContext());
-        accountTable = new AccountTableAccessor(db_helper);
+        accountTable = new AccountTableAccessor(db_helper, this.appConfig);
         masterTable = new AccountMasterTableAccessor(db_helper);
     }
 
@@ -73,8 +75,7 @@ public abstract class AbstractInfoArea {
      * @return start_date.
      */
     protected String getStartDateOfMonth() {
-        AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        return Utility.getStartDateOfMonth(this.displayDate, app_config.getStartDay());
+        return Utility.getStartDateOfMonth(this.displayDate, this.appConfig.getStartDay());
     }
 
     /**
@@ -83,8 +84,7 @@ public abstract class AbstractInfoArea {
      * @return end date.
      */
     protected String getEndDateOfMonth() {
-        AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        return Utility.getEndDateOfMonth(this.displayDate, app_config.getStartDay());
+        return Utility.getEndDateOfMonth(this.displayDate, this.appConfig.getStartDay());
     }
 
     /**

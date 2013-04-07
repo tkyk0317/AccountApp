@@ -37,7 +37,7 @@
     <string name="menu_account_data_edit_title">編集</string>
     <string name="menu_account_data_edit_list_title">編集項目</string>
     <string name="menu_master_edit_title">カテゴリ編集</string>
-    <string name="menu_user_add_title">ユーザー編集</string>
+    <string name="menu_user_edit_title">ユーザー編集</string>
     <string name="estimate_configuration_enable">有効</string>
     <string name="estimate_configuration_unenable">無効</string>
     <string name="sunday">日</string>
@@ -64,4 +64,14 @@
     <string name="day_unit_string">日</string>
     <string name="estimate_money_summary_suffix">月度予算：</string>
     <string name="payment_period">期間</string>
+    <string name="user_name_label">名前</string>
+    <string name="user_memo_label">メモ</string>
+    <string name="add_user_dialog_title">ユーザー情報追加</string>
+    <string name="edit_user_dialog_title">ユーザー情報編集</string>
+    <string name="add_user_message">ユーザー情報を追加しました</string>
+    <string name="add_user_alert_message">入力内容を確認して下さい\n(ユーザー名の重複等)</string>
+    <string name="modify_user_message">ユーザー情報を変更しました</string>
+    <string name="delete_user_confirm_msg">関連するデータも削除します。よろしいですか？</string>
+    <string name="del_user_repletion_message">デフォルトユーザーは削除できません</string>
 </resources>
+

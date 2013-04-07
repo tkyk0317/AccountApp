@@ -4,19 +4,21 @@ import java.util.List;
 import java.util.ArrayList;
 import android.app.Activity;
 import android.util.Log;
+
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.file_manager.ExportImportDBTableInterface;
 import com.myapp.account.file_manager.SdCardFileManagerImpl;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
+import com.myapp.account.config.AppConfigurationData;
 
 /**
  * @brief Export AccountData Table Class.
  */
 public class ImportAccountDataTableImpl implements ExportImportDBTableInterface {
 
-    protected SdCardFileManagerImpl sdCardFileManager;
-    protected AccountTableAccessor accountTable;
+    protected SdCardFileManagerImpl sdCardFileManager = null;
+    protected AccountTableAccessor accountTable = null;
     protected static final String ACCOUNT_DATA_FILE_NAME = "AccountData.csv";
     protected static final String CSV_DELIMITER = ",";
     protected static final String LINE_END = "\n";
@@ -25,8 +27,9 @@ public class ImportAccountDataTableImpl implements ExportImportDBTableInterface 
      * @brief Constractor.
      */
     public ImportAccountDataTableImpl(Activity activity) {
+        AppConfigurationData app_config = new AppConfigurationData(activity);
         this.sdCardFileManager = new SdCardFileManagerImpl();
-        this.accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
+        this.accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()), app_config);
     }
 
     /**

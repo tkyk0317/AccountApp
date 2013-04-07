@@ -27,16 +27,16 @@ import com.myapp.account.database.AccountTableAccessor;
  */
 public class AccountCalendar implements ClickObserverInterface {
 
-    private Activity activity;
+    private Activity activity = null;
     private List<AccountCalendarCell> calendarCells = new ArrayList<AccountCalendarCell>(CALENDAR_DAY_OF_WEEK_NUM*CALENDAR_ROW_NUM);
-    private ClickObserverInterface observer;
-    private AccountCalendarCell currentCell;
-    private LinearLayout layout;
-    private AppConfigurationData appConfigData;
-    private String appearDate;
-    private AccountTableAccessor accountTableAccessor;
-    private String firstDateOfMonth;
-    private String lastDateOfMonth;
+    private ClickObserverInterface observer = null;
+    private AccountCalendarCell currentCell = null;
+    private LinearLayout layout = null;
+    private AppConfigurationData appConfig = null;
+    private String appearDate = null;
+    private AccountTableAccessor accountTableAccessor = null;
+    private String firstDateOfMonth = null;
+    private String lastDateOfMonth = null;
     private static final int CALENDAR_DAY_OF_WEEK_NUM = 7;
     private static final int CALENDAR_ROW_NUM = 6;
     private static final int WEEK_OF_SATURDAY = 5;
@@ -48,8 +48,8 @@ public class AccountCalendar implements ClickObserverInterface {
     public AccountCalendar(Activity activity, LinearLayout layout) {
         this.activity = activity;
         this.layout = layout;
-        this.appConfigData = new AppConfigurationData(this.activity);
-        this.accountTableAccessor = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
+        this.appConfig = new AppConfigurationData(this.activity);
+        this.accountTableAccessor = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()), this.appConfig);
         getCalendarItems();
     }
 
@@ -175,7 +175,7 @@ public class AccountCalendar implements ClickObserverInterface {
     private void setStartDayMarker() {
         int start_position = getStartPosition();
         int last_day = Integer.valueOf(Utility.splitDay(Utility.getLastDateOfTargetMonth(this.appearDate)));
-        int start_day = this.appConfigData.getStartDay();
+        int start_day = this.appConfig.getStartDay();
 
         if( start_day > last_day ) start_day = last_day;
 

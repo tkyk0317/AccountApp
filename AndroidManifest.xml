@@ -19,6 +19,10 @@
             android:label="@string/app_name"
             android:exported="false" >
         </activity>
+        <activity android:name=".EditUserTableActivity"
+            android:label="@string/app_name"
+            android:exported="false" >
+        </activity>
         <activity android:name=".AccountPieGraphActivity"
             android:label="@string/app_name"
             android:exported="false" >

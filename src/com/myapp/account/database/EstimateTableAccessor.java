@@ -2,12 +2,15 @@ package com.myapp.account.database;
 
 import java.util.*;
 import java.text.*;
+
 import android.util.Log;
 import android.database.Cursor;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
+
 import com.myapp.account.database.EstimateTableRecord;
+import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.utility.Utility;
 
 /**
@@ -18,13 +21,15 @@ public class EstimateTableAccessor {
     protected SQLiteDatabase readDatabase = null;
     protected SQLiteDatabase writeDatabase = null;
     protected SQLiteOpenHelper helper = null;
+    protected AppConfigurationData appConfig = null;
     protected static final String TABLE_NAME = "EstimateTable";
 
     /**
      * @brief Constractor.
      */
-    public EstimateTableAccessor(SQLiteOpenHelper helper) {
+    public EstimateTableAccessor(SQLiteOpenHelper helper, AppConfigurationData app_config) {
         this.helper = helper;
+        this.appConfig = app_config;
     }
 
     /**
@@ -51,8 +56,30 @@ public class EstimateTableAccessor {
      * @brief open Database.
      */
     private void open() {
-        if( null == this.readDatabase ) this.readDatabase = this.helper.getReadableDatabase();
         if( null == this.writeDatabase ) this.writeDatabase = this.helper.getWritableDatabase();
+        if( null == this.readDatabase ) this.readDatabase = this.helper.getReadableDatabase();
+    }
+
+    /**
+     * @brief Get All Record(specified user_id).
+     * @return All EstimateRecord in EstimateTable.
+     */
+    public List<EstimateTableRecord> getAllRecordSpecifiedUserId(int user_id) {
+        open();
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , "user_id=?", new String[]{String.valueOf(user_id)},
+                                           null, null, null, null);
+        cursor.moveToFirst();
+        int record_count = cursor.getCount();
+        List<EstimateTableRecord> record_list = new ArrayList<EstimateTableRecord>(record_count+1);
+
+        for( int i = 0 ; i < record_count ; i++ ) {
+            record_list.add( new EstimateTableRecord() );
+            record_list.get(i).set(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        close();
+        return record_list;
     }
 
     /**
@@ -63,7 +90,8 @@ public class EstimateTableAccessor {
         open();
 
         String current_year_month = Utility.getCurrentYearAndMonth();
-        Cursor cursor = readDatabase.query(TABLE_NAME, null, "target_date=?", new String[] {current_year_month}, null, null, null, null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "target_date=? and user_id=?",
+                                           new String[] {current_year_month, String.valueOf(this.appConfig.getTargetUserNameId())}, null, null, null, null);
 
         EstimateTableRecord record = new EstimateTableRecord();
         if( true == cursor.moveToFirst() ) {
@@ -82,7 +110,8 @@ public class EstimateTableAccessor {
      */
     public EstimateTableRecord getRecordAtTargetDate(String target_date) {
         open();
-        Cursor cursor = readDatabase.query(TABLE_NAME, null, "target_date=?", new String[] {target_date}, null, null, null, null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "target_date=? and user_id=?",
+                                           new String[] {target_date, String.valueOf(this.appConfig.getTargetUserNameId())}, null, null, null, null);
 
         EstimateTableRecord record = new EstimateTableRecord();
         if( true == cursor.moveToFirst() ) {
@@ -100,7 +129,8 @@ public class EstimateTableAccessor {
      */
     public boolean isEstimateRecord(String target_date) {
         open();
-        Cursor cursor = readDatabase.query(TABLE_NAME, null, "target_date=?", new String[] {target_date}, null, null, null, null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "target_date=? and user_id=?",
+                                           new String[] {target_date, String.valueOf(this.appConfig.getTargetUserNameId())}, null, null, null, null);
 
         boolean ret = false;
         if( true == cursor.moveToFirst() ) {
@@ -126,6 +156,7 @@ public class EstimateTableAccessor {
         insert_record.put("target_date", record.getTargetDate() );
         insert_record.put("update_date", Utility.getCurrentDate() );
         insert_record.put("insert_date", Utility.getCurrentDate() );
+        insert_record.put("user_id", this.appConfig.getTargetUserNameId() );
 
         // insert record.
         long is_insert = writeDatabase.insert(TABLE_NAME, null, insert_record);
@@ -145,10 +176,23 @@ public class EstimateTableAccessor {
         update_record.put("target_date", record.getTargetDate());
         update_record.put("update_date", record.getUpdateDate());
         update_record.put("insert_date", record.getInsertDate());
+        update_record.put("user_id", this.appConfig.getTargetUserNameId());
 
         int is_update = writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
         close();
         return is_update;
+    }
+
+    /**
+     * @brief Delete Record from Estimate Table.
+     * @param key Delete Target id of Estimate Table.
+     * @return  deleteted key number.
+     */
+    public int delete(int key) {
+        open();
+        writeDatabase.delete(TABLE_NAME, "_id=" + String.valueOf(key), null);
+        close();
+        return key;
     }
 }
 

@@ -65,8 +65,9 @@ public class AppConfigurationActivity extends PreferenceActivity {
 
         for( UserTableRecord record : user_records ) {
             String user_name = record.getName();
+            String user_name_value = String.valueOf(record.getId());
             entriesList.add(user_name.subSequence(0, user_name.length()));
-            entryValuesList.add(user_name.subSequence(0, user_name.length()));
+            entryValuesList.add(user_name_value.subSequence(0, user_name_value.length()));
         }
 
         // set entry.
@@ -138,13 +139,13 @@ public class AppConfigurationActivity extends PreferenceActivity {
                 new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference pref, Object value) {
                         ListPreference user_name_pref = (ListPreference)pref;
-                        String user_name = value.toString();
+                        String user_name_id = value.toString();
 
                         // save target user name.
-                        appConfiguration.saveUserName(user_name);
+                        appConfiguration.saveUserNameId(user_name_id);
 
                         // display summary.
-                        user_name_pref.setSummary(user_name);
+                        user_name_pref.setSummary(appConfiguration.getTargetUserName());
                         return true;
                     }
                 });

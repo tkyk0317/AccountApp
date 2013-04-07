@@ -19,6 +19,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
+import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.dialog.AccountDialogInterface;
 import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.database.DatabaseHelper;
@@ -32,16 +33,16 @@ import com.myapp.account.edit_account_master.EditAccountMasterRecord;
  */
 public class EditAccountMasterDialogImpl implements OnItemSelectedListener, AccountDialogInterface, EventCompleteObserver {
 
-    private Activity activity;
-    private View addCategoryView;
-    private AlertDialog addCategoryDialog;
-    private AccountRecordModifyEvent modifyEvent;
-    private AccountRecordDeleteEvent deleteEvent;
-    private Spinner kindSpinner;
-    private Button modifyButton;
-    private Button deleteButton;
-    private EventCompleteObserver observer;
-    private EditAccountMasterRecord editRecord;
+    private Activity activity = null;
+    private View addCategoryView = null;
+    private AlertDialog addCategoryDialog = null;
+    private AccountRecordModifyEvent modifyEvent = null;
+    private AccountRecordDeleteEvent deleteEvent = null;
+    private Spinner kindSpinner = null;
+    private Button modifyButton = null;
+    private Button deleteButton = null;
+    private EventCompleteObserver observer = null;
+    private EditAccountMasterRecord editRecord = null;
     private static final int BUTTON_WIDTH = 100;
 
     /**
@@ -136,7 +137,8 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
      * @return true:enable delete false:unenable delete.
      */
     private boolean isEnableDeleteRecord() {
-        AccountTableAccessor accountTable = new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+        AppConfigurationData app_config = new AppConfigurationData(this.activity);
+        AccountTableAccessor accountTable = new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), app_config);
         return !(accountTable.isExsitRecordAtCategoryId(this.editRecord.getPrimaryId()));
     }
 
@@ -213,6 +215,8 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
     // not support.
     @Override
     public void notifyAccountEditComplete() {}
+    @Override
+    public void notifyUserTableEditComplete() {}
 
     /**
      * @brief Modify AccountRecord Event.

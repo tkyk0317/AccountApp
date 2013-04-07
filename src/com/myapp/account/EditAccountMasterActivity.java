@@ -23,16 +23,16 @@ import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.edit_account_master.EditAccountMasterRecord;
 
 /**
- * @brief Main Class in AccountApp Application.
+ * @brief Edit AccountMasterTable Activity.
  */
 public class EditAccountMasterActivity extends Activity implements OnClickListener, OnLongClickListener, EventCompleteObserver {
 
-    private AccountMasterTableAccessor accountMasterAccessor;
-    private TableLayout tableLayout;
-    private EditAccountMasterRecord currentRow;
-    private ImageView addCategoryImage;
-    private AccountDialogInterface addAccountMasterDialog;
-    private AccountDialogInterface editAccountMasterDialog;
+    private AccountMasterTableAccessor accountMasterAccessor = null;
+    private TableLayout tableLayout = null;
+    private EditAccountMasterRecord currentRow = null;
+    private ImageView addCategoryImage = null;
+    private AccountDialogInterface addAccountMasterDialog = null;
+    private AccountDialogInterface editAccountMasterDialog = null;
 
     /**
      * @brief Create Activity.
@@ -84,7 +84,7 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
         this.editAccountMasterDialog = new EditAccountMasterDialogImpl(this);
         this.accountMasterAccessor = new AccountMasterTableAccessor(new DatabaseHelper(getApplicationContext()));
         this.addCategoryImage = (ImageView)findViewById(R.id.add_master_image);
-        this.addCategoryImage.setImageDrawable(getResources().getDrawable(R.drawable.add_master));
+        this.addCategoryImage.setImageDrawable(getResources().getDrawable(R.drawable.add_button));
         this.addCategoryImage.setId(ViewId.ADD_MASTER.getId());
         this.addCategoryImage.setOnClickListener(this);
 
@@ -169,6 +169,8 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
     // not support.
     @Override
     public void notifyAccountEditComplete() {}
+    @Override
+    public void notifyUserTableEditComplete() {}
 
     /**
      * @brief View ID Class.
