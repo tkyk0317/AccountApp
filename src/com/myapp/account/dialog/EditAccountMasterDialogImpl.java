@@ -215,6 +215,8 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
     // not support.
     @Override
     public void notifyAccountEditComplete() {}
+    @Override
+    public void notifyUserTableEditComplete() {}
 
     /**
      * @brief Modify AccountRecord Event.

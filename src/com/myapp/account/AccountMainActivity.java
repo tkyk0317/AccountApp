@@ -145,7 +145,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.lineGraphImage = (ImageView)findViewById(R.id.account_line_chart_image);
         this.lineGraphImage.setImageDrawable(getResources().getDrawable(R.drawable.line_chart));
         this.addAccountImage = (ImageView)findViewById(R.id.add_account_image);
-        this.addAccountImage.setImageDrawable(getResources().getDrawable(R.drawable.add_master));
+        this.addAccountImage.setImageDrawable(getResources().getDrawable(R.drawable.add_button));
     }
 
     /**
@@ -439,11 +439,11 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         refleshDisplay();
     }
 
-    /**
-     * @brief AccountMaster Edit Complete.
-     */
-    public void notifyAccountMasterEditComplete() {
-    }
+    // not supported.
+    @Override
+    public void notifyAccountMasterEditComplete() {}
+    @Override
+    public void notifyUserTableEditComplete() {}
 
     /**
      * @brief Reflesh Display.

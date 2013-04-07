@@ -1,13 +1,16 @@
 package com.myapp.account.config;
 
+import android.util.Log;
 import android.app.Activity;
 import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.Menu;
+
 import com.myapp.account.R;
 import com.myapp.account.AppConfigurationActivity;
 import com.myapp.account.EditAccountMasterActivity;
+import com.myapp.account.EditUserTableActivity;
 
 /**
  * @brief Application Menu Class.
@@ -16,7 +19,7 @@ public class ApplicationMenu {
 
     // Dialog List Index.
     private enum DialogListIndex {
-        ADD_USER_INDEX(0), ADD_CATEGORY_INDEX(0);
+        ADD_CATEGORY_INDEX(0), ADD_USER_INDEX(1);
 
         private final int index;
 
@@ -76,7 +79,7 @@ public class ApplicationMenu {
     protected void displayEditDialog() {
         final String[] edit_menus
             = { this.activity.getText(R.string.menu_master_edit_title).toString(),
-                this.activity.getText(R.string.menu_user_add_title).toString()};
+                this.activity.getText(R.string.menu_user_edit_title).toString()};
 
         AlertDialog.Builder edit_menu_dialog = new AlertDialog.Builder(this.activity);
         edit_menu_dialog.setTitle(R.string.menu_account_data_edit_list_title);
@@ -113,6 +116,8 @@ public class ApplicationMenu {
      * @brief Move To Add User into User Table.
      */
     protected void moveToUser() {
+        Intent intent = new Intent( this.activity, EditUserTableActivity.class);
+        this.activity.startActivity(intent);
     }
 }
 

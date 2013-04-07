@@ -154,6 +154,8 @@ public class AddAccountMasterDialogImpl implements OnItemSelectedListener, Accou
     // not support.
     @Override
     public void notifyAccountEditComplete() {}
+    @Override
+    public void notifyUserTableEditComplete() {}
 
     /**
      * @brief Commit AccountRecord Event.

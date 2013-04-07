@@ -14,5 +14,10 @@ public interface EventCompleteObserver {
      * @brief AccountMaster Edit Complete.
      */
     public void notifyAccountMasterEditComplete();
+
+    /**
+     * @brief UserTable Edit Complete.
+     */
+    public void notifyUserTableEditComplete();
 }
 

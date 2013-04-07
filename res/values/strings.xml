@@ -37,7 +37,7 @@
     <string name="menu_account_data_edit_title">編集</string>
     <string name="menu_account_data_edit_list_title">編集項目</string>
     <string name="menu_master_edit_title">カテゴリ編集</string>
-    <string name="menu_user_add_title">ユーザー編集</string>
+    <string name="menu_user_edit_title">ユーザー編集</string>
     <string name="estimate_configuration_enable">有効</string>
     <string name="estimate_configuration_unenable">無効</string>
     <string name="sunday">日</string>
@@ -65,3 +65,4 @@
     <string name="estimate_money_summary_suffix">月度予算：</string>
     <string name="payment_period">期間</string>
 </resources>
+
