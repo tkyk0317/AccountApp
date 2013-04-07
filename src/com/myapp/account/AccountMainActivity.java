@@ -37,11 +37,6 @@ import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.edit_account_data.AccountEdit;
 import com.myapp.account.infoarea.DailyInfoRecord;
 
-// change user_id at AccountTable for debug.
-//import com.myapp.account.database.DatabaseHelper;
-//import com.myapp.account.database.AccountTableAccessor;
-//import com.myapp.account.database.AccountTableRecord;
-
 /**
  * @brief Main Class in AccountApp Application.
  */
@@ -126,14 +121,6 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.currentCalendar.attachObserver(this);
         this.nextCalendar.attachObserver(this);
         this.tabContent.attachObserverForDailyInfo(this);
-
-        // change user_id for debug.
-//        AccountTableAccessor account = new AccountTableAccessor(new DatabaseHelper(this.getApplicationContext()), this.appConfig);
-//        List<AccountTableRecord> records = account.getAllRecordNotSpecifiedUserId();
-//
-//        for( AccountTableRecord record : records ) {
-//            account.update(record);
-//        }
     }
 
     /**

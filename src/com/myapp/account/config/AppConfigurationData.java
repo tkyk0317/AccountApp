@@ -59,16 +59,19 @@ public class AppConfigurationData {
         // get configuration value.
         this.isEstimate = this.appConfig.getBoolean(ESTIMATE_KEY, false);
         this.startDayOfMonth = Integer.valueOf(this.appConfig.getString(START_DAY_KEY, "1"));
-        EstimateTableRecord record = this.estimateTable.getRecordAtTargetDate(Utility.splitYearAndMonth(getEstimateTargetDate()));
 
         // get user name id.
-        this.estimateMoney = record.getEstimateMoney(); try {
+        try {
             this.userNameId = Integer.valueOf(this.appConfig.getString(USER_TARGET_KEY, "1"));
         } catch( NumberFormatException exception) {
             this.userNameId = Integer.valueOf(USER_NAME_ID_DEFAULT);
             saveUserNameId(USER_NAME_ID_DEFAULT);
         }
         this.userName = convertUserNameToId(this.userNameId);
+
+        // get estimate money.
+        EstimateTableRecord record = this.estimateTable.getRecordAtTargetDate(Utility.splitYearAndMonth(getEstimateTargetDate()));
+        this.estimateMoney = record.getEstimateMoney();
     }
 
     /**
@@ -112,7 +115,7 @@ public class AppConfigurationData {
      */
     public void saveEstimateMoney(int estimate_money) throws RuntimeException {
         try {
-            String estimate_target_date = getEstimateTargetDate();
+            String estimate_target_date = Utility.splitYearAndMonth(getEstimateTargetDate());
 
             // Check Exsit Record.
             if( this.estimateTable.isEstimateRecord(estimate_target_date) ) {
@@ -122,7 +125,7 @@ public class AppConfigurationData {
             } else {
                 EstimateTableRecord estimate_record = new EstimateTableRecord();
                 estimate_record.setEstimateMoney(estimate_money);
-                estimate_record.setEstimateTargetDate(Utility.splitYearAndMonth(estimate_target_date));
+                estimate_record.setEstimateTargetDate(estimate_target_date);
                 this.estimateTable.insert(estimate_record);
             }
             readConfigurationData();

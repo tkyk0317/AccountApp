@@ -161,7 +161,9 @@ public class AppConfigurationActivity extends PreferenceActivity {
 
                             // save estimate_money.
                             appConfiguration.saveEstimateMoney(estimate_money);
-                            estimate_money_config.setSummary(String.format("%,d", estimate_money));
+
+                            // reflesh estimate money summary.
+                            setEstimateMoneySummary();
                         } catch (RuntimeException error) {
                             displayAlertEstimateMoney();
                         }

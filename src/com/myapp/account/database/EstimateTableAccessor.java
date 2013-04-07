@@ -152,11 +152,11 @@ public class EstimateTableAccessor {
         open();
         ContentValues insert_record = new ContentValues();
 
-        insert_record.put("money", record.getEstimateMoney() );
-        insert_record.put("target_date", record.getTargetDate() );
-        insert_record.put("update_date", Utility.getCurrentDate() );
-        insert_record.put("insert_date", Utility.getCurrentDate() );
-        insert_record.put("user_id", this.appConfig.getTargetUserNameId() );
+        insert_record.put("money", record.getEstimateMoney());
+        insert_record.put("target_date", record.getTargetDate());
+        insert_record.put("update_date", Utility.getCurrentDate());
+        insert_record.put("insert_date", Utility.getCurrentDate());
+        insert_record.put("user_id", this.appConfig.getTargetUserNameId());
 
         // insert record.
         long is_insert = writeDatabase.insert(TABLE_NAME, null, insert_record);
@@ -170,7 +170,6 @@ public class EstimateTableAccessor {
      */
     public int update(EstimateTableRecord record) {
         open();
-
         ContentValues update_record = new ContentValues();
         update_record.put("money", record.getEstimateMoney());
         update_record.put("target_date", record.getTargetDate());
