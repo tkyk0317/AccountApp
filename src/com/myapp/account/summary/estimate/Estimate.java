@@ -46,7 +46,7 @@ public class Estimate {
     public Estimate(Activity activity) {
         this.activity = activity;
         this.appConfig= new AppConfigurationData(this.activity);
-        this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
+        this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(activity.getApplicationContext()), this.appConfig);
         this.accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()), this.appConfig);
     }
 

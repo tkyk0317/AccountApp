@@ -27,6 +27,8 @@ import com.myapp.account.database.UserTableRecord;
 import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
+import com.myapp.account.database.EstimateTableRecord;
+import com.myapp.account.database.EstimateTableAccessor;
 
 /**
  * @brief EditUserTable Dialog Class.
@@ -167,6 +169,7 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
         EditText user_memo_value = (EditText)this.editUserTableView.findViewById(R.id.user_memo_value);
 
         user_name_value.setText(this.editRecord.getName());
+        user_memo_value.setText(this.editRecord.getMemo());
     }
 
     /**
@@ -261,6 +264,7 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
 
             user_record.setId(this.editRecord.getPrimaryId());
             user_record.setName(Utility.deleteSpace(user_name_value.getText().toString()));
+            user_record.setMemo(user_memo_value.getText().toString());
             user_record.setUpdateDate(this.editRecord.getUpdateDate());
             user_record.setInsertDate(this.editRecord.getInsertDate());
 
@@ -292,8 +296,7 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
          * @return true:valid false:invalid.
          */
         private boolean isValidUserRecord(UserTableRecord record) {
-            if( true == this.userTable.isExsitRecordMatchName(record.getName()) ||
-                true == Utility.isStringNULL(record.getName()) ) {
+            if( true == Utility.isStringNULL(record.getName()) ) {
                 return false;
             }
             return true;
@@ -401,6 +404,7 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
          */
         private void deleteUserRecord() {
             deleteAccountData(this.editRecord.getPrimaryId());
+            deleteEstimateData(this.editRecord.getPrimaryId());
             this.userTable.delete(this.editRecord.getPrimaryId());
             this.appConfig.saveUserNameId(AppConfigurationData.USER_NAME_ID_DEFAULT);
         }
@@ -416,6 +420,20 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
 
             for( AccountTableRecord record : account_records ) {
                 account_table.delete(record.getId());
+            }
+        }
+
+        /**
+         * @brief delete estimate data.
+         *
+         * @param user_id specified user_id.
+         */
+        private void deleteEstimateData(int user_id) {
+            EstimateTableAccessor estimate_table = new EstimateTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), this.appConfig);
+            List<EstimateTableRecord> estimate_records = estimate_table.getAllRecordSpecifiedUserId(this.editRecord.getPrimaryId());
+
+            for( EstimateTableRecord record : estimate_records ) {
+                estimate_table.delete(record.getId());
             }
         }
 

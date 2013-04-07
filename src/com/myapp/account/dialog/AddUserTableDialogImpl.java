@@ -192,7 +192,7 @@ public class AddUserTableDialogImpl implements UserTableDialogInterface, EventCo
             UserTableRecord user_record = new UserTableRecord();
 
             user_record.setName(Utility.deleteSpace(user_name_value.getText().toString()));
-
+            user_record.setMemo(user_memo_value.getText().toString());
             return user_record;
         }
 

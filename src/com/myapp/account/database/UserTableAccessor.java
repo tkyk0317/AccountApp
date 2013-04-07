@@ -53,8 +53,8 @@ public class UserTableAccessor {
      * @brief open Database.
      */
     private void open() {
-        if( null == this.readDatabase ) this.readDatabase = this.helper.getReadableDatabase();
         if( null == this.writeDatabase ) this.writeDatabase = this.helper.getWritableDatabase();
+        if( null == this.readDatabase ) this.readDatabase = this.helper.getReadableDatabase();
     }
 
     /**
@@ -125,9 +125,10 @@ public class UserTableAccessor {
         open();
         ContentValues insert_record = new ContentValues();
 
-        insert_record.put("name", record.getName() );
-        insert_record.put("update_date", Utility.getCurrentDate() );
-        insert_record.put("insert_date", Utility.getCurrentDate() );
+        insert_record.put("name", record.getName());
+        insert_record.put("memo", record.getMemo());
+        insert_record.put("update_date", Utility.getCurrentDate());
+        insert_record.put("insert_date", Utility.getCurrentDate());
 
         // insert record.
         long key = this.writeDatabase.insert(TABLE_NAME, null, insert_record);
@@ -144,6 +145,7 @@ public class UserTableAccessor {
         open();
         ContentValues update_record = new ContentValues();
         update_record.put("name", record.getName());
+        update_record.put("memo", record.getMemo());
         update_record.put("update_date", record.getUpdateDate());
         update_record.put("insert_date", record.getInsertDate());
 

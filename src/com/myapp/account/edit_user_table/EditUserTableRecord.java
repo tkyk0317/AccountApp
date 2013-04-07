@@ -20,6 +20,7 @@ public class EditUserTableRecord extends TableRow {
     protected Activity activity = null;
     protected UserTableRecord userTableRecord = null;
     protected TextView userName = null;
+    protected TextView userMemo = null;
     protected static final int TEXT_SIZE = 18;
 
     /**
@@ -30,7 +31,9 @@ public class EditUserTableRecord extends TableRow {
         super(activity);
         this.activity = activity;
         this.userName = new TextView(this.activity);
+        this.userMemo = new TextView(this.activity);
         this.userName.setTextSize(TEXT_SIZE);
+        this.userMemo.setTextSize(TEXT_SIZE);
         this.setClickable(true);
     }
 
@@ -41,14 +44,17 @@ public class EditUserTableRecord extends TableRow {
     public void setUserTableRecord(UserTableRecord record) {
         this.userTableRecord = record;
         this.userName.setText(record.getName());
+        this.userMemo.setText(record.getMemo());
 
         // add view.
         super.addView(this.userName);
+        super.addView(this.userMemo);
     }
 
     // getter.
     public int getPrimaryId() { return this.userTableRecord.getId(); }
     public String getName() { return this.userTableRecord.getName(); }
+    public String getMemo() { return this.userTableRecord.getMemo(); }
     public String getUpdateDate() { return this.userTableRecord.getUpdateDate(); }
     public String getInsertDate() { return this.userTableRecord.getInsertDate(); }
 }

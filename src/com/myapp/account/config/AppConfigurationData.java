@@ -45,7 +45,7 @@ public class AppConfigurationData {
     public AppConfigurationData(Activity activity) {
         this.activity = activity;
         if( null == this.appConfig ) this.appConfig = PreferenceManager.getDefaultSharedPreferences(this.activity);
-        this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+        this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), this);
         this.userTable = new UserTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
 
         // read configuration data.

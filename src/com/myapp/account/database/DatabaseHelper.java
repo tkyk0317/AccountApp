@@ -1,11 +1,14 @@
 package com.myapp.account.database;
 
+import java.util.List;
+
 import android.util.Log;
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.myapp.account.R;
+import com.myapp.account.config.AppConfigurationData;
 
 /**
  * @brief Database Helper Class.
@@ -14,7 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 {
     public static final int INCOME_FLAG = 0;
     public static final int PAYMENT_FLAG = 1;
-    private static final int DB_VERSION  = 1;
+    private static final int DB_VERSION  = 2;
     private static final String LOG_TAG = "DatabaseHelper";
     private static final String DB_NAME = "Account.db";
     private static final String ACCOUNT_MASTER_NAME = "AccountMaster";
@@ -29,9 +32,9 @@ public class DatabaseHelper extends SQLiteOpenHelper
         "category_id interger not null, money integer not null," + "memo text, update_date text not null, insert_date text not null);";
     private static final String CREATE_ESTIMATE_TABLE   =
         "create table " + ESTIMATE_TABLE_NAME + "(_id integer not null primary key," +
-        "money integer not null, target_date text not null, update_date text not null, insert_date text not null);";
+        "money integer not null, target_date text not null, update_date text not null, insert_date text not null, user_id integer not null);";
     private static final String CREATE_USER_TABLE =
-        "create table " + USER_TABLE_NAME + "(_id integer not null primary key, name text not null, update_date text not null , insert_date text not null);";
+        "create table " + USER_TABLE_NAME + "(_id integer not null primary key, name text not null, update_date text not null , insert_date text not null, memo text);";
 
     private SQLiteDatabase m_SqliteDatabase;
 
@@ -57,6 +60,13 @@ public class DatabaseHelper extends SQLiteOpenHelper
      */
     public void onUpgrade(SQLiteDatabase db, int old_version, int new_version ) {
         if( old_version >= new_version ) return;
+        if( old_version == 1 && new_version == 2 ) {
+            Log.d("DatabaseHelper", "onUpgrade : old_ver " + old_version + " new_ver : " + new_version);
+
+            // add column(user_id and memo columns).
+            db.execSQL("alter table " + ESTIMATE_TABLE_NAME + " add column user_id integer not null default 1;");
+            db.execSQL("alter table " + USER_TABLE_NAME + " add column memo text;");
+        }
     }
 
     /**
