@@ -20,10 +20,11 @@ import com.myapp.account.config.AppConfigurationData;
  */
 public class Summary {
 
-    private Activity activity;
-    private Estimate estimateInfo;
-    private AccountTableAccessor accountTable;
-    private String currentDate;
+    private Activity activity = null;
+    private Estimate estimateInfo = null;
+    private AccountTableAccessor accountTable = null;
+    private String currentDate = null;
+    private AppConfigurationData appConfig = null;
     private static final String PERIOD_BEFORE_STRING = "[";
     private static final String PERIOD_AFTER_STRING = "]";
     private static final String PERIOD_DELIMITER = "-";
@@ -36,8 +37,9 @@ public class Summary {
      */
     public Summary(Activity activity) {
         this.activity = activity;
+        this.appConfig = new AppConfigurationData(this.activity);
         this.estimateInfo = new Estimate(this.activity);
-        this.accountTable = new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+        this.accountTable = new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), this.appConfig);
      }
 
     /**
@@ -162,8 +164,7 @@ public class Summary {
      * @return start_date.
      */
     private String getStartDateOfMonth() {
-        AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        return Utility.getStartDateOfMonth(this.currentDate, app_config.getStartDay());
+        return Utility.getStartDateOfMonth(this.currentDate, this.appConfig.getStartDay());
     }
 
     /**
@@ -172,8 +173,7 @@ public class Summary {
      * @return end date.
      */
     private String getEndDateOfMonth() {
-        AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        return Utility.getEndDateOfMonth(this.currentDate, app_config.getStartDay());
+        return Utility.getEndDateOfMonth(this.currentDate, this.appConfig.getStartDay());
     }
 }
 

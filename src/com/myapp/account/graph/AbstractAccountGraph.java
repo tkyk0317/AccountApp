@@ -34,16 +34,17 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
  */
 public abstract class AbstractAccountGraph implements OnGestureListener, View.OnTouchListener {
 
-    protected Activity activity;
-    protected LinearLayout chartArea;
-    protected String targetDate;
-    protected AccountTableAccessor accountTable;
-    protected AccountMasterTableAccessor masterTable;
-    protected CategorySeries categorySeries;
-    protected DefaultRenderer renderer;
-    protected ArrayList<Integer> graphColors;
-    protected GestureDetector gestureDetector;
-    protected ClickObserverInterface observer;
+    protected Activity activity = null;
+    protected LinearLayout chartArea = null;
+    protected String targetDate = null;
+    protected AccountTableAccessor accountTable = null;
+    protected AccountMasterTableAccessor masterTable = null;
+    protected CategorySeries categorySeries = null;
+    protected DefaultRenderer renderer = null;
+    protected ArrayList<Integer> graphColors = null;
+    protected GestureDetector gestureDetector = null;
+    protected ClickObserverInterface observer = null;
+    protected AppConfigurationData appConfig = null;
     protected static final int NODATA_TEXT_SIZE = 30;
     protected static final int GRAPH_TITLE_SIZE = 20;
     protected static final int GRAPH_LEGEND_SIZE = 15;
@@ -58,7 +59,8 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
     public AbstractAccountGraph(Activity activity, LinearLayout layout) {
         this.activity = activity;
         this.chartArea = layout;
-        this.accountTable= new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+        this.appConfig = new AppConfigurationData(this.activity);
+        this.accountTable= new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), this.appConfig);
         this.masterTable= new AccountMasterTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
         this.categorySeries = new CategorySeries(null);
         this.renderer = new DefaultRenderer();
@@ -236,8 +238,7 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
      * @return start_date.
      */
     protected String getStartDateOfMonth() {
-        AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        return Utility.getStartDateOfMonth(this.targetDate, app_config.getStartDay());
+        return Utility.getStartDateOfMonth(this.targetDate, this.appConfig.getStartDay());
     }
 
     /**
@@ -246,8 +247,7 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
      * @return end date.
      */
     protected String getEndDateOfMonth() {
-        AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        return Utility.getEndDateOfMonth(this.targetDate, app_config.getStartDay());
+        return Utility.getEndDateOfMonth(this.targetDate, this.appConfig.getStartDay());
     }
 
     /**

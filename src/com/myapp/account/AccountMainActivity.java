@@ -37,6 +37,11 @@ import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.edit_account_data.AccountEdit;
 import com.myapp.account.infoarea.DailyInfoRecord;
 
+// change user_id at AccountTable for debug.
+//import com.myapp.account.database.DatabaseHelper;
+//import com.myapp.account.database.AccountTableAccessor;
+//import com.myapp.account.database.AccountTableRecord;
+
 /**
  * @brief Main Class in AccountApp Application.
  */
@@ -59,7 +64,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     private ImageView pieGraphImage;
     private ImageView lineGraphImage;
     private ImageView addAccountImage;
-    private AppConfigurationData appConfigData;
+    private AppConfigurationData appConfig;
     private static final int ANIMATION_DURATION = 300;
 
     /**
@@ -99,7 +104,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.currentCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.current_flipper));
         this.nextCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.next_flipper));
         this.currentDate = getCurrentDate();
-        this.appConfigData = new AppConfigurationData(this);
+        this.appConfig = new AppConfigurationData(this);
 
         // init image.
         initImage();
@@ -121,6 +126,14 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.currentCalendar.attachObserver(this);
         this.nextCalendar.attachObserver(this);
         this.tabContent.attachObserverForDailyInfo(this);
+
+        // change user_id for debug.
+//        AccountTableAccessor account = new AccountTableAccessor(new DatabaseHelper(this.getApplicationContext()), this.appConfig);
+//        List<AccountTableRecord> records = account.getAllRecordNotSpecifiedUserId();
+//
+//        for( AccountTableRecord record : records ) {
+//            account.update(record);
+//        }
     }
 
     /**
@@ -274,7 +287,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.pieGraphImage = null;
         this.lineGraphImage = null;
         this.addAccountImage = null;
-        this.appConfigData = null;
+        this.appConfig = null;
     }
 
     /**
@@ -330,7 +343,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * @return true:reflesh false:not reflesh.
      */
     private boolean isSummaryReflesh(AccountCalendarCell cell) {
-        int start_day = this.appConfigData.getStartDay();
+        int start_day = this.appConfig.getStartDay();
         int last_day = Integer.valueOf(Utility.splitDay(getLastDateOfTargetMonth(cell.getDate())));
 
         // check lastday and current day.

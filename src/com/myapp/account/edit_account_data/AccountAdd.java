@@ -31,22 +31,23 @@ import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.infoarea.DailyInfoRecord;
 import com.myapp.account.observer.EventCompleteObserver;
+import com.myapp.account.config.AppConfigurationData;
 
 /**
  * @brief Add Account Date Class.
  */
 public class AccountAdd implements OnItemSelectedListener {
 
-    protected Activity activity;
-    protected AlertDialog inputDialog;
-    protected AccountTableAccessor accountTable;
-    protected AccountMasterTableAccessor masterTable;
-    protected LinearLayout layout;
-    protected String insertDate;
-    protected EventCompleteObserver observer;
-    protected Spinner categorySpinner;
-    protected String selectedCategoryItem;
-    protected String[] categoryItems;
+    protected Activity activity = null;
+    protected AlertDialog inputDialog = null;
+    protected AccountTableAccessor accountTable = null;
+    protected AccountMasterTableAccessor masterTable = null;
+    protected LinearLayout layout = null;
+    protected String insertDate = null;
+    protected EventCompleteObserver observer = null;
+    protected Spinner categorySpinner = null;
+    protected String selectedCategoryItem = null;
+    protected String[] categoryItems = null;
     protected static final String PREFIX_WEEKDAY = "(";
     protected static final String SUFFIX_WEEKDAY = ")";
 
@@ -55,8 +56,9 @@ public class AccountAdd implements OnItemSelectedListener {
      */
     public AccountAdd(Activity activity) {
         this.activity = activity;
-        this.accountTable = new AccountTableAccessor( new DatabaseHelper(this.activity.getApplicationContext()) );
-        this.masterTable = new AccountMasterTableAccessor( new DatabaseHelper(this.activity.getApplicationContext()) );
+        AppConfigurationData app_config = new AppConfigurationData(this.activity);
+        this.accountTable = new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), app_config);
+        this.masterTable = new AccountMasterTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()) );
     }
 
     /**

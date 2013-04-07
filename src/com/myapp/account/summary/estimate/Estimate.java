@@ -27,12 +27,12 @@ import com.myapp.account.config.AppConfigurationData;
  */
 public class Estimate {
 
-    private EstimateTableAccessor estimateTable;
-    private EstimateTableRecord estimateRecord;
-    private AccountTableAccessor accountTable;
-    private Activity activity;
-    private String currentDate;
-    private AppConfigurationData appConfigData;
+    private Activity activity = null;
+    private EstimateTableAccessor estimateTable = null;
+    private EstimateTableRecord estimateRecord = null;
+    private AccountTableAccessor accountTable = null;
+    private String currentDate = null;
+    private AppConfigurationData appConfig = null;
     private static boolean isAlertFlag = false;
     private static final int ESTIMATE_MONEY_DIGITS = 9;
     private static final int TABLE_FIRST_INDEX = 0;
@@ -45,9 +45,9 @@ public class Estimate {
      */
     public Estimate(Activity activity) {
         this.activity = activity;
+        this.appConfig= new AppConfigurationData(this.activity);
         this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
-        this.accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
-        this.appConfigData= new AppConfigurationData(this.activity);
+        this.accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()), this.appConfig);
     }
 
     /**
@@ -71,7 +71,7 @@ public class Estimate {
      * @return true if estimate function is enable.
      */
     private boolean isEstimate() {
-        if( this.appConfigData.getEstimate() ) {
+        if( this.appConfig.getEstimate() ) {
             return true;
         }
         return false;
@@ -225,7 +225,7 @@ public class Estimate {
      * @return start date.
      */
     private String getStartDateOfMonth(String target_date) {
-        return Utility.getStartDateOfMonth(target_date, this.appConfigData.getStartDay());
+        return Utility.getStartDateOfMonth(target_date, this.appConfig.getStartDay());
     }
 
     /**
@@ -236,7 +236,7 @@ public class Estimate {
      * @return end date.
      */
     private String getEndDateOfMonth(String target_date) {
-        return Utility.getEndDateOfMonth(target_date, this.appConfigData.getStartDay());
+        return Utility.getEndDateOfMonth(target_date, this.appConfig.getStartDay());
     }
 
     /**
@@ -247,7 +247,7 @@ public class Estimate {
      * @return target date.
      */
     private String getEstimateTargetDate(String target_date) {
-        return Utility.getEstimateTargetDate(target_date, this.appConfigData.getStartDay());
+        return Utility.getEstimateTargetDate(target_date, this.appConfig.getStartDay());
     }
 
     /**

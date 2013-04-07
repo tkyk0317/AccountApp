@@ -3,6 +3,7 @@ package com.myapp.account.config;
 import java.util.*;
 import java.text.*;
 import java.lang.RuntimeException;
+import java.lang.NumberFormatException;
 
 import android.util.Log;
 import android.app.Activity;
@@ -14,6 +15,8 @@ import android.content.SharedPreferences.Editor;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.EstimateTableAccessor;
 import com.myapp.account.database.EstimateTableRecord;
+import com.myapp.account.database.UserTableAccessor;
+import com.myapp.account.database.UserTableRecord;
 import com.myapp.account.utility.Utility;
 
 /**
@@ -27,11 +30,14 @@ public class AppConfigurationData {
     private String userName = null;
     private int startDayOfMonth = 0;
     private int estimateMoney = 0;
+    private int userNameId = 0;
     private EstimateTableAccessor estimateTable = null;
+    private UserTableAccessor userTable = null;
     private final String ESTIMATE_KEY = "estimate_configuration";
     private final String ESTIMATE_MONEY_KEY = "estimate_money_configuration";
     private final String START_DAY_KEY = "start_day_configuration";
     private final String USER_TARGET_KEY = "target_user_configuration";
+    private final String USER_NAME_ID_DEFAULT = "1";
 
     /**
      * @brief Constractor.
@@ -40,6 +46,9 @@ public class AppConfigurationData {
         this.activity = activity;
         if( null == this.appConfig ) this.appConfig = PreferenceManager.getDefaultSharedPreferences(this.activity);
         this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+        this.userTable = new UserTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+
+        // read configuration data.
         readConfigurationData();
     }
 
@@ -49,11 +58,29 @@ public class AppConfigurationData {
     private void readConfigurationData() {
         // get configuration value.
         this.isEstimate = this.appConfig.getBoolean(ESTIMATE_KEY, false);
-        this.userName = this.appConfig.getString(USER_TARGET_KEY, "default");
         this.startDayOfMonth = Integer.valueOf(this.appConfig.getString(START_DAY_KEY, "1"));
-
         EstimateTableRecord record = this.estimateTable.getRecordAtTargetDate(Utility.splitYearAndMonth(getEstimateTargetDate()));
-        this.estimateMoney = record.getEstimateMoney();
+
+        // get user name id.
+        this.estimateMoney = record.getEstimateMoney(); try {
+            this.userNameId = Integer.valueOf(this.appConfig.getString(USER_TARGET_KEY, "1"));
+        } catch( NumberFormatException exception) {
+            this.userNameId = Integer.valueOf(USER_NAME_ID_DEFAULT);
+            saveUserNameId(USER_NAME_ID_DEFAULT);
+        }
+        this.userName = convertUserNameToId(this.userNameId);
+    }
+
+    /**
+     * @brief Convert UserName from UserNameId.
+     *
+     * @param user_name_id UserName Id.
+     *
+     * @return User Name String.
+     */
+    private String convertUserNameToId(int user_name_id) {
+        UserTableRecord record = this.userTable.getRecord(user_name_id);
+        return record.getName();
     }
 
     /**
@@ -69,11 +96,11 @@ public class AppConfigurationData {
 
     /**
      * @brief Save Target User Name.
-     * @param user_name Target User Name for AccountApp.
+     * @param user_name Target User Name Id for AccountApp.
      */
-    public void saveUserName(String user_name) {
+    public void saveUserNameId(String user_name_id) {
         Editor edit_config = this.appConfig.edit();
-        edit_config.putString(USER_TARGET_KEY, user_name);
+        edit_config.putString(USER_TARGET_KEY, user_name_id);
         edit_config.commit();
         readConfigurationData();
     }
@@ -135,6 +162,7 @@ public class AppConfigurationData {
 
     // Getter.
     public boolean getEstimate() { return this.isEstimate; }
+    public int getTargetUserNameId() { return this.userNameId; }
     public String getTargetUserName() { return this.userName; }
     public int getEstimateMoney() { return this.estimateMoney; }
     public int getStartDay() { return this.startDayOfMonth; }

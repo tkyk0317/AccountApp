@@ -7,8 +7,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.ContentValues;
-import com.myapp.account.database.AccountTableRecord;
+
 import com.myapp.account.utility.Utility;
+import com.myapp.account.database.AccountTableRecord;
+import com.myapp.account.config.AppConfigurationData;
 
 /**
  * @brief AccountTableAccessor.
@@ -18,13 +20,15 @@ public class AccountTableAccessor {
     protected SQLiteOpenHelper helper = null;
     protected SQLiteDatabase readDatabase = null;
     protected SQLiteDatabase writeDatabase = null;
+    protected AppConfigurationData appConfig = null;
     protected static final String TABLE_NAME = "AccountTable";
 
     /**
      * @brief Consturactor.
      */
-    public AccountTableAccessor(SQLiteOpenHelper helper) {
+    public AccountTableAccessor(SQLiteOpenHelper helper, AppConfigurationData app_config) {
         this.helper = helper;
+        this.appConfig = app_config;
     }
 
     /**
@@ -62,9 +66,9 @@ public class AccountTableAccessor {
      */
     public AccountTableRecord getRecord(int key) {
         open();
-
-        Cursor cursor = readDatabase.query(TABLE_NAME, null , "_id=?", new String[] {String.valueOf(key)}, null, null, null);
-
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , "_id=? and user_id=?",
+                                           new String[] {String.valueOf(key), String.valueOf(this.appConfig.getTargetUserNameId())},
+                                           null, null, null);
         AccountTableRecord record = new AccountTableRecord();
         if( true == cursor.moveToFirst() ) {
             record.set(cursor);
@@ -82,7 +86,9 @@ public class AccountTableAccessor {
     public List<AccountTableRecord> getRecordWithTargetDate(String target_date)
     {
         open();
-        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date=?" , new String[]{target_date}, null, null, "category_id", null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date=? and user_id=?",
+                                           new String[]{target_date, String.valueOf(this.appConfig.getTargetUserNameId())},
+                                           null, null, "category_id", null);
 
         cursor.moveToFirst();
         int record_count = cursor.getCount();
@@ -107,7 +113,9 @@ public class AccountTableAccessor {
      */
     public boolean isExsitRecordAtCategoryId(int category_id) {
         open();
-        Cursor cursor = readDatabase.query(TABLE_NAME, null , "category_id=?", new String[] {String.valueOf(category_id)}, null, null, null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , "category_id=? and user_id=?",
+                                           new String[] {String.valueOf(category_id),String.valueOf(this.appConfig.getTargetUserNameId())},
+                                           null, null, null);
 
         boolean is_exsit = false;
         if( true == cursor.moveToFirst() ) {
@@ -128,7 +136,9 @@ public class AccountTableAccessor {
     public boolean isExsitRecordAtTargetDate(String target_date)
     {
         open();
-        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date=?" , new String[]{target_date}, null, null, "category_id", null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date=? and user_id=?",
+                                           new String[]{target_date, String.valueOf(this.appConfig.getTargetUserNameId())},
+                                           null, null, "category_id", null);
 
         boolean is_exsit = false;
         if( true == cursor.moveToFirst() ) {
@@ -152,7 +162,9 @@ public class AccountTableAccessor {
     public boolean isExsitRecordBetweenStartDateAndEndDate(String start_date, String end_date)
     {
         open();
-        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date>=? and insert_date<=?" , new String[]{start_date, end_date}, null, null, "category_id", null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date>=? and insert_date<=? and user_id=?",
+                                           new String[]{start_date, end_date, String.valueOf(this.appConfig.getTargetUserNameId())},
+                                           null, null, "category_id", null);
 
         boolean is_exsit = false;
         if( true == cursor.moveToFirst() ) {
@@ -174,7 +186,8 @@ public class AccountTableAccessor {
         open();
         Cursor cursor = readDatabase.rawQuery("select AccountTable.* from AccountTable " +
                 "join AccountMaster on AccountTable.category_id=AccountMaster._id " +
-                "where AccountMaster.kind_id=1 and AccountTable.insert_date=" + "'" + target_date + "';", null);
+                "where AccountMaster.kind_id=1 and AccountTable.insert_date=" + "'" + target_date + "'" +
+                " and user_id=" + String.valueOf(this.appConfig.getTargetUserNameId()) + ";", null);
 
         boolean is_exsit = false;
         if( true == cursor.moveToFirst() ) {
@@ -196,7 +209,8 @@ public class AccountTableAccessor {
         open();
         Cursor cursor = readDatabase.rawQuery("select AccountTable.* from AccountTable " +
                 "join AccountMaster on AccountTable.category_id=AccountMaster._id " +
-                "where AccountMaster.kind_id=0 and AccountTable.insert_date=" + "'" + target_date + "';", null);
+                "where AccountMaster.kind_id=0 and AccountTable.insert_date=" + "'" + target_date + "'" +
+                " and user_id=" + String.valueOf(this.appConfig.getTargetUserNameId()) + ";", null);
 
         boolean is_exsit = false;
         if( true == cursor.moveToFirst() ) {
@@ -219,7 +233,9 @@ public class AccountTableAccessor {
         String last_date_of_year = Utility.getLastDateOfTargetYear(target_date);
         String first_date_of_year = Utility.getFirstDateOfTargetYear(target_date);
 
-        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date<=? and insert_date>=?" , new String[]{last_date_of_year, first_date_of_year}, "category_id, insert_date", null, "insert_date", null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date<=? and insert_date>=? and user_id=?" ,
+                                           new String[]{last_date_of_year, first_date_of_year, String.valueOf(this.appConfig.getTargetUserNameId())},
+                                           "category_id, insert_date", null, "insert_date", null);
 
         boolean is_exsit = false;
         if( true == cursor.moveToFirst() ) {
@@ -241,7 +257,8 @@ public class AccountTableAccessor {
     {
         open();
         Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
-                                           "insert_date=?" , new String[]{target_date}, "category_id", null, "category_id", null);
+                                           "insert_date=? and user_id=?", new String[]{target_date, String.valueOf(this.appConfig.getTargetUserNameId())},
+                                           "category_id", null, "category_id", null);
 
         cursor.moveToFirst();
         int record_count = cursor.getCount();
@@ -265,7 +282,9 @@ public class AccountTableAccessor {
     public List<AccountTableRecord> getRecordWithTargetMonthGroupByCategoryId(String start_date, String end_date) {
         open();
         Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
-                                           "insert_date<=? and insert_date>=?" , new String[]{end_date, start_date}, "category_id", null, "insert_date", null);
+                                           "insert_date<=? and insert_date>=? and user_id=?",
+                                           new String[]{end_date, start_date, String.valueOf(this.appConfig.getTargetUserNameId())},
+                                           "category_id", null, "insert_date", null);
         cursor.moveToFirst();
 
         int record_count = cursor.getCount();
@@ -292,7 +311,8 @@ public class AccountTableAccessor {
         String first_date_of_year = Utility.getFirstDateOfTargetYear(target_date);
 
         Cursor cursor = readDatabase.query(TABLE_NAME, new String [] { "_id", "user_id", "category_id", "sum(money)", "memo", "update_date", "insert_date" },
-                                           "insert_date<=? and insert_date>=?" , new String[]{last_date_of_year, first_date_of_year}, "substr(insert_date,1,7), category_id", null, "category_id,insert_date", null);
+                                           "insert_date<=? and insert_date>=? and user_id=?",
+                                           new String[]{last_date_of_year, first_date_of_year, String.valueOf(this.appConfig.getTargetUserNameId())}, "substr(insert_date,1,7), category_id", null, "category_id,insert_date", null);
         cursor.moveToFirst();
 
         int record_count = cursor.getCount();
@@ -313,6 +333,28 @@ public class AccountTableAccessor {
      * @return All AccountTableRecord in AccountMasterTable.
      */
     public List<AccountTableRecord> getAllRecord() {
+        open();
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , "user_id=?", new String[]{String.valueOf(this.appConfig.getTargetUserNameId())},
+                                           null, null, null, null);
+        cursor.moveToFirst();
+        int record_count = cursor.getCount();
+        List<AccountTableRecord> record_list = new ArrayList<AccountTableRecord>(record_count+1);
+
+        for( int i = 0 ; i < record_count ; i++ ) {
+            record_list.add( new AccountTableRecord() );
+            record_list.get(i).set(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        close();
+        return record_list;
+    }
+
+    /**
+     * @brief Get All Record(not specified user_id).
+     * @return All AccountTableRecord in AccountMasterTable.
+     */
+    public List<AccountTableRecord> getAllRecordNotSpecifiedUserId() {
         open();
         Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, null, null);
         cursor.moveToFirst();
@@ -340,7 +382,7 @@ public class AccountTableAccessor {
         Cursor cursor = readDatabase.rawQuery("select sum(AccountTable.money) from AccountTable " +
                 "join AccountMaster on AccountTable.category_id=AccountMaster._id " +
                 "where AccountMaster.kind_id=0 and AccountTable.insert_date>=" + "'" + start_date + "'" +
-                " and AccountTable.insert_date<=" + "'" + end_date + "'" + " ;", null);
+                " and AccountTable.insert_date<=" + "'" + end_date + "'" + " and user_id=" + String.valueOf(this.appConfig.getTargetUserNameId()) + " ;", null);
         cursor.moveToFirst();
 
         int total = cursor.getInt(0);
@@ -360,7 +402,7 @@ public class AccountTableAccessor {
         Cursor cursor = readDatabase.rawQuery("select sum(AccountTable.money) from AccountTable " +
                 "join AccountMaster on AccountTable.category_id=AccountMaster._id " +
                 "where AccountMaster.kind_id=1 and AccountTable.insert_date>=" + "'" + start_date + "'" +
-                " and AccountTable.insert_date<=" + "'" + end_date + "'" + " ;", null);
+                " and AccountTable.insert_date<=" + "'" + end_date + "'" + " and user_id=" + String.valueOf(this.appConfig.getTargetUserNameId()) + " ;", null);
         cursor.moveToFirst();
 
         int total = cursor.getInt(0);
@@ -377,7 +419,7 @@ public class AccountTableAccessor {
     public long insert(AccountTableRecord record) {
         open();
         ContentValues insert_record = new ContentValues();
-        insert_record.put("user_id", record.getUserId());
+        insert_record.put("user_id", this.appConfig.getTargetUserNameId());
         insert_record.put("category_id", record.getCategoryId());
         insert_record.put("money", record.getMoney());
         insert_record.put("memo", record.getMemo());
@@ -410,7 +452,7 @@ public class AccountTableAccessor {
     public boolean update(AccountTableRecord record) {
         open();
         ContentValues update_record = new ContentValues();
-        update_record.put("user_id", record.getUserId());
+        update_record.put("user_id", this.appConfig.getTargetUserNameId());
         update_record.put("category_id", record.getCategoryId());
         update_record.put("money", record.getMoney());
         update_record.put("memo", record.getMemo());
@@ -422,3 +464,4 @@ public class AccountTableAccessor {
         return true;
     }
 }
+
