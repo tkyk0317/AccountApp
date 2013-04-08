@@ -144,7 +144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 ",'雑費',strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')) );" );
         // User Table.
         db.execSQL( "insert into "+ USER_TABLE_NAME +
-                "(name, update_date, insert_date) values('default_user' ,strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')));");
+                "(name, update_date, insert_date) values('default' ,strftime('%Y/%m/%d', datetime('now', 'localtime')), strftime('%Y/%m/%d', datetime('now', 'localtime')));");
     }
 }
 
