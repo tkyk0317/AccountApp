@@ -77,7 +77,7 @@ public class Utility {
         try {
             converted_date = Utility.dateFormat.parse(target_str);
         } catch(ParseException exception) {
-            Log.d("Utility", "convertStringDateToDate Exception");
+            Log.e("Utility", "convertStringDateToDate Exception");
         }
         return converted_date;
     }

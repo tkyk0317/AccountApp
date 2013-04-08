@@ -25,11 +25,13 @@ public class Summary {
     private AccountTableAccessor accountTable = null;
     private String currentDate = null;
     private AppConfigurationData appConfig = null;
-    private static final String PERIOD_BEFORE_STRING = "[";
-    private static final String PERIOD_AFTER_STRING = "]";
+    private static final String ACCOUNT_DATA_BEFORE_STRING = "[";
+    private static final String ACCOUNT_DATA_AFTER_STRING = "]";
     private static final String PERIOD_DELIMITER = "-";
-    private static final String PERIOD_COLON = ":";
+    private static final String COLON_STRING = ":";
+    private static final String SPACE = "　";
     private static final int TEXT_FONT_SIZE = 15;
+    private static final int TEXT_FONT_HEIGHT = 20;
 
     /**
      * @brief Constractor.
@@ -49,8 +51,8 @@ public class Summary {
     public void appear(String target_date) {
         this.currentDate = target_date;
 
-        // create start and date info.
-        createStartAndEndDateInfo();
+        // create account data infomation.
+        createAccountDataInfo();
 
         // appear estimate area.
         this.estimateInfo.appear(this.currentDate);
@@ -60,26 +62,55 @@ public class Summary {
     }
 
     /**
-     * @brief Create Start and End Date of Month Infomation.
+     * @brief Crate Account Data Infomation.
      */
-    private void createStartAndEndDateInfo() {
-        String start_date = Utility.splitMonthAndDay(getStartDateOfMonth());
-        String end_date = Utility.splitMonthAndDay(getEndDateOfMonth());
-        String info_text = PERIOD_BEFORE_STRING;
-        info_text += (this.activity.getText(R.string.payment_period).toString() + PERIOD_COLON);
-        info_text += (start_date + PERIOD_DELIMITER + end_date);
-        info_text += PERIOD_AFTER_STRING;
+    private void createAccountDataInfo() {
+        // initialize target layout.
+        LinearLayout layout = (LinearLayout)this.activity.findViewById(R.id.summary_account_data_info);
+        layout.removeAllViews();
+
+        // create user and start/end date info.
+        createUserInfo(layout);
+        createStartAndEndDateInfo(layout);
+    }
+
+    /**
+     * @brief Create UserInfo.
+     *
+     * @param layout Target LinearLayout Instance.
+     */
+    private void createUserInfo(LinearLayout layout) {
+        String user_name_text = (ACCOUNT_DATA_BEFORE_STRING + this.appConfig.getTargetUserName() + COLON_STRING);
 
         // set text view.
-        TextView info_text_view = new TextView(this.activity);
-        info_text_view.setTextSize(TEXT_FONT_SIZE);
-        info_text_view.setGravity(Gravity.CENTER);
-        info_text_view.setText(info_text);
+        TextView user_name_view = new TextView(this.activity);
+        user_name_view.setTextSize(TEXT_FONT_SIZE);
+        user_name_view.setHeight(TEXT_FONT_HEIGHT);
+        user_name_view.setText(user_name_text);
 
         // Create Table.
-        LinearLayout layout = (LinearLayout)this.activity.findViewById(R.id.summary_period_info_area);
-        layout.removeAllViews();
-        layout.addView(info_text_view, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+        layout.addView(user_name_view, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                                                                     LinearLayout.LayoutParams.WRAP_CONTENT));
+    }
+
+    /**
+     * @brief Create Start and End Date of Month Infomation.
+     *
+     * @param layout Target LinearLayout Instance.
+     */
+    private void createStartAndEndDateInfo(LinearLayout layout) {
+        String start_date = Utility.splitMonthAndDay(getStartDateOfMonth());
+        String end_date = Utility.splitMonthAndDay(getEndDateOfMonth());
+        String date_text = (start_date + PERIOD_DELIMITER + end_date + ACCOUNT_DATA_AFTER_STRING);
+
+        // set text view.
+        TextView date_text_view = new TextView(this.activity);
+        date_text_view.setTextSize(TEXT_FONT_SIZE);
+        date_text_view.setHeight(TEXT_FONT_HEIGHT);
+        date_text_view.setText(date_text);
+
+        // Create Table.
+        layout.addView(date_text_view, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                                                                      LinearLayout.LayoutParams.WRAP_CONTENT));
     }
 

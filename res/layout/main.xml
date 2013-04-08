@@ -72,8 +72,9 @@
         android:paddingTop="2dp"
         />
     <LinearLayout
-        android:id="@+id/summary_period_info_area"
-        android:orientation="vertical"
+        android:id="@+id/summary_account_data_info"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
