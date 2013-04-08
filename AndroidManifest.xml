@@ -5,7 +5,8 @@
     android:versionName="1.0">
     <application android:label="@string/app_name" >
         <activity android:name="AccountMainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Black.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -13,23 +14,28 @@
         </activity>
         <activity android:name=".AppConfigurationActivity"
             android:label="@string/app_name"
-            android:exported="false" >
+            android:exported="false"
+            android:theme="@android:style/Theme.Black.NoTitleBar">
         </activity>
         <activity android:name=".EditAccountMasterActivity"
             android:label="@string/app_name"
-            android:exported="false" >
+            android:exported="false"
+            android:theme="@android:style/Theme.Black.NoTitleBar">
         </activity>
         <activity android:name=".EditUserTableActivity"
             android:label="@string/app_name"
-            android:exported="false" >
+            android:exported="false"
+            android:theme="@android:style/Theme.Black.NoTitleBar">
         </activity>
         <activity android:name=".AccountPieGraphActivity"
             android:label="@string/app_name"
-            android:exported="false" >
+            android:exported="false"
+            android:theme="@android:style/Theme.Black.NoTitleBar">
         </activity>
         <activity android:name=".AccountLineGraphActivity"
             android:label="@string/app_name"
-            android:exported="false" >
+            android:exported="false"
+            android:theme="@android:style/Theme.Black.NoTitleBar">
         </activity>
          <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     </application>
