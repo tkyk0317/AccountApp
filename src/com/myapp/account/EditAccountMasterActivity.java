@@ -103,7 +103,7 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
         boolean is_first_row = false;
         this.tableLayout.removeAllViews();
 
-        List<AccountMasterTableRecord> master_record = this.accountMasterAccessor.getAll();
+        List<AccountMasterTableRecord> master_record = this.accountMasterAccessor.getAllRecord();
 
         for( AccountMasterTableRecord record : master_record ) {
             EditAccountMasterRecord master_table_row = new EditAccountMasterRecord(this);

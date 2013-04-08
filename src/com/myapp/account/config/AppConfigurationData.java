@@ -24,7 +24,7 @@ import com.myapp.account.utility.Utility;
  */
 public class AppConfigurationData {
 
-    static private SharedPreferences appConfig = null;
+    private static SharedPreferences appConfig = null;
     private Activity activity = null;
     private boolean isEstimate = false;
     private String userName = null;

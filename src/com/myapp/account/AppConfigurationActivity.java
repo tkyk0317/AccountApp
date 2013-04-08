@@ -27,7 +27,7 @@ import com.myapp.account.config.AppConfigurationData;
  */
 public class AppConfigurationActivity extends PreferenceActivity {
 
-    private AppConfigurationData appConfiguration = null;
+    private AppConfigurationData appConfig = null;
     private UserTableAccessor userTable = null;
 
     /**
@@ -48,7 +48,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
      * @brief Initialize.
      */
     private void init() {
-        this.appConfiguration = new AppConfigurationData(this);
+        this.appConfig = new AppConfigurationData(this);
         this.userTable = new UserTableAccessor(new DatabaseHelper(this.getApplicationContext()));
     }
 
@@ -56,7 +56,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
      * @brief Create Preference for UserName.
      */
     private void createUserNameListPreference() {
-        ListPreference user_name_list_preference = (ListPreference)findPreference(this.appConfiguration.getTargetUserKey());
+        ListPreference user_name_list_preference = (ListPreference)findPreference(this.appConfig.getTargetUserKey());
         List<UserTableRecord> user_records = this.userTable.getAllRecord();
 
         // add entry values.
@@ -76,23 +76,26 @@ public class AppConfigurationActivity extends PreferenceActivity {
 
         user_name_list_preference.setEntries(entries);
         user_name_list_preference.setEntryValues(entryValues);
+
+        // set default value index.
+        user_name_list_preference.setValueIndex(this.appConfig.getTargetUserNameId() - 1);
     }
 
     /**
       * @brief Display Summary.
       */
     private void displaySummary() {
-        CheckBoxPreference estimate_config = (CheckBoxPreference)findPreference(this.appConfiguration.getEstimateKey());
-        ListPreference user_config = (ListPreference)findPreference(this.appConfiguration.getTargetUserKey());
-        ListPreference start_day_config = (ListPreference)findPreference(this.appConfiguration.getStartDayKey());
+        CheckBoxPreference estimate_config = (CheckBoxPreference)findPreference(this.appConfig.getEstimateKey());
+        ListPreference user_config = (ListPreference)findPreference(this.appConfig.getTargetUserKey());
+        ListPreference start_day_config = (ListPreference)findPreference(this.appConfig.getStartDayKey());
 
-        if( this.appConfiguration.getEstimate() ) {
+        if( this.appConfig.getEstimate() ) {
             estimate_config.setSummary(getText(R.string.estimate_configuration_enable));
         } else {
             estimate_config.setSummary(getText(R.string.estimate_configuration_unenable));
         }
-        user_config.setSummary(this.appConfiguration.getTargetUserName());
-        start_day_config.setSummary(String.valueOf(this.appConfiguration.getStartDay()) + getText(R.string.day_unit_string).toString());
+        user_config.setSummary(this.appConfig.getTargetUserName());
+        start_day_config.setSummary(String.valueOf(this.appConfig.getStartDay()) + getText(R.string.day_unit_string).toString());
 
         // estimate money summary
         setEstimateMoneySummary();
@@ -102,11 +105,11 @@ public class AppConfigurationActivity extends PreferenceActivity {
      * @brief Set Summary for Estimate Money.
      */
     private void setEstimateMoneySummary() {
-        EditTextPreference estimate_money_config = (EditTextPreference)findPreference(this.appConfiguration.getEstimateMoneyKey());
+        EditTextPreference estimate_money_config = (EditTextPreference)findPreference(this.appConfig.getEstimateMoneyKey());
 
         String estimate_money_summary = getEstimateTargetDate();
         estimate_money_summary = Utility.splitMonth(estimate_money_summary) + getText(R.string.estimate_money_summary_suffix);
-        estimate_money_summary = estimate_money_summary + String.format("%,d", this.appConfiguration.getEstimateMoney());
+        estimate_money_summary = estimate_money_summary + String.format("%,d", this.appConfig.getEstimateMoney());
         estimate_money_config.setSummary(estimate_money_summary);
     }
 
@@ -115,7 +118,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
       */
     private void registEvent() {
         // Estimate Function Enable/UnEnable Event.
-        CheckBoxPreference estimate_pref = (CheckBoxPreference)findPreference(this.appConfiguration.getEstimateKey());
+        CheckBoxPreference estimate_pref = (CheckBoxPreference)findPreference(this.appConfig.getEstimateKey());
         estimate_pref.setOnPreferenceChangeListener(
                 new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference pref, Object value) {
@@ -123,7 +126,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
                         boolean is_estimate = ((Boolean)value).booleanValue();
 
                         // save estimate parameter.
-                        appConfiguration.saveEstimate(is_estimate);
+                        appConfig.saveEstimate(is_estimate);
                         if( is_estimate ) {
                             estimate_config.setSummary(getText(R.string.estimate_configuration_enable));
                         } else {
@@ -134,7 +137,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
                 });
 
         // UserName Changed Event.
-        ListPreference user_pref = (ListPreference)findPreference(this.appConfiguration.getTargetUserKey());
+        ListPreference user_pref = (ListPreference)findPreference(this.appConfig.getTargetUserKey());
         user_pref.setOnPreferenceChangeListener(
                 new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference pref, Object value) {
@@ -142,16 +145,16 @@ public class AppConfigurationActivity extends PreferenceActivity {
                         String user_name_id = value.toString();
 
                         // save target user name.
-                        appConfiguration.saveUserNameId(user_name_id);
+                        appConfig.saveUserNameId(user_name_id);
 
                         // display summary.
-                        user_name_pref.setSummary(appConfiguration.getTargetUserName());
+                        user_name_pref.setSummary(appConfig.getTargetUserName());
                         return true;
                     }
                 });
 
         // Changed Estimate Money Event.
-        EditTextPreference estimate_money_pref = (EditTextPreference)findPreference(this.appConfiguration.getEstimateMoneyKey());
+        EditTextPreference estimate_money_pref = (EditTextPreference)findPreference(this.appConfig.getEstimateMoneyKey());
         estimate_money_pref.setOnPreferenceChangeListener(
                 new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference pref, Object value) {
@@ -160,7 +163,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
                             int estimate_money = Integer.valueOf(value.toString());
 
                             // save estimate_money.
-                            appConfiguration.saveEstimateMoney(estimate_money);
+                            appConfig.saveEstimateMoney(estimate_money);
 
                             // reflesh estimate money summary.
                             setEstimateMoneySummary();
@@ -172,14 +175,14 @@ public class AppConfigurationActivity extends PreferenceActivity {
                 });
 
         // Change Start Day Event.
-        ListPreference start_day_pref = (ListPreference)findPreference(this.appConfiguration.getStartDayKey());
+        ListPreference start_day_pref = (ListPreference)findPreference(this.appConfig.getStartDayKey());
         start_day_pref.setOnPreferenceChangeListener(
             new OnPreferenceChangeListener() {
                 public boolean onPreferenceChange(Preference pref, Object value) {
                     ListPreference start_day_pref = (ListPreference)pref;
 
                     // save start day.
-                    appConfiguration.savaStartDay(value.toString());
+                    appConfig.savaStartDay(value.toString());
                     start_day_pref.setSummary(value.toString() + getText(R.string.day_unit_string).toString());
 
                     // reflesh estimate money summary.
@@ -212,7 +215,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
      */
     private String getEstimateTargetDate() {
         String current_date = Utility.getCurrentDate();
-        return Utility.getEstimateTargetDate(current_date, appConfiguration.getStartDay());
+        return Utility.getEstimateTargetDate(current_date, appConfig.getStartDay());
     }
 }
 

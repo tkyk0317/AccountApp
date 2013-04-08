@@ -130,7 +130,7 @@ public class AccountAdd implements OnItemSelectedListener {
      * @brief Create Category Items.
      */
     protected void createCategoryItems() {
-        List<AccountMasterTableRecord> record = this.masterTable.getAll();
+        List<AccountMasterTableRecord> record = this.masterTable.getAllRecord();
         this.categoryItems = new String[ record.size() ];
 
         for( int i = 0 ; i < record.size() ; i++ ) {

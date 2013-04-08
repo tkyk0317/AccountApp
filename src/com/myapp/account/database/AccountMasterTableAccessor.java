@@ -114,9 +114,9 @@ public class AccountMasterTableAccessor {
      * @brief Get All Record.
      * @return All AccountMasterTableRecord in AccountMasterTable.
      */
-    public List<AccountMasterTableRecord> getAll() {
+    public List<AccountMasterTableRecord> getAllRecord() {
         open();
-        Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, "use_date desc, _id", null);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, null, null, null, null, "use_date desc, _id", null);
 
         cursor.moveToFirst();
         int record_count = cursor.getCount();
