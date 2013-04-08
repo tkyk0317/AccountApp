@@ -15,11 +15,11 @@ import com.myapp.account.config.AppConfigurationData;
  */
 public class ExportAccountDataTableImpl implements ExportImportDBTableInterface {
 
-    protected SdCardFileManagerImpl sdCardFileManager = null;
-    protected AccountTableAccessor accountTable = null;
-    protected static final String ACCOUNT_DATA_FILE_NAME = "AccountData.csv";
-    protected static final String CSV_DELIMITER = ",";
-    protected static final String LINE_END = "\n";
+    private SdCardFileManagerImpl sdCardFileManager = null;
+    private AccountTableAccessor accountTable = null;
+    private static final String EXPORT_FILE_NAME = "AccountData.csv";
+    private static final String CSV_DELIMITER = ",";
+    private static final String LINE_END = "\n";
 
     /**
      * @brief Constractor.
@@ -45,14 +45,14 @@ public class ExportAccountDataTableImpl implements ExportImportDBTableInterface 
      */
     @Override
     public boolean exportData() {
-        return this.sdCardFileManager.writeFile(ACCOUNT_DATA_FILE_NAME, getAccountTableData());
+        return this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, getAccountTableData());
     }
 
     /**
      * @brief Get AccountTable All Record.
      */
-    protected String getAccountTableData() {
-        List<AccountTableRecord> record = this.accountTable.getAllRecord();
+    private String getAccountTableData() {
+        List<AccountTableRecord> record = this.accountTable.getAllRecordNotSpecifiedUserId();
         return serialize(record);
     }
 
@@ -61,7 +61,7 @@ public class ExportAccountDataTableImpl implements ExportImportDBTableInterface 
      * @param record AccountTable Record List.
      * @return Serialized AccountTable Record Data.
      */
-    protected String serialize(List<AccountTableRecord> record_list) {
+    private String serialize(List<AccountTableRecord> record_list) {
         String serialize_data= new String();
 
         for( AccountTableRecord record : record_list) {

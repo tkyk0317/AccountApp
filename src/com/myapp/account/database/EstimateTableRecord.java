@@ -35,8 +35,11 @@ public class EstimateTableRecord {
     }
 
     // Setter.
+    public void setId(int id) { this.id = id; }
     public void setEstimateMoney(int money) { this.estimate_money = money; }
     public void setEstimateTargetDate(String date) { this.target_date = date; }
+    public void setUpdateDate(String date) { this.update_date = date; }
+    public void setInsertDate(String date) { this.insert_date = date; }
     public void setUserId(int id) { this.user_id = id; }
 
     // Getter.

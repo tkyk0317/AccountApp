@@ -11,4 +11,9 @@
         android:title="@string/menu_account_data_edit_title"
         android:icon="@android:drawable/ic_menu_edit"
         ></item>
+    <item
+        android:id="@+id/menu_account_data_input_output"
+        android:title="@string/menu_account_data_input_output_title"
+        android:icon="@android:drawable/ic_menu_save"
+        ></item>
 </menu>

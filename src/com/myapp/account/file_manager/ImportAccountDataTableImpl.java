@@ -17,11 +17,11 @@ import com.myapp.account.config.AppConfigurationData;
  */
 public class ImportAccountDataTableImpl implements ExportImportDBTableInterface {
 
-    protected SdCardFileManagerImpl sdCardFileManager = null;
-    protected AccountTableAccessor accountTable = null;
-    protected static final String ACCOUNT_DATA_FILE_NAME = "AccountData.csv";
-    protected static final String CSV_DELIMITER = ",";
-    protected static final String LINE_END = "\n";
+    private SdCardFileManagerImpl sdCardFileManager = null;
+    private AccountTableAccessor accountTable = null;
+    private static final String IMPORT_FILE_NAME = "AccountData.csv";
+    private static final String CSV_DELIMITER = ",";
+    private static final String LINE_END = "\n";
 
     /**
      * @brief Constractor.
@@ -60,9 +60,9 @@ public class ImportAccountDataTableImpl implements ExportImportDBTableInterface 
      * @brief Deserialize AccountTable Record.
      * @return AccountTableRecord List.
      */
-    protected List<AccountTableRecord> deserialize() {
+    private List<AccountTableRecord> deserialize() {
         List<AccountTableRecord> record = new ArrayList<AccountTableRecord>();
-        String[] account_data = this.sdCardFileManager.readFile(ACCOUNT_DATA_FILE_NAME).split(LINE_END);
+        String[] account_data = this.sdCardFileManager.readFile(IMPORT_FILE_NAME).split(LINE_END);
 
         for( int i = 0 ; i < account_data.length ; ++i ) {
             String[] item_data = account_data[i].split(CSV_DELIMITER);

@@ -37,6 +37,8 @@ public class AccountTableRecord {
         update_date = cursor.getString(DatabaseIndex.UPDATE_DATE.getIndex());
         insert_date = cursor.getString(DatabaseIndex.INSERT_DATE.getIndex());
     }
+
+    // setter.
     public void setId(int id) { this.id = id; }
     public void setUserId(int user_id) { this.user_id = user_id; }
     public void setCategoryId(int id) { this.category_id = id; }

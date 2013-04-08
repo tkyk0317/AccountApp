@@ -83,6 +83,28 @@ public class EstimateTableAccessor {
     }
 
     /**
+     * @brief Get All Record(not specified user_id).
+     * @return All EstimateRecord in EstimateTable.
+     */
+    public List<EstimateTableRecord> getAllRecordNotSpecifiedUserId() {
+        open();
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, null, null);
+        cursor.moveToFirst();
+        int record_count = cursor.getCount();
+        List<EstimateTableRecord> record_list = new ArrayList<EstimateTableRecord>(record_count+1);
+
+        for( int i = 0 ; i < record_count ; i++ ) {
+            record_list.add( new EstimateTableRecord() );
+            record_list.get(i).set(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        close();
+        return record_list;
+    }
+
+
+    /**
      * @brief Get Record With Current Month.
      * @return EstimateRecord Instance.
      */

@@ -17,17 +17,27 @@ import com.myapp.account.EditUserTableActivity;
  */
 public class ApplicationMenu {
 
-    // Dialog List Index.
-    private enum DialogListIndex {
+    // Dialog List Index for Edit Data.
+    private enum EditDataListIndex {
         ADD_CATEGORY_INDEX(0), ADD_USER_INDEX(1);
 
         private final int index;
 
-        private DialogListIndex(int index) { this.index = index; }
+        private EditDataListIndex(int index) { this.index = index; }
         public int getIndex() { return this.index; }
     }
 
-    protected Activity activity;
+    // Dialog List Index for CSV Data.
+    private enum CSVDataListIndex {
+        INPUT_CSV_FILE_DATA(0), OUTPUT_CSV_FILE_DATA(1);
+
+        private final int index;
+
+        private CSVDataListIndex(int index) { this.index = index; }
+        public int getIndex() { return this.index; }
+    }
+
+    private Activity activity = null;
 
     /**
      * @brief Constractor.
@@ -58,6 +68,9 @@ public class ApplicationMenu {
             case R.id.menu_account_data_edit:
                 displayEditDialog();
                 break;
+            case R.id.menu_account_data_input_output:
+                displayInputOutputAccountDataDialog();
+                break;
             default:
                 result = false;
                 break;
@@ -68,7 +81,7 @@ public class ApplicationMenu {
     /**
      * @brief Move To Configuration Activity.
      */
-    protected void moveToConfig() {
+    private void moveToConfig() {
         Intent intent = new Intent( this.activity, AppConfigurationActivity.class);
         this.activity.startActivity(intent);
     }
@@ -76,17 +89,36 @@ public class ApplicationMenu {
     /**
      * @brief Display Edit Dialog.
      */
-    protected void displayEditDialog() {
+    private void displayEditDialog() {
         final String[] edit_menus
             = { this.activity.getText(R.string.menu_master_edit_title).toString(),
                 this.activity.getText(R.string.menu_user_edit_title).toString()};
 
         AlertDialog.Builder edit_menu_dialog = new AlertDialog.Builder(this.activity);
         edit_menu_dialog.setTitle(R.string.menu_account_data_edit_list_title);
-        edit_menu_dialog.setItems( edit_menus,
+        edit_menu_dialog.setItems(edit_menus,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int index) {
-                        parseClickEvent(index);
+                        parseClickEventForEditData(index);
+                    }
+                });
+        edit_menu_dialog.show();
+    }
+
+    /**
+     * @brief Display Input and Output Account Data Dialog.
+     */
+    private void displayInputOutputAccountDataDialog() {
+        final String[] edit_menus
+            = { this.activity.getText(R.string.menu_input_account_data_title).toString(),
+                this.activity.getText(R.string.menu_output_account_data_title).toString()};
+
+        AlertDialog.Builder edit_menu_dialog = new AlertDialog.Builder(this.activity);
+        edit_menu_dialog.setTitle(R.string.menu_input_output_account_data_title);
+        edit_menu_dialog.setItems(edit_menus,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int index) {
+                        parseClickEventForCSVData(index);
                     }
                 });
         edit_menu_dialog.show();
@@ -96,18 +128,29 @@ public class ApplicationMenu {
      * @brief Parse Click Event.
      * @param click_index Click List Item Index.
      */
-    protected void parseClickEvent(int click_index) {
-        if( click_index == DialogListIndex.ADD_CATEGORY_INDEX.getIndex() ) {
+    private void parseClickEventForEditData(int click_index) {
+        if( click_index == EditDataListIndex.ADD_CATEGORY_INDEX.getIndex() ) {
             moveToAddCategory();
-        } else if( click_index == DialogListIndex.ADD_USER_INDEX.getIndex() ) {
+        } else if( click_index == EditDataListIndex.ADD_USER_INDEX.getIndex() ) {
             moveToUser();
+        }
+    }
+
+    /**
+     * @brief Parse Click Event For CSV Data.
+     *
+     * @param click_index clciked index.
+     */
+    private void parseClickEventForCSVData(int click_index) {
+        if( click_index == CSVDataListIndex.INPUT_CSV_FILE_DATA.getIndex() ) {
+        } else if( click_index == CSVDataListIndex.OUTPUT_CSV_FILE_DATA.getIndex() ) {
         }
     }
 
     /**
      * @brief Move To Add Category into Master Activity.
      */
-    protected void moveToAddCategory() {
+    private void moveToAddCategory() {
         Intent intent = new Intent( this.activity, EditAccountMasterActivity.class);
         this.activity.startActivity(intent);
     }
@@ -115,7 +158,7 @@ public class ApplicationMenu {
     /**
      * @brief Move To Add User into User Table.
      */
-    protected void moveToUser() {
+    private void moveToUser() {
         Intent intent = new Intent( this.activity, EditUserTableActivity.class);
         this.activity.startActivity(intent);
     }
