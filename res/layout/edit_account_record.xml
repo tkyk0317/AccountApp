@@ -6,14 +6,39 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     >
-    <TextView
-        android:id="@+id/date_title"
+    <RelativeLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="20sp"
-        android:gravity="center"
-        />
+        android:paddingTop="5dp"
+        >
+        <TextView
+            android:id="@+id/date_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:paddingRight="20dp"
+            >
+            <ImageView
+                android:id="@+id/calendar_image"
+                android:layout_width="32px"
+                android:layout_height="32px"
+                android:scaleType="fitCenter"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                />
+        </LinearLayout>
+    </RelativeLayout>
     <ImageView
         android:src="@android:drawable/divider_horizontal_dark"
         android:layout_width="match_parent"

@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.widget.Spinner;
@@ -96,6 +96,7 @@ public class AccountAdd implements OnItemSelectedListener {
         createSpinner();
         setTitleArea();
         setButtonTitle();
+        setCalendarButton();
         registEvent();
      }
 
@@ -158,6 +159,11 @@ public class AccountAdd implements OnItemSelectedListener {
         regist_button.setText(this.activity.getText(R.string.regist_btn_label));
      }
 
+    protected void setCalendarButton() {
+        ImageView calendar_button = (ImageView)this.layout.findViewById(R.id.calendar_image);
+        calendar_button.setImageDrawable(null);
+    }
+
     /**
      * @brief Rejist Event
      */
@@ -204,6 +210,7 @@ public class AccountAdd implements OnItemSelectedListener {
         AccountTableRecord record = new AccountTableRecord();
         try {
             record.setInsertDate(this.insertDate);
+            record.setUpdateDate(getCurrentDate());
             record.setCategoryId(master_record.getId());
             record.setMoney(Integer.valueOf(edit_money.getText().toString()));
             record.setMemo(edit_memo.getText().toString());
@@ -276,11 +283,17 @@ public class AccountAdd implements OnItemSelectedListener {
     }
 
     /**
-     * @brief Non Selected item on Spinner.
+     * @brief Get Current Date.
+     *
+     * @return current date string.
      */
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    private String getCurrentDate() {
+        return Utility.getCurrentDate();
     }
+
+    // not supportted.
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {}
 }
 
 

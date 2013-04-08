@@ -1,14 +1,20 @@
 package com.myapp.account.edit_account_data;
 
+import java.util.*;
+
 import android.app.Activity;
 import android.util.Log;
 import android.widget.Toast;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 
 import com.myapp.account.R;
@@ -16,13 +22,15 @@ import com.myapp.account.utility.Utility;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.infoarea.DailyInfoRecord;
+import com.myapp.account.observer.EventCompleteObserver;
 
 /**
  * @brief Edit Account Date Class.
  */
-public class AccountEdit extends AccountAdd {
+public class AccountEdit extends AccountAdd implements EventCompleteObserver {
 
-    protected DailyInfoRecord updateRecord;
+    protected DailyInfoRecord updateRecord = null;
+    protected CalendarClickEvent calendarEvent = null;
     protected static final int BUTTON_WIDTH = 100;
 
     /**
@@ -48,28 +56,43 @@ public class AccountEdit extends AccountAdd {
     public void appear(DailyInfoRecord record) {
         this.updateRecord = record;
         this.insertDate = record.getAccountDate();
+        this.calendarEvent = new CalendarClickEvent(this.activity, this.insertDate);
+        this.calendarEvent.attachObserver(this);
+
         // initalize.
         initialize();
+
         // set current data.
         setCurrentData();
+
         // Add Delete Button.
         addDeleteButton();
+    }
+
+    /**
+     * @brief set Calendar Button.
+     */
+    protected void setCalendarButton() {
+        ImageView calendar_button = (ImageView)this.layout.findViewById(R.id.calendar_image);
+
+        calendar_button.setImageDrawable(this.activity.getResources().getDrawable(R.drawable.calendar));
+        calendar_button.setOnClickListener(this.calendarEvent);
     }
 
     /**
      * @brief Add Delete Button.
      */
     protected void addDeleteButton() {
-        Button delete_button = new Button(activity);
+        Button delete_button = new Button(this.activity);
         delete_button.setWidth(BUTTON_WIDTH);
         delete_button.setText(R.string.delete_btn_label);
 
-        LinearLayout linear_layout = (LinearLayout)layout.findViewById(R.id.commit_btn_area);
+        LinearLayout linear_layout = (LinearLayout)this.layout.findViewById(R.id.commit_btn_area);
         linear_layout.addView(delete_button);
 
         // set event listener.
-        delete_button.setOnClickListener(
-                new View.OnClickListener() {
+        delete_button.setOnClickListener(new View.OnClickListener() {
+            @Override
                     public void onClick(View v) {
                         // Create Dialog.
                         AlertDialog.Builder confirm_dialog = new AlertDialog.Builder(activity);
@@ -87,7 +110,6 @@ public class AccountEdit extends AccountAdd {
                                     displayDeleteCompleteMessage();
                                 }
                         });
-
                         // delete NO.
                         confirm_dialog.setNegativeButton(
                             R.string.delete_confirm_no,
@@ -105,7 +127,7 @@ public class AccountEdit extends AccountAdd {
      * @brief Delete Current Record.
      */
     protected void deleteAccountRecord() {
-        accountTable.delete(updateRecord.getAccountRecord().getId());
+        this.accountTable.delete(updateRecord.getAccountRecord().getId());
     }
 
     /**
@@ -113,19 +135,19 @@ public class AccountEdit extends AccountAdd {
      */
     @Override
     protected void setButtonTitle() {
-        Button regist_button = (Button)layout.findViewById(R.id.regist_btn);
-        regist_button.setText(activity.getText(R.string.modify_btn_label));
+        Button regist_button = (Button)this.layout.findViewById(R.id.regist_btn);
+        regist_button.setText(this.activity.getText(R.string.modify_btn_label));
      }
 
     /**
      * @brief set Current Data.
      */
     protected void setCurrentData() {
-        EditText current_money = (EditText)layout. findViewById(R.id.money_value);
-        EditText current_memo = (EditText)layout.findViewById(R.id.memo_value);
+        EditText current_money = (EditText)this.layout. findViewById(R.id.money_value);
+        EditText current_memo = (EditText)this.layout.findViewById(R.id.memo_value);
 
         // set current data.
-        categorySpinner.setSelection(getCategoryPositionFromSpinner(updateRecord.getCategoryName()));
+        this.categorySpinner.setSelection(getCategoryPositionFromSpinner(updateRecord.getCategoryName()));
         current_money.setText(String.valueOf(this.updateRecord.getAccountRecord().getMoney()));
         current_memo.setText(this.updateRecord.getAccountMemo());
     }
@@ -136,8 +158,8 @@ public class AccountEdit extends AccountAdd {
     protected int getCategoryPositionFromSpinner(String category_name) {
         int pos = 0;
         boolean is_find = false;
-        for( pos = 0 ; pos < categoryItems.length ; ++pos ) {
-            if( categoryItems[pos].equals(category_name) ) {
+        for( pos = 0 ; pos < this.categoryItems.length ; ++pos ) {
+            if( this.categoryItems[pos].equals(category_name) ) {
                 is_find = true;
                 break;
             }
@@ -156,23 +178,100 @@ public class AccountEdit extends AccountAdd {
         record.setUpdateDate(Utility.getCurrentDate());
 
         // update record.
-        accountTable.update(record);
+        this.accountTable.update(record);
     }
 
     /**
      * @brief Display Complete Message.
      */
     protected void displayCompleteMessage() {
-        String message = activity.getText(R.string.modify_msg).toString();
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        String message = this.activity.getText(R.string.modify_msg).toString();
+        Toast.makeText(this.activity, message, Toast.LENGTH_SHORT).show();
     }
 
     /**
      * @brief Display Delete Complete Message.
      */
     protected void displayDeleteCompleteMessage() {
-        String message = activity.getText(R.string.delete_msg).toString();
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        String message = this.activity.getText(R.string.delete_msg).toString();
+        Toast.makeText(this.activity, message, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * @brief Edit Complete.
+     */
+    public void notifyAccountEditComplete() {
+        this.insertDate = this.calendarEvent.getCalendarDate();
+        setTitleArea();
+    }
+
+    // not supportted.
+    public void notifyAccountMasterEditComplete() {}
+    public void notifyUserTableEditComplete() {}
+
+    /**
+     * @brief Calendar Click Event Class.
+     */
+    private class CalendarClickEvent implements OnClickListener {
+
+        private Activity activity = null;
+        private String insertDate = null;
+        private DatePickerDialog calendarDialog = null;
+        private EventCompleteObserver observer = null;
+
+        /**
+         * @brief constractor.
+         *
+         * @param activity Activity Instances.
+         */
+        public CalendarClickEvent(Activity activity, String insert_date) {
+           this.activity = activity;
+           this.insertDate = insert_date;
+        }
+
+        /**
+         * @brief Attach Observer.
+         *
+         * @param observer EventCompleteObserver Instance.
+         */
+        public void attachObserver(EventCompleteObserver observer) {
+            this.observer = observer;
+        }
+
+        /**
+         * @brief OnClick Event Handler.
+         *
+         * @param view View Instances.
+         */
+        @Override
+        public void onClick(View view) {
+            // create picker.
+            createCalendarPicker();
+            // show dialog.
+            this.calendarDialog.show();
+        }
+
+        /**
+         * @brief create calendar dialog.
+         */
+        private void createCalendarPicker() {
+            this.calendarDialog = new DatePickerDialog(
+                    this.activity,
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int day) {
+                            insertDate = Utility.createDateFormat(year, month + 1, day);
+                            if( observer != null ) observer.notifyAccountEditComplete();
+                        }
+                    },
+                    Integer.valueOf(Utility.splitYear(this.insertDate)),
+                    Integer.valueOf(Utility.splitMonth(this.insertDate)) - 1,
+                    Integer.valueOf(Utility.splitDay(this.insertDate))
+                    );
+        }
+
+        // getter.
+        public String getCalendarDate() { return this.insertDate; }
     }
 }
 
