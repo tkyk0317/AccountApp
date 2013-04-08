@@ -12,8 +12,6 @@ import com.myapp.account.R;
  */
 public class Utility {
 
-    private static Calendar currentCalDate = null;
-    private static String currentDateString = null;
     public static final String HALF_SPACE = " ";
     public static final String FULL_SPACE = "　";
     public static final String EMPTY_STRING = "";
@@ -32,6 +30,10 @@ public class Utility {
     public static final String YEAR_OF_FIRST_DATE = "01/01";
     public static final String YEAR_OF_LAST_DATE = "12/31";
     public static final String MONTH_OF_FIRST_DAY = "01";
+    private static Calendar currentCalDate = null;
+    private static String currentDateString = null;
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+    private static SimpleDateFormat dateAndTimeFormat = new SimpleDateFormat(DATE_AND_TIME_FORMAT);
 
     /**
      * @brief Is String is NULL.
@@ -72,9 +74,8 @@ public class Utility {
      */
     public static Date convertStringDateToDate(String target_str) {
         Date converted_date = null;
-        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
         try {
-            converted_date = format.parse(target_str);
+            converted_date = Utility.dateFormat.parse(target_str);
         } catch(ParseException exception) {
             Log.d("Utility", "convertStringDateToDate Exception");
         }
@@ -103,7 +104,7 @@ public class Utility {
     public static String getCurrentDate() {
         if( null == Utility.currentCalDate ) {
             Utility.currentCalDate = Calendar.getInstance(TimeZone.getDefault());
-            Utility.currentDateString = new SimpleDateFormat(DATE_FORMAT).format(Utility.currentCalDate.getTime());
+            Utility.currentDateString = Utility.dateFormat.format(Utility.currentCalDate.getTime());
         }
 
         // check diffrence.
@@ -111,7 +112,7 @@ public class Utility {
         if( cal_date.compareTo(Utility.currentCalDate) != 0 ) {
             Utility.currentDateString = null;
             Utility.currentCalDate = cal_date;
-            Utility.currentDateString = new SimpleDateFormat(DATE_FORMAT).format(Utility.currentCalDate.getTime());
+            Utility.currentDateString = Utility.dateFormat.format(Utility.currentCalDate.getTime());
         }
         return Utility.currentDateString;
     }
@@ -128,7 +129,7 @@ public class Utility {
         Calendar previous_date = Calendar.getInstance(TimeZone.getDefault());
         previous_date.set(year, month - 1, day);
         previous_date.add(Calendar.MONTH, -1);
-        return (new SimpleDateFormat(DATE_FORMAT)).format(previous_date.getTime());
+        return Utility.dateFormat.format(previous_date.getTime());
     }
 
     /**
@@ -143,7 +144,7 @@ public class Utility {
         Calendar previous_date = Calendar.getInstance(TimeZone.getDefault());
         previous_date.set(year, month - 1, day);
         previous_date.add(Calendar.MONTH, 1);
-        return (new SimpleDateFormat(DATE_FORMAT)).format(previous_date.getTime());
+        return Utility.dateFormat.format(previous_date.getTime());
     }
 
     /**
@@ -158,7 +159,7 @@ public class Utility {
         Calendar previous_date = Calendar.getInstance(TimeZone.getDefault());
         previous_date.set(year, month - 1, day);
         previous_date.add(Calendar.YEAR, -1);
-        return (new SimpleDateFormat(DATE_FORMAT)).format(previous_date.getTime());
+        return Utility.dateFormat.format(previous_date.getTime());
     }
 
     /**
@@ -173,7 +174,7 @@ public class Utility {
         Calendar previous_date = Calendar.getInstance(TimeZone.getDefault());
         previous_date.set(year, month - 1, day);
         previous_date.add(Calendar.YEAR, 1);
-        return (new SimpleDateFormat(DATE_FORMAT)).format(previous_date.getTime());
+        return Utility.dateFormat.format(previous_date.getTime());
     }
 
     /**
@@ -182,7 +183,7 @@ public class Utility {
      */
     public static String getCurrentDateAndTime() {
         Calendar cal_date = Calendar.getInstance(TimeZone.getDefault());
-        return (new SimpleDateFormat(DATE_AND_TIME_FORMAT)).format(cal_date.getTime());
+        return Utility.dateAndTimeFormat.format(cal_date.getTime());
     }
 
     /**
@@ -197,7 +198,7 @@ public class Utility {
 
         cal_date.set(year, month - 1, 1);
 
-        return (new SimpleDateFormat(DATE_FORMAT)).format(cal_date.getTime());
+        return Utility.dateFormat.format(cal_date.getTime());
     }
 
     /**
@@ -218,7 +219,7 @@ public class Utility {
         cal_date.set(Calendar.DAY_OF_MONTH, 1);
         cal_date.add(Calendar.DAY_OF_MONTH, -1);
 
-        return (new SimpleDateFormat(DATE_FORMAT)).format(cal_date.getTime());
+        return Utility.dateFormat.format(cal_date.getTime());
     }
 
     /**
@@ -257,7 +258,7 @@ public class Utility {
 
         // check last day of current month.
         int original_start_day = start_day;
-        String start_date = new SimpleDateFormat(DATE_FORMAT).format(start_date_cal.getTime());
+        String start_date = Utility.dateFormat.format(start_date_cal.getTime());
         String last_date_of_month = getLastDateOfTargetMonth(start_date);
         int last_day_of_month = Integer.valueOf(splitDay(last_date_of_month));
         if( start_day > last_day_of_month ) {
@@ -271,7 +272,7 @@ public class Utility {
             start_date_cal.add(Calendar.MONTH, -1);
 
             // check last day of current month again.
-            start_date = new SimpleDateFormat(DATE_FORMAT).format(start_date_cal.getTime());
+            start_date = Utility.dateFormat.format(start_date_cal.getTime());
             last_date_of_month = getLastDateOfTargetMonth(start_date);
             last_day_of_month = Integer.valueOf(splitDay(last_date_of_month));
             if( start_day >= last_day_of_month ) {
@@ -279,7 +280,7 @@ public class Utility {
             }
         }
         start_date_cal.set(Calendar.DAY_OF_MONTH, start_day);
-        return (new SimpleDateFormat(DATE_FORMAT)).format(start_date_cal.getTime());
+        return Utility.dateFormat.format(start_date_cal.getTime());
     }
 
     /**
@@ -305,14 +306,14 @@ public class Utility {
         end_date.add(Calendar.MONTH, 1);
 
         // check start_day and calculated day.
-        String last_date = new SimpleDateFormat(DATE_FORMAT).format(end_date.getTime());
+        String last_date = Utility.dateFormat.format(end_date.getTime());
         last_date = getLastDateOfTargetMonth(last_date);
         int last_day = Integer.valueOf(splitDay(last_date));
         if( start_day - 1 < last_day ) last_day = start_day - 1;
 
         end_date.set(Calendar.DAY_OF_MONTH, last_day);
 
-        return (new SimpleDateFormat(DATE_FORMAT)).format(end_date.getTime());
+        return Utility.dateFormat.format(end_date.getTime());
     }
 
     /**
