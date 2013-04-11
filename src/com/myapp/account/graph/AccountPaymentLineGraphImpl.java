@@ -14,6 +14,7 @@ import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.graph.AbstractAccountGraph;
 import com.myapp.account.database.DatabaseHelper;
+import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.database.AccountTableRecord;
 
@@ -101,8 +102,14 @@ public class AccountPaymentLineGraphImpl extends AbstractAccountGraph {
      */
     protected int getMaxMoney() {
         int max_money = 0;
+        AccountMasterTableAccessor masterTable = new AccountMasterTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+
         for( AccountTableRecord record : this.accountRecord ) {
-            if( max_money == 0 || record.getMoney() > max_money ) max_money = record.getMoney();
+            AccountMasterTableRecord master_record = masterTable.getRecord(record.getCategoryId());
+
+            if( true == isTargetAccountRecord(master_record) && record.getMoney() > max_money ) {
+                max_money = record.getMoney();
+            }
         }
         return max_money;
     }
