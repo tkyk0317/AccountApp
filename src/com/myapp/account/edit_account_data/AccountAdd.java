@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.util.Log;
 import android.app.Activity;
+import android.content.Context;
 import android.view.Gravity;
 import android.widget.EditText;
 import android.app.AlertDialog;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.view.inputmethod.InputMethodManager;
 
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
@@ -32,11 +35,13 @@ import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.infoarea.DailyInfoRecord;
 import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.config.AppConfigurationData;
+import com.mylib.calculator.Calculator;
+import com.mylib.calculator.observer.ClickObserverInterface;
 
 /**
  * @brief Add Account Date Class.
  */
-public class AccountAdd implements OnItemSelectedListener {
+public class AccountAdd implements OnItemSelectedListener, ClickObserverInterface {
 
     protected Activity activity = null;
     protected AlertDialog inputDialog = null;
@@ -48,6 +53,7 @@ public class AccountAdd implements OnItemSelectedListener {
     protected Spinner categorySpinner = null;
     protected String selectedCategoryItem = null;
     protected String[] categoryItems = null;
+    protected Calculator calculator = null;
     protected static final String PREFIX_WEEKDAY = "(";
     protected static final String SUFFIX_WEEKDAY = ")";
 
@@ -59,6 +65,8 @@ public class AccountAdd implements OnItemSelectedListener {
         AppConfigurationData app_config = new AppConfigurationData(this.activity);
         this.accountTable = new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), app_config);
         this.masterTable = new AccountMasterTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()) );
+        this.calculator = new Calculator(this.activity);
+        this.calculator.attachObserver(this);
     }
 
     /**
@@ -168,13 +176,63 @@ public class AccountAdd implements OnItemSelectedListener {
      * @brief Rejist Event
      */
     protected void registEvent() {
+        // regist button event.
         Button regist_btn = (Button)this.layout.findViewById(R.id.regist_btn);
         regist_btn.setOnClickListener(
                 new View.OnClickListener() {
+                    @Override
                     public void onClick(View v) {
                         insertOrUpdateAccountRecord();
                     }
                 });
+
+        // click event.
+        EditText edit_money = (EditText)this.layout.findViewById(R.id.money_value);
+        edit_money.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // close soft keyboard.
+                closeSoftwareKeyboard(view);
+                // appear calculator.
+                calculator.appear(((EditText)view).getText().toString());
+            }
+        });
+
+        // focus change event.
+        edit_money.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean is_focus) {
+                closeSoftwareKeyboard(view);
+                if( false == is_focus ) {
+                    calculator.disAppear();
+                } else {
+                    calculator.appear(((EditText)view).getText().toString());
+                }
+                closeSoftwareKeyboard(view);
+            }
+        });
+
+        // focus change event.
+        EditText edit_memo = (EditText)this.layout.findViewById(R.id.memo_value);
+        edit_memo.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean is_focus) {
+                if( false == is_focus ) {
+                    // close soft keyboard.
+                    closeSoftwareKeyboard(view);
+                }
+            }
+        });
+    }
+
+    /**
+     * @brief Clse Software Keyboard.
+     *
+     * @param view View Instance.
+     */
+    protected void closeSoftwareKeyboard(View view) {
+        InputMethodManager input_method = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        input_method.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     /**
@@ -280,6 +338,18 @@ public class AccountAdd implements OnItemSelectedListener {
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id ) {
         Spinner spinner = (Spinner)parent;
         this.selectedCategoryItem = (String)spinner.getSelectedItem().toString();
+    }
+
+    /**
+     * @brief notify click from calculator.
+     *
+     * @param event Event Instance(Calculator Instance).
+     */
+    @Override
+    public void notifyClick(Object event) {
+        Calculator cal = (Calculator)event;
+        EditText edit_money = (EditText)this.layout.findViewById(R.id.money_value);
+        edit_money.setText(cal.getDisplayText());
     }
 
     /**
