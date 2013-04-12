@@ -70,13 +70,12 @@ public class AccountEdit extends AccountAdd implements EventCompleteObserver {
     }
 
     /**
-     * @brief set Calendar Button.
+     * @brief set Calendar Image.
      */
-    protected void setCalendarButton() {
-        ImageView calendar_button = (ImageView)this.layout.findViewById(R.id.calendar_image);
-
-        calendar_button.setImageDrawable(this.activity.getResources().getDrawable(R.drawable.calendar));
-        calendar_button.setOnClickListener(this.calendarEvent);
+    protected void setCalendarImage() {
+        ImageView calendar_image = (ImageView)this.layout.findViewById(R.id.calendar_image);
+        calendar_image.setImageResource(R.drawable.calendar);
+        calendar_image.setOnClickListener(this.calendarEvent);
     }
 
     /**
@@ -102,8 +101,7 @@ public class AccountEdit extends AccountAdd implements EventCompleteObserver {
                         confirm_dialog.setPositiveButton(
                             R.string.delete_confirm_yes,
                             new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                                @Override public void onClick(DialogInterface dialog, int which) {
                                     deleteAccountRecord();
                                     observer.notifyAccountEditComplete();
                                     closeInputDialog();
@@ -114,9 +112,7 @@ public class AccountEdit extends AccountAdd implements EventCompleteObserver {
                         confirm_dialog.setNegativeButton(
                             R.string.delete_confirm_no,
                             new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
+                                @Override public void onClick(DialogInterface dialog, int which) {}
                             });
                         confirm_dialog.show();
                    }

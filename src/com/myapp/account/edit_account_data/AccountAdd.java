@@ -14,7 +14,6 @@ import android.widget.Toast;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.view.inputmethod.InputMethodManager;
 
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
@@ -104,7 +102,8 @@ public class AccountAdd implements OnItemSelectedListener, ClickObserverInterfac
         createSpinner();
         setTitleArea();
         setButtonTitle();
-        setCalendarButton();
+        setCalendarImage();
+        setCalculatorImage();
         registEvent();
      }
 
@@ -167,9 +166,20 @@ public class AccountAdd implements OnItemSelectedListener, ClickObserverInterfac
         regist_button.setText(this.activity.getText(R.string.regist_btn_label));
      }
 
-    protected void setCalendarButton() {
+    /**
+     * @brief Set Calendar Button Image.
+     */
+    protected void setCalendarImage() {
         ImageView calendar_button = (ImageView)this.layout.findViewById(R.id.calendar_image);
         calendar_button.setImageDrawable(null);
+    }
+
+    /**
+     * @brief Set Calculator Image.
+     */
+    protected void setCalculatorImage() {
+        ImageView calculator_image = (ImageView)this.layout.findViewById(R.id.calculator_image);
+        calculator_image.setImageResource(R.drawable.calculator);
     }
 
     /**
@@ -178,61 +188,20 @@ public class AccountAdd implements OnItemSelectedListener, ClickObserverInterfac
     protected void registEvent() {
         // regist button event.
         Button regist_btn = (Button)this.layout.findViewById(R.id.regist_btn);
-        regist_btn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        insertOrUpdateAccountRecord();
-                    }
-                });
-
-        // click event.
-        EditText edit_money = (EditText)this.layout.findViewById(R.id.money_value);
-        edit_money.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // close soft keyboard.
-                closeSoftwareKeyboard(view);
-                // appear calculator.
-                calculator.appear(((EditText)view).getText().toString());
+        regist_btn.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                insertOrUpdateAccountRecord();
             }
         });
 
-        // focus change event.
-        edit_money.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean is_focus) {
-                closeSoftwareKeyboard(view);
-                if( false == is_focus ) {
-                    calculator.disAppear();
-                } else {
-                    calculator.appear(((EditText)view).getText().toString());
-                }
-                closeSoftwareKeyboard(view);
+        // click event for calculator image.
+        ImageView calculator_image = (ImageView)this.layout.findViewById(R.id.calculator_image);
+        calculator_image.setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                EditText money_text = (EditText)layout.findViewById(R.id.money_value);
+                calculator.appear(money_text.getText().toString());
             }
         });
-
-        // focus change event.
-        EditText edit_memo = (EditText)this.layout.findViewById(R.id.memo_value);
-        edit_memo.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean is_focus) {
-                if( false == is_focus ) {
-                    // close soft keyboard.
-                    closeSoftwareKeyboard(view);
-                }
-            }
-        });
-    }
-
-    /**
-     * @brief Clse Software Keyboard.
-     *
-     * @param view View Instance.
-     */
-    protected void closeSoftwareKeyboard(View view) {
-        InputMethodManager input_method = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        input_method.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     /**
@@ -349,7 +318,8 @@ public class AccountAdd implements OnItemSelectedListener, ClickObserverInterfac
     public void notifyClick(Object event) {
         Calculator cal = (Calculator)event;
         EditText edit_money = (EditText)this.layout.findViewById(R.id.money_value);
-        edit_money.setText(cal.getDisplayText());
+        int calculate_result = cal.getCalculateResult();
+        edit_money.setText(String.valueOf(calculate_result));
     }
 
     /**
