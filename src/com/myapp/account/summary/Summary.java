@@ -28,8 +28,7 @@ public class Summary {
     private static final String ACCOUNT_DATA_BEFORE_STRING = "[";
     private static final String ACCOUNT_DATA_AFTER_STRING = "]";
     private static final String PERIOD_DELIMITER = "-";
-    private static final String COLON_STRING = ":";
-    private static final String SPACE = "　";
+    private static final String COLON_STRING = " : ";
     private static final int TEXT_FONT_SIZE = 15;
     private static final int TEXT_FONT_HEIGHT = 20;
 
