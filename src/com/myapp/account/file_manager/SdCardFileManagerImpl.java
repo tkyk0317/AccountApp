@@ -56,10 +56,13 @@ public class SdCardFileManagerImpl implements FileManagerInterface {
             }
 
         } catch (FileNotFoundException file_not_found) {
+            read_string = "";
             Log.d("SdCardFileManagerImpl", "readFile:File Not Found : " + file_not_found);
         } catch (IOException io_exception) {
+            read_string = "";
             Log.d("SdCardFileManagerImpl", "readFile:IOException : " + io_exception);
         } finally {
+            read_string = "";
             if( null != read_buffer ) {
                 try {
                     read_buffer.close();

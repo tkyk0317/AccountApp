@@ -11,6 +11,9 @@ import com.myapp.account.R;
 import com.myapp.account.AppConfigurationActivity;
 import com.myapp.account.EditAccountMasterActivity;
 import com.myapp.account.EditUserTableActivity;
+import com.myapp.account.file_manager.AbstractExportImportDBTable;
+import com.myapp.account.file_manager.ExportDatabaseTable;
+import com.myapp.account.file_manager.ImportDatabaseTable;
 
 /**
  * @brief Application Menu Class.
@@ -38,12 +41,16 @@ public class ApplicationMenu {
     }
 
     private Activity activity = null;
+    private ExportDatabaseTable exportDatabaseTable = null;
+    private ImportDatabaseTable importDatabaseTable = null;
 
     /**
      * @brief Constractor.
      */
     public ApplicationMenu(Activity activity) {
         this.activity = activity;
+        this.exportDatabaseTable = new ExportDatabaseTable(activity);
+        this.importDatabaseTable = new ImportDatabaseTable(activity);
     }
 
     /**
@@ -143,7 +150,9 @@ public class ApplicationMenu {
      */
     private void parseClickEventForCSVData(int click_index) {
         if( click_index == CSVDataListIndex.INPUT_CSV_FILE_DATA.getIndex() ) {
+            this.importDatabaseTable.importData();
         } else if( click_index == CSVDataListIndex.OUTPUT_CSV_FILE_DATA.getIndex() ) {
+            this.exportDatabaseTable.exportData();
         }
     }
 
