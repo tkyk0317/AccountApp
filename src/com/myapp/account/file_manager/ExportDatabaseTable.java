@@ -43,7 +43,7 @@ public class ExportDatabaseTable {
     /**
      * @brief Export Database Table Data.
      */
-    public void exportData() {
+    public void exportData() throws ExportDataException {
         try {
             this.exportAccountMasterTable.exportData();
             this.exportAccountDataTable.exportData();
@@ -51,6 +51,7 @@ public class ExportDatabaseTable {
             this.exportUserTable.exportData();
         } catch(ExportDataException exception) {
             Log.d("ExportDatabaseTable", "ExportData Exception");
+            throw exception;
         }
     }
 

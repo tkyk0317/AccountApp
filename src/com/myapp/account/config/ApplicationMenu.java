@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.myapp.account.R;
 import com.myapp.account.AppConfigurationActivity;
@@ -14,6 +15,8 @@ import com.myapp.account.EditUserTableActivity;
 import com.myapp.account.file_manager.AbstractExportImportDBTable;
 import com.myapp.account.file_manager.ExportDatabaseTable;
 import com.myapp.account.file_manager.ImportDatabaseTable;
+import com.myapp.account.file_manager.ExportDataException;
+import com.myapp.account.file_manager.ImportDataException;
 
 /**
  * @brief Application Menu Class.
@@ -150,10 +153,43 @@ public class ApplicationMenu {
      */
     private void parseClickEventForCSVData(int click_index) {
         if( click_index == CSVDataListIndex.INPUT_CSV_FILE_DATA.getIndex() ) {
-            this.importDatabaseTable.importData();
+            importDatabaseTable();
         } else if( click_index == CSVDataListIndex.OUTPUT_CSV_FILE_DATA.getIndex() ) {
-            this.exportDatabaseTable.exportData();
+            exportDatabaseTable();
         }
+    }
+
+    /**
+     * @brief Import Database Table Data.
+     */
+    private void importDatabaseTable() {
+        try {
+            this.importDatabaseTable.importData();
+            displayToast(this.activity.getText(R.string.import_data_success).toString());
+        } catch(ImportDataException import_exception) {
+            displayToast(this.activity.getText(R.string.import_data_error).toString());
+        }
+    }
+
+    /**
+     * @brief Export Database Table Data.
+     */
+    private void exportDatabaseTable() {
+        try {
+            this.exportDatabaseTable.exportData();
+            displayToast(this.activity.getText(R.string.export_data_success).toString());
+        } catch(ExportDataException export_exception) {
+            displayToast(this.activity.getText(R.string.export_data_error).toString());
+        }
+    }
+
+    /**
+     * @brief Display Toast Message.
+     *
+     * @param message displaied message.
+     */
+    private void displayToast(String message) {
+        Toast.makeText(this.activity, message, Toast.LENGTH_SHORT).show();
     }
 
     /**

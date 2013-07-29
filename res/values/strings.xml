@@ -77,5 +77,9 @@
     <string name="modify_user_message">ユーザー情報を変更しました</string>
     <string name="delete_user_confirm_msg">関連するデータも削除します。よろしいですか？</string>
     <string name="del_user_repletion_message">デフォルトユーザーは削除できません</string>
+    <string name="export_data_success">正常にデータ出力できました</string>
+    <string name="import_data_success">正常にデータ入力できました</string>
+    <string name="export_data_error">データ出力できませんでした\nSDカードを確認して下さい</string>
+    <string name="import_data_error">データ入力できませんでした\nSDカードを確認して下さい</string>
 </resources>
 

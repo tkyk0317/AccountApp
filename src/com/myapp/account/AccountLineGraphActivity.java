@@ -205,6 +205,5 @@ public class AccountLineGraphActivity extends Activity implements ClickObserverI
     private enum GraphIndex {
         CURRENT_ID(), NEXT_ID();
     }
-
 }
 

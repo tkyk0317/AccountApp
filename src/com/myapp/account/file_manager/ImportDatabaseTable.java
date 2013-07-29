@@ -44,7 +44,7 @@ public class ImportDatabaseTable {
     /**
      * @brief Import Table Data.
      */
-    public void importData() {
+    public void importData() throws ImportDataException {
         try {
             this.importAccountMasterTable.importData();
             this.importAccountDataTable.importData();
@@ -52,6 +52,7 @@ public class ImportDatabaseTable {
             this.importUserTable.importData();
         } catch(ImportDataException exception) {
             Log.d("ImportDatabaseTable", "ImportData Exception");
+            throw exception;
         }
     }
 
