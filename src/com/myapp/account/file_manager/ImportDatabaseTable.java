@@ -18,6 +18,7 @@ import com.myapp.account.database.EstimateTableRecord;
 import com.myapp.account.database.EstimateTableAccessor;
 import com.myapp.account.database.UserTableRecord;
 import com.myapp.account.database.UserTableAccessor;
+import com.myapp.account.utility.Utility;
 
 /**
  * @brief Import Table Data Class.
@@ -78,13 +79,14 @@ public class ImportDatabaseTable {
          */
         @Override
         public void importData() throws ImportDataException {
-            boolean ret = false;
             List<AccountTableRecord> account_record = deserialize();
 
-            // insert table data.
-            for( AccountTableRecord record : account_record ) {
-                ret = true;
+            // check empty list.
+            if( true == account_record.isEmpty() ) return;
 
+            // insert table data.
+            boolean ret = true;
+            for( AccountTableRecord record : account_record ) {
                 // check insert return value.
                 if( -1 == this.accountTable.insert(record) ) {
                     ret = false;
@@ -105,19 +107,23 @@ public class ImportDatabaseTable {
             List<AccountTableRecord> record = new ArrayList<AccountTableRecord>();
             String[] account_data = this.sdCardFileManager.readFile(IMPORT_FILE_NAME).split(LINE_END);
 
-            for( int i = 0 ; i < account_data.length ; ++i ) {
-                String[] item_data = account_data[i].split(CSV_DELIMITER);
-                AccountTableRecord account_record = new AccountTableRecord();
+            // check null string.
+            if( false == Utility.isStringNULL(account_data[0]) ) {
+                for( int i = 0 ; i < account_data.length ; ++i ) {
+                    String[] item_data = account_data[i].split(CSV_DELIMITER);
 
-                account_record.setId(Integer.valueOf(item_data[0]));
-                account_record.setUserId(Integer.valueOf(item_data[1]));
-                account_record.setCategoryId(Integer.valueOf(item_data[2]));
-                account_record.setMoney(Integer.valueOf(item_data[3]));
-                account_record.setMemo(item_data[4]);
-                account_record.setUpdateDate(item_data[5]);
-                account_record.setInsertDate(item_data[6]);
+                    AccountTableRecord account_record = new AccountTableRecord();
 
-                record.add(account_record);
+                    account_record.setId(Integer.valueOf(item_data[0]));
+                    account_record.setUserId(Integer.valueOf(item_data[1]));
+                    account_record.setCategoryId(Integer.valueOf(item_data[2]));
+                    account_record.setMoney(Integer.valueOf(item_data[3]));
+                    account_record.setMemo(item_data[4]);
+                    account_record.setUpdateDate(item_data[5]);
+                    account_record.setInsertDate(item_data[6]);
+
+                    record.add(account_record);
+                }
             }
             return record;
         }
@@ -144,13 +150,14 @@ public class ImportDatabaseTable {
          */
         @Override
         public void importData() throws ImportDataException {
-            boolean ret = false;
             List<AccountMasterTableRecord> master_records = deserialize();
 
-            // insert table data.
-            for( AccountMasterTableRecord record : master_records ) {
-                ret = true;
+            // check empty list.
+            if( true == master_records.isEmpty() ) return;
 
+            // insert table data.
+            boolean ret = true;
+            for( AccountMasterTableRecord record : master_records ) {
                 // check insert return value.
                 if( -1 == this.accountMaster.insert(record) ) {
                     ret = false;
@@ -171,18 +178,21 @@ public class ImportDatabaseTable {
             List<AccountMasterTableRecord> record = new ArrayList<AccountMasterTableRecord>();
             String[] master_data = this.sdCardFileManager.readFile(IMPORT_FILE_NAME).split(LINE_END);
 
-            for( int i = 0 ; i < master_data.length ; ++i ) {
-                String[] item_data = master_data[i].split(CSV_DELIMITER);
-                AccountMasterTableRecord master_record = new AccountMasterTableRecord();
+            // check null string.
+            if( false == Utility.isStringNULL(master_data[0]) ) {
+                for( int i = 0 ; i < master_data.length ; ++i ) {
+                    String[] item_data = master_data[i].split(CSV_DELIMITER);
+                    AccountMasterTableRecord master_record = new AccountMasterTableRecord();
 
-                master_record.setId(Integer.valueOf(item_data[0]));
-                master_record.setKindId(Integer.valueOf(item_data[1]));
-                master_record.setName(item_data[2]);
-                master_record.setUseDate(item_data[3]);
-                master_record.setUpdateDate(item_data[4]);
-                master_record.setInsertDate(item_data[5]);
+                    master_record.setId(Integer.valueOf(item_data[0]));
+                    master_record.setKindId(Integer.valueOf(item_data[1]));
+                    master_record.setName(item_data[2]);
+                    master_record.setUseDate(item_data[3]);
+                    master_record.setUpdateDate(item_data[4]);
+                    master_record.setInsertDate(item_data[5]);
 
-                record.add(master_record);
+                    record.add(master_record);
+                }
             }
             return record;
         }
@@ -211,13 +221,14 @@ public class ImportDatabaseTable {
          */
         @Override
         public void importData() throws ImportDataException {
-            boolean ret = false;
             List<EstimateTableRecord> estimate_records = deserialize();
 
-            // insert table data.
-            for( EstimateTableRecord record : estimate_records ) {
-                ret = true;
+            // check empty list.
+            if( true == estimate_records.isEmpty() ) return;
 
+            // insert table data.
+            boolean ret = true;
+            for( EstimateTableRecord record : estimate_records ) {
                 // check insert return value.
                 if( -1 == this.estimateTable.insert(record) ) {
                     ret = false;
@@ -238,18 +249,21 @@ public class ImportDatabaseTable {
             List<EstimateTableRecord> record = new ArrayList<EstimateTableRecord>();
             String[] estimate_data = this.sdCardFileManager.readFile(IMPORT_FILE_NAME).split(LINE_END);
 
-            for( int i = 0 ; i < estimate_data.length ; ++i ) {
-                String[] item_data = estimate_data[i].split(CSV_DELIMITER);
-                EstimateTableRecord estimate_record = new EstimateTableRecord();
+            // check null string.
+            if( false == Utility.isStringNULL(estimate_data[0]) ) {
+                for( int i = 0 ; i < estimate_data.length ; ++i ) {
+                    String[] item_data = estimate_data[i].split(CSV_DELIMITER);
+                    EstimateTableRecord estimate_record = new EstimateTableRecord();
 
-                estimate_record.setId(Integer.valueOf(item_data[0]));
-                estimate_record.setEstimateMoney(Integer.valueOf(item_data[1]));
-                estimate_record.setEstimateTargetDate(item_data[2]);
-                estimate_record.setUpdateDate(item_data[3]);
-                estimate_record.setInsertDate(item_data[4]);
-                estimate_record.setUserId(Integer.valueOf(item_data[5]));
+                    estimate_record.setId(Integer.valueOf(item_data[0]));
+                    estimate_record.setEstimateMoney(Integer.valueOf(item_data[1]));
+                    estimate_record.setEstimateTargetDate(item_data[2]);
+                    estimate_record.setUpdateDate(item_data[3]);
+                    estimate_record.setInsertDate(item_data[4]);
+                    estimate_record.setUserId(Integer.valueOf(item_data[5]));
 
-                record.add(estimate_record);
+                    record.add(estimate_record);
+                }
             }
             return record;
         }
@@ -276,13 +290,14 @@ public class ImportDatabaseTable {
          */
         @Override
         public void importData() throws ImportDataException {
-            boolean ret = false;
             List<UserTableRecord> user_records = deserialize();
 
-            // insert table data.
-            for( UserTableRecord record : user_records ) {
-                ret = true;
+            // check empty list.
+            if( true == user_records.isEmpty() ) return;
 
+            // insert table data.
+            boolean ret = true;
+            for( UserTableRecord record : user_records ) {
                 // check insert return value.
                 if( -1 == this.userTable.insert(record) ) {
                     ret = false;
@@ -303,17 +318,20 @@ public class ImportDatabaseTable {
             List<UserTableRecord> record = new ArrayList<UserTableRecord>();
             String[] user_data = this.sdCardFileManager.readFile(IMPORT_FILE_NAME).split(LINE_END);
 
-            for( int i = 0 ; i < user_data.length ; ++i ) {
-                String[] item_data = user_data[i].split(CSV_DELIMITER);
-                UserTableRecord user_record = new UserTableRecord();
+            // check null string.
+            if( false == Utility.isStringNULL(user_data[0]) ) {
+                for( int i = 0 ; i < user_data.length ; ++i ) {
+                    String[] item_data = user_data[i].split(CSV_DELIMITER);
+                    UserTableRecord user_record = new UserTableRecord();
 
-                user_record.setId(Integer.valueOf(item_data[0]));
-                user_record.setName(item_data[1]);
-                user_record.setUpdateDate(item_data[2]);
-                user_record.setInsertDate(item_data[3]);
-                user_record.setMemo(item_data[4]);
+                    user_record.setId(Integer.valueOf(item_data[0]));
+                    user_record.setName(item_data[1]);
+                    user_record.setUpdateDate(item_data[2]);
+                    user_record.setInsertDate(item_data[3]);
+                    user_record.setMemo(item_data[4]);
 
-                record.add(user_record);
+                    record.add(user_record);
+                }
             }
             return record;
         }

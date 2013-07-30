@@ -62,7 +62,6 @@ public class SdCardFileManagerImpl implements FileManagerInterface {
             read_string = "";
             Log.d("SdCardFileManagerImpl", "readFile:IOException : " + io_exception);
         } finally {
-            read_string = "";
             if( null != read_buffer ) {
                 try {
                     read_buffer.close();
