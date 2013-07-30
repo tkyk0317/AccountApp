@@ -81,9 +81,6 @@ public class ImportDatabaseTable {
         public void importData() throws ImportDataException {
             List<AccountTableRecord> account_record = deserialize();
 
-            // check empty list.
-            if( true == account_record.isEmpty() ) return;
-
             // insert table data.
             boolean ret = true;
             for( AccountTableRecord record : account_record ) {
@@ -161,14 +158,11 @@ public class ImportDatabaseTable {
         public void importData() throws ImportDataException {
             List<AccountMasterTableRecord> master_records = deserialize();
 
-            // check empty list.
-            if( true == master_records.isEmpty() ) return;
-
             // insert table data.
             boolean ret = true;
             for( AccountMasterTableRecord record : master_records ) {
                 // check same name record.
-                if( true == this.accountMaster.isExsitRecordMatchName(record.getName()) ) break;
+                if( true == this.accountMaster.isExsitRecordMatchName(record.getName()) ) continue;
 
                 // check insert return value.
                 if( -1 == this.accountMaster.insert(record) ) {
@@ -245,14 +239,11 @@ public class ImportDatabaseTable {
         public void importData() throws ImportDataException {
             List<EstimateTableRecord> estimate_records = deserialize();
 
-            // check empty list.
-            if( true == estimate_records.isEmpty() ) return;
-
             // insert table data.
             boolean ret = true;
             for( EstimateTableRecord record : estimate_records ) {
                 // check same target date record.
-                if( true == this.estimateTable.isEstimateRecord(record.getTargetDate()) ) break;
+                if( true == this.estimateTable.isEstimateRecord(record.getTargetDate()) ) continue;
 
                 // check insert return value.
                 if( -1 == this.estimateTable.insert(record) ) {
@@ -282,7 +273,6 @@ public class ImportDatabaseTable {
 
                     // add table data.
                     addTableDataIntoRecord(table_data, estimate_record);
-
                     record.add(estimate_record);
                 }
             }
@@ -328,14 +318,11 @@ public class ImportDatabaseTable {
         public void importData() throws ImportDataException {
             List<UserTableRecord> user_records = deserialize();
 
-            // check empty list.
-            if( true == user_records.isEmpty() ) return;
-
             // insert table data.
             boolean ret = true;
             for( UserTableRecord record : user_records ) {
                 // check same user name record.
-                if( true == this.userTable.isExsitRecordMatchName(record.getName()) ) break;
+                if( true == this.userTable.isExsitRecordMatchName(record.getName()) ) continue;
 
                 // check insert return value.
                 if( -1 == this.userTable.insert(record) ) {
