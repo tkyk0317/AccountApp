@@ -110,22 +110,31 @@ public class ImportDatabaseTable {
             // check null string.
             if( false == Utility.isStringNULL(account_data[0]) ) {
                 for( int i = 0 ; i < account_data.length ; ++i ) {
-                    String[] item_data = account_data[i].split(CSV_DELIMITER);
-
+                    String[] table_data = account_data[i].split(CSV_DELIMITER);
                     AccountTableRecord account_record = new AccountTableRecord();
 
-                    account_record.setId(Integer.valueOf(item_data[0]));
-                    account_record.setUserId(Integer.valueOf(item_data[1]));
-                    account_record.setCategoryId(Integer.valueOf(item_data[2]));
-                    account_record.setMoney(Integer.valueOf(item_data[3]));
-                    account_record.setMemo(item_data[4]);
-                    account_record.setUpdateDate(item_data[5]);
-                    account_record.setInsertDate(item_data[6]);
-
+                    // add table data.
+                    addTableDataIntoRecord(table_data, account_record);
                     record.add(account_record);
                 }
             }
             return record;
+        }
+
+        /**
+         * @brief Add TableData Into Record Object.
+         *
+         * @param table_data table data(string array).
+         * @param record AccountTableRecord.
+         */
+        private void addTableDataIntoRecord(String[] table_data, AccountTableRecord record) {
+            record.setId(Integer.valueOf(table_data[0]));
+            record.setUserId(Integer.valueOf(table_data[1]));
+            record.setCategoryId(Integer.valueOf(table_data[2]));
+            record.setMoney(Integer.valueOf(table_data[3]));
+            record.setMemo(table_data[4]);
+            record.setUpdateDate(table_data[5]);
+            record.setInsertDate(table_data[6]);
         }
     }
 
@@ -158,6 +167,9 @@ public class ImportDatabaseTable {
             // insert table data.
             boolean ret = true;
             for( AccountMasterTableRecord record : master_records ) {
+                // check same name record.
+                if( true == this.accountMaster.isExsitRecordMatchName(record.getName()) ) break;
+
                 // check insert return value.
                 if( -1 == this.accountMaster.insert(record) ) {
                     ret = false;
@@ -181,20 +193,30 @@ public class ImportDatabaseTable {
             // check null string.
             if( false == Utility.isStringNULL(master_data[0]) ) {
                 for( int i = 0 ; i < master_data.length ; ++i ) {
-                    String[] item_data = master_data[i].split(CSV_DELIMITER);
+                    String[] table_data = master_data[i].split(CSV_DELIMITER);
                     AccountMasterTableRecord master_record = new AccountMasterTableRecord();
 
-                    master_record.setId(Integer.valueOf(item_data[0]));
-                    master_record.setKindId(Integer.valueOf(item_data[1]));
-                    master_record.setName(item_data[2]);
-                    master_record.setUseDate(item_data[3]);
-                    master_record.setUpdateDate(item_data[4]);
-                    master_record.setInsertDate(item_data[5]);
-
+                    // add table data.
+                    addTableDataIntoRecord(table_data, master_record);
                     record.add(master_record);
                 }
             }
             return record;
+        }
+
+        /**
+         * @brief Add TableData Into Record Object.
+         *
+         * @param table_data table data(string array).
+         * @param record AccountMasterTableRecord.
+         */
+        private void addTableDataIntoRecord(String[] table_data, AccountMasterTableRecord record) {
+            record.setId(Integer.valueOf(table_data[0]));
+            record.setKindId(Integer.valueOf(table_data[1]));
+            record.setName(table_data[2]);
+            record.setUseDate(table_data[3]);
+            record.setUpdateDate(table_data[4]);
+            record.setInsertDate(table_data[5]);
         }
     }
 
@@ -229,6 +251,9 @@ public class ImportDatabaseTable {
             // insert table data.
             boolean ret = true;
             for( EstimateTableRecord record : estimate_records ) {
+                // check same target date record.
+                if( true == this.estimateTable.isEstimateRecord(record.getTargetDate()) ) break;
+
                 // check insert return value.
                 if( -1 == this.estimateTable.insert(record) ) {
                     ret = false;
@@ -252,21 +277,32 @@ public class ImportDatabaseTable {
             // check null string.
             if( false == Utility.isStringNULL(estimate_data[0]) ) {
                 for( int i = 0 ; i < estimate_data.length ; ++i ) {
-                    String[] item_data = estimate_data[i].split(CSV_DELIMITER);
+                    String[] table_data = estimate_data[i].split(CSV_DELIMITER);
                     EstimateTableRecord estimate_record = new EstimateTableRecord();
 
-                    estimate_record.setId(Integer.valueOf(item_data[0]));
-                    estimate_record.setEstimateMoney(Integer.valueOf(item_data[1]));
-                    estimate_record.setEstimateTargetDate(item_data[2]);
-                    estimate_record.setUpdateDate(item_data[3]);
-                    estimate_record.setInsertDate(item_data[4]);
-                    estimate_record.setUserId(Integer.valueOf(item_data[5]));
+                    // add table data.
+                    addTableDataIntoRecord(table_data, estimate_record);
 
                     record.add(estimate_record);
                 }
             }
             return record;
         }
+
+        /**
+         * @brief Add TableData Into Record Object.
+         *
+         * @param table_data table data(string array).
+         * @param record EstimateTableRecord.
+         */
+        private void addTableDataIntoRecord(String[] table_data, EstimateTableRecord record) {
+            record.setId(Integer.valueOf(table_data[0]));
+            record.setEstimateMoney(Integer.valueOf(table_data[1]));
+            record.setEstimateTargetDate(table_data[2]);
+            record.setUpdateDate(table_data[3]);
+            record.setInsertDate(table_data[4]);
+            record.setUserId(Integer.valueOf(table_data[5]));
+       }
     }
 
     /**
@@ -298,6 +334,9 @@ public class ImportDatabaseTable {
             // insert table data.
             boolean ret = true;
             for( UserTableRecord record : user_records ) {
+                // check same user name record.
+                if( true == this.userTable.isExsitRecordMatchName(record.getName()) ) break;
+
                 // check insert return value.
                 if( -1 == this.userTable.insert(record) ) {
                     ret = false;
@@ -321,20 +360,30 @@ public class ImportDatabaseTable {
             // check null string.
             if( false == Utility.isStringNULL(user_data[0]) ) {
                 for( int i = 0 ; i < user_data.length ; ++i ) {
-                    String[] item_data = user_data[i].split(CSV_DELIMITER);
+                    String[] table_data = user_data[i].split(CSV_DELIMITER);
                     UserTableRecord user_record = new UserTableRecord();
 
-                    user_record.setId(Integer.valueOf(item_data[0]));
-                    user_record.setName(item_data[1]);
-                    user_record.setUpdateDate(item_data[2]);
-                    user_record.setInsertDate(item_data[3]);
-                    user_record.setMemo(item_data[4]);
-
+                    // add table data.
+                    addTableDataIntoRecord(table_data, user_record);
                     record.add(user_record);
                 }
             }
             return record;
         }
+
+        /**
+         * @brief Add TableData Into Record Object.
+         *
+         * @param table_data table data(string array).
+         * @param record UserTableRecord.
+         */
+        private void addTableDataIntoRecord(String[] table_data, UserTableRecord record) {
+            record.setId(Integer.valueOf(table_data[0]));
+            record.setName(table_data[1]);
+            record.setUpdateDate(table_data[2]);
+            record.setInsertDate(table_data[3]);
+            record.setMemo(table_data[4]);
+      }
     }
 }
 
