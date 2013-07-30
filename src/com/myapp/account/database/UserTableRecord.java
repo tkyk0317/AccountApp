@@ -7,7 +7,7 @@ import android.database.Cursor;
  */
 public class UserTableRecord {
 
-    // Database Index Enum.
+    // Database Index.
     private enum DatabaseIndex {
         ID(0), NAME(1), UPDATE_DATE(2), INSERT_DATE(3), MEMO(4);
 

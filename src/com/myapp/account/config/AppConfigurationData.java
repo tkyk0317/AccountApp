@@ -1,15 +1,11 @@
 package com.myapp.account.config;
 
-import java.util.*;
-import java.text.*;
 import java.lang.RuntimeException;
 import java.lang.NumberFormatException;
 
-import android.util.Log;
 import android.app.Activity;
 import android.preference.PreferenceManager;
 import android.content.SharedPreferences;
-import android.content.Context;
 import android.content.SharedPreferences.Editor;
 
 import com.myapp.account.database.DatabaseHelper;
@@ -40,11 +36,11 @@ public class AppConfigurationData {
     public static final String USER_NAME_ID_DEFAULT = "1";
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
     public AppConfigurationData(Activity activity) {
         this.activity = activity;
-        if( null == this.appConfig ) this.appConfig = PreferenceManager.getDefaultSharedPreferences(this.activity);
+        if( null == AppConfigurationData.appConfig ) AppConfigurationData.appConfig = PreferenceManager.getDefaultSharedPreferences(this.activity);
         this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), this);
         this.userTable = new UserTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
 
@@ -57,12 +53,12 @@ public class AppConfigurationData {
      */
     private void readConfigurationData() {
         // get configuration value.
-        this.isEstimate = this.appConfig.getBoolean(ESTIMATE_KEY, false);
-        this.startDayOfMonth = Integer.valueOf(this.appConfig.getString(START_DAY_KEY, "1"));
+        this.isEstimate = AppConfigurationData.appConfig.getBoolean(ESTIMATE_KEY, false);
+        this.startDayOfMonth = Integer.valueOf(AppConfigurationData.appConfig.getString(START_DAY_KEY, "1"));
 
         // get user name id.
         try {
-            this.userNameId = Integer.valueOf(this.appConfig.getString(USER_TARGET_KEY, "1"));
+            this.userNameId = Integer.valueOf(AppConfigurationData.appConfig.getString(USER_TARGET_KEY, "1"));
         } catch( NumberFormatException exception) {
             this.userNameId = Integer.valueOf(USER_NAME_ID_DEFAULT);
             saveUserNameId(USER_NAME_ID_DEFAULT);
@@ -91,7 +87,7 @@ public class AppConfigurationData {
      * @param is_estimate Estimate Function is enable/UnEnable.
      */
     public void saveEstimate(boolean is_estimate) {
-        Editor edit_config = this.appConfig.edit();
+        Editor edit_config = AppConfigurationData.appConfig.edit();
         edit_config.putBoolean(ESTIMATE_KEY, is_estimate);
         edit_config.commit();
         readConfigurationData();
@@ -102,7 +98,7 @@ public class AppConfigurationData {
      * @param user_name Target User Name Id for AccountApp.
      */
     public void saveUserNameId(String user_name_id) {
-        Editor edit_config = this.appConfig.edit();
+        Editor edit_config = AppConfigurationData.appConfig.edit();
         edit_config.putString(USER_TARGET_KEY, user_name_id);
         edit_config.commit();
         readConfigurationData();
@@ -117,7 +113,7 @@ public class AppConfigurationData {
         try {
             String estimate_target_date = Utility.splitYearAndMonth(getEstimateTargetDate());
 
-            // Check Exsit Record.
+            // Check Exist Record.
             if( this.estimateTable.isEstimateRecord(estimate_target_date) ) {
                 EstimateTableRecord record = this.estimateTable.getRecordAtTargetDate(estimate_target_date);
                 record.setEstimateMoney(estimate_money);
@@ -140,7 +136,7 @@ public class AppConfigurationData {
      * @param start_day start day of month.
      */
     public void savaStartDay(String start_day) {
-        Editor edit_config = this.appConfig.edit();
+        Editor edit_config = AppConfigurationData.appConfig.edit();
         edit_config.putString(START_DAY_KEY, start_day);
         edit_config.commit();
         readConfigurationData();

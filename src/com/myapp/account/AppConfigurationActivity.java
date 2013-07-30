@@ -2,7 +2,6 @@ package com.myapp.account;
 
 import java.util.*;
 import java.lang.CharSequence;
-import java.lang.NumberFormatException;
 import java.lang.RuntimeException;
 
 import android.os.Bundle;
@@ -33,6 +32,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
     /**
      * @brief Called the Activity is First Created.
      */
+    @SuppressWarnings("deprecation")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +54,8 @@ public class AppConfigurationActivity extends PreferenceActivity {
 
     /**
      * @brief Create Preference for UserName.
-     */
+      */
+    @SuppressWarnings("deprecation")
     private void createUserNameListPreference() {
         ListPreference user_name_list_preference = (ListPreference)findPreference(this.appConfig.getTargetUserKey());
         List<UserTableRecord> user_records = this.userTable.getAllRecord();
@@ -84,7 +85,8 @@ public class AppConfigurationActivity extends PreferenceActivity {
     /**
       * @brief Display Summary.
       */
-    private void displaySummary() {
+    @SuppressWarnings("deprecation")
+	private void displaySummary() {
         CheckBoxPreference estimate_config = (CheckBoxPreference)findPreference(this.appConfig.getEstimateKey());
         ListPreference user_config = (ListPreference)findPreference(this.appConfig.getTargetUserKey());
         ListPreference start_day_config = (ListPreference)findPreference(this.appConfig.getStartDayKey());
@@ -104,6 +106,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
     /**
      * @brief Set Summary for Estimate Money.
      */
+    @SuppressWarnings("deprecation")
     private void setEstimateMoneySummary() {
         EditTextPreference estimate_money_config = (EditTextPreference)findPreference(this.appConfig.getEstimateMoneyKey());
 
@@ -116,6 +119,7 @@ public class AppConfigurationActivity extends PreferenceActivity {
     /**
       * @brief Regist Event Listner.
       */
+    @SuppressWarnings("deprecation")
     private void registEvent() {
         // Estimate Function Enable/UnEnable Event.
         CheckBoxPreference estimate_pref = (CheckBoxPreference)findPreference(this.appConfig.getEstimateKey());
@@ -158,7 +162,6 @@ public class AppConfigurationActivity extends PreferenceActivity {
         estimate_money_pref.setOnPreferenceChangeListener(
                 new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference pref, Object value) {
-                        EditTextPreference estimate_money_config = (EditTextPreference)pref;
                         try {
                             int estimate_money = Integer.valueOf(value.toString());
 

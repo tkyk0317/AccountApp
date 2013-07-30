@@ -1,7 +1,6 @@
 package com.myapp.account.database;
 
 import java.util.*;
-import java.text.*;
 
 import android.util.Log;
 import android.database.Cursor;
@@ -23,7 +22,7 @@ public class UserTableAccessor {
     protected static final String TABLE_NAME = "UserTable";
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
     public UserTableAccessor(SQLiteOpenHelper helper) {
         this.helper = helper;
@@ -161,7 +160,7 @@ public class UserTableAccessor {
      *
      * @param key Delete Target id of UserTable.
      *
-     * @return  deleteted key number.
+     * @return  deleted key number.
      */
     public int delete(int key) {
         open();

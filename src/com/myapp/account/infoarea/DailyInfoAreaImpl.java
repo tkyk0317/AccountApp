@@ -1,18 +1,14 @@
 package com.myapp.account.infoarea;
 
 import java.util.*;
-import android.util.Log;
 import android.app.Activity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import com.myapp.account.R;
 import com.myapp.account.infoarea.AbstractInfoArea;
-import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.infoarea.DailyInfoRecord;
@@ -25,7 +21,7 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
     protected static final int DISPLAY_MAX_LINE = 1;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
     public DailyInfoAreaImpl(Activity activity) {
         super(activity);
@@ -41,7 +37,7 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
     }
 
     /**
-     * @brief Get Table Rayout instansce.
+     * @brief Get Table Layout instance.
      * @return TableRayout Instance.
      */
     @Override

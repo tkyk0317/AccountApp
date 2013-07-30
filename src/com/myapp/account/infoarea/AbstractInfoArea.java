@@ -1,12 +1,10 @@
 package com.myapp.account.infoarea;
 
 import java.util.*;
-import android.util.Log;
 import android.app.Activity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
@@ -31,7 +29,7 @@ public abstract class AbstractInfoArea {
     protected static final String MONEY_SPACE = " ";
 
     /**
-     * @brief InfoDailyArea Class Constractor.
+     * @brief InfoDailyArea Class Constructor.
      */
     AbstractInfoArea(Activity activity) {
         this.activity = activity;
@@ -50,7 +48,7 @@ public abstract class AbstractInfoArea {
     }
 
     /**
-     * @brief Appear the Daily Infomation Area.
+     * @brief Appear the Daily Information Area.
      */
     public void appear(String display_date) {
         this.displayDate = display_date;
@@ -94,7 +92,7 @@ public abstract class AbstractInfoArea {
     abstract List<AccountTableRecord> getAccountRecord();
 
     /**
-     * @brief Get Table Rayout instansce.
+     * @brief Get Table Layout instance.
      * @return TableRayout Instance.
      */
     abstract TableLayout getTableLayout();

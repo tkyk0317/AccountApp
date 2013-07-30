@@ -1,7 +1,6 @@
 package com.myapp.account.database;
 
 import java.util.*;
-import android.util.Log;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,7 +19,7 @@ public class AccountMasterTableAccessor {
     protected static final String TABLE_NAME = "AccountMaster";
 
     /**
-      * @brief Consturactor.
+      * @brief Constructor.
       */
     public AccountMasterTableAccessor(SQLiteOpenHelper helper) {
         this.helper = helper;

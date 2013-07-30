@@ -1,16 +1,13 @@
 package com.myapp.account;
 
-import android.util.Log;
 import android.os.Bundle;
 import android.content.Intent;
 import android.app.Activity;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.view.MotionEvent;
 import android.widget.ViewFlipper;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 
 import com.myapp.account.utility.Utility;
@@ -54,7 +51,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
         super.onStart();
         setContentView(R.layout.account_graph);
 
-        // initalize.
+        // initialize.
         init();
 
         // display graph.
@@ -112,7 +109,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
     }
 
     /**
-     * @brief Called Activity is Destoryed.
+     * @brief Called Activity is Destroyed.
      */
     @Override
     public void onDestroy() {
@@ -176,7 +173,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
             this.currentGraphIndex = GraphIndex.NEXT_ID;
             displayGraph(this.nextGraph);
         }
-        // Animatio graph.
+        // Animation graph.
         animationGraph(velocity_x);
     }
 
@@ -235,7 +232,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
     public void notifyLongClick(Object event) {}
 
     /**
-     * @brief Graph Index Enum.
+     * @brief Graph Index.
      */
     private enum GraphIndex {
         CURRENT_ID(), NEXT_ID();

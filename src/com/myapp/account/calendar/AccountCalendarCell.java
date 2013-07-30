@@ -2,12 +2,13 @@ package com.myapp.account.calendar;
 
 import java.util.*;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.util.Log;
 import android.graphics.Color;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ImageView;
+import android.os.Build;
 import android.text.TextPaint;
 import android.view.View;
 import android.view.Gravity;
@@ -16,11 +17,9 @@ import android.view.MotionEvent;
 import android.view.GestureDetector.OnGestureListener;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.myapp.account.R;
-import com.myapp.account.utility.Utility;
 import com.myapp.account.observer.ClickObserverInterface;
 
 /**
@@ -34,9 +33,6 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     private ImageView startMarkerImage = null;
     private ImageView exsitRecordImage = null;
     private TextView textView = null;
-    private int year = 0;
-    private int month = 0;
-    private int day = 0;
     private int dayOfWeek = 0;
     private String date = null;
     private ClickObserverInterface observer = null;
@@ -46,9 +42,10 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     private static final int TEXT_ONLY_HEIGHT = IMAGE_HEIGHT * 2;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
-    public AccountCalendarCell(LinearLayout layout, Activity activity) {
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
+	public AccountCalendarCell(LinearLayout layout, Activity activity) {
         this.layout = layout;
         this.layout.setClickable(false);
         this.activity = activity;
@@ -59,8 +56,6 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
         this.textView.setHeight(TEXT_ONLY_HEIGHT);
         this.textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         this.textView.setOnTouchListener(this);
-
-
         this.gestureDetector = new GestureDetector(this.activity, this);
     }
 
@@ -81,9 +76,6 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
      * @param String date.
      */
     public void setDate(int year, int month, int day, int day_of_week, String date) {
-        this.year = year;
-        this.month = month;
-        this.day = day;
         this.dayOfWeek = day_of_week;
         this.date = date;
 
@@ -135,7 +127,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
 
         // check layout item num.
         if( 0 < this.image_layout.getChildCount() ) {
-            // add again exsit image.
+            // add again exist image.
             RelativeLayout.LayoutParams exsit_image_param = (RelativeLayout.LayoutParams)this.exsitRecordImage.getLayoutParams();
             exsit_image_param.addRule(RelativeLayout.LEFT_OF, ImageId.RELATIVE_LAYOUT.getId());
             layout_params.addRule(RelativeLayout.RIGHT_OF, ImageId.EXSIT_ACCOUNT_DATA_IMAGE.getId());

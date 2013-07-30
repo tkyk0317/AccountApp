@@ -30,12 +30,12 @@ public class ImportDatabaseTable {
     private AbstractExportImportDBTable importUserTable = null;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      *
      * @param activity Activity Instance.
      */
     public ImportDatabaseTable(Activity activity) {
-        this.importAccountMasterTable = new ImportAccountDataTableImpl(activity);
+        this.importAccountMasterTable = new ImportAccountMasterTableImpl(activity);
         this.importAccountDataTable = new ImportAccountDataTableImpl(activity);
         this.importEstimateTable = new ImportEstimateTableImpl(activity);
         this.importUserTable = new ImportUserTableImpl(activity);
@@ -65,7 +65,7 @@ public class ImportDatabaseTable {
         private static final String IMPORT_FILE_NAME = "AccountData.csv";
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
         public ImportAccountDataTableImpl(Activity activity) {
             AppConfigurationData app_config = new AppConfigurationData(activity);
@@ -80,10 +80,18 @@ public class ImportDatabaseTable {
         public void importData() throws ImportDataException {
             boolean ret = false;
             List<AccountTableRecord> account_record = deserialize();
+
+            // insert table data.
             for( AccountTableRecord record : account_record ) {
                 ret = true;
-                this.accountTable.insert(record);
+
+                // check insert return value.
+                if( -1 == this.accountTable.insert(record) ) {
+                    ret = false;
+                    break;
+                }
             }
+            // check insert result.
             if( false == ret ) {
                 throw new ImportDataException("ImportData Exception");
             }
@@ -124,7 +132,7 @@ public class ImportDatabaseTable {
         private static final String IMPORT_FILE_NAME = "AccountMaster.csv";
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
         public ImportAccountMasterTableImpl(Activity activity) {
             this.sdCardFileManager = new SdCardFileManagerImpl();
@@ -138,10 +146,18 @@ public class ImportDatabaseTable {
         public void importData() throws ImportDataException {
             boolean ret = false;
             List<AccountMasterTableRecord> master_records = deserialize();
+
+            // insert table data.
             for( AccountMasterTableRecord record : master_records ) {
                 ret = true;
-                this.accountMaster.insert(record);
+
+                // check insert return value.
+                if( -1 == this.accountMaster.insert(record) ) {
+                    ret = false;
+                    break;
+                }
             }
+            // check insert result.
             if( false == ret ) {
                 throw new ImportDataException("ImportData Exception");
             }
@@ -181,7 +197,7 @@ public class ImportDatabaseTable {
         private static final String IMPORT_FILE_NAME = "Estimate.csv";
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
         public ImportEstimateTableImpl(Activity activity) {
             AppConfigurationData app_config = new AppConfigurationData(activity);
@@ -197,10 +213,18 @@ public class ImportDatabaseTable {
         public void importData() throws ImportDataException {
             boolean ret = false;
             List<EstimateTableRecord> estimate_records = deserialize();
+
+            // insert table data.
             for( EstimateTableRecord record : estimate_records ) {
                 ret = true;
-                this.estimateTable.insert(record);
+
+                // check insert return value.
+                if( -1 == this.estimateTable.insert(record) ) {
+                    ret = false;
+                    break;
+                }
             }
+            // check insert result.
             if( false == ret ) {
                 throw new ImportDataException("ImportData Exception");
             }
@@ -240,7 +264,7 @@ public class ImportDatabaseTable {
         private static final String IMPORT_FILE_NAME = "UserTable.csv";
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
         public ImportUserTableImpl(Activity activity) {
             this.sdCardFileManager = new SdCardFileManagerImpl();
@@ -254,10 +278,18 @@ public class ImportDatabaseTable {
         public void importData() throws ImportDataException {
             boolean ret = false;
             List<UserTableRecord> user_records = deserialize();
+
+            // insert table data.
             for( UserTableRecord record : user_records ) {
                 ret = true;
-                this.userTable.insert(record);
+
+                // check insert return value.
+                if( -1 == this.userTable.insert(record) ) {
+                    ret = false;
+                    break;
+                }
             }
+            // check insert result.
             if( false == ret ) {
                 throw new ImportDataException("ImportData Exception");
             }

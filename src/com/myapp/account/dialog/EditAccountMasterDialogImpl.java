@@ -1,6 +1,5 @@
 package com.myapp.account.dialog;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.app.AlertDialog;
 import android.view.View;
@@ -46,7 +45,7 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
     private static final int BUTTON_WIDTH = 100;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      *
      * @param activity Activity Instance.
      */
@@ -84,7 +83,7 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
     }
 
     /**
-     * @brief Initalize.
+     * @brief Initialize.
      */
     private void init() {
         LayoutInflater inflater = LayoutInflater.from(this.activity);
@@ -92,19 +91,19 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
                                                  (ViewGroup)this.activity.findViewById(R.id.edit_account_master_dialog));
         this.kindSpinner = (Spinner)this.addCategoryView.findViewById(R.id.kind_spinner);
 
-        // init button.
+        // initialize button.
         initButton();
 
-        // init event instance.
+        // initialize event instance.
         this.modifyEvent = new AccountRecordModifyEvent(this.activity, this.addCategoryView, this.editRecord);
-        this.deleteEvent = new AccountRecordDeleteEvent(this.activity, this.addCategoryView, this.editRecord);
+        this.deleteEvent = new AccountRecordDeleteEvent(this.activity, this.editRecord);
         this.modifyEvent.attachObserver(this);
         this.deleteEvent.attachObserver(this);
 
-        // regist event.
+        // register event.
         registEvent();
 
-        // initalize current data.
+        // initialize current data.
         setCurrentData();
     }
 
@@ -151,7 +150,7 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
     }
 
     /**
-     * @brief Regist Event.
+     * @brief Register Event.
      */
     private void registEvent() {
         this.modifyButton.setOnClickListener(this.modifyEvent);
@@ -234,7 +233,7 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
         private AccountMasterTableAccessor accountMasterAccessor;
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
         public AccountRecordModifyEvent(Activity activity, View dialog_view, EditAccountMasterRecord edit_record) {
             this.observer = null;
@@ -296,11 +295,11 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
         }
 
         /**
-         * @brief Convert Kind Id(String to int).
+         * @brief Convert Kind Id(String to integer).
          *
          * @param kind_str Kind String.
          *
-         * @return kind id(int).
+         * @return kind id(integer).
          */
         private int convertKindString(String kind_string) {
             int kind_id = DatabaseHelper.PAYMENT_FLAG;
@@ -373,19 +372,16 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
     private class AccountRecordDeleteEvent implements View.OnClickListener {
 
         private Activity activity;
-        private View dialogView;
-        private String selectedCategoryKind;
         private EditAccountMasterRecord editRecord;
         private EventCompleteObserver observer;
         private AccountMasterTableAccessor accountMasterAccessor;
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
-        public AccountRecordDeleteEvent(Activity activity, View dialog_view, EditAccountMasterRecord edit_record) {
+        public AccountRecordDeleteEvent(Activity activity, EditAccountMasterRecord edit_record) {
             this.observer = null;
             this.activity = activity;
-            this.dialogView = dialog_view;
             this.editRecord = edit_record;
             this.accountMasterAccessor = new AccountMasterTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
         }
@@ -397,15 +393,6 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
          */
         public void attachObserver(EventCompleteObserver observer) {
             this.observer = observer;
-        }
-
-        /**
-         * @brief notify selected spinner.
-         *
-         * @param kind_value Selected String.
-         */
-        public void notifySelectedSpinner(String kind_value) {
-            this.selectedCategoryKind = kind_value;
         }
 
         /**

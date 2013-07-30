@@ -1,14 +1,9 @@
 package com.myapp.account.database;
 
-import java.util.List;
-
 import android.util.Log;
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
-
-import com.myapp.account.R;
-import com.myapp.account.config.AppConfigurationData;
 
 /**
  * @brief Database Helper Class.
@@ -18,7 +13,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
     public static final int INCOME_FLAG = 0;
     public static final int PAYMENT_FLAG = 1;
     private static final int DB_VERSION  = 2;
-    private static final String LOG_TAG = "DatabaseHelper";
     private static final String DB_NAME = "Account.db";
     private static final String ACCOUNT_MASTER_NAME = "AccountMaster";
     private static final String ACCOUNT_TABLE_NAME = "AccountTable";
@@ -35,8 +29,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
         "money integer not null, target_date text not null, update_date text not null, insert_date text not null, user_id integer not null);";
     private static final String CREATE_USER_TABLE =
         "create table " + USER_TABLE_NAME + "(_id integer not null primary key, name text not null, update_date text not null , insert_date text not null, memo text);";
-
-    private SQLiteDatabase m_SqliteDatabase;
 
     /**
      * @brief Class Constructor.

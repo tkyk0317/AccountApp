@@ -2,12 +2,10 @@ package com.myapp.account;
 
 import java.util.*;
 
-import android.util.Log;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -59,7 +57,7 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
     }
 
     /**
-     * @brief Called Activity is Destoryed.
+     * @brief Called Activity is Destroyed.
      */
     @Override
     public void onDestroy() {
@@ -92,7 +90,7 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
         this.addAccountMasterDialog.attachObserver(this);
         this.editAccountMasterDialog.attachObserver(this);
 
-        // init table layout.
+        // initialize table layout.
         this.tableLayout = (TableLayout)findViewById(R.id.account_master_table);
     }
 

@@ -1,6 +1,5 @@
 package com.myapp.account.dialog;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.app.AlertDialog;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.app.Activity;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.EditText;
-import android.widget.TableRow;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -39,7 +37,7 @@ public class AddAccountMasterDialogImpl implements OnItemSelectedListener, Accou
     private EventCompleteObserver observer;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      *
      * @param activity Activity Instance.
      */
@@ -82,14 +80,14 @@ public class AddAccountMasterDialogImpl implements OnItemSelectedListener, Accou
                                                  (ViewGroup)this.activity.findViewById(R.id.edit_account_master_dialog));
         this.kindSpinner = (Spinner)this.addCategoryView.findViewById(R.id.kind_spinner);
 
-        // init button.
+        // initialize button.
         initButton();
 
-        // init event instance.
+        // initialize event instance.
         this.addEvent = new AccountRecordAddEvent(this.activity, this.addCategoryView);
         this.addEvent.attachObserver(this);
 
-        // regist event.
+        // register event.
         registEvent();
     }
 
@@ -102,7 +100,7 @@ public class AddAccountMasterDialogImpl implements OnItemSelectedListener, Accou
     }
 
     /**
-     * @brief Regist Event.
+     * @brief Register Event.
      */
     private void registEvent() {
         this.commitButton.setOnClickListener(this.addEvent);
@@ -172,7 +170,7 @@ public class AddAccountMasterDialogImpl implements OnItemSelectedListener, Accou
         private AccountMasterTableAccessor accountMasterAccessor;
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
         public AccountRecordAddEvent(Activity activity, View dialog_view) {
             this.observer = null;

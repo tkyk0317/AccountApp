@@ -1,7 +1,5 @@
 package com.myapp.account.dialog;
 
-import android.widget.TableRow;
-
 import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.edit_user_table.EditUserTableRecord;
 

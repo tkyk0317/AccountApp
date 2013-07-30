@@ -2,7 +2,6 @@ package com.myapp.account.dialog;
 
 import java.util.List;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.app.AlertDialog;
 import android.view.View;
@@ -47,7 +46,7 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
     private static final int BUTTON_WIDTH = 100;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      *
      * @param activity Activity Instance.
      */
@@ -85,26 +84,26 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
     }
 
     /**
-     * @brief Initalize.
+     * @brief Initialize.
      */
     private void init() {
         LayoutInflater inflater = LayoutInflater.from(this.activity);
         this.editUserTableView = inflater.inflate(R.layout.edit_user_table_dialog,
                                                  (ViewGroup)this.activity.findViewById(R.id.edit_user_table_dialog));
 
-        // init button.
+        // initialize button.
         initButton();
 
-        // init event instance.
+        // initialize event instance.
         this.modifyEvent = new UserTableModifyEvent(this.activity, this.editUserTableView, this.editRecord);
-        this.deleteEvent = new UserTableDeleteEvent(this.activity, this.editUserTableView, this.editRecord);
+        this.deleteEvent = new UserTableDeleteEvent(this.activity, this.editRecord);
         this.modifyEvent.attachObserver(this);
         this.deleteEvent.attachObserver(this);
 
-        // regist event.
+        // register event.
         registEvent();
 
-        // initalize current data.
+        // initialize current data.
         setCurrentData();
     }
 
@@ -120,7 +119,7 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
         this.deleteButton.setWidth(BUTTON_WIDTH);
         this.deleteButton.setText(this.activity.getText(R.string.delete_btn_label).toString());
 
-        // checl enable delete button.
+        // check enable delete button.
         if( false == isEnableDeleteRecord() ) {
             this.deleteButton.setEnabled(false);
             this.deleteButton.setClickable(false);
@@ -154,7 +153,7 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
 
 
     /**
-     * @brief Regist Event.
+     * @brief Register Event.
      */
     private void registEvent() {
         this.modifyButton.setOnClickListener(this.modifyEvent);
@@ -222,7 +221,7 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
         private UserTableAccessor userTable = null;
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
         public UserTableModifyEvent(Activity activity, View dialog_view, EditUserTableRecord edit_record) {
             this.observer = null;
@@ -335,19 +334,17 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
     private class UserTableDeleteEvent implements View.OnClickListener {
 
         private Activity activity = null;
-        private View dialogView = null;
         private EditUserTableRecord editRecord = null;
         private EventCompleteObserver observer = null;
         private UserTableAccessor userTable = null;
         private AppConfigurationData appConfig = null;
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
-        public UserTableDeleteEvent(Activity activity, View dialog_view, EditUserTableRecord edit_record) {
+        public UserTableDeleteEvent(Activity activity, EditUserTableRecord edit_record) {
             this.observer = null;
             this.activity = activity;
-            this.dialogView = dialog_view;
             this.editRecord = edit_record;
             this.appConfig = new AppConfigurationData(this.activity);
             this.userTable = new UserTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));

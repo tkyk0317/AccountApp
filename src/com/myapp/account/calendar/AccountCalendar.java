@@ -1,16 +1,9 @@
 package com.myapp.account.calendar;
 
 import java.util.*;
-import java.text.*;
 
-import android.util.Log;
 import android.app.Activity;
 import android.content.res.Resources;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.ImageView;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.view.MotionEvent;
 
@@ -39,11 +32,9 @@ public class AccountCalendar implements ClickObserverInterface {
     private String lastDateOfMonth = null;
     private static final int CALENDAR_DAY_OF_WEEK_NUM = 7;
     private static final int CALENDAR_ROW_NUM = 6;
-    private static final int WEEK_OF_SATURDAY = 5;
-    private static final int WEEK_OF_SUNDAY = 6;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
     public AccountCalendar(Activity activity, LinearLayout layout) {
         this.activity = activity;
@@ -54,7 +45,7 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-     * @brief appear the Calender.
+     * @brief appear the Calendar.
      */
     public void appear(String target_date) {
         this.appearDate = target_date;
@@ -229,16 +220,16 @@ public class AccountCalendar implements ClickObserverInterface {
 
     /**
      * @brief Get Calendar Start Position.
-     * @return int Calendar Start Position.
+     * @return integer Calendar Start Position.
      */
     private int getStartPosition() {
-        // calednar start if index zero(day of week start is index one).
+        // calendar start if index zero(day of week start is index one).
         return Utility.getDayOfWeek(this.firstDateOfMonth) - 1;
     }
 
     /**
      * @brief Get Calendar End Position.
-     * @return int Calendar End Position.
+     * @return integer Calendar End Position.
      */
     private int getEndPosition() {
         int cal_st_pos = getStartPosition();
@@ -263,7 +254,7 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-     * @brief Onfiling Event.
+     * @brief Onfling Event.
      */
     @Override
     public void notifyOnFling(Object event, MotionEvent motion_start, MotionEvent motion_end, float velocityX, float velocityY) {
@@ -281,7 +272,7 @@ public class AccountCalendar implements ClickObserverInterface {
         Resources resources = activity.getResources();
         this.currentCell.setBackgroundColor(resources.getColor(R.color.default_background));
 
-        // current cell setteing.
+        // current cell setting.
         this.currentCell = current_cell;
         this.currentCell.setBackgroundColor(resources.getColor(R.color.focus_background));
     }

@@ -2,12 +2,10 @@ package com.myapp.account;
 
 import java.util.*;
 
-import android.util.Log;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -58,7 +56,7 @@ public class EditUserTableActivity extends Activity implements OnClickListener, 
     }
 
     /**
-     * @brief Called Activity is Destoryed.
+     * @brief Called Activity is Destroyed.
      */
     @Override
     public void onDestroy() {
@@ -91,7 +89,7 @@ public class EditUserTableActivity extends Activity implements OnClickListener, 
         this.addUserTableDialog.attachObserver(this);
         this.editUserTableDialog.attachObserver(this);
 
-        // init table layout.
+        // initialize table layout.
         this.tableLayout = (TableLayout)findViewById(R.id.user_table_layout);
     }
 

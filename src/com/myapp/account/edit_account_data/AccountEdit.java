@@ -1,14 +1,10 @@
 package com.myapp.account.edit_account_data;
 
-import java.util.*;
-
 import android.app.Activity;
-import android.util.Log;
 import android.widget.Toast;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.view.View;
@@ -34,7 +30,7 @@ public class AccountEdit extends AccountAdd implements EventCompleteObserver {
     protected static final int BUTTON_WIDTH = 100;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
     public AccountEdit(Activity activity) {
         super(activity);
@@ -59,7 +55,7 @@ public class AccountEdit extends AccountAdd implements EventCompleteObserver {
         this.calendarEvent = new CalendarClickEvent(this.activity, this.insertDate);
         this.calendarEvent.attachObserver(this);
 
-        // initalize.
+        // initialize.
         initialize();
 
         // set current data.
@@ -201,7 +197,7 @@ public class AccountEdit extends AccountAdd implements EventCompleteObserver {
         setTitleArea();
     }
 
-    // not supportted.
+    // not supported.
     public void notifyAccountMasterEditComplete() {}
     public void notifyUserTableEditComplete() {}
 
@@ -216,7 +212,7 @@ public class AccountEdit extends AccountAdd implements EventCompleteObserver {
         private EventCompleteObserver observer = null;
 
         /**
-         * @brief constractor.
+         * @brief constructor.
          *
          * @param activity Activity Instances.
          */

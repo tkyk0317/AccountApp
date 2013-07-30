@@ -2,7 +2,6 @@ package com.myapp.account.graph;
 
 import java.util.List;
 
-import android.util.Log;
 import android.app.Activity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,7 +12,6 @@ import com.myapp.account.utility.Utility;
 import com.myapp.account.graph.AbstractAccountGraph;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountMasterTableRecord;
-import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 
 /**

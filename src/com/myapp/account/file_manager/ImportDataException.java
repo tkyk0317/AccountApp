@@ -5,10 +5,11 @@ import java.lang.Exception;
 /**
  * @brief Import Data Exception Class.
  */
+@SuppressWarnings("serial")
 public class ImportDataException extends Exception {
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      *
      * @param str Exception String.
      */

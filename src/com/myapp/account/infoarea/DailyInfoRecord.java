@@ -1,12 +1,10 @@
 package com.myapp.account.infoarea;
 
-import java.util.*;
 import android.widget.TableRow;
 import android.content.Context;
 import android.widget.TextView;
 import android.view.Gravity;
 import com.myapp.account.database.AccountTableRecord;
-import com.myapp.account.database.DatabaseHelper;
 
 /**
  * @brief Daily Info Record Class.
@@ -30,7 +28,7 @@ public class DailyInfoRecord extends TableRow {
     public String getAccountMemo() { return String.valueOf(accountMemo.getText()); }
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
     public DailyInfoRecord(Context context) {
         super(context);

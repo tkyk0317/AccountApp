@@ -1,6 +1,5 @@
 package com.myapp.account.config;
 
-import android.util.Log;
 import android.app.Activity;
 import android.content.Intent;
 import android.app.AlertDialog;
@@ -12,7 +11,6 @@ import com.myapp.account.R;
 import com.myapp.account.AppConfigurationActivity;
 import com.myapp.account.EditAccountMasterActivity;
 import com.myapp.account.EditUserTableActivity;
-import com.myapp.account.file_manager.AbstractExportImportDBTable;
 import com.myapp.account.file_manager.ExportDatabaseTable;
 import com.myapp.account.file_manager.ImportDatabaseTable;
 import com.myapp.account.file_manager.ExportDataException;
@@ -48,7 +46,7 @@ public class ApplicationMenu {
     private ImportDatabaseTable importDatabaseTable = null;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
     public ApplicationMenu(Activity activity) {
         this.activity = activity;
@@ -186,7 +184,7 @@ public class ApplicationMenu {
     /**
      * @brief Display Toast Message.
      *
-     * @param message displaied message.
+     * @param message displayed message.
      */
     private void displayToast(String message) {
         Toast.makeText(this.activity, message, Toast.LENGTH_SHORT).show();

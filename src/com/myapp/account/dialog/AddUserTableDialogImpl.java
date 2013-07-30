@@ -1,6 +1,5 @@
 package com.myapp.account.dialog;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.app.AlertDialog;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.app.Activity;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.EditText;
-import android.widget.TableRow;
 
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
@@ -35,7 +33,7 @@ public class AddUserTableDialogImpl implements UserTableDialogInterface, EventCo
     private EventCompleteObserver observer;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      *
      * @param activity Activity Instance.
      */
@@ -70,21 +68,21 @@ public class AddUserTableDialogImpl implements UserTableDialogInterface, EventCo
     public void appear(EditUserTableRecord table_row) {}
 
     /**
-     * @brief Initalize.
+     * @brief Initialize.
      */
     private void init() {
         LayoutInflater inflater = LayoutInflater.from(this.activity);
         this.addUserTableView = inflater.inflate(R.layout.edit_user_table_dialog,
                                                  (ViewGroup)this.activity.findViewById(R.id.edit_user_table_dialog));
 
-        // init button.
+        // initialize button.
         initButton();
 
-        // init event instance.
+        // initialize event instance.
         this.addEvent = new UserTableAddEvent(this.activity, this.addUserTableView);
         this.addEvent.attachObserver(this);
 
-        // regist event.
+        // register event.
         registEvent();
     }
 
@@ -97,7 +95,7 @@ public class AddUserTableDialogImpl implements UserTableDialogInterface, EventCo
     }
 
     /**
-     * @brief Regist Event.
+     * @brief Register Event.
      */
     private void registEvent() {
         this.commitButton.setOnClickListener(this.addEvent);
@@ -125,7 +123,7 @@ public class AddUserTableDialogImpl implements UserTableDialogInterface, EventCo
     }
 
     /**
-     * @brief UserTable Editted Complete.
+     * @brief UserTable Edited Complete.
      */
     @Override
     public void notifyUserTableEditComplete() {
@@ -147,12 +145,11 @@ public class AddUserTableDialogImpl implements UserTableDialogInterface, EventCo
 
         private Activity activity;
         private View dialogView;
-        private String selectedCategoryKind;
         private EventCompleteObserver observer;
         private UserTableAccessor userTable;
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
         public UserTableAddEvent(Activity activity, View dialog_view) {
             this.observer = null;

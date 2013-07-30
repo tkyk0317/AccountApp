@@ -1,15 +1,9 @@
 package com.myapp.account.edit_user_table;
 
-import java.util.*;
-import android.app.Activity;
 import android.widget.TableRow;
-import android.content.Context;
 import android.widget.TextView;
-import android.content.res.Resources;
-import android.view.Gravity;
+import android.content.Context;
 
-import com.myapp.account.R;
-import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.UserTableRecord;
 
 /**
@@ -17,28 +11,26 @@ import com.myapp.account.database.UserTableRecord;
  */
 public class EditUserTableRecord extends TableRow {
 
-    protected Activity activity = null;
     protected UserTableRecord userTableRecord = null;
     protected TextView userName = null;
     protected TextView userMemo = null;
     protected static final int TEXT_SIZE = 18;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      * @param context Context Instance.
      */
-    public EditUserTableRecord(Activity activity) {
-        super(activity);
-        this.activity = activity;
-        this.userName = new TextView(this.activity);
-        this.userMemo = new TextView(this.activity);
+    public EditUserTableRecord(Context context) {
+        super(context);
+        this.userName = new TextView(context);
+        this.userMemo = new TextView(context);
         this.userName.setTextSize(TEXT_SIZE);
         this.userMemo.setTextSize(TEXT_SIZE);
         this.setClickable(true);
     }
 
     /**
-     * @brief Set UserTable Record Infomation.
+     * @brief Set UserTable Record Information.
      * @param record AccountMasterTable Record.
      */
     public void setUserTableRecord(UserTableRecord record) {

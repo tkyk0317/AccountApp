@@ -1,9 +1,7 @@
 package com.myapp.account.database;
 
 import java.util.*;
-import java.text.*;
 
-import android.util.Log;
 import android.database.Cursor;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -25,7 +23,7 @@ public class EstimateTableAccessor {
     protected static final String TABLE_NAME = "EstimateTable";
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
     public EstimateTableAccessor(SQLiteOpenHelper helper, AppConfigurationData app_config) {
         this.helper = helper;
@@ -207,7 +205,7 @@ public class EstimateTableAccessor {
     /**
      * @brief Delete Record from Estimate Table.
      * @param key Delete Target id of Estimate Table.
-     * @return  deleteted key number.
+     * @return  deleted key number.
      */
     public int delete(int key) {
         open();

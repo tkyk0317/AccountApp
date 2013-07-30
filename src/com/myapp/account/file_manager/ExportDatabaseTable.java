@@ -29,7 +29,7 @@ public class ExportDatabaseTable {
     private AbstractExportImportDBTable exportUserTable = null;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      *
      * @param activity Activity Instance.
      */
@@ -64,7 +64,7 @@ public class ExportDatabaseTable {
         private static final String EXPORT_FILE_NAME = "AccountMaster.csv";
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
         public ExportAccountMasterTableImpl(Activity activity) {
             this.sdCardFileManager = new SdCardFileManagerImpl();
@@ -97,13 +97,15 @@ public class ExportDatabaseTable {
         private String serialize(List<AccountMasterTableRecord> record_list) {
             String serialize_data= new String();
 
-            for( AccountMasterTableRecord record : record_list) {
-                serialize_data += (String.valueOf(record.getId()) + CSV_DELIMITER);
-                serialize_data += (String.valueOf(record.getKindId()) + CSV_DELIMITER);
-                serialize_data += (record.getName() + CSV_DELIMITER);
-                serialize_data += (record.getUseDate() + CSV_DELIMITER);
-                serialize_data += (record.getUpdateDate() + CSV_DELIMITER);
-                serialize_data += (record.getInsertDate() + LINE_END);
+            if( false == record_list.isEmpty() ) {
+                for( AccountMasterTableRecord record : record_list) {
+                    serialize_data += (String.valueOf(record.getId()) + CSV_DELIMITER);
+                    serialize_data += (String.valueOf(record.getKindId()) + CSV_DELIMITER);
+                    serialize_data += (record.getName() + CSV_DELIMITER);
+                    serialize_data += (record.getUseDate() + CSV_DELIMITER);
+                    serialize_data += (record.getUpdateDate() + CSV_DELIMITER);
+                    serialize_data += (record.getInsertDate() + LINE_END);
+                }
             }
             return serialize_data;
         }
@@ -118,7 +120,7 @@ public class ExportDatabaseTable {
         private static final String EXPORT_FILE_NAME = "AccountData.csv";
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
         public ExportAccountDataTableImpl(Activity activity) {
             AppConfigurationData app_config = new AppConfigurationData(activity);
@@ -152,14 +154,16 @@ public class ExportDatabaseTable {
         private String serialize(List<AccountTableRecord> record_list) {
             String serialize_data= new String();
 
-            for( AccountTableRecord record : record_list) {
-                serialize_data += (String.valueOf(record.getId()) + CSV_DELIMITER);
-                serialize_data += (String.valueOf(record.getUserId()) + CSV_DELIMITER);
-                serialize_data += (String.valueOf(record.getCategoryId()) + CSV_DELIMITER);
-                serialize_data += (String.valueOf(record.getMoney()) + CSV_DELIMITER);
-                serialize_data += (record.getMemo() + CSV_DELIMITER);
-                serialize_data += (record.getUpdateDate() + CSV_DELIMITER);
-                serialize_data += (record.getInsertDate() + LINE_END);
+            if( false == record_list.isEmpty() ) {
+                for( AccountTableRecord record : record_list) {
+                    serialize_data += (String.valueOf(record.getId()) + CSV_DELIMITER);
+                    serialize_data += (String.valueOf(record.getUserId()) + CSV_DELIMITER);
+                    serialize_data += (String.valueOf(record.getCategoryId()) + CSV_DELIMITER);
+                    serialize_data += (String.valueOf(record.getMoney()) + CSV_DELIMITER);
+                    serialize_data += (record.getMemo() + CSV_DELIMITER);
+                    serialize_data += (record.getUpdateDate() + CSV_DELIMITER);
+                    serialize_data += (record.getInsertDate() + LINE_END);
+                }
             }
             return serialize_data;
         }
@@ -174,7 +178,7 @@ public class ExportDatabaseTable {
         private static final String EXPORT_FILE_NAME = "Estimate.csv";
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
         public ExportEstimateTableImpl(Activity activity) {
             AppConfigurationData app_config = new AppConfigurationData(activity);
@@ -208,13 +212,15 @@ public class ExportDatabaseTable {
         private String serialize(List<EstimateTableRecord> record_list) {
             String serialize_data= new String();
 
-            for( EstimateTableRecord record : record_list) {
-                serialize_data += (String.valueOf(record.getId()) + CSV_DELIMITER);
-                serialize_data += (String.valueOf(record.getEstimateMoney()) + CSV_DELIMITER);
-                serialize_data += (record.getTargetDate() + CSV_DELIMITER);
-                serialize_data += (record.getUpdateDate() + CSV_DELIMITER);
-                serialize_data += (record.getInsertDate() + CSV_DELIMITER);
-                serialize_data += (String.valueOf(record.getUserId()) + LINE_END);
+            if( false == record_list.isEmpty() ) {
+                for( EstimateTableRecord record : record_list) {
+                    serialize_data += (String.valueOf(record.getId()) + CSV_DELIMITER);
+                    serialize_data += (String.valueOf(record.getEstimateMoney()) + CSV_DELIMITER);
+                    serialize_data += (record.getTargetDate() + CSV_DELIMITER);
+                    serialize_data += (record.getUpdateDate() + CSV_DELIMITER);
+                    serialize_data += (record.getInsertDate() + CSV_DELIMITER);
+                    serialize_data += (String.valueOf(record.getUserId()) + LINE_END);
+                }
             }
             return serialize_data;
         }
@@ -229,7 +235,7 @@ public class ExportDatabaseTable {
         private static final String EXPORT_FILE_NAME = "UserTable.csv";
 
         /**
-         * @brief Constractor.
+         * @brief Constructor.
          */
         public ExportUserTableImpl(Activity activity) {
             this.sdCardFileManager = new SdCardFileManagerImpl();
@@ -262,12 +268,14 @@ public class ExportDatabaseTable {
         private String serialize(List<UserTableRecord> record_list) {
             String serialize_data= new String();
 
-            for( UserTableRecord record : record_list) {
-                serialize_data += (String.valueOf(record.getId()) + CSV_DELIMITER);
-                serialize_data += (record.getName() + CSV_DELIMITER);
-                serialize_data += (record.getUpdateDate() + CSV_DELIMITER);
-                serialize_data += (record.getInsertDate() + CSV_DELIMITER);
-                serialize_data += (record.getMemo() + LINE_END);
+            if( false == record_list.isEmpty() ) {
+                for( UserTableRecord record : record_list) {
+                    serialize_data += (String.valueOf(record.getId()) + CSV_DELIMITER);
+                    serialize_data += (record.getName() + CSV_DELIMITER);
+                    serialize_data += (record.getUpdateDate() + CSV_DELIMITER);
+                    serialize_data += (record.getInsertDate() + CSV_DELIMITER);
+                    serialize_data += (record.getMemo() + LINE_END);
+                }
             }
             return serialize_data;
         }

@@ -1,8 +1,6 @@
 package com.myapp.account.database;
 
 import java.util.*;
-import java.text.*;
-import android.util.Log;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,7 +22,7 @@ public class AccountTableAccessor {
     protected static final String TABLE_NAME = "AccountTable";
 
     /**
-     * @brief Consturactor.
+     * @brief Constructor.
      */
     public AccountTableAccessor(SQLiteOpenHelper helper, AppConfigurationData app_config) {
         this.helper = helper;
@@ -105,11 +103,11 @@ public class AccountTableAccessor {
     }
 
     /**
-     * @brief Check Exsit Record at CategoryId.
+     * @brief Check Exist Record at CategoryId.
      *
      * @param category_id Category Id.
      *
-     * @return true:exsit false:not exsit.
+     * @return true:exsit false:not exist.
      */
     public boolean isExsitRecordAtCategoryId(int category_id) {
         open();
@@ -224,9 +222,9 @@ public class AccountTableAccessor {
     }
 
     /**
-     * @brief Check Exsit Record at Target Year.
+     * @brief Check Exist Record at Target Year.
      * @param target_date Specified Target Date.
-     * @return true:exsit false:not exsit.
+     * @return true:exsit false:not exist.
      */
     public boolean isExsitRecordAtTargetYear(String target_date) {
         open();
@@ -457,7 +455,7 @@ public class AccountTableAccessor {
     /**
      * @brief Delete Record from AccountMasterTable.
      * @param key Delete Target id of AccountTable.
-     * @return  deleteted key number.
+     * @return  deleted key number.
      */
     public int delete(int key) {
         open();
@@ -486,4 +484,3 @@ public class AccountTableAccessor {
         return true;
     }
 }
-

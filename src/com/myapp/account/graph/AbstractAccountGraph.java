@@ -1,10 +1,11 @@
 package com.myapp.account.graph;
 
 import java.util.*;
-import android.util.Log;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.widget.LinearLayout;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -25,7 +26,6 @@ import com.myapp.account.observer.ClickObserverInterface;
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.model.CategorySeries;
-import org.achartengine.model.SeriesSelection;
 import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 
@@ -53,10 +53,11 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
     protected static final String MONEY_DELIMITER = ":";
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      * @param activity Activity Instance.
      */
-    public AbstractAccountGraph(Activity activity, LinearLayout layout) {
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
+	public AbstractAccountGraph(Activity activity, LinearLayout layout) {
         this.activity = activity;
         this.chartArea = layout;
         this.appConfig = new AppConfigurationData(this.activity);
@@ -85,17 +86,17 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
         this.graphColors = new ArrayList<Integer>();
         this.graphColors.add(Color.rgb(102, 0, 255));
         this.graphColors.add(Color.rgb(153, 0, 0));
-        this.graphColors.add(new Integer(Color.MAGENTA));
+        this.graphColors.add(Integer.valueOf(Color.MAGENTA));
         this.graphColors.add(Color.rgb(204, 153, 0));
         this.graphColors.add(Color.rgb(204, 102, 51));
-        this.graphColors.add(new Integer(Color.GREEN));
+        this.graphColors.add(Integer.valueOf(Color.GREEN));
         this.graphColors.add(Color.rgb(153, 153, 0));
         this.graphColors.add(Color.rgb(153, 102, 0));
-        this.graphColors.add(new Integer(Color.BLUE));
-        this.graphColors.add(new Integer(Color.YELLOW));
-        this.graphColors.add(new Integer(Color.CYAN));
-        this.graphColors.add(new Integer(Color.RED));
-        this.graphColors.add(new Integer(Color.LTGRAY));
+        this.graphColors.add(Integer.valueOf(Color.BLUE));
+        this.graphColors.add(Integer.valueOf(Color.YELLOW));
+        this.graphColors.add(Integer.valueOf(Color.CYAN));
+        this.graphColors.add(Integer.valueOf(Color.RED));
+        this.graphColors.add(Integer.valueOf(Color.LTGRAY));
     }
 
     /**
@@ -165,7 +166,7 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
             if( false == isTargetAccountRecord(master_record) ) continue;
 
             String label_str = master_record.getName() + MONEY_DELIMITER + String.valueOf(record.getMoney()) + this.activity.getText(R.string.money_unit).toString();
-            this.categorySeries.add(label_str, new Double((double)record.getMoney()));
+            this.categorySeries.add(label_str, Double.valueOf((double)record.getMoney()));
             SimpleSeriesRenderer simple_renderer = new SimpleSeriesRenderer();
             simple_renderer.setColor(this.graphColors.get(count));
             simple_renderer.setDisplayChartValues(true);
@@ -191,8 +192,8 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
     protected abstract boolean isTargetAccountRecord(AccountMasterTableRecord master_record);
 
     /**
-     * @brief Check Exsit Record at Target Date.
-     * @return true:exsit false:not exsit.
+     * @brief Check Exist Record at Target Date.
+     * @return true:exsit false:not exist.
      */
     protected abstract boolean isExsitRecord();
 
@@ -285,7 +286,7 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
     /**
      * @brief Sort Account Record By Money Class.
      */
-    private class SortAccountRecordByMoney implements Comparator {
+    private class SortAccountRecordByMoney implements Comparator<Object> {
 
         /**
          * @brief Compare Function.
