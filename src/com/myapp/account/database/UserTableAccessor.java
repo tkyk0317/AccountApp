@@ -26,6 +26,7 @@ public class UserTableAccessor {
      */
     public UserTableAccessor(SQLiteOpenHelper helper) {
         this.helper = helper;
+        open();
     }
 
     /**
@@ -57,12 +58,32 @@ public class UserTableAccessor {
     }
 
     /**
+     * @brief Start Transaction.
+     */
+    public void startTransaction() {
+        this.writeDatabase.beginTransaction();
+    }
+
+    /**
+     * @brief Set Transaction when Successful.
+     */
+    public void setTransactionSuccessful() {
+        this.writeDatabase.setTransactionSuccessful();
+    }
+
+    /**
+     * @brief End Transaction.
+     */
+    public void endTransaction() {
+        this.writeDatabase.endTransaction();
+    }
+
+    /**
      * @brief Get Record Specified Key.
      * @param key Table key.
      * @return UserTableRecord Instance.
      */
     public UserTableRecord getRecord(int key) {
-        open();
         Cursor cursor = readDatabase.query(TABLE_NAME, null , "_id=?", new String[] {String.valueOf(key)}, null, null, null);
 
         UserTableRecord record = new UserTableRecord();
@@ -70,7 +91,6 @@ public class UserTableAccessor {
             record.set(cursor);
         }
         cursor.close();
-        close();
         return record;
     }
 
@@ -79,7 +99,6 @@ public class UserTableAccessor {
      * @return All UserTableRecord in UserTable.
      */
     public List<UserTableRecord> getAllRecord() {
-        open();
         Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, null, null);
         cursor.moveToFirst();
         int record_count = cursor.getCount();
@@ -91,7 +110,6 @@ public class UserTableAccessor {
             cursor.moveToNext();
         }
         cursor.close();
-        close();
         return record_list;
     }
 
@@ -101,7 +119,6 @@ public class UserTableAccessor {
       * @return true:exsit false:not exsit.
       */
     public boolean isExsitRecordMatchName(String name) {
-        open();
         Cursor cursor = readDatabase.rawQuery("select * from " + TABLE_NAME + " where name = " + "'" + name + "'" + ";", null);
 
         boolean is_exsit = false;
@@ -111,7 +128,6 @@ public class UserTableAccessor {
             }
         }
         cursor.close();
-        close();
         return is_exsit;
     }
 
@@ -121,7 +137,6 @@ public class UserTableAccessor {
      * @return Insert Record Key(_id).
      */
     public long insert(UserTableRecord record) {
-        open();
         ContentValues insert_record = new ContentValues();
 
         insert_record.put("name", record.getName());
@@ -131,8 +146,6 @@ public class UserTableAccessor {
 
         // insert record.
         long key = this.writeDatabase.insert(TABLE_NAME, null, insert_record);
-
-        close();
         return key;
     }
 
@@ -141,7 +154,6 @@ public class UserTableAccessor {
      * @param record UserTable Instance.
      */
     public int update(UserTableRecord record) {
-        open();
         ContentValues update_record = new ContentValues();
         update_record.put("name", record.getName());
         update_record.put("memo", record.getMemo());
@@ -150,8 +162,6 @@ public class UserTableAccessor {
 
         Log.d("UserTableAccessor", "UserTable Primary Id : " + record.getId());
         int key = this.writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
-
-        close();
         return key;
     }
 
@@ -163,9 +173,7 @@ public class UserTableAccessor {
      * @return  deleted key number.
      */
     public int delete(int key) {
-        open();
         writeDatabase.delete(TABLE_NAME, "_id=" + String.valueOf(key), null);
-        close();
         return key;
     }
 

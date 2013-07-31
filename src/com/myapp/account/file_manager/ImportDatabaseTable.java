@@ -83,6 +83,7 @@ public class ImportDatabaseTable {
 
             // insert table data.
             boolean ret = true;
+            this.accountTable.startTransaction();
             for( AccountTableRecord record : account_record ) {
                 // check insert return value.
                 if( -1 == this.accountTable.insert(record) ) {
@@ -90,10 +91,16 @@ public class ImportDatabaseTable {
                     break;
                 }
             }
+
             // check insert result.
             if( false == ret ) {
+                this.accountTable.endTransaction();
                 throw new ImportDataException("ImportData Exception");
             }
+
+            // end transaction.
+            this.accountTable.setTransactionSuccessful();
+            this.accountTable.endTransaction();
         }
 
         /**
@@ -160,6 +167,7 @@ public class ImportDatabaseTable {
 
             // insert table data.
             boolean ret = true;
+            this.accountMaster.startTransaction();
             for( AccountMasterTableRecord record : master_records ) {
                 // check same name record.
                 if( true == this.accountMaster.isExsitRecordMatchName(record.getName()) ) continue;
@@ -172,8 +180,12 @@ public class ImportDatabaseTable {
             }
             // check insert result.
             if( false == ret ) {
+                this.accountMaster.endTransaction();
                 throw new ImportDataException("ImportData Exception");
             }
+            // end transaction.
+            this.accountMaster.setTransactionSuccessful();
+            this.accountMaster.endTransaction();
         }
 
         /**
@@ -241,6 +253,7 @@ public class ImportDatabaseTable {
 
             // insert table data.
             boolean ret = true;
+            this.estimateTable.startTransaction();
             for( EstimateTableRecord record : estimate_records ) {
                 // check same target date record.
                 if( true == this.estimateTable.isEstimateRecord(record.getTargetDate()) ) continue;
@@ -253,8 +266,12 @@ public class ImportDatabaseTable {
             }
             // check insert result.
             if( false == ret ) {
+                this.estimateTable.endTransaction();
                 throw new ImportDataException("ImportData Exception");
             }
+            // end transaction.
+            this.estimateTable.setTransactionSuccessful();
+            this.estimateTable.endTransaction();
         }
 
         /**
@@ -320,6 +337,7 @@ public class ImportDatabaseTable {
 
             // insert table data.
             boolean ret = true;
+            this.userTable.startTransaction();
             for( UserTableRecord record : user_records ) {
                 // check same user name record.
                 if( true == this.userTable.isExsitRecordMatchName(record.getName()) ) continue;
@@ -332,8 +350,12 @@ public class ImportDatabaseTable {
             }
             // check insert result.
             if( false == ret ) {
+                this.userTable.endTransaction();
                 throw new ImportDataException("ImportData Exception");
             }
+            // end transaction.
+            this.userTable.setTransactionSuccessful();
+            this.userTable.endTransaction();
         }
 
         /**

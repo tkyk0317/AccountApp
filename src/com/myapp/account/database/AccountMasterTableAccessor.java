@@ -23,6 +23,7 @@ public class AccountMasterTableAccessor {
       */
     public AccountMasterTableAccessor(SQLiteOpenHelper helper) {
         this.helper = helper;
+        open();
     }
 
     /**
@@ -54,12 +55,32 @@ public class AccountMasterTableAccessor {
     }
 
     /**
+     * @brief Start Transaction.
+     */
+    public void startTransaction() {
+        this.writeDatabase.beginTransaction();
+    }
+
+    /**
+     * @brief Set Transaction when Successful.
+     */
+    public void setTransactionSuccessful() {
+        this.writeDatabase.setTransactionSuccessful();
+    }
+
+    /**
+     * @brief End Transaction.
+     */
+    public void endTransaction() {
+        this.writeDatabase.endTransaction();
+    }
+
+    /**
       * @brief Get Record Specified Key.
       * @param key Table key.
       * @return AccountMasterTableRecord Instance.
       */
     public AccountMasterTableRecord getRecord(int key) {
-        open();
         Cursor cursor = readDatabase.query(TABLE_NAME, null , "_id=?", new String[] {String.valueOf(key)}, null, null, null);
 
         AccountMasterTableRecord record = new AccountMasterTableRecord();
@@ -67,7 +88,6 @@ public class AccountMasterTableAccessor {
             record.set(cursor);
         }
         cursor.close();
-        close();
         return record;
     }
 
@@ -77,7 +97,6 @@ public class AccountMasterTableAccessor {
       * @return AccountMasterTableRecord Instance.
       */
     public AccountMasterTableRecord getRecordMatchName(String name) {
-        open();
         Cursor cursor = readDatabase.rawQuery("select * from " + TABLE_NAME + " where name = " + "'" + name + "'" + ";", null);
 
         AccountMasterTableRecord record = new AccountMasterTableRecord();
@@ -85,7 +104,6 @@ public class AccountMasterTableAccessor {
             record.set(cursor);
         }
         cursor.close();
-        close();
         return record;
     }
 
@@ -95,7 +113,6 @@ public class AccountMasterTableAccessor {
       * @return true:exsit false:not exsit.
       */
     public boolean isExsitRecordMatchName(String name) {
-        open();
         Cursor cursor = readDatabase.rawQuery("select * from " + TABLE_NAME + " where name = " + "'" + name + "'" + ";", null);
 
         boolean is_exsit = false;
@@ -105,7 +122,6 @@ public class AccountMasterTableAccessor {
             }
         }
         cursor.close();
-        close();
         return is_exsit;
     }
 
@@ -114,7 +130,6 @@ public class AccountMasterTableAccessor {
      * @return All AccountMasterTableRecord in AccountMasterTable.
      */
     public List<AccountMasterTableRecord> getAllRecord() {
-        open();
         Cursor cursor = readDatabase.query(TABLE_NAME, null, null, null, null, null, "use_date desc, _id", null);
 
         cursor.moveToFirst();
@@ -127,7 +142,6 @@ public class AccountMasterTableAccessor {
             cursor.moveToNext();
         }
         cursor.close();
-        close();
         return record_list;
     }
 
@@ -137,7 +151,6 @@ public class AccountMasterTableAccessor {
      * @return Insert Record Key(_id).
      */
     public long insert(AccountMasterTableRecord record) {
-        open();
         ContentValues insert_record = new ContentValues();
         insert_record.put("kind_id", record.getKindId());
         insert_record.put("name", record.getName());
@@ -147,7 +160,6 @@ public class AccountMasterTableAccessor {
 
         // insert item.
         long key = writeDatabase.insert(TABLE_NAME, null, insert_record);
-        close();
         return key;
     }
 
@@ -157,9 +169,7 @@ public class AccountMasterTableAccessor {
      * @return true if delete success.
      */
     public int delete(int key) {
-        open();
         writeDatabase.delete(TABLE_NAME, "_id=" + String.valueOf(key), null);
-        close();
         return key;
     }
 
@@ -169,7 +179,6 @@ public class AccountMasterTableAccessor {
      * @return true if update success.
      */
     public boolean update(AccountMasterTableRecord record) {
-        open();
         ContentValues update_record = new ContentValues();
         update_record.put("kind_id", record.getKindId());
         update_record.put("name", record.getName());
@@ -178,7 +187,6 @@ public class AccountMasterTableAccessor {
         update_record.put("insert_date", record.getInsertDate());
 
         writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
-        close();
         return true;
     }
 }
