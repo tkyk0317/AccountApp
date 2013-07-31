@@ -15,6 +15,7 @@ import com.myapp.account.file_manager.ExportDatabaseTable;
 import com.myapp.account.file_manager.ImportDatabaseTable;
 import com.myapp.account.file_manager.ExportDataException;
 import com.myapp.account.file_manager.ImportDataException;
+import com.myapp.account.response.ResponseApplicationMenuInterface;
 
 /**
  * @brief Application Menu Class.
@@ -44,6 +45,7 @@ public class ApplicationMenu {
     private Activity activity = null;
     private ExportDatabaseTable exportDatabaseTable = null;
     private ImportDatabaseTable importDatabaseTable = null;
+    private ResponseApplicationMenuInterface responseAppMenu = null;
 
     /**
      * @brief Constructor.
@@ -66,7 +68,8 @@ public class ApplicationMenu {
      * @param item_id Selected Item Id.
      * @return true if match item_id.
      */
-    public boolean displayMenu(int item_id) {
+    public boolean displayMenu(int item_id, ResponseApplicationMenuInterface response) {
+        this.responseAppMenu = response;
         boolean result = true;
 
         switch(item_id) {
@@ -163,7 +166,11 @@ public class ApplicationMenu {
     private void importDatabaseTable() {
         try {
             this.importDatabaseTable.importData();
+
+            // notify complete import data.
+            this.responseAppMenu.OnResponseImportData();
             displayToast(this.activity.getText(R.string.import_data_success).toString());
+
         } catch(ImportDataException import_exception) {
             displayToast(this.activity.getText(R.string.import_data_error).toString());
         }
@@ -187,7 +194,7 @@ public class ApplicationMenu {
      * @param message displayed message.
      */
     private void displayToast(String message) {
-        Toast.makeText(this.activity, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.activity, message, Toast.LENGTH_LONG).show();
     }
 
     /**

@@ -31,11 +31,12 @@ import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.edit_account_data.AccountEdit;
 import com.myapp.account.infoarea.DailyInfoRecord;
+import com.myapp.account.response.ResponseApplicationMenuInterface;
 
 /**
  * @brief Main Class in AccountApp Application.
  */
-public class AccountMainActivity extends Activity implements ClickObserverInterface, EventCompleteObserver, OnClickListener {
+public class AccountMainActivity extends Activity implements ClickObserverInterface, EventCompleteObserver, OnClickListener, ResponseApplicationMenuInterface {
 
     private TitleArea titleArea;
     private Summary summary;
@@ -287,7 +288,15 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return this.applicationMenu.displayMenu(item.getItemId());
+        return this.applicationMenu.displayMenu(item.getItemId(), this);
+    }
+
+    /**
+     * @brief Response when Import Data.
+     */
+    @Override
+    public void OnResponseImportData() {
+        refleshDisplay();
     }
 
     /**
