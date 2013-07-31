@@ -293,10 +293,21 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
 
     /**
      * @brief Response when Import Data.
+     *
+     * @param boolean Import Data Result(true:successed false:failed).
      */
     @Override
-    public void OnResponseImportData() {
+    public void OnResponseImportData(boolean is_result) {
         refleshDisplay();
+    }
+
+    /**
+     * @brief Response when TableData is Exported.
+     *
+     * @param boolean Export Data Resule(true:successed false:failed).
+     */
+    @Override
+    public void OnResponseExportData(boolean is_result) {
     }
 
     /**

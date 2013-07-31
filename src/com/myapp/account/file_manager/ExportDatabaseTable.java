@@ -2,8 +2,11 @@ package com.myapp.account.file_manager;
 
 import java.util.List;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.util.Log;
+import android.os.Handler;
 
+import com.myapp.account.R;
 import com.myapp.account.file_manager.ExportDataException;
 import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.database.DatabaseHelper;
@@ -17,6 +20,7 @@ import com.myapp.account.database.EstimateTableAccessor;
 import com.myapp.account.database.EstimateTableRecord;
 import com.myapp.account.database.UserTableAccessor;
 import com.myapp.account.database.UserTableRecord;
+import com.myapp.account.response.ResponseApplicationMenuInterface;
 
 /**
  * @brief  Export Table Data Class.
@@ -27,6 +31,8 @@ public class ExportDatabaseTable {
     private AbstractExportImportDBTable exportAccountDataTable = null;
     private AbstractExportImportDBTable exportEstimateTable = null;
     private AbstractExportImportDBTable exportUserTable = null;
+    private ProgressDialog progressDialog = null;
+    private ResponseApplicationMenuInterface responseAppMenu = null;
 
     /**
      * @brief Constructor.
@@ -38,20 +44,66 @@ public class ExportDatabaseTable {
         this.exportAccountDataTable = new ExportAccountDataTableImpl(activity);
         this.exportEstimateTable = new ExportEstimateTableImpl(activity);
         this.exportUserTable = new ExportUserTableImpl(activity);
+        this.progressDialog = new ProgressDialog(activity);
+
+        // initialize progress dialog.
+        initializeProgressDialog(activity);
+    }
+
+    /**
+     * @brief Initialize Progress Dialog.
+     */
+    private void initializeProgressDialog(Activity activity) {
+        this.progressDialog.setTitle(activity.getText(R.string.export_progress_dialog_title));
+        this.progressDialog.setMessage(activity.getText(R.string.export_progress_dialog_message));
+        this.progressDialog.setIndeterminate(false);
+        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        this.progressDialog.setCancelable(false);
     }
 
     /**
      * @brief Export Database Table Data.
      */
-    public void exportData() throws ExportDataException {
+    public void exportData(ResponseApplicationMenuInterface response) {
+        // if UI operation, must use Handler Thread.
+        this.responseAppMenu = response;
+        final Handler handler = new Handler();
+
+        // display progress dialog.
+        this.progressDialog.show();
+
+        // start thread.
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        startExportData();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    /**
+     * @brief start Export Data.
+     */
+    public void startExportData() {
         try {
+            // export data.
             this.exportAccountMasterTable.exportData();
             this.exportAccountDataTable.exportData();
             this.exportEstimateTable.exportData();
             this.exportUserTable.exportData();
+
+            // notify export data complete.
+            this.progressDialog.dismiss();
+            this.responseAppMenu.OnResponseExportData(true);
         } catch(ExportDataException exception) {
             Log.d("ExportDatabaseTable", "ExportData Exception");
-            throw exception;
+            this.responseAppMenu.OnResponseExportData(false);
         }
     }
 

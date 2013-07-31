@@ -20,7 +20,7 @@ import com.myapp.account.response.ResponseApplicationMenuInterface;
 /**
  * @brief Application Menu Class.
  */
-public class ApplicationMenu {
+public class ApplicationMenu implements ResponseApplicationMenuInterface {
 
     // Dialog List Index for Edit Data.
     private enum EditDataListIndex {
@@ -154,37 +154,39 @@ public class ApplicationMenu {
      */
     private void parseClickEventForCSVData(int click_index) {
         if( click_index == CSVDataListIndex.INPUT_CSV_FILE_DATA.getIndex() ) {
-            importDatabaseTable();
+            this.importDatabaseTable.importData(this);
         } else if( click_index == CSVDataListIndex.OUTPUT_CSV_FILE_DATA.getIndex() ) {
-            exportDatabaseTable();
+            this.exportDatabaseTable.exportData(this);
         }
     }
 
     /**
-     * @brief Import Database Table Data.
+     * @brief Response Import Data.
+     *
+     * @param boolean Import Data Resule(true:successed false:failed).
      */
-    private void importDatabaseTable() {
-        try {
-            this.importDatabaseTable.importData();
-
-            // notify complete import data.
-            this.responseAppMenu.OnResponseImportData();
-            displayToast(this.activity.getText(R.string.import_data_success).toString());
-
-        } catch(ImportDataException import_exception) {
+    @Override
+    public void OnResponseImportData(boolean is_result) {
+        if( false == is_result ) {
             displayToast(this.activity.getText(R.string.import_data_error).toString());
+        } else {
+            // notify complete import data.
+            this.responseAppMenu.OnResponseImportData(is_result);
+            displayToast(this.activity.getText(R.string.import_data_success).toString());
         }
     }
 
     /**
-     * @brief Export Database Table Data.
+     * @brief Response when TableData is Exported.
+     *
+     * @param boolean Export Data Resule(true:successed false:failed).
      */
-    private void exportDatabaseTable() {
-        try {
-            this.exportDatabaseTable.exportData();
-            displayToast(this.activity.getText(R.string.export_data_success).toString());
-        } catch(ExportDataException export_exception) {
+    @Override
+    public void OnResponseExportData(boolean is_result) {
+        if( false == is_result ) {
             displayToast(this.activity.getText(R.string.export_data_error).toString());
+        } else {
+            displayToast(this.activity.getText(R.string.export_data_success).toString());
         }
     }
 
