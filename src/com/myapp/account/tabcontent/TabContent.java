@@ -1,7 +1,6 @@
 package com.myapp.account.tabcontent;
 
 import android.app.Activity;
-import android.util.Log;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
@@ -24,7 +23,7 @@ public class TabContent {
     protected static final String MONTHLY_TAB_ID = "monthly_tab";
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
     public TabContent(Activity activity) {
         this.activity = activity;

@@ -1,18 +1,12 @@
 package com.myapp.account.summary.estimate;
 
-import java.lang.RuntimeException;
-import android.util.Log;
-import android.widget.EditText;
 import android.app.Activity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.view.Gravity;
 import android.graphics.Color;
-import android.text.InputType;
-import android.text.InputFilter;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;

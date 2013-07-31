@@ -1,6 +1,5 @@
 package com.myapp.account.summary;
 
-import android.util.Log;
 import android.app.Activity;
 import android.widget.TableLayout;
 import android.widget.TableRow;

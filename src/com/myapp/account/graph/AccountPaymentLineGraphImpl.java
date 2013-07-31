@@ -2,15 +2,12 @@ package com.myapp.account.graph;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Date;
 
-import android.util.Log;
 import android.app.Activity;
 import android.widget.LinearLayout;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 
-import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.graph.AbstractAccountGraph;
 import com.myapp.account.database.DatabaseHelper;
@@ -42,7 +39,7 @@ public class AccountPaymentLineGraphImpl extends AbstractAccountGraph {
     protected static final int YLABEL_ITEM_NUM = 10;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      *
      * @param activity Activity Instance.
      */
@@ -132,9 +129,9 @@ public class AccountPaymentLineGraphImpl extends AbstractAccountGraph {
     }
 
     /**
-     * @brief Check Exsit Record at Target Date.
+     * @brief Check Exist Record at Target Date.
      *
-     * @return true:exsit false:not exsit.
+     * @return true:exsit false:not exist.
      */
     protected boolean isExsitRecord() {
         return this.accountTable.isExsitRecordAtTargetYear(this.targetDate);
@@ -179,7 +176,7 @@ public class AccountPaymentLineGraphImpl extends AbstractAccountGraph {
 
                 this.graphTitle.add(master_record.getName());
             }
-            // add record item into tmporary buffer.
+            // add record item into temporary buffer.
             addRecordItem(record_items, month_items, this.accountRecord.get(i));
         }
         // Add items into graph.
@@ -198,8 +195,8 @@ public class AccountPaymentLineGraphImpl extends AbstractAccountGraph {
      */
     protected void addRecordItem(List<Double> record_items, List<Integer> month_items, AccountTableRecord record) {
         String month = Utility.splitMonth(record.getInsertDate());
-        month_items.add(new Integer(Integer.valueOf(month)));
-        record_items.add(new Double((double)record.getMoney()));
+        month_items.add(Integer.valueOf(Integer.valueOf(month)));
+        record_items.add(Double.valueOf((double)record.getMoney()));
      }
 
     /**

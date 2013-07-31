@@ -2,13 +2,10 @@ package com.myapp.account.edit_account_data;
 
 import java.util.List;
 
-import android.util.Log;
 import android.app.Activity;
-import android.content.Context;
 import android.view.Gravity;
 import android.widget.EditText;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
@@ -56,7 +53,7 @@ public class AccountAdd implements OnItemSelectedListener, ClickObserverInterfac
     protected static final String SUFFIX_WEEKDAY = ")";
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
     public AccountAdd(Activity activity) {
         this.activity = activity;
@@ -128,7 +125,7 @@ public class AccountAdd implements OnItemSelectedListener, ClickObserverInterfac
     protected void createSpinner() {
        this.categorySpinner = (Spinner)this.layout.findViewById(R.id.category_spinner);
        ArrayAdapter<String> adapter =
-           new ArrayAdapter(this.activity, android.R.layout.simple_spinner_item, this.categoryItems);
+           new ArrayAdapter<String>(this.activity, android.R.layout.simple_spinner_item, this.categoryItems);
        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
        this.categorySpinner.setAdapter(adapter);
 
@@ -185,10 +182,10 @@ public class AccountAdd implements OnItemSelectedListener, ClickObserverInterfac
     }
 
     /**
-     * @brief Rejist Event
+     * @brief Register Event
      */
     protected void registEvent() {
-        // regist button event.
+        // register button event.
         Button regist_btn = (Button)this.layout.findViewById(R.id.regist_btn);
         regist_btn.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -333,7 +330,7 @@ public class AccountAdd implements OnItemSelectedListener, ClickObserverInterfac
         return Utility.getCurrentDate();
     }
 
-    // not supportted.
+    // not supported.
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
 }

@@ -1,18 +1,12 @@
 package com.myapp.account.infoarea;
 
 import java.util.*;
-import android.util.Log;
 import android.app.Activity;
 import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.view.Gravity;
 
 import com.myapp.account.R;
 import com.myapp.account.infoarea.AbstractInfoArea;
-import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
-import com.myapp.account.utility.Utility;
 import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.infoarea.MonthlyInfoRecord;
 
@@ -22,7 +16,7 @@ import com.myapp.account.infoarea.MonthlyInfoRecord;
 public class MonthInfoAreaImpl extends AbstractInfoArea {
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
     public MonthInfoAreaImpl(Activity activity) {
         super(activity);
@@ -40,7 +34,7 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
     }
 
     /**
-     * @brief Get Table Rayout instansce.
+     * @brief Get Table Layout instance.
      * @return TableRayout Instance.
      */
     @Override

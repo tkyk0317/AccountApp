@@ -1,12 +1,11 @@
 package com.myapp.account.edit_account_master;
 
-import java.util.*;
-import android.app.Activity;
 import android.widget.TableRow;
-import android.content.Context;
 import android.widget.TextView;
 import android.content.res.Resources;
 import android.view.Gravity;
+import android.content.Context;
+
 import com.myapp.account.R;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountMasterTableRecord;
@@ -17,27 +16,27 @@ import com.myapp.account.database.AccountMasterTableRecord;
 public class EditAccountMasterRecord extends TableRow {
 
     protected AccountMasterTableRecord accountMasterRecord;
-    protected Activity activity;
+    protected Context context;
     protected TextView categoryName;
     protected TextView accountKind;
     protected static final int TEXT_SIZE = 18;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      * @param context Context Instance.
      */
-    public EditAccountMasterRecord(Activity activity) {
-        super(activity);
-        this.activity = activity;
-        this.categoryName = new TextView(activity);
-        this.accountKind = new TextView(activity);
+    public EditAccountMasterRecord(Context context) {
+        super(context);
+        this.context = context;
+        this.categoryName = new TextView(context);
+        this.accountKind = new TextView(context);
         this.categoryName.setTextSize(TEXT_SIZE);
         this.accountKind.setTextSize(TEXT_SIZE);
         this.setClickable(true);
     }
 
     /**
-     * @brief Set AccountMaster Record Infomation.
+     * @brief Set AccountMaster Record Information.
      * @param record AccountMasterTable Record.
      */
     public void setAccountMasterInfo(AccountMasterTableRecord record) {
@@ -59,7 +58,7 @@ public class EditAccountMasterRecord extends TableRow {
      * @return Account Kind String.
      */
     private String convertAccountKind(int kind_id) {
-        Resources resources = this.activity.getResources();
+        Resources resources = this.context.getResources();
         if( DatabaseHelper.INCOME_FLAG == kind_id) {
             return resources.getString(R.string.income_label);
         }

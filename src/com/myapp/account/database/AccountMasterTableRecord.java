@@ -1,7 +1,5 @@
 package com.myapp.account.database;
 
-import java.util.*;
-import java.text.DateFormat;
 import android.database.Cursor;
 
 /**
@@ -9,7 +7,7 @@ import android.database.Cursor;
  */
 public class AccountMasterTableRecord {
 
-    // Database Index Enum.
+    // Database Index.
     private enum DatabaseIndex {
         ID(0), KIND_ID(1), NAME(2), USE_DATE(3), UPDATE_DATE(4), INSERT_DATE(5);
 
@@ -49,5 +47,4 @@ public class AccountMasterTableRecord {
     public String getUseDate() { return use_date; }
     public String getUpdateDate() { return update_date; }
     public String getInsertDate() { return insert_date; }
-
 }

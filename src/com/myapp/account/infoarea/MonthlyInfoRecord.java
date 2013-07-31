@@ -1,11 +1,9 @@
 package com.myapp.account.infoarea;
 
-import java.util.*;
 import android.widget.TableRow;
 import android.content.Context;
 import android.widget.TextView;
 import android.view.Gravity;
-import com.myapp.account.database.DatabaseHelper;
 
 /**
  * @brief Monthly Info Record Class.
@@ -19,7 +17,7 @@ public class MonthlyInfoRecord extends TableRow {
     protected static final int TEXT_SIZE = 15;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
     public MonthlyInfoRecord(Context context) {
         super(context);

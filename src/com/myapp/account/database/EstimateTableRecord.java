@@ -7,7 +7,7 @@ import android.database.Cursor;
  */
 public class EstimateTableRecord {
 
-    // Database Index Enum.
+    // Database Index.
     private enum DatabaseIndex {
         ID(0), ESTIMATE_MONEY(1), TARGET_DATE(2), UPDATE_DATE(3), INSERT_DATE(4), USER_ID(5);
 

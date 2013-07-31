@@ -1,9 +1,5 @@
 package com.myapp.account;
 
-import java.util.*;
-import java.lang.ClassCastException;
-
-import android.util.Log;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
@@ -18,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.ViewFlipper;
 import android.widget.ImageView;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 
 import com.myapp.account.AccountLineGraphActivity;
@@ -36,11 +31,12 @@ import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.edit_account_data.AccountEdit;
 import com.myapp.account.infoarea.DailyInfoRecord;
+import com.myapp.account.response.ResponseApplicationMenuInterface;
 
 /**
  * @brief Main Class in AccountApp Application.
  */
-public class AccountMainActivity extends Activity implements ClickObserverInterface, EventCompleteObserver, OnClickListener {
+public class AccountMainActivity extends Activity implements ClickObserverInterface, EventCompleteObserver, OnClickListener, ResponseApplicationMenuInterface {
 
     private TitleArea titleArea;
     private Summary summary;
@@ -101,7 +97,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.currentDate = getCurrentDate();
         this.appConfig = new AppConfigurationData(this);
 
-        // init image.
+        // initialize image.
         initImage();
 
         // not display return current month view.
@@ -114,7 +110,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         // clear summary views.
         clearSummaryViews();
 
-        // regist event.
+        // register event.
         registEvent();
 
         // attach observer.
@@ -124,8 +120,8 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * @brief Initalize Image.
-     */
+     * @brief Initialize Image.
+      */
     private void initImage() {
         this.pieGraphImage = (ImageView)findViewById(R.id.account_pie_chart_image);
         this.pieGraphImage.setImageDrawable(getResources().getDrawable(R.drawable.pie_chart));
@@ -158,7 +154,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * @brief Regist Event.
+     * @brief Register Event.
      */
     private void registEvent() {
         this.returnCurrentMonthView.setId(ViewId.CALENDAR_VIEW.getId());
@@ -245,7 +241,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * @brief Called Activity is Destoryed.
+     * @brief Called Activity is Destroyed.
      */
     @Override
     public void onDestroy() {
@@ -288,11 +284,30 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * @brief Called Option Menu Seelcted.
+     * @brief Called Option Menu Selected.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return this.applicationMenu.displayMenu(item.getItemId());
+        return this.applicationMenu.displayMenu(item.getItemId(), this);
+    }
+
+    /**
+     * @brief Response when Import Data.
+     *
+     * @param boolean Import Data Result(true:successed false:failed).
+     */
+    @Override
+    public void OnResponseImportData(boolean is_result) {
+        refleshDisplay();
+    }
+
+    /**
+     * @brief Response when TableData is Exported.
+     *
+     * @param boolean Export Data Resule(true:successed false:failed).
+     */
+    @Override
+    public void OnResponseExportData(boolean is_result) {
     }
 
     /**
@@ -312,7 +327,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     public void notifyClick(Object event) {
         AccountCalendarCell cell = (AccountCalendarCell)event;
 
-        // check reflesh timing.
+        // check refresh timing.
         if( true == isSummaryReflesh(cell) ) {
             clearSummaryViews();
             this.summary.appear(cell.getDate());
@@ -323,11 +338,11 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * @brief Check Reflesh Summary.
+     * @brief Check Refresh Summary.
      *
      * @param cell AccountCalendarCell instance.
      *
-     * @return true:reflesh false:not reflesh.
+     * @return true:refresh false:not refresh.
      */
     private boolean isSummaryReflesh(AccountCalendarCell cell) {
         int start_day = this.appConfig.getStartDay();
@@ -339,7 +354,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         int current_day = Integer.valueOf(Utility.splitDay(cell.getDate()));
         int previous_day = Integer.valueOf(Utility.splitDay(this.currentDate));
 
-        // check reflesh timing.
+        // check refresh timing.
         if( previous_day < start_day && start_day <= current_day ) {
             return true;
         }
@@ -395,10 +410,10 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         } else {
             this.currentCalendarIndex = CalendarIndex.NEXT_ID;
         }
-        // Animatio calendar.
+        // Animation calendar.
         animationCalendar(velocity_x);
 
-        // reflesh.
+        // refresh.
         refleshDisplay();
     }
 
@@ -433,11 +448,11 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     public void notifyUserTableEditComplete() {}
 
     /**
-     * @brief Reflesh Display.
+     * @brief Refresh Display.
      */
     private void refleshDisplay() {
         clearSummaryViews();
-        refleshCalendar();
+        refreshCalendar();
         refleshReturnCurrentMonthView();
         this.summary.appear(this.currentDate);
         this.titleArea.appear(this.currentDate);
@@ -445,9 +460,9 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * @brief Reflesh Calendar.
+     * @brief Refresh Calendar.
      */
-    private void refleshCalendar() {
+    private void refreshCalendar() {
         if( this.currentCalendarIndex == CalendarIndex.CURRENT_ID ) {
             this.currentCalendar.appear(currentDate);
         } else if( this.currentCalendarIndex == CalendarIndex.NEXT_ID ) {
@@ -456,7 +471,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * @brief Reflesh Return Current Month View.
+     * @brief Refresh Return Current Month View.
      */
     private void refleshReturnCurrentMonthView() {
         if( false == Utility.isIncludeTargetDateInCurrentMonth(this.currentDate) ) {
@@ -511,7 +526,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
-     * @brief Calendar Index Enum.
+     * @brief Calendar Index.
      */
     private enum CalendarIndex {
         CURRENT_ID(), NEXT_ID();

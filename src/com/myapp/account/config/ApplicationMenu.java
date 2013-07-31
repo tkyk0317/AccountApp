@@ -1,21 +1,26 @@
 package com.myapp.account.config;
 
-import android.util.Log;
 import android.app.Activity;
 import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.myapp.account.R;
 import com.myapp.account.AppConfigurationActivity;
 import com.myapp.account.EditAccountMasterActivity;
 import com.myapp.account.EditUserTableActivity;
+import com.myapp.account.file_manager.ExportDatabaseTable;
+import com.myapp.account.file_manager.ImportDatabaseTable;
+import com.myapp.account.file_manager.ExportDataException;
+import com.myapp.account.file_manager.ImportDataException;
+import com.myapp.account.response.ResponseApplicationMenuInterface;
 
 /**
  * @brief Application Menu Class.
  */
-public class ApplicationMenu {
+public class ApplicationMenu implements ResponseApplicationMenuInterface {
 
     // Dialog List Index for Edit Data.
     private enum EditDataListIndex {
@@ -38,12 +43,17 @@ public class ApplicationMenu {
     }
 
     private Activity activity = null;
+    private ExportDatabaseTable exportDatabaseTable = null;
+    private ImportDatabaseTable importDatabaseTable = null;
+    private ResponseApplicationMenuInterface responseAppMenu = null;
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      */
     public ApplicationMenu(Activity activity) {
         this.activity = activity;
+        this.exportDatabaseTable = new ExportDatabaseTable(activity);
+        this.importDatabaseTable = new ImportDatabaseTable(activity);
     }
 
     /**
@@ -58,7 +68,8 @@ public class ApplicationMenu {
      * @param item_id Selected Item Id.
      * @return true if match item_id.
      */
-    public boolean displayMenu(int item_id) {
+    public boolean displayMenu(int item_id, ResponseApplicationMenuInterface response) {
+        this.responseAppMenu = response;
         boolean result = true;
 
         switch(item_id) {
@@ -143,8 +154,49 @@ public class ApplicationMenu {
      */
     private void parseClickEventForCSVData(int click_index) {
         if( click_index == CSVDataListIndex.INPUT_CSV_FILE_DATA.getIndex() ) {
+            this.importDatabaseTable.importData(this);
         } else if( click_index == CSVDataListIndex.OUTPUT_CSV_FILE_DATA.getIndex() ) {
+            this.exportDatabaseTable.exportData(this);
         }
+    }
+
+    /**
+     * @brief Response Import Data.
+     *
+     * @param boolean Import Data Resule(true:successed false:failed).
+     */
+    @Override
+    public void OnResponseImportData(boolean is_result) {
+        if( false == is_result ) {
+            displayToast(this.activity.getText(R.string.import_data_error).toString());
+        } else {
+            // notify complete import data.
+            this.responseAppMenu.OnResponseImportData(is_result);
+            displayToast(this.activity.getText(R.string.import_data_success).toString());
+        }
+    }
+
+    /**
+     * @brief Response when TableData is Exported.
+     *
+     * @param boolean Export Data Resule(true:successed false:failed).
+     */
+    @Override
+    public void OnResponseExportData(boolean is_result) {
+        if( false == is_result ) {
+            displayToast(this.activity.getText(R.string.export_data_error).toString());
+        } else {
+            displayToast(this.activity.getText(R.string.export_data_success).toString());
+        }
+    }
+
+    /**
+     * @brief Display Toast Message.
+     *
+     * @param message displayed message.
+     */
+    private void displayToast(String message) {
+        Toast.makeText(this.activity, message, Toast.LENGTH_LONG).show();
     }
 
     /**

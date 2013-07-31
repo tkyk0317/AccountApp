@@ -13,6 +13,8 @@ import java.io.OutputStreamWriter;
 
 import android.os.Environment;
 import android.util.Log;
+
+import com.myapp.account.utility.Utility;
 import com.myapp.account.file_manager.FileManagerInterface;
 
 /**
@@ -24,7 +26,7 @@ public class SdCardFileManagerImpl implements FileManagerInterface {
     protected static final String LINE_END = "\n";
 
     /**
-     * @brief Constractor.
+     * @brief Constructor.
      * @param context Context Instance.
      */
     public SdCardFileManagerImpl() {
@@ -45,8 +47,7 @@ public class SdCardFileManagerImpl implements FileManagerInterface {
         try {
             read_string = new String();
             file = new File(this.sdCardFullPath + file_name);
-            read_buffer = new BufferedReader(
-                    new InputStreamReader(new FileInputStream(file), "UTF-8"));
+            read_buffer = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
             // Read All File String.
             String line_string;
@@ -54,10 +55,11 @@ public class SdCardFileManagerImpl implements FileManagerInterface {
                 read_string += line_string;
                 read_string += LINE_END;
             }
-
         } catch (FileNotFoundException file_not_found) {
+            read_string = "";
             Log.d("SdCardFileManagerImpl", "readFile:File Not Found : " + file_not_found);
         } catch (IOException io_exception) {
+            read_string = "";
             Log.d("SdCardFileManagerImpl", "readFile:IOException : " + io_exception);
         } finally {
             if( null != read_buffer ) {
@@ -75,11 +77,14 @@ public class SdCardFileManagerImpl implements FileManagerInterface {
     /**
      * @brief Write File.
      * @param file_name Write FileName.
-     * @param write_string Write Strng to File.
+     * @param write_string Write String to File.
      * @return true:Write Success false:Write Failed.
      */
     @Override
     public boolean writeFile(String file_name, String write_string) {
+        // do not write when string is null.
+        if( true == Utility.isStringNULL(write_string) ) return true;
+
         boolean ret = true;
         BufferedWriter write_buffer = null;
         String file_path = sdCardFullPath + file_name;
@@ -102,7 +107,7 @@ public class SdCardFileManagerImpl implements FileManagerInterface {
                 }
             }
         }
-        return true;
+       return ret;
     }
 }
 
