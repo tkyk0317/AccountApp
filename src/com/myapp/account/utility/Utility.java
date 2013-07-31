@@ -4,6 +4,8 @@ import java.util.*;
 import java.text.*;
 import android.util.Log;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.view.WindowManager.LayoutParams;
 
 import com.myapp.account.R;
 
@@ -448,6 +450,17 @@ public class Utility {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @brief Modify AlertDialog Width Max Width.
+     *
+     * @param dialog Target Dialog Instance.
+     */
+    public static void modifyDialogWidthMax(AlertDialog dialog) {
+        LayoutParams layout_param = dialog.getWindow().getAttributes();
+        layout_param.width = LayoutParams.FILL_PARENT;
+        dialog.getWindow().setAttributes(layout_param);
     }
 }
 

@@ -125,6 +125,9 @@ public class AddAccountMasterDialogImpl implements OnItemSelectedListener, Accou
         this.addCategoryDialog.setView(this.addCategoryView);
         this.addCategoryDialog.getWindow().setGravity(Gravity.TOP);
         this.addCategoryDialog.show();
+
+        // modify dialog width.
+        Utility.modifyDialogWidthMax(this.addCategoryDialog);
     }
 
     /**

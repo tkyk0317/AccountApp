@@ -119,6 +119,9 @@ public class AddUserTableDialogImpl implements UserTableDialogInterface, EventCo
         this.addUserTableDialog.setView(this.addUserTableView);
         this.addUserTableDialog.getWindow().setGravity(Gravity.TOP);
         this.addUserTableDialog.show();
+
+        // modify dialog width.
+        Utility.modifyDialogWidthMax(this.addUserTableDialog);
     }
 
     /**

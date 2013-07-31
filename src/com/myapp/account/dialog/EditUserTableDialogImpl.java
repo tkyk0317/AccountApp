@@ -188,6 +188,9 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
         this.editUserTableDialog.setView(this.editUserTableView);
         this.editUserTableDialog.getWindow().setGravity(Gravity.TOP);
         this.editUserTableDialog.show();
+
+        // modify dialog width.
+        Utility.modifyDialogWidthMax(this.editUserTableDialog);
     }
 
     /**

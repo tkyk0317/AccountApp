@@ -116,8 +116,10 @@ public class AccountAdd implements OnItemSelectedListener, ClickObserverInterfac
         this.inputDialog = new AlertDialog.Builder(this.activity).create();
         this.inputDialog.setView(this.layout);
         this.inputDialog.getWindow().setGravity(Gravity.TOP);
-
         this.inputDialog.show();
+
+        // modify dialog width.
+        Utility.modifyDialogWidthMax(this.inputDialog);
     }
 
     /**
