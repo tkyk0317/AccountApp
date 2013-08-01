@@ -1,5 +1,6 @@
 package com.myapp.account;
 
+import android.os.Handler;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ViewFlipper;
 import android.widget.ImageView;
 import android.view.animation.Animation;
+import android.app.ProgressDialog;
 import android.view.animation.TranslateAnimation;
 
 import com.myapp.account.AccountLineGraphActivity;
@@ -56,6 +58,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     private ImageView lineGraphImage;
     private ImageView addAccountImage;
     private AppConfigurationData appConfig;
+    private ProgressDialog progressDialog;
     private static final int ANIMATION_DURATION = 300;
 
     /**
@@ -78,8 +81,9 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         // initialize.
         init();
 
-        // display Main Content.
-        displayMainContent();
+        // start display main content thread.
+        displayProgressDialog();
+        startDisplayMainContentThread();
     }
 
     /**
@@ -96,6 +100,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.nextCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.next_flipper));
         this.currentDate = getCurrentDate();
         this.appConfig = new AppConfigurationData(this);
+        this.progressDialog = new ProgressDialog(this);
 
         // initialize image.
         initImage();
@@ -227,6 +232,40 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         AccountAdd account_add = new AccountAdd(this);
         account_add.attachObserver(this);
         account_add.appear(this.currentDate);
+    }
+
+    /**
+     * @brief Start Display Content Thread.
+     */
+    private void startDisplayMainContentThread() {
+        final Handler handler = new Handler();
+
+        // start display main content.
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        displayMainContent();
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    /**
+     * @brief Display Progress Dialog.
+     */
+    private void displayProgressDialog() {
+        this.progressDialog.setTitle(getText(R.string.loading_progress_dialog_title));
+        this.progressDialog.setMessage(getText(R.string.loading_progress_dialog_message));
+        this.progressDialog.setIndeterminate(false);
+        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        this.progressDialog.setCancelable(false);
+        this.progressDialog.show();
     }
 
     /**

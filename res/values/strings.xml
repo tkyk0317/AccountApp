@@ -82,8 +82,10 @@
     <string name="export_data_error">データ出力できませんでした\nSDカードを確認して下さい</string>
     <string name="import_data_error">データ入力できませんでした\nSDカードを確認して下さい</string>
     <string name="import_progress_dialog_title">CSVデータ入力</string>
-    <string name="import_progress_dialog_message">インポート中</string>
+    <string name="import_progress_dialog_message">インポート中......</string>
     <string name="export_progress_dialog_title">CSVデータ出力</string>
-    <string name="export_progress_dialog_message">エクスポート中</string>
+    <string name="export_progress_dialog_message">エクスポート中......</string>
+    <string name="loading_progress_dialog_title">データベース読込</string>
+    <string name="loading_progress_dialog_message">読込中......</string>
 </resources>
 
