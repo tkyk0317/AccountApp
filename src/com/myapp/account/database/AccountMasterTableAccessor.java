@@ -160,6 +160,7 @@ public class AccountMasterTableAccessor {
 
         // insert item.
         long key = writeDatabase.insert(TABLE_NAME, null, insert_record);
+        insert_record = null;
         return key;
     }
 
@@ -187,6 +188,7 @@ public class AccountMasterTableAccessor {
         update_record.put("insert_date", record.getInsertDate());
 
         writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
+        update_record = null;
         return true;
     }
 }

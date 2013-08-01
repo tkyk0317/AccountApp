@@ -190,6 +190,7 @@ public class EstimateTableAccessor {
 
         // insert record.
         long is_insert = writeDatabase.insert(TABLE_NAME, null, insert_record);
+        insert_record = null;
         return is_insert;
     }
 
@@ -206,6 +207,7 @@ public class EstimateTableAccessor {
         update_record.put("user_id", this.appConfig.getTargetUserNameId());
 
         int is_update = writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
+        update_record = null;
         return is_update;
     }
 

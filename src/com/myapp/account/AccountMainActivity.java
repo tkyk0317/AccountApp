@@ -298,7 +298,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     @Override
     public void OnResponseImportData(boolean is_result) {
-        refleshDisplay();
+        refreshDisplay();
     }
 
     /**
@@ -414,7 +414,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         animationCalendar(velocity_x);
 
         // refresh.
-        refleshDisplay();
+        refreshDisplay();
     }
 
     /**
@@ -438,7 +438,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      */
     @Override
     public void notifyAccountEditComplete() {
-        refleshDisplay();
+        refreshDisplay();
     }
 
     // not supported.
@@ -450,7 +450,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Refresh Display.
      */
-    private void refleshDisplay() {
+    private void refreshDisplay() {
         clearSummaryViews();
         refreshCalendar();
         refleshReturnCurrentMonthView();

@@ -1,7 +1,8 @@
 package com.myapp.account.file_manager;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.util.Log;
@@ -100,11 +101,12 @@ public class ImportDatabaseTable {
             this.importUserTable.importData();
 
             // notify response import data.
-            this.progressDialog.dismiss();
             this.responseAppMenu.OnResponseImportData(true);
         } catch(ImportDataException exception) {
             Log.d("ImportDatabaseTable", "ImportData Exception");
             this.responseAppMenu.OnResponseImportData(false);
+        } finally {
+            this.progressDialog.dismiss();
         }
      }
 
@@ -130,48 +132,50 @@ public class ImportDatabaseTable {
          */
         @Override
         public void importData() throws ImportDataException {
-            List<AccountTableRecord> account_record = deserialize();
+            try {
+                this.accountTable.startTransaction();
 
-            // insert table data.
-            boolean ret = true;
-            this.accountTable.startTransaction();
-            for( AccountTableRecord record : account_record ) {
-                // check insert return value.
-                if( -1 == this.accountTable.insert(record) ) {
-                    ret = false;
-                    break;
+                // Read File.
+                String line_string;
+                this.sdCardFileManager.open(IMPORT_FILE_NAME);
+                while( null != (line_string = this.sdCardFileManager.readOneline()) ) {
+                    AccountTableRecord record = deserialize(line_string.split(LINE_END)[0]);
+
+                    // insert record.
+                    if( -1 == this.accountTable.insert(record) ) {
+                        this.sdCardFileManager.close();
+                        this.accountTable.endTransaction();
+                        throw new ImportDataException("ImportData Exception");
+                    }
+                    // delete instance.
+                    line_string = null;
+                    record = null;
                 }
-            }
-
-            // check insert result.
-            if( false == ret ) {
+                this.sdCardFileManager.close();
+                this.accountTable.setTransactionSuccessful();
+            } catch (FileNotFoundException not_found_exception) {
+                Log.d("ImportAccountDataTableImpl", "File Not Found Exception");
+            } catch (IOException io_exception) {
+                throw new ImportDataException("IOException");
+            } finally {
                 this.accountTable.endTransaction();
-                throw new ImportDataException("ImportData Exception");
             }
-
-            // end transaction.
-            this.accountTable.setTransactionSuccessful();
-            this.accountTable.endTransaction();
         }
 
         /**
          * @brief Deserialize AccountTable Record.
-         * @return AccountTableRecord List.
+         *
+         * @param csv_data CSV Data String.
+         *
+         * @return AccountTableRecord.
          */
-        private List<AccountTableRecord> deserialize() {
-            List<AccountTableRecord> record = new ArrayList<AccountTableRecord>();
-            String[] account_data = this.sdCardFileManager.readFile(IMPORT_FILE_NAME).split(LINE_END);
+        private AccountTableRecord deserialize(String csv_data) {
+            AccountTableRecord record = new AccountTableRecord();
 
             // check null string.
-            if( false == Utility.isStringNULL(account_data[0]) ) {
-                for( int i = 0 ; i < account_data.length ; ++i ) {
-                    String[] table_data = account_data[i].split(CSV_DELIMITER);
-                    AccountTableRecord account_record = new AccountTableRecord();
-
-                    // add table data.
-                    addTableDataIntoRecord(table_data, account_record);
-                    record.add(account_record);
-                }
+            if( false == Utility.isStringNULL(csv_data) ) {
+                String[] table_data = csv_data.split(CSV_DELIMITER);
+                addTableDataIntoRecord(table_data, record);
             }
             return record;
         }
@@ -214,49 +218,53 @@ public class ImportDatabaseTable {
          */
         @Override
         public void importData() throws ImportDataException {
-            List<AccountMasterTableRecord> master_records = deserialize();
+            try {
+                this.accountMaster.startTransaction();
 
-            // insert table data.
-            boolean ret = true;
-            this.accountMaster.startTransaction();
-            for( AccountMasterTableRecord record : master_records ) {
-                // check same name record.
-                if( true == this.accountMaster.isExsitRecordMatchName(record.getName()) ) continue;
+                // read file.
+                String line_string;
+                this.sdCardFileManager.open(IMPORT_FILE_NAME);
+                while( null != (line_string = this.sdCardFileManager.readOneline()) ) {
+                    AccountMasterTableRecord record = deserialize(line_string.split(LINE_END)[0]);
 
-                // check insert return value.
-                if( -1 == this.accountMaster.insert(record) ) {
-                    ret = false;
-                    break;
+                    // check same name record.
+                    if( true == this.accountMaster.isExsitRecordMatchName(record.getName()) ) continue;
+
+                    // check insert return value.
+                    if( -1 == this.accountMaster.insert(record) ) {
+                        this.sdCardFileManager.close();
+                        this.accountMaster.endTransaction();
+                        throw new ImportDataException("ImportData Exception");
+                    }
+                    // delete instance.
+                    line_string = null;
+                    record = null;
                 }
-            }
-            // check insert result.
-            if( false == ret ) {
+                this.sdCardFileManager.close();
+                this.accountMaster.setTransactionSuccessful();
+            } catch (FileNotFoundException not_found_exception) {
+                Log.d("ImportAccountMasterTableImpl", "File Not Found Exception");
+            } catch (IOException io_exception) {
+                throw new ImportDataException("IOException");
+            } finally {
                 this.accountMaster.endTransaction();
-                throw new ImportDataException("ImportData Exception");
             }
-            // end transaction.
-            this.accountMaster.setTransactionSuccessful();
-            this.accountMaster.endTransaction();
         }
 
         /**
          * @brief Deserialize AccountMaster Record.
-         * @return AccountMasterTableRecord List.
+         *
+         * @param csv_data CSV Data String.
+         *
+         * @return AccountMasterTableRecord.
          */
-        private List<AccountMasterTableRecord> deserialize() {
-            List<AccountMasterTableRecord> record = new ArrayList<AccountMasterTableRecord>();
-            String[] master_data = this.sdCardFileManager.readFile(IMPORT_FILE_NAME).split(LINE_END);
+        private AccountMasterTableRecord deserialize(String csv_data) {
+            AccountMasterTableRecord record = new AccountMasterTableRecord();
 
             // check null string.
-            if( false == Utility.isStringNULL(master_data[0]) ) {
-                for( int i = 0 ; i < master_data.length ; ++i ) {
-                    String[] table_data = master_data[i].split(CSV_DELIMITER);
-                    AccountMasterTableRecord master_record = new AccountMasterTableRecord();
-
-                    // add table data.
-                    addTableDataIntoRecord(table_data, master_record);
-                    record.add(master_record);
-                }
+            if( false == Utility.isStringNULL(csv_data) ) {
+                String[] table_data = csv_data.split(CSV_DELIMITER);
+                addTableDataIntoRecord(table_data, record);
             }
             return record;
         }
@@ -300,49 +308,53 @@ public class ImportDatabaseTable {
          */
         @Override
         public void importData() throws ImportDataException {
-            List<EstimateTableRecord> estimate_records = deserialize();
+            try {
+                this.estimateTable.startTransaction();
 
-            // insert table data.
-            boolean ret = true;
-            this.estimateTable.startTransaction();
-            for( EstimateTableRecord record : estimate_records ) {
-                // check same target date record.
-                if( true == this.estimateTable.isEstimateRecord(record.getTargetDate()) ) continue;
+                // read file.
+                String line_string;
+                this.sdCardFileManager.open(IMPORT_FILE_NAME);
+                while( null != (line_string = this.sdCardFileManager.readOneline()) ) {
+                    EstimateTableRecord record = deserialize(line_string.split(LINE_END)[0]);
 
-                // check insert return value.
-                if( -1 == this.estimateTable.insert(record) ) {
-                    ret = false;
-                    break;
+                    // check same target date record.
+                    if( true == this.estimateTable.isEstimateRecord(record.getTargetDate()) ) continue;
+
+                    // check insert return value.
+                    if( -1 == this.estimateTable.insert(record) ) {
+                        this.sdCardFileManager.close();
+                        this.estimateTable.endTransaction();
+                        throw new ImportDataException("ImportData Exception");
+                    }
+                    // delete instance.
+                    line_string = null;
+                    record = null;
                 }
-            }
-            // check insert result.
-            if( false == ret ) {
+                this.sdCardFileManager.close();
+                this.estimateTable.setTransactionSuccessful();
+            } catch (FileNotFoundException not_found_exception) {
+                Log.d("ImportEstimateTableImpl", "File Not Found Exception");
+            } catch (IOException io_exception) {
+                throw new ImportDataException("IOException");
+            } finally {
                 this.estimateTable.endTransaction();
-                throw new ImportDataException("ImportData Exception");
             }
-            // end transaction.
-            this.estimateTable.setTransactionSuccessful();
-            this.estimateTable.endTransaction();
         }
 
         /**
          * @brief Deserialize EstimateTable Record.
-         * @return EstimateTableRecord List.
+         *
+         * @param csv_data CSV Data String.
+         *
+         * @return EstimateTableRecord.
          */
-        private List<EstimateTableRecord> deserialize() {
-            List<EstimateTableRecord> record = new ArrayList<EstimateTableRecord>();
-            String[] estimate_data = this.sdCardFileManager.readFile(IMPORT_FILE_NAME).split(LINE_END);
+        private EstimateTableRecord deserialize(String csv_data) {
+            EstimateTableRecord record = new EstimateTableRecord();
 
             // check null string.
-            if( false == Utility.isStringNULL(estimate_data[0]) ) {
-                for( int i = 0 ; i < estimate_data.length ; ++i ) {
-                    String[] table_data = estimate_data[i].split(CSV_DELIMITER);
-                    EstimateTableRecord estimate_record = new EstimateTableRecord();
-
-                    // add table data.
-                    addTableDataIntoRecord(table_data, estimate_record);
-                    record.add(estimate_record);
-                }
+            if( false == Utility.isStringNULL(csv_data) ) {
+                String[] table_data = csv_data.split(CSV_DELIMITER);
+                addTableDataIntoRecord(table_data, record);
             }
             return record;
         }
@@ -384,49 +396,53 @@ public class ImportDatabaseTable {
          */
         @Override
         public void importData() throws ImportDataException {
-            List<UserTableRecord> user_records = deserialize();
+            try {
+                this.userTable.startTransaction();
 
-            // insert table data.
-            boolean ret = true;
-            this.userTable.startTransaction();
-            for( UserTableRecord record : user_records ) {
-                // check same user name record.
-                if( true == this.userTable.isExsitRecordMatchName(record.getName()) ) continue;
+                // read file.
+                String line_string;
+                this.sdCardFileManager.open(IMPORT_FILE_NAME);
+                while( null != (line_string = this.sdCardFileManager.readOneline()) ) {
+                    UserTableRecord record = deserialize(line_string.split(LINE_END)[0]);
 
-                // check insert return value.
-                if( -1 == this.userTable.insert(record) ) {
-                    ret = false;
-                    break;
+                    // check same user name record.
+                    if( true == this.userTable.isExsitRecordMatchName(record.getName()) ) continue;
+
+                    // check insert return value.
+                    if( -1 == this.userTable.insert(record) ) {
+                        this.sdCardFileManager.close();
+                        this.userTable.endTransaction();
+                        throw new ImportDataException("ImportData Exception");
+                    }
+                    // delete instance.
+                    line_string = null;
+                    record = null;
                 }
-            }
-            // check insert result.
-            if( false == ret ) {
+                this.sdCardFileManager.close();
+                this.userTable.setTransactionSuccessful();
+            } catch (FileNotFoundException not_found_exception) {
+                Log.d("ImportUserTableImpl", "File Not Found Exception");
+            } catch (IOException io_exception) {
+                throw new ImportDataException("IOException");
+            } finally {
                 this.userTable.endTransaction();
-                throw new ImportDataException("ImportData Exception");
             }
-            // end transaction.
-            this.userTable.setTransactionSuccessful();
-            this.userTable.endTransaction();
         }
 
         /**
          * @brief Deserialize UserTable Record.
-         * @return UserTableRecord List.
+         *
+         * @param csv_data CSV Data String.
+         *
+         * @return UserTableRecord.
          */
-        private List<UserTableRecord> deserialize() {
-            List<UserTableRecord> record = new ArrayList<UserTableRecord>();
-            String[] user_data = this.sdCardFileManager.readFile(IMPORT_FILE_NAME).split(LINE_END);
+        private UserTableRecord deserialize(String csv_data) {
+            UserTableRecord record = new UserTableRecord();
 
             // check null string.
-            if( false == Utility.isStringNULL(user_data[0]) ) {
-                for( int i = 0 ; i < user_data.length ; ++i ) {
-                    String[] table_data = user_data[i].split(CSV_DELIMITER);
-                    UserTableRecord user_record = new UserTableRecord();
-
-                    // add table data.
-                    addTableDataIntoRecord(table_data, user_record);
-                    record.add(user_record);
-                }
+            if( false == Utility.isStringNULL(csv_data) ) {
+                String[] table_data = csv_data.split(CSV_DELIMITER);
+                addTableDataIntoRecord(table_data, record);
             }
             return record;
         }

@@ -2,6 +2,7 @@ package com.myapp.account.file_manager;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -24,6 +25,7 @@ public class SdCardFileManagerImpl implements FileManagerInterface {
 
     protected String sdCardFullPath;
     protected static final String LINE_END = "\n";
+    protected BufferedReader bufReader = null;
 
     /**
      * @brief Constructor.
@@ -34,42 +36,54 @@ public class SdCardFileManagerImpl implements FileManagerInterface {
     }
 
     /**
+     * @brief Open File.
+     *
+     * @param file_name File Name.
+     */
+    public void open(String file_name) throws FileNotFoundException, UnsupportedEncodingException {
+        // open file.
+        File file = new File(this.sdCardFullPath + file_name);
+        this.bufReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+    }
+
+    /**
+     * @brief Read Oneline from File.
+     *
+     * @return Read String.
+     */
+    @Override
+    public String readOneline() throws IOException {
+        String read_string = new String();
+
+        // check bufReader.
+        if( null == this.bufReader ) return read_string;
+        return this.bufReader.readLine();
+    }
+
+    /**
+     * @brief Close File.
+     */
+    public void close() throws IOException {
+        this.bufReader.close();
+        this.bufReader = null;
+    }
+
+    /**
      * @brief Read File.
-     * @param file_name Read FileName.
+     *
      * @return Read String from Specified FileName.
      */
     @Override
-    public String readFile(String file_name) {
-        String read_string = null;
-        BufferedReader read_buffer = null;
-        File file = null;
+    public String readFile() throws IOException {
+        String read_string = new String();
 
-        try {
-            read_string = new String();
-            file = new File(this.sdCardFullPath + file_name);
-            read_buffer = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+        // check bufReader.
+        if( null == this.bufReader ) return read_string;
 
-            // Read All File String.
-            String line_string;
-            while( null != (line_string = read_buffer.readLine()) ) {
-                read_string += line_string;
-                read_string += LINE_END;
-            }
-        } catch (FileNotFoundException file_not_found) {
-            read_string = "";
-            Log.d("SdCardFileManagerImpl", "readFile:File Not Found : " + file_not_found);
-        } catch (IOException io_exception) {
-            read_string = "";
-            Log.d("SdCardFileManagerImpl", "readFile:IOException : " + io_exception);
-        } finally {
-            if( null != read_buffer ) {
-                try {
-                    read_buffer.close();
-                    read_buffer = null;
-                } catch (IOException io_exception) {
-                    Log.d("SdCardFileManagerImpl", "readFile:IOException(BufferedReader.close) : " + io_exception);
-                }
-            }
+        // Read All File String.
+        String line_string;
+        while( null != (line_string = this.bufReader.readLine()) ) {
+            read_string += line_string;
         }
         return read_string;
     }

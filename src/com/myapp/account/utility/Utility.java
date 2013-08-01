@@ -2,6 +2,7 @@ package com.myapp.account.utility;
 
 import java.util.*;
 import java.text.*;
+
 import android.util.Log;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -457,7 +458,8 @@ public class Utility {
      *
      * @param dialog Target Dialog Instance.
      */
-    public static void modifyDialogWidthMax(AlertDialog dialog) {
+    @SuppressWarnings("deprecation")
+	public static void modifyDialogWidthMax(AlertDialog dialog) {
         LayoutParams layout_param = dialog.getWindow().getAttributes();
         layout_param.width = LayoutParams.FILL_PARENT;
         dialog.getWindow().setAttributes(layout_param);

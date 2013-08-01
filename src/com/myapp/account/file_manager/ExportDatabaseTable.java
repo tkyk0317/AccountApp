@@ -99,11 +99,12 @@ public class ExportDatabaseTable {
             this.exportUserTable.exportData();
 
             // notify export data complete.
-            this.progressDialog.dismiss();
             this.responseAppMenu.OnResponseExportData(true);
         } catch(ExportDataException exception) {
             Log.d("ExportDatabaseTable", "ExportData Exception");
             this.responseAppMenu.OnResponseExportData(false);
+        } finally {
+            this.progressDialog.dismiss();
         }
     }
 

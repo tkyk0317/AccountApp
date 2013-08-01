@@ -146,6 +146,7 @@ public class UserTableAccessor {
 
         // insert record.
         long key = this.writeDatabase.insert(TABLE_NAME, null, insert_record);
+        insert_record = null;
         return key;
     }
 
@@ -160,8 +161,8 @@ public class UserTableAccessor {
         update_record.put("update_date", record.getUpdateDate());
         update_record.put("insert_date", record.getInsertDate());
 
-        Log.d("UserTableAccessor", "UserTable Primary Id : " + record.getId());
         int key = this.writeDatabase.update(TABLE_NAME, update_record, "_id=" + String.valueOf(record.getId()), null);
+        update_record = null;
         return key;
     }
 
