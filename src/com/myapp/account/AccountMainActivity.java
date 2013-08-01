@@ -1,7 +1,8 @@
 package com.myapp.account;
 
-import android.os.Handler;
+import android.os.AsyncTask;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
@@ -58,7 +59,6 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     private ImageView lineGraphImage;
     private ImageView addAccountImage;
     private AppConfigurationData appConfig;
-    private ProgressDialog progressDialog;
     private static final int ANIMATION_DURATION = 300;
 
     /**
@@ -81,9 +81,9 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         // initialize.
         init();
 
-        // start display main content thread.
-        displayProgressDialog();
-        startDisplayMainContentThread();
+        // start worker thread.
+        displayMainContent();
+        //new LoadingDatabaseASync((Context)this).execute("");
     }
 
     /**
@@ -100,7 +100,6 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.nextCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.next_flipper));
         this.currentDate = getCurrentDate();
         this.appConfig = new AppConfigurationData(this);
-        this.progressDialog = new ProgressDialog(this);
 
         // initialize image.
         initImage();
@@ -173,6 +172,17 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
+     * @brief Display Main Content.
+     */
+    public void displayMainContent() {
+        this.summary.appear(this.currentDate);
+        this.titleArea.appear(this.currentDate);
+        this.tabContent.appear(this.currentDate);
+        this.currentCalendar.appear(this.currentDate);
+        this.currentCalendarIndex = CalendarIndex.CURRENT_ID;
+    }
+
+    /**
      * @brief OnClickEvent Listener.
      * @param view View Instance.
      */
@@ -232,51 +242,6 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         AccountAdd account_add = new AccountAdd(this);
         account_add.attachObserver(this);
         account_add.appear(this.currentDate);
-    }
-
-    /**
-     * @brief Start Display Content Thread.
-     */
-    private void startDisplayMainContentThread() {
-        final Handler handler = new Handler();
-
-        // start display main content.
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        displayMainContent();
-                        progressDialog.dismiss();
-                    }
-                });
-            }
-        }).start();
-    }
-
-    /**
-     * @brief Display Progress Dialog.
-     */
-    private void displayProgressDialog() {
-        this.progressDialog.setTitle(getText(R.string.loading_progress_dialog_title));
-        this.progressDialog.setMessage(getText(R.string.loading_progress_dialog_message));
-        this.progressDialog.setIndeterminate(false);
-        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        this.progressDialog.setCancelable(false);
-        this.progressDialog.show();
-    }
-
-    /**
-     * @brief Display Main Content.
-     */
-    private void displayMainContent() {
-        this.summary.appear(this.currentDate);
-        this.titleArea.appear(this.currentDate);
-        this.tabContent.appear(this.currentDate);
-        this.currentCalendar.appear(this.currentDate);
-        this.currentCalendarIndex = CalendarIndex.CURRENT_ID;
     }
 
     /**
@@ -581,6 +546,77 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
 
         private ViewId(int id) { this.id = id; }
         public int getId() { return this.id; }
+    }
+
+    /**
+     * @brief Loading Database Class(ASync).
+     */
+    private class LoadingDatabaseASync extends AsyncTask<String, Integer, Boolean> {
+        private Context context;
+        private ProgressDialog progressDialog;
+
+        /**
+         * @brief Constructor.
+         *
+         * @param context Context Instance.
+         */
+        public LoadingDatabaseASync(Context context) {
+            this.context = context;
+        }
+
+        /**
+         * @brief First Called from UI Thread.
+         */
+        @Override
+        protected void onPreExecute() {
+            this.progressDialog = new ProgressDialog(context);
+            this.progressDialog.setTitle(this.context.getText(R.string.loading_progress_dialog_title));
+            this.progressDialog.setMessage(this.context.getText(R.string.loading_progress_dialog_message));
+            this.progressDialog.setIndeterminate(false);
+            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            this.progressDialog.setCancelable(false);
+            this.progressDialog.show();
+            ((AccountMainActivity)this.context).displayMainContent();
+        }
+
+        /**
+         * @brief BackGround Work.
+         *
+         * @param params String Parameters.
+         */
+        @Override
+        protected Boolean doInBackground(String... params) {
+            return new Boolean(true);
+        }
+
+        /**
+         * @brief Called from Worker Thread when publishProgress called.
+         *
+         * @param values progress value.
+         */
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+        }
+
+        /**
+         * @brief Called when Cancel.
+         */
+        @Override
+        protected void onCancelled() {
+        }
+
+        /**
+         * @brief Called when Worker Thread is Complete.
+         *
+         * @param result Result Parameter.
+         */
+        @Override
+        protected void onPostExecute(Boolean result) {
+            Log.d("CCCCCCCCCCCCCCCCCCCC", "onPostExecute");
+            this.progressDialog.dismiss();
+            this.progressDialog = null;
+        }
     }
 }
 

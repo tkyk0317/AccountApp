@@ -4,9 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.content.Context;
 import android.app.ProgressDialog;
 import android.util.Log;
-import android.os.Handler;
+import android.os.AsyncTask;
 
 import com.myapp.account.R;
 import com.myapp.account.file_manager.ImportDataException;
@@ -28,14 +29,15 @@ import com.myapp.account.response.ResponseApplicationMenuInterface;
 /**
  * @brief Import Table Data Class.
  */
-public class ImportDatabaseTable {
+public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
 
+    private Activity activity = null;
     private AbstractExportImportDBTable importAccountMasterTable = null;
     private AbstractExportImportDBTable importAccountDataTable = null;
     private AbstractExportImportDBTable importEstimateTable = null;
     private AbstractExportImportDBTable importUserTable = null;
-    private ProgressDialog progressDialog = null;
     private ResponseApplicationMenuInterface responseAppMenu = null;
+    private ProgressDialog progressDialog = null;
 
     /**
      * @brief Constructor.
@@ -43,56 +45,81 @@ public class ImportDatabaseTable {
      * @param activity Activity Instance.
      */
     public ImportDatabaseTable(Activity activity) {
+        this.activity = activity;
         this.importAccountMasterTable = new ImportAccountMasterTableImpl(activity);
         this.importAccountDataTable = new ImportAccountDataTableImpl(activity);
         this.importEstimateTable = new ImportEstimateTableImpl(activity);
         this.importUserTable = new ImportUserTableImpl(activity);
-        this.progressDialog = new ProgressDialog(activity);
-
-        // initialize progress dialog.
-        initializeProgressDialog(activity);
     }
-
-    /**
-     * @brief Initialize Progress Dialog.
-     */
-    private void initializeProgressDialog(Activity activity) {
-        this.progressDialog.setTitle(activity.getText(R.string.import_progress_dialog_title));
-        this.progressDialog.setMessage(activity.getText(R.string.import_progress_dialog_message));
-        this.progressDialog.setIndeterminate(false);
-        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        this.progressDialog.setCancelable(false);    }
 
     /**
      * @brief Import Table Data.
      */
     public void importData(ResponseApplicationMenuInterface response) {
-        // if UI operation, must use Handler Thread.
         this.responseAppMenu = response;
-        final Handler handler = new Handler();
+        execute("");
+    }
 
-        // display progress dialog.
+    /**
+     * @brief First Called from UI Thread.
+     */
+    @Override
+    protected void onPreExecute() {
+        this.progressDialog = new ProgressDialog((Context)this.activity);
+        this.progressDialog.setTitle(this.activity.getText(R.string.import_progress_dialog_title));
+        this.progressDialog.setMessage(this.activity.getText(R.string.import_progress_dialog_message));
+        this.progressDialog.setIndeterminate(false);
+        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        this.progressDialog.setCancelable(false);
         this.progressDialog.show();
+    }
 
-        // start thread.
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        startImportData();
-                    }
-                });
-            }
-        }).start();
+    /**
+     * @brief BackGround Work.
+     *
+     * @param params String Parameters.
+     */
+    @Override
+    protected Boolean doInBackground(String... params) {
+        return new Boolean(startImportData());
+    }
+
+    /**
+     * @brief Called from Worker Thread when publishProgress called.
+     *
+     * @param values progress value.
+     */
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+    }
+
+    /**
+     * @brief Called when Cancel.
+     */
+    @Override
+    protected void onCancelled() {
+    }
+
+    /**
+     * @brief Called when Worker Thread is Complete.
+     *
+     * @param result Result Parameter.
+     */
+    @Override
+    protected void onPostExecute(Boolean result) {
+        this.progressDialog.dismiss();
+        this.progressDialog = null;
+
+        // notify import data complete.
+        this.responseAppMenu.OnResponseImportData(result.booleanValue());
     }
 
     /**
      * @brief Start Import Data.
      */
-    public void startImportData() {
+    public boolean startImportData() {
+        boolean result = true;
         try {
             // import data.
             this.importAccountMasterTable.importData();
@@ -101,14 +128,12 @@ public class ImportDatabaseTable {
             this.importUserTable.importData();
 
             // notify response import data.
-            this.responseAppMenu.OnResponseImportData(true);
         } catch(ImportDataException exception) {
             Log.d("ImportDatabaseTable", "ImportData Exception");
-            this.responseAppMenu.OnResponseImportData(false);
-        } finally {
-            this.progressDialog.dismiss();
+            result = false;
         }
-     }
+        return result;
+    }
 
     /**
      * @brief Export AccountData Table Class.
