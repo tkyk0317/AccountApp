@@ -1,10 +1,11 @@
 package com.myapp.account.file_manager;
 
 import java.util.List;
+import android.content.Context;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.util.Log;
-import android.os.Handler;
+import android.os.AsyncTask;
 
 import com.myapp.account.R;
 import com.myapp.account.file_manager.ExportDataException;
@@ -25,8 +26,9 @@ import com.myapp.account.response.ResponseApplicationMenuInterface;
 /**
  * @brief  Export Table Data Class.
  */
-public class ExportDatabaseTable {
+public class ExportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
 
+    private Activity activity = null;
     private AbstractExportImportDBTable exportAccountMasterTable = null;
     private AbstractExportImportDBTable exportAccountDataTable = null;
     private AbstractExportImportDBTable exportEstimateTable = null;
@@ -40,26 +42,11 @@ public class ExportDatabaseTable {
      * @param activity Activity Instance.
      */
     public ExportDatabaseTable(Activity activity) {
+        this.activity = activity;
         this.exportAccountMasterTable = new ExportAccountMasterTableImpl(activity);
         this.exportAccountDataTable = new ExportAccountDataTableImpl(activity);
         this.exportEstimateTable = new ExportEstimateTableImpl(activity);
         this.exportUserTable = new ExportUserTableImpl(activity);
-        this.progressDialog = new ProgressDialog(activity);
-
-        // initialize progress dialog.
-        initializeProgressDialog(activity);
-    }
-
-    /**
-     * @brief Initialize Progress Dialog.
-     */
-    private void initializeProgressDialog(Activity activity) {
-        this.progressDialog.setTitle(activity.getText(R.string.export_progress_dialog_title));
-        this.progressDialog.setMessage(activity.getText(R.string.export_progress_dialog_message));
-        this.progressDialog.setIndeterminate(false);
-        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        this.progressDialog.setCancelable(false);
     }
 
     /**
@@ -68,44 +55,80 @@ public class ExportDatabaseTable {
     public void exportData(ResponseApplicationMenuInterface response) {
         // if UI operation, must use Handler Thread.
         this.responseAppMenu = response;
-        final Handler handler = new Handler();
+        execute("");
+    }
 
-        // display progress dialog.
+    /**
+     * @brief First Called from UI Thread.
+     */
+    @Override
+    protected void onPreExecute() {
+        this.progressDialog = new ProgressDialog((Context)this.activity);
+        this.progressDialog.setTitle(activity.getText(R.string.export_progress_dialog_title));
+        this.progressDialog.setMessage(activity.getText(R.string.export_progress_dialog_message));
+        this.progressDialog.setIndeterminate(false);
+        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        this.progressDialog.setCancelable(false);
         this.progressDialog.show();
+    }
 
-        // start thread.
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        startExportData();
-                    }
-                });
-            }
-        }).start();
+    /**
+     * @brief BackGround Work.
+     *
+     * @param params String Parameters.
+     */
+    @Override
+    protected Boolean doInBackground(String... params) {
+        return new Boolean(startExportData());
+    }
+
+    /**
+     * @brief Called from Worker Thread when publishProgress called.
+     *
+     * @param values progress value.
+     */
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+    }
+
+    /**
+     * @brief Called when Cancel.
+     */
+    @Override
+    protected void onCancelled() {
+    }
+
+    /**
+     * @brief Called when Worker Thread is Complete.
+     *
+     * @param result Result Parameter.
+     */
+    @Override
+    protected void onPostExecute(Boolean result) {
+        this.progressDialog.dismiss();
+        this.progressDialog = null;
+
+        // notify export data complete.
+        this.responseAppMenu.OnResponseExportData(result.booleanValue());
     }
 
     /**
      * @brief start Export Data.
      */
-    public void startExportData() {
+    public boolean startExportData() {
+        boolean result = true;
         try {
             // export data.
             this.exportAccountMasterTable.exportData();
             this.exportAccountDataTable.exportData();
             this.exportEstimateTable.exportData();
             this.exportUserTable.exportData();
-
-            // notify export data complete.
-            this.responseAppMenu.OnResponseExportData(true);
         } catch(ExportDataException exception) {
             Log.d("ExportDatabaseTable", "ExportData Exception");
-            this.responseAppMenu.OnResponseExportData(false);
-        } finally {
-            this.progressDialog.dismiss();
+            result = false;
         }
+        return result;
     }
 
     /**

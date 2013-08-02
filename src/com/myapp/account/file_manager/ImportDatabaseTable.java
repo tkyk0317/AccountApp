@@ -126,8 +126,6 @@ public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
             this.importAccountDataTable.importData();
             this.importEstimateTable.importData();
             this.importUserTable.importData();
-
-            // notify response import data.
         } catch(ImportDataException exception) {
             Log.d("ImportDatabaseTable", "ImportData Exception");
             result = false;

@@ -613,7 +613,6 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
          */
         @Override
         protected void onPostExecute(Boolean result) {
-            Log.d("CCCCCCCCCCCCCCCCCCCC", "onPostExecute");
             this.progressDialog.dismiss();
             this.progressDialog = null;
         }
