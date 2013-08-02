@@ -22,8 +22,8 @@ public class EditUserTableRecord extends TableRow {
      */
     public EditUserTableRecord(Context context) {
         super(context);
-        this.userName = new TextView(context);
-        this.userMemo = new TextView(context);
+        this.userName = new TextView(context.getApplicationContext());
+        this.userMemo = new TextView(context.getApplicationContext());
         this.userName.setTextSize(TEXT_SIZE);
         this.userMemo.setTextSize(TEXT_SIZE);
         this.setClickable(true);

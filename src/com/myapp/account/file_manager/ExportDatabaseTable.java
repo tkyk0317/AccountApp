@@ -1,12 +1,12 @@
 package com.myapp.account.file_manager;
 
 import java.util.List;
-import android.content.Context;
+import java.io.IOException;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.util.Log;
 import android.os.AsyncTask;
-
 import com.myapp.account.R;
 import com.myapp.account.file_manager.ExportDataException;
 import com.myapp.account.config.AppConfigurationData;
@@ -26,6 +26,7 @@ import com.myapp.account.response.ResponseApplicationMenuInterface;
 /**
  * @brief  Export Table Data Class.
  */
+@SuppressLint("NewApi")
 public class ExportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
 
     private Activity activity = null;
@@ -52,7 +53,8 @@ public class ExportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
     /**
      * @brief Export Database Table Data.
      */
-    public void exportData(ResponseApplicationMenuInterface response) {
+    @SuppressLint("NewApi")
+	public void exportData(ResponseApplicationMenuInterface response) {
         // if UI operation, must use Handler Thread.
         this.responseAppMenu = response;
         execute("");
@@ -63,7 +65,7 @@ public class ExportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
      */
     @Override
     protected void onPreExecute() {
-        this.progressDialog = new ProgressDialog((Context)this.activity);
+        this.progressDialog = new ProgressDialog(this.activity);
         this.progressDialog.setTitle(activity.getText(R.string.export_progress_dialog_title));
         this.progressDialog.setMessage(activity.getText(R.string.export_progress_dialog_message));
         this.progressDialog.setIndeterminate(false);
@@ -80,7 +82,7 @@ public class ExportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
      */
     @Override
     protected Boolean doInBackground(String... params) {
-        return new Boolean(startExportData());
+        return Boolean.valueOf(startExportData());
     }
 
     /**
@@ -152,17 +154,36 @@ public class ExportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
          */
         @Override
         public void exportData() throws ExportDataException {
-            if( false == this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, getAccountMasterData()) ) {
-                throw new ExportDataException("ExportData Error");
+            // delete file.
+            this.sdCardFileManager.deleteFile(EXPORT_FILE_NAME);
+
+            // write record.
+            int record_count = this.accountMaster.getRecordCount();
+            for( int write_count = 0 ; write_count < record_count ; write_count += WRITE_RECORD_COUNT ) {
+                try {
+                    String write_record = getRecord(WRITE_RECORD_COUNT, write_count);
+                    this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, write_record);
+                    write_record = null;
+                } catch(IOException exception) {
+                    throw new ExportDataException("ExportData Error");
+                }
             }
         }
 
         /**
-         * @brief Get AccountMaster All Record.
+         * @brief Get Record.
+         *
+         * @param count Get Record Count.
+         * @param offset Start Offset.
+         *
+         * @return  AccountMasterTableRecord String.
          */
-        private String getAccountMasterData() {
-            List<AccountMasterTableRecord> record = this.accountMaster.getAllRecord();
-            return serialize(record);
+        private String getRecord(int count, int offset) {
+            List<AccountMasterTableRecord> record = this.accountMaster.getRecord(count, offset);
+            String write_record = serialize(record);
+            record.clear();
+            record = null;
+            return write_record;
         }
 
         /**
@@ -209,17 +230,36 @@ public class ExportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
          */
         @Override
         public void exportData() throws ExportDataException {
-            if( false == this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, getAccountTableData()) ) {
-                throw new ExportDataException("ExportData Error");
+            // delete file.
+            this.sdCardFileManager.deleteFile(EXPORT_FILE_NAME);
+
+            // write record.
+            int record_count = this.accountTable.getRecordCount();
+            for( int write_count = 0 ; write_count < record_count ; write_count += WRITE_RECORD_COUNT ) {
+                try {
+                    String write_record = getRecord(WRITE_RECORD_COUNT, write_count);
+                    this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, write_record);
+                    write_record = null;
+                } catch (IOException exception) {
+                    throw new ExportDataException("ExportData Error");
+                }
             }
         }
 
         /**
-         * @brief Get AccountTable All Record.
+         * @brief Get Record.
+         *
+         * @param count Get Record Count.
+         * @param offset Start Offset.
+         *
+         * @return  AccountMasterTableRecord String.
          */
-        private String getAccountTableData() {
-            List<AccountTableRecord> record = this.accountTable.getAllRecordNotSpecifiedUserId();
-            return serialize(record);
+        private String getRecord(int count, int offset) {
+            List<AccountTableRecord> record = this.accountTable.getRecord(count, offset);
+            String write_record = serialize(record);
+            record.clear();
+            record = null;
+            return write_record;
         }
 
         /**
@@ -267,17 +307,36 @@ public class ExportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
          */
         @Override
         public void exportData() throws ExportDataException {
-            if( false == this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, getEstimateTableData()) ) {
-                throw new ExportDataException("ExportData Error");
+            // delete file.
+            this.sdCardFileManager.deleteFile(EXPORT_FILE_NAME);
+
+            // write record.
+            int record_count = this.estimateTable.getRecordCount();
+            for( int write_count = 0 ; write_count < record_count ; write_count += WRITE_RECORD_COUNT ) {
+                try {
+                    String write_record = getRecord(WRITE_RECORD_COUNT, write_count);
+                    this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, write_record);
+                    write_record = null;
+                } catch (IOException exception) {
+                    throw new ExportDataException("ExportData Error");
+                }
             }
         }
 
         /**
-         * @brief Get EstimateTable All Record.
+         * @brief Get Record.
+         *
+         * @param count Get Record Count.
+         * @param offset Start Offset.
+         *
+         * @return  AccountMasterTableRecord String.
          */
-        private String getEstimateTableData() {
-            List<EstimateTableRecord> record = this.estimateTable.getAllRecordNotSpecifiedUserId();
-            return serialize(record);
+        private String getRecord(int count, int offset) {
+            List<EstimateTableRecord> record = this.estimateTable.getRecord(count, offset);
+            String write_record = serialize(record);
+            record.clear();
+            record = null;
+            return write_record;
         }
 
         /**
@@ -323,17 +382,36 @@ public class ExportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
          */
         @Override
         public void exportData() throws ExportDataException {
-            if( false == this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, getUserTableData()) ) {
-                throw new ExportDataException("ExportData Error");
+            // delete file.
+            this.sdCardFileManager.deleteFile(EXPORT_FILE_NAME);
+
+            // write record.
+            int record_count = this.userTable.getRecordCount();
+            for( int write_count = 0 ; write_count < record_count ; write_count += WRITE_RECORD_COUNT ) {
+                try {
+                    String write_record = getRecord(WRITE_RECORD_COUNT, write_count);
+                    this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, write_record);
+                    write_record = null;
+                } catch (IOException exception) {
+                    throw new ExportDataException("ExportData Error");
+                }
             }
         }
 
         /**
-         * @brief Get USerTableData All Record.
+         * @brief Get Record.
+         *
+         * @param count Get Record Count.
+         * @param offset Start Offset.
+         *
+         * @return  AccountMasterTableRecord String.
          */
-        private String getUserTableData() {
-            List<UserTableRecord> record = this.userTable.getAllRecord();
-            return serialize(record);
+        private String getRecord(int count, int offset) {
+            List<UserTableRecord> record = this.userTable.getRecord(count, offset);
+            String write_record = serialize(record);
+            record.clear();
+            record = null;
+            return write_record;
         }
 
         /**

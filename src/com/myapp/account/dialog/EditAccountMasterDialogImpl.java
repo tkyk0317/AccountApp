@@ -115,7 +115,7 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
         this.modifyButton.setText(this.activity.getText(R.string.modify_btn_label).toString());
 
         // add delete button.
-        this.deleteButton = new Button(this.activity);
+        this.deleteButton = new Button(this.activity.getApplicationContext());
         this.deleteButton.setWidth(BUTTON_WIDTH);
         this.deleteButton.setText(this.activity.getText(R.string.delete_btn_label).toString());
 

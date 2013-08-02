@@ -21,6 +21,7 @@ public class EstimateTableAccessor {
     protected SQLiteOpenHelper helper = null;
     protected AppConfigurationData appConfig = null;
     protected static final String TABLE_NAME = "EstimateTable";
+    protected static final String STRING_CAMMA = ",";
 
     /**
      * @brief Constructor.
@@ -79,6 +80,46 @@ public class EstimateTableAccessor {
     public void endTransaction() {
         this.writeDatabase.endTransaction();
     }
+
+    /**
+     * @brief Get Record Specified Count and Offset.
+     *
+     * @param count Getting Count.
+     * @param offset Start Offset.
+     *
+     * @return EstimateTableRecord List.
+     */
+    public List<EstimateTableRecord> getRecord(int count, int offset) {
+        String limit = new String();
+        limit = String.valueOf(offset) + STRING_CAMMA + String.valueOf(count);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, null, null, null, null, "_id", limit );
+
+        cursor.moveToFirst();
+        int record_count = cursor.getCount();
+        List<EstimateTableRecord> record_list = new ArrayList<EstimateTableRecord>(record_count+1);
+
+        for( int i = 0 ; i < record_count ; i++ ) {
+            record_list.add( new EstimateTableRecord() );
+            record_list.get(i).set(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return record_list;
+    }
+
+    /**
+     * @brief Get Record Count.
+     *
+     * @return All Record Count.
+     */
+    public int getRecordCount() {
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, null, null);
+        cursor.moveToFirst();
+        int record_count = cursor.getCount();
+        cursor.close();
+        return record_count;
+    }
+
 
     /**
      * @brief Get All Record(specified user_id).

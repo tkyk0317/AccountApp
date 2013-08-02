@@ -125,7 +125,7 @@ public class AccountAdd implements OnItemSelectedListener, ClickObserverInterfac
     protected void createSpinner() {
        this.categorySpinner = (Spinner)this.layout.findViewById(R.id.category_spinner);
        ArrayAdapter<String> adapter =
-           new ArrayAdapter<String>(this.activity, android.R.layout.simple_spinner_item, this.categoryItems);
+           new ArrayAdapter<String>(this.activity.getApplicationContext(), android.R.layout.simple_spinner_item, this.categoryItems);
        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
        this.categorySpinner.setAdapter(adapter);
 

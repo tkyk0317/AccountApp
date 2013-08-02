@@ -78,7 +78,7 @@ public class AccountEdit extends AccountAdd implements EventCompleteObserver {
      * @brief Add Delete Button.
      */
     protected void addDeleteButton() {
-        Button delete_button = new Button(this.activity);
+        Button delete_button = new Button(this.activity.getApplicationContext());
         delete_button.setWidth(BUTTON_WIDTH);
         delete_button.setText(R.string.delete_btn_label);
 

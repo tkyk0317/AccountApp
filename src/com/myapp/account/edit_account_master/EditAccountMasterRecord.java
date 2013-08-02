@@ -28,8 +28,8 @@ public class EditAccountMasterRecord extends TableRow {
     public EditAccountMasterRecord(Context context) {
         super(context);
         this.context = context;
-        this.categoryName = new TextView(context);
-        this.accountKind = new TextView(context);
+        this.categoryName = new TextView(context.getApplicationContext());
+        this.accountKind = new TextView(context.getApplicationContext());
         this.categoryName.setTextSize(TEXT_SIZE);
         this.accountKind.setTextSize(TEXT_SIZE);
         this.setClickable(true);

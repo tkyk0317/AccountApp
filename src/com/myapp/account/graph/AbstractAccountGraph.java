@@ -65,7 +65,7 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
         this.masterTable= new AccountMasterTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
         this.categorySeries = new CategorySeries(null);
         this.renderer = new DefaultRenderer();
-        this.gestureDetector = new GestureDetector(this.activity, this);
+        this.gestureDetector = new GestureDetector(this.activity.getApplicationContext(), this);
 
         // create color array.
         createColors();
@@ -222,7 +222,7 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
         this.chartArea.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER);
 
         // set nodata message.
-        TextView nodata_text = new TextView(this.activity);
+        TextView nodata_text = new TextView(this.activity.getApplicationContext());
         nodata_text.setTextColor(Color.CYAN);
         nodata_text.setTextSize(NODATA_TEXT_SIZE);
         nodata_text.setGravity(Gravity.CENTER);

@@ -2,13 +2,11 @@ package com.myapp.account.file_manager;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.app.ProgressDialog;
 import android.util.Log;
 import android.os.AsyncTask;
-
 import com.myapp.account.R;
 import com.myapp.account.file_manager.ImportDataException;
 import com.myapp.account.config.AppConfigurationData;
@@ -29,6 +27,7 @@ import com.myapp.account.response.ResponseApplicationMenuInterface;
 /**
  * @brief Import Table Data Class.
  */
+@SuppressLint("NewApi")
 public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
 
     private Activity activity = null;
@@ -65,7 +64,7 @@ public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
      */
     @Override
     protected void onPreExecute() {
-        this.progressDialog = new ProgressDialog((Context)this.activity);
+        this.progressDialog = new ProgressDialog(this.activity);
         this.progressDialog.setTitle(this.activity.getText(R.string.import_progress_dialog_title));
         this.progressDialog.setMessage(this.activity.getText(R.string.import_progress_dialog_message));
         this.progressDialog.setIndeterminate(false);
@@ -82,7 +81,7 @@ public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
      */
     @Override
     protected Boolean doInBackground(String... params) {
-        return new Boolean(startImportData());
+        return Boolean.valueOf(startImportData());
     }
 
     /**

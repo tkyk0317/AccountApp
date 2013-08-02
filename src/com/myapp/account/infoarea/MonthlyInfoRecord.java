@@ -21,9 +21,9 @@ public class MonthlyInfoRecord extends TableRow {
      */
     public MonthlyInfoRecord(Context context) {
         super(context);
-        this.accountDate = new TextView(context);
-        this.categoryName = new TextView(context);
-        this.accountMoney = new TextView(context);
+        this.accountDate = new TextView(context.getApplicationContext());
+        this.categoryName = new TextView(context.getApplicationContext());
+        this.accountMoney = new TextView(context.getApplicationContext());
     }
 
     /**
