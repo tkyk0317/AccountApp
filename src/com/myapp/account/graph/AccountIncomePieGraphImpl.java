@@ -5,7 +5,6 @@ import java.util.List;
 import android.app.Activity;
 import android.widget.LinearLayout;
 
-import com.myapp.account.graph.AbstractAccountGraph;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.database.AccountTableRecord;

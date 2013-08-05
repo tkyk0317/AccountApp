@@ -16,7 +16,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
-import com.myapp.account.dialog.AccountDialogInterface;
 import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.edit_account_master.EditAccountMasterRecord;

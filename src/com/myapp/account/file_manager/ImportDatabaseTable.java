@@ -6,13 +6,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.util.Log;
-import android.os.AsyncTask;
+
 import com.myapp.account.R;
-import com.myapp.account.file_manager.ImportDataException;
 import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.database.DatabaseHelper;
-import com.myapp.account.file_manager.AbstractExportImportDBTable;
-import com.myapp.account.file_manager.SdCardFileManagerImpl;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableRecord;
@@ -28,15 +25,7 @@ import com.myapp.account.response.ResponseApplicationMenuInterface;
  * @brief Import Table Data Class.
  */
 @SuppressLint("NewApi")
-public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
-
-    private Activity activity = null;
-    private AbstractExportImportDBTable importAccountMasterTable = null;
-    private AbstractExportImportDBTable importAccountDataTable = null;
-    private AbstractExportImportDBTable importEstimateTable = null;
-    private AbstractExportImportDBTable importUserTable = null;
-    private ResponseApplicationMenuInterface responseAppMenu = null;
-    private ProgressDialog progressDialog = null;
+public class ImportDatabaseTable extends AbstractExportImportData {
 
     /**
      * @brief Constructor.
@@ -44,19 +33,11 @@ public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
      * @param activity Activity Instance.
      */
     public ImportDatabaseTable(Activity activity) {
-        this.activity = activity;
-        this.importAccountMasterTable = new ImportAccountMasterTableImpl(activity);
-        this.importAccountDataTable = new ImportAccountDataTableImpl(activity);
-        this.importEstimateTable = new ImportEstimateTableImpl(activity);
-        this.importUserTable = new ImportUserTableImpl(activity);
-    }
-
-    /**
-     * @brief Import Table Data.
-     */
-    public void importData(ResponseApplicationMenuInterface response) {
-        this.responseAppMenu = response;
-        execute("");
+        super(activity);
+        this.accountMasterTable = new ImportAccountMasterTableImpl(activity);
+        this.accountDataTable = new ImportAccountDataTableImpl(activity);
+        this.estimateTable = new ImportEstimateTableImpl(activity);
+        this.userTable = new ImportUserTableImpl(activity);
     }
 
     /**
@@ -81,50 +62,20 @@ public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
      */
     @Override
     protected Boolean doInBackground(String... params) {
-        return Boolean.valueOf(startImportData());
-    }
-
-    /**
-     * @brief Called from Worker Thread when publishProgress called.
-     *
-     * @param values progress value.
-     */
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-    }
-
-    /**
-     * @brief Called when Cancel.
-     */
-    @Override
-    protected void onCancelled() {
-    }
-
-    /**
-     * @brief Called when Worker Thread is Complete.
-     *
-     * @param result Result Parameter.
-     */
-    @Override
-    protected void onPostExecute(Boolean result) {
-        this.progressDialog.dismiss();
-        this.progressDialog = null;
-
-        // notify import data complete.
-        this.responseAppMenu.OnResponseImportData(result.booleanValue());
+        return Boolean.valueOf(start());
     }
 
     /**
      * @brief Start Import Data.
      */
-    public boolean startImportData() {
+    public boolean start() {
         boolean result = true;
         try {
             // import data.
-            this.importAccountMasterTable.importData();
-            this.importAccountDataTable.importData();
-            this.importEstimateTable.importData();
-            this.importUserTable.importData();
+            this.accountMasterTable.importData();
+            this.accountDataTable.importData();
+            this.estimateTable.importData();
+            this.userTable.importData();
         } catch(ImportDataException exception) {
             Log.d("ImportDatabaseTable", "ImportData Exception");
             result = false;
@@ -133,9 +84,19 @@ public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
     }
 
     /**
-     * @brief Export AccountData Table Class.
+     * @brief Complete Disposal.
+     *
+     * @param complete_result Result Boolean Value.
      */
-    private class ImportAccountDataTableImpl extends AbstractExportImportDBTable {
+    @Override
+    protected void onComplete(Boolean complete_result) {
+        this.response.OnResponseImportData(complete_result.booleanValue());
+    }
+
+    /**
+     * @brief Import AccountData Table Class.
+     */
+    static private class ImportAccountDataTableImpl extends AbstractExportImportDBTable {
 
         private AccountTableAccessor accountTable = null;
         private static final String IMPORT_FILE_NAME = "AccountData.csv";
@@ -144,9 +105,16 @@ public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
          * @brief Constructor.
          */
         public ImportAccountDataTableImpl(Activity activity) {
+            super(activity);
             AppConfigurationData app_config = new AppConfigurationData(activity);
-            this.sdCardFileManager = new SdCardFileManagerImpl();
             this.accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()), app_config);
+        }
+
+        /**
+         * @brief Export Table Data.
+         */
+        @Override
+        public void exportData() throws ExportDataException {
         }
 
         /**
@@ -220,9 +188,9 @@ public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
     }
 
     /**
-     * @brief Export AccountMaster Table Class.
+     * @brief Import AccountMaster Table Class.
      */
-    private class ImportAccountMasterTableImpl extends AbstractExportImportDBTable {
+    static private class ImportAccountMasterTableImpl extends AbstractExportImportDBTable {
 
         private AccountMasterTableAccessor accountMaster = null;
         private static final String IMPORT_FILE_NAME = "AccountMaster.csv";
@@ -231,8 +199,15 @@ public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
          * @brief Constructor.
          */
         public ImportAccountMasterTableImpl(Activity activity) {
-            this.sdCardFileManager = new SdCardFileManagerImpl();
+            super(activity);
             this.accountMaster = new AccountMasterTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
+        }
+
+        /**
+         * @brief Export Table Data.
+         */
+        @Override
+        public void exportData() throws ExportDataException {
         }
 
         /**
@@ -308,9 +283,9 @@ public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
     }
 
     /**
-     * @brief Export Estimate Table Class.
+     * @brief Import Estimate Table Class.
      */
-    private class ImportEstimateTableImpl extends AbstractExportImportDBTable {
+    static private class ImportEstimateTableImpl extends AbstractExportImportDBTable {
 
         private EstimateTableAccessor estimateTable = null;
         private static final String IMPORT_FILE_NAME = "Estimate.csv";
@@ -319,14 +294,21 @@ public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
          * @brief Constructor.
          */
         public ImportEstimateTableImpl(Activity activity) {
+            super(activity);
             AppConfigurationData app_config = new AppConfigurationData(activity);
-            this.sdCardFileManager = new SdCardFileManagerImpl();
             this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(activity.getApplicationContext()), app_config);
         }
 
         /**
+         * @brief Export Table Data.
+         */
+        @Override
+        public void exportData() throws ExportDataException {
+        }
+
+        /**
          * @brief Import Table Data.
-         * @return true:Successed Export false:Failed Export.
+         * @return true:Successed Import false:Failed Import.
          */
         @Override
         public void importData() throws ImportDataException {
@@ -398,9 +380,9 @@ public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
     }
 
     /**
-     * @brief Export User Table Class.
+     * @brief Import User Table Class.
      */
-    private class ImportUserTableImpl extends AbstractExportImportDBTable {
+    static private class ImportUserTableImpl extends AbstractExportImportDBTable {
 
         private UserTableAccessor userTable = null;
         private static final String IMPORT_FILE_NAME = "UserTable.csv";
@@ -409,8 +391,15 @@ public class ImportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
          * @brief Constructor.
          */
         public ImportUserTableImpl(Activity activity) {
-            this.sdCardFileManager = new SdCardFileManagerImpl();
+            super(activity);
             this.userTable = new UserTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
+        }
+
+        /**
+         * @brief Export Table Data.
+         */
+        @Override
+        public void exportData() throws ExportDataException {
         }
 
         /**

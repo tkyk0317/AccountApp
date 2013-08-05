@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.content.ContentValues;
 
 import com.myapp.account.utility.Utility;
-import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.config.AppConfigurationData;
 
 /**

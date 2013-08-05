@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.widget.Toast;
 
 import com.myapp.account.R;
+import com.myapp.account.utility.Utility;
 import com.myapp.account.AppConfigurationActivity;
 import com.myapp.account.EditAccountMasterActivity;
 import com.myapp.account.EditUserTableActivity;
@@ -108,6 +109,9 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
                     }
                 });
         edit_menu_dialog.show();
+
+        // modify dialog size.
+        Utility.modifyDialogWidthMax(edit_menu_dialog.create());
     }
 
     /**
@@ -127,6 +131,9 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
                     }
                 });
         edit_menu_dialog.show();
+
+        // modify dialog size.
+        Utility.modifyDialogWidthMax(edit_menu_dialog.create());
     }
 
     /**
@@ -148,9 +155,9 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
      */
     private void parseClickEventForCSVData(int click_index) {
         if( click_index == CSVDataListIndex.INPUT_CSV_FILE_DATA.getIndex() ) {
-            new ImportDatabaseTable(this.activity).importData(this);
+            new ImportDatabaseTable(this.activity).execute(this);
         } else if( click_index == CSVDataListIndex.OUTPUT_CSV_FILE_DATA.getIndex() ) {
-            new ExportDatabaseTable(this.activity).exportData(this);
+            new ExportDatabaseTable(this.activity).execute(this);
         }
     }
 
@@ -190,7 +197,7 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
      * @param message displayed message.
      */
     private void displayToast(String message) {
-        Toast.makeText(this.activity, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this.activity, message, Toast.LENGTH_SHORT).show();
     }
 
     /**

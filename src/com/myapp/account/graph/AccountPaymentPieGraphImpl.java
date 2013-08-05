@@ -9,7 +9,6 @@ import android.view.Gravity;
 
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
-import com.myapp.account.graph.AbstractAccountGraph;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.database.AccountTableRecord;

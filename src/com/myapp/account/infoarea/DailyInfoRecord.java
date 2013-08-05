@@ -4,6 +4,7 @@ import android.widget.TableRow;
 import android.content.Context;
 import android.widget.TextView;
 import android.view.Gravity;
+
 import com.myapp.account.database.AccountTableRecord;
 
 /**

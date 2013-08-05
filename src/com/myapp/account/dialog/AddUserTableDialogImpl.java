@@ -13,7 +13,6 @@ import android.widget.EditText;
 
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
-import com.myapp.account.dialog.UserTableDialogInterface;
 import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.edit_user_table.EditUserTableRecord;

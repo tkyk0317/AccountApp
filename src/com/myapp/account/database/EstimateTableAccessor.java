@@ -7,7 +7,6 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.myapp.account.database.EstimateTableRecord;
 import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.utility.Utility;
 

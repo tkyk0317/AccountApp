@@ -7,11 +7,10 @@ import android.widget.TableRow;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+
 import com.myapp.account.R;
-import com.myapp.account.infoarea.AbstractInfoArea;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableRecord;
-import com.myapp.account.infoarea.DailyInfoRecord;
 
 /**
  * @brief Daily Info Area Class.

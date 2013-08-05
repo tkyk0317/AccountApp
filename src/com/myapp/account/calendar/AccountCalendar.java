@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
-import com.myapp.account.calendar.AccountCalendarCell;
 import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.observer.ClickObserverInterface;
 import com.myapp.account.database.DatabaseHelper;

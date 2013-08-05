@@ -5,10 +5,8 @@ import android.app.Activity;
 import android.widget.TableLayout;
 
 import com.myapp.account.R;
-import com.myapp.account.infoarea.AbstractInfoArea;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableRecord;
-import com.myapp.account.infoarea.MonthlyInfoRecord;
 
 /**
  * @brief Month Info Area Class.

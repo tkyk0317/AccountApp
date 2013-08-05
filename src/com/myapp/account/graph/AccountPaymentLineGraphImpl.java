@@ -8,13 +8,6 @@ import android.widget.LinearLayout;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 
-import com.myapp.account.utility.Utility;
-import com.myapp.account.graph.AbstractAccountGraph;
-import com.myapp.account.database.DatabaseHelper;
-import com.myapp.account.database.AccountMasterTableAccessor;
-import com.myapp.account.database.AccountMasterTableRecord;
-import com.myapp.account.database.AccountTableRecord;
-
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
@@ -23,6 +16,13 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYSeriesRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
+
+import com.myapp.account.utility.Utility;
+import com.myapp.account.database.DatabaseHelper;
+import com.myapp.account.database.AccountMasterTableAccessor;
+import com.myapp.account.database.AccountMasterTableRecord;
+import com.myapp.account.database.AccountTableRecord;
+
 
 /**
  * @brief Account Payment Line Graph Class.
