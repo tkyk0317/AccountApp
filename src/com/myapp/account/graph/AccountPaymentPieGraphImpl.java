@@ -66,7 +66,7 @@ public class AccountPaymentPieGraphImpl extends AbstractAccountGraph {
      * @brief Display Sum money.
      */
     protected void displaySumMoney() {
-        TextView summary_text = new TextView(this.activity);
+        TextView summary_text = new TextView(this.activity.getApplicationContext());
         int sum_money = getTotalPaymentMoney();
 
         // setting period.

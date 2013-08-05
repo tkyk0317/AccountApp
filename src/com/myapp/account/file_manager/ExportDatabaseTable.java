@@ -1,11 +1,12 @@
 package com.myapp.account.file_manager;
 
 import java.util.List;
+import java.io.IOException;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.util.Log;
-import android.os.Handler;
-
+import android.os.AsyncTask;
 import com.myapp.account.R;
 import com.myapp.account.file_manager.ExportDataException;
 import com.myapp.account.config.AppConfigurationData;
@@ -25,8 +26,10 @@ import com.myapp.account.response.ResponseApplicationMenuInterface;
 /**
  * @brief  Export Table Data Class.
  */
-public class ExportDatabaseTable {
+@SuppressLint("NewApi")
+public class ExportDatabaseTable extends AsyncTask<String, Integer, Boolean> {
 
+    private Activity activity = null;
     private AbstractExportImportDBTable exportAccountMasterTable = null;
     private AbstractExportImportDBTable exportAccountDataTable = null;
     private AbstractExportImportDBTable exportEstimateTable = null;
@@ -40,72 +43,94 @@ public class ExportDatabaseTable {
      * @param activity Activity Instance.
      */
     public ExportDatabaseTable(Activity activity) {
+        this.activity = activity;
         this.exportAccountMasterTable = new ExportAccountMasterTableImpl(activity);
         this.exportAccountDataTable = new ExportAccountDataTableImpl(activity);
         this.exportEstimateTable = new ExportEstimateTableImpl(activity);
         this.exportUserTable = new ExportUserTableImpl(activity);
-        this.progressDialog = new ProgressDialog(activity);
-
-        // initialize progress dialog.
-        initializeProgressDialog(activity);
     }
 
     /**
-     * @brief Initialize Progress Dialog.
+     * @brief Export Database Table Data.
      */
-    private void initializeProgressDialog(Activity activity) {
+    @SuppressLint("NewApi")
+	public void exportData(ResponseApplicationMenuInterface response) {
+        // if UI operation, must use Handler Thread.
+        this.responseAppMenu = response;
+        execute("");
+    }
+
+    /**
+     * @brief First Called from UI Thread.
+     */
+    @Override
+    protected void onPreExecute() {
+        this.progressDialog = new ProgressDialog(this.activity);
         this.progressDialog.setTitle(activity.getText(R.string.export_progress_dialog_title));
         this.progressDialog.setMessage(activity.getText(R.string.export_progress_dialog_message));
         this.progressDialog.setIndeterminate(false);
         this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         this.progressDialog.setCancelable(false);
+        this.progressDialog.show();
     }
 
     /**
-     * @brief Export Database Table Data.
+     * @brief BackGround Work.
+     *
+     * @param params String Parameters.
      */
-    public void exportData(ResponseApplicationMenuInterface response) {
-        // if UI operation, must use Handler Thread.
-        this.responseAppMenu = response;
-        final Handler handler = new Handler();
+    @Override
+    protected Boolean doInBackground(String... params) {
+        return Boolean.valueOf(startExportData());
+    }
 
-        // display progress dialog.
-        this.progressDialog.show();
+    /**
+     * @brief Called from Worker Thread when publishProgress called.
+     *
+     * @param values progress value.
+     */
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+    }
 
-        // start thread.
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        startExportData();
-                    }
-                });
-            }
-        }).start();
+    /**
+     * @brief Called when Cancel.
+     */
+    @Override
+    protected void onCancelled() {
+    }
+
+    /**
+     * @brief Called when Worker Thread is Complete.
+     *
+     * @param result Result Parameter.
+     */
+    @Override
+    protected void onPostExecute(Boolean result) {
+        this.progressDialog.dismiss();
+        this.progressDialog = null;
+
+        // notify export data complete.
+        this.responseAppMenu.OnResponseExportData(result.booleanValue());
     }
 
     /**
      * @brief start Export Data.
      */
-    public void startExportData() {
+    public boolean startExportData() {
+        boolean result = true;
         try {
             // export data.
             this.exportAccountMasterTable.exportData();
             this.exportAccountDataTable.exportData();
             this.exportEstimateTable.exportData();
             this.exportUserTable.exportData();
-
-            // notify export data complete.
-            this.responseAppMenu.OnResponseExportData(true);
         } catch(ExportDataException exception) {
             Log.d("ExportDatabaseTable", "ExportData Exception");
-            this.responseAppMenu.OnResponseExportData(false);
-        } finally {
-            this.progressDialog.dismiss();
+            result = false;
         }
+        return result;
     }
 
     /**
@@ -129,17 +154,36 @@ public class ExportDatabaseTable {
          */
         @Override
         public void exportData() throws ExportDataException {
-            if( false == this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, getAccountMasterData()) ) {
-                throw new ExportDataException("ExportData Error");
+            // delete file.
+            this.sdCardFileManager.deleteFile(EXPORT_FILE_NAME);
+
+            // write record.
+            int record_count = this.accountMaster.getRecordCount();
+            for( int write_count = 0 ; write_count < record_count ; write_count += WRITE_RECORD_COUNT ) {
+                try {
+                    String write_record = getRecord(WRITE_RECORD_COUNT, write_count);
+                    this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, write_record);
+                    write_record = null;
+                } catch(IOException exception) {
+                    throw new ExportDataException("ExportData Error");
+                }
             }
         }
 
         /**
-         * @brief Get AccountMaster All Record.
+         * @brief Get Record.
+         *
+         * @param count Get Record Count.
+         * @param offset Start Offset.
+         *
+         * @return  AccountMasterTableRecord String.
          */
-        private String getAccountMasterData() {
-            List<AccountMasterTableRecord> record = this.accountMaster.getAllRecord();
-            return serialize(record);
+        private String getRecord(int count, int offset) {
+            List<AccountMasterTableRecord> record = this.accountMaster.getRecord(count, offset);
+            String write_record = serialize(record);
+            record.clear();
+            record = null;
+            return write_record;
         }
 
         /**
@@ -186,17 +230,36 @@ public class ExportDatabaseTable {
          */
         @Override
         public void exportData() throws ExportDataException {
-            if( false == this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, getAccountTableData()) ) {
-                throw new ExportDataException("ExportData Error");
+            // delete file.
+            this.sdCardFileManager.deleteFile(EXPORT_FILE_NAME);
+
+            // write record.
+            int record_count = this.accountTable.getRecordCount();
+            for( int write_count = 0 ; write_count < record_count ; write_count += WRITE_RECORD_COUNT ) {
+                try {
+                    String write_record = getRecord(WRITE_RECORD_COUNT, write_count);
+                    this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, write_record);
+                    write_record = null;
+                } catch (IOException exception) {
+                    throw new ExportDataException("ExportData Error");
+                }
             }
         }
 
         /**
-         * @brief Get AccountTable All Record.
+         * @brief Get Record.
+         *
+         * @param count Get Record Count.
+         * @param offset Start Offset.
+         *
+         * @return  AccountMasterTableRecord String.
          */
-        private String getAccountTableData() {
-            List<AccountTableRecord> record = this.accountTable.getAllRecordNotSpecifiedUserId();
-            return serialize(record);
+        private String getRecord(int count, int offset) {
+            List<AccountTableRecord> record = this.accountTable.getRecord(count, offset);
+            String write_record = serialize(record);
+            record.clear();
+            record = null;
+            return write_record;
         }
 
         /**
@@ -244,17 +307,36 @@ public class ExportDatabaseTable {
          */
         @Override
         public void exportData() throws ExportDataException {
-            if( false == this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, getEstimateTableData()) ) {
-                throw new ExportDataException("ExportData Error");
+            // delete file.
+            this.sdCardFileManager.deleteFile(EXPORT_FILE_NAME);
+
+            // write record.
+            int record_count = this.estimateTable.getRecordCount();
+            for( int write_count = 0 ; write_count < record_count ; write_count += WRITE_RECORD_COUNT ) {
+                try {
+                    String write_record = getRecord(WRITE_RECORD_COUNT, write_count);
+                    this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, write_record);
+                    write_record = null;
+                } catch (IOException exception) {
+                    throw new ExportDataException("ExportData Error");
+                }
             }
         }
 
         /**
-         * @brief Get EstimateTable All Record.
+         * @brief Get Record.
+         *
+         * @param count Get Record Count.
+         * @param offset Start Offset.
+         *
+         * @return  AccountMasterTableRecord String.
          */
-        private String getEstimateTableData() {
-            List<EstimateTableRecord> record = this.estimateTable.getAllRecordNotSpecifiedUserId();
-            return serialize(record);
+        private String getRecord(int count, int offset) {
+            List<EstimateTableRecord> record = this.estimateTable.getRecord(count, offset);
+            String write_record = serialize(record);
+            record.clear();
+            record = null;
+            return write_record;
         }
 
         /**
@@ -300,17 +382,36 @@ public class ExportDatabaseTable {
          */
         @Override
         public void exportData() throws ExportDataException {
-            if( false == this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, getUserTableData()) ) {
-                throw new ExportDataException("ExportData Error");
+            // delete file.
+            this.sdCardFileManager.deleteFile(EXPORT_FILE_NAME);
+
+            // write record.
+            int record_count = this.userTable.getRecordCount();
+            for( int write_count = 0 ; write_count < record_count ; write_count += WRITE_RECORD_COUNT ) {
+                try {
+                    String write_record = getRecord(WRITE_RECORD_COUNT, write_count);
+                    this.sdCardFileManager.writeFile(EXPORT_FILE_NAME, write_record);
+                    write_record = null;
+                } catch (IOException exception) {
+                    throw new ExportDataException("ExportData Error");
+                }
             }
         }
 
         /**
-         * @brief Get USerTableData All Record.
+         * @brief Get Record.
+         *
+         * @param count Get Record Count.
+         * @param offset Start Offset.
+         *
+         * @return  AccountMasterTableRecord String.
          */
-        private String getUserTableData() {
-            List<UserTableRecord> record = this.userTable.getAllRecord();
-            return serialize(record);
+        private String getRecord(int count, int offset) {
+            List<UserTableRecord> record = this.userTable.getRecord(count, offset);
+            String write_record = serialize(record);
+            record.clear();
+            record = null;
+            return write_record;
         }
 
         /**

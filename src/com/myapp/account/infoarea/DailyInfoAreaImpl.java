@@ -53,7 +53,7 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
     @Override
     protected void drawRecord(TableLayout layout, AccountTableRecord account_record) {
         // set long click event listener.
-        DailyInfoRecord row = new DailyInfoRecord(activity.getApplicationContext());
+        DailyInfoRecord row = new DailyInfoRecord(activity);
         row.removeAllViews();
 
         // get item name from AccountMaster.

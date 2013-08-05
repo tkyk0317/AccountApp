@@ -32,9 +32,9 @@ public class DailyInfoRecord extends TableRow {
      */
     public DailyInfoRecord(Context context) {
         super(context);
-        this.categoryName = new TextView(context);
-        this.accountMoney = new TextView(context);
-        this.accountMemo = new TextView(context);
+        this.categoryName = new TextView(context.getApplicationContext());
+        this.accountMoney = new TextView(context.getApplicationContext());
+        this.accountMemo = new TextView(context.getApplicationContext());
     }
 
     /**

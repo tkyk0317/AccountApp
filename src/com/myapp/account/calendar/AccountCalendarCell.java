@@ -50,13 +50,13 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
         this.layout.setClickable(false);
         this.activity = activity;
 
-        this.textView = new TextView(this.activity);
+        this.textView = new TextView(this.activity.getApplicationContext());
         this.layout.addView(this.textView);
         this.textView.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
         this.textView.setHeight(TEXT_ONLY_HEIGHT);
         this.textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         this.textView.setOnTouchListener(this);
-        this.gestureDetector = new GestureDetector(this.activity, this);
+        this.gestureDetector = new GestureDetector(this.activity.getApplicationContext(), this);
     }
 
     /**
@@ -117,7 +117,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
         Resources resources = this.activity.getResources();
         Drawable mark_image = resources.getDrawable(R.drawable.start_sign);
 
-        this.startMarkerImage = new ImageView(this.activity);
+        this.startMarkerImage = new ImageView(this.activity.getApplicationContext());
         this.startMarkerImage.setId(ImageId.START_DAY_IMAGE.getId());
         this.startMarkerImage.setImageDrawable(mark_image);
         this.startMarkerImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -189,7 +189,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
             Drawable check_image = resources.getDrawable(R.drawable.circle_red);
 
             // create view image.
-            this.exsitRecordImage = new ImageView(this.activity);
+            this.exsitRecordImage = new ImageView(this.activity.getApplicationContext());
             this.exsitRecordImage.setId(ImageId.EXSIT_ACCOUNT_DATA_IMAGE.getId());
             this.exsitRecordImage.setImageDrawable(check_image);
             this.exsitRecordImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -210,7 +210,7 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     private void createLinearLayoutForImageView() {
         if( null != this.image_layout ) return;
 
-        this.image_layout = new RelativeLayout(this.activity);
+        this.image_layout = new RelativeLayout(this.activity.getApplicationContext());
         this.image_layout.setId(ImageId.RELATIVE_LAYOUT.getId());
         this.layout.addView(this.image_layout);
         this.image_layout.setGravity(Gravity.CENTER_HORIZONTAL);

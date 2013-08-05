@@ -81,7 +81,7 @@ public class Summary {
         String user_name_text = (ACCOUNT_DATA_BEFORE_STRING + this.appConfig.getTargetUserName() + COLON_STRING);
 
         // set text view.
-        TextView user_name_view = new TextView(this.activity);
+        TextView user_name_view = new TextView(this.activity.getApplicationContext());
         user_name_view.setTextSize(TEXT_FONT_SIZE);
         user_name_view.setHeight(TEXT_FONT_HEIGHT);
         user_name_view.setText(user_name_text);
@@ -102,7 +102,7 @@ public class Summary {
         String date_text = (start_date + PERIOD_DELIMITER + end_date + ACCOUNT_DATA_AFTER_STRING);
 
         // set text view.
-        TextView date_text_view = new TextView(this.activity);
+        TextView date_text_view = new TextView(this.activity.getApplicationContext());
         date_text_view.setTextSize(TEXT_FONT_SIZE);
         date_text_view.setHeight(TEXT_FONT_HEIGHT);
         date_text_view.setText(date_text);

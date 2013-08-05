@@ -37,10 +37,17 @@ public interface FileManagerInterface {
 
     /**
      * @brief Write File.
+     *
      * @param file_name Write FileName.
      * @param write_string Write Strng to File.
-     * @return TRUE:Write Success FALSE:Write Failed.
      */
-    public boolean writeFile(String file_name, String write_string);
+    public void writeFile(String file_name, String write_string) throws IOException;
+
+    /**
+     * @brief Delete File.
+     *
+     * @param file_name File Name.
+     */
+    public void deleteFile(String file_name);
 }
 

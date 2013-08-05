@@ -2,7 +2,6 @@ package com.myapp.account.database;
 
 import java.util.*;
 
-import android.util.Log;
 import android.database.Cursor;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -20,6 +19,7 @@ public class UserTableAccessor {
     protected SQLiteDatabase writeDatabase = null;
     protected SQLiteOpenHelper helper = null;
     protected static final String TABLE_NAME = "UserTable";
+    protected static final String STRING_CAMMA = ",";
 
     /**
      * @brief Constructor.
@@ -92,6 +92,45 @@ public class UserTableAccessor {
         }
         cursor.close();
         return record;
+    }
+
+    /**
+     * @brief Get Record Specified Count and Offset.
+     *
+     * @param count Getting Count.
+     * @param offset Start Offset.
+     *
+     * @return UserTableRecord List.
+     */
+    public List<UserTableRecord> getRecord(int count, int offset) {
+        String limit = new String();
+        limit = String.valueOf(offset) + STRING_CAMMA + String.valueOf(count);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, null, null, null, null, "_id", limit );
+
+        cursor.moveToFirst();
+        int record_count = cursor.getCount();
+        List<UserTableRecord> record_list = new ArrayList<UserTableRecord>(record_count+1);
+
+        for( int i = 0 ; i < record_count ; i++ ) {
+            record_list.add( new UserTableRecord() );
+            record_list.get(i).set(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return record_list;
+    }
+
+    /**
+     * @brief Get Record Count.
+     *
+     * @return All Record Count.
+     */
+    public int getRecordCount() {
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, null, null);
+        cursor.moveToFirst();
+        int record_count = cursor.getCount();
+        cursor.close();
+        return record_count;
     }
 
     /**

@@ -28,9 +28,6 @@ public class Estimate {
     private String currentDate = null;
     private AppConfigurationData appConfig = null;
     private static boolean isAlertFlag = false;
-    private static final int ESTIMATE_MONEY_DIGITS = 9;
-    private static final int TABLE_FIRST_INDEX = 0;
-    private static final int TABLE_SECOND_INDEX = 1;
     private static final int TEXT_FONT_SIZE = 15;
 
     /**
@@ -129,7 +126,7 @@ public class Estimate {
         // clear all views.
         TableLayout summary_table = (TableLayout)activity.findViewById(R.id.summary_table);
 
-        TableRow table_row = new TableRow(activity);
+        TableRow table_row = new TableRow(activity.getApplicationContext());
         insertEstimateMoneyIntoTableRow(table_row);
         insertRestEstimateMoneyIntoTableRow(table_row);
 
@@ -157,8 +154,8 @@ public class Estimate {
      * @brief Insert Estimate Money.
      */
     private void insertEstimateMoneyIntoTableRow(TableRow table_row) {
-        TextView estimate_label = new TextView(activity);
-        TextView estimate_value = new TextView(activity);
+        TextView estimate_label = new TextView(activity.getApplicationContext());
+        TextView estimate_value = new TextView(activity.getApplicationContext());
 
         estimate_value.setText(String.format("%,d", this.estimateRecord.getEstimateMoney()) + activity.getText(R.string.money_unit).toString());
         estimate_label.setText(activity.getText(R.string.estimate_label));
@@ -175,8 +172,8 @@ public class Estimate {
      * @brief Insert Rest Estimate Money.
      */
     private void insertRestEstimateMoneyIntoTableRow(TableRow table_row) {
-        TextView estimate_rest_label = new TextView(activity);
-        TextView estimate_rest_value = new TextView(activity);
+        TextView estimate_rest_label = new TextView(activity.getApplicationContext());
+        TextView estimate_rest_value = new TextView(activity.getApplicationContext());
 
         int total_payment = getPaymentTotalMoney();
         int rest_money = this.estimateRecord.getEstimateMoney() - total_payment;

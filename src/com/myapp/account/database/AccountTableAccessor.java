@@ -20,6 +20,7 @@ public class AccountTableAccessor {
     protected SQLiteDatabase writeDatabase = null;
     protected AppConfigurationData appConfig = null;
     protected static final String TABLE_NAME = "AccountTable";
+    protected static final String STRING_CAMMA = ",";
 
     /**
      * @brief Constructor.
@@ -94,6 +95,45 @@ public class AccountTableAccessor {
         }
         cursor.close();
         return record;
+    }
+
+    /**
+     * @brief Get Record Specified Count and Offset.
+     *
+     * @param count Getting Count.
+     * @param offset Start Offset.
+     *
+     * @return AccountTableRecord List.
+     */
+    public List<AccountTableRecord> getRecord(int count, int offset) {
+        String limit = new String();
+        limit = String.valueOf(offset) + STRING_CAMMA + String.valueOf(count);
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, null, null, null, null, "_id", limit );
+
+        cursor.moveToFirst();
+        int record_count = cursor.getCount();
+        List<AccountTableRecord> record_list = new ArrayList<AccountTableRecord>(record_count+1);
+
+        for( int i = 0 ; i < record_count ; i++ ) {
+            record_list.add( new AccountTableRecord() );
+            record_list.get(i).set(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return record_list;
+    }
+
+    /**
+     * @brief Get Record Count.
+     *
+     * @return All Record Count.
+     */
+    public int getRecordCount() {
+        Cursor cursor = readDatabase.query(TABLE_NAME, null , null, null, null, null, null, null);
+        cursor.moveToFirst();
+        int record_count = cursor.getCount();
+        cursor.close();
+        return record_count;
     }
 
     /**

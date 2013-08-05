@@ -6,14 +6,12 @@ import java.io.UnsupportedEncodingException;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-
 import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 
 import android.os.Environment;
-import android.util.Log;
 
 import com.myapp.account.utility.Utility;
 import com.myapp.account.file_manager.FileManagerInterface;
@@ -90,38 +88,40 @@ public class SdCardFileManagerImpl implements FileManagerInterface {
 
     /**
      * @brief Write File.
+     *
      * @param file_name Write FileName.
      * @param write_string Write String to File.
-     * @return true:Write Success false:Write Failed.
      */
     @Override
-    public boolean writeFile(String file_name, String write_string) {
+    public void writeFile(String file_name, String write_string) throws IOException {
         // do not write when string is null.
-        if( true == Utility.isStringNULL(write_string) ) return true;
+        if( true == Utility.isStringNULL(write_string) ) return;
 
-        boolean ret = true;
         BufferedWriter write_buffer = null;
         String file_path = sdCardFullPath + file_name;
         File file = new File(file_path);
 
-        try {
-            write_buffer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false), "UTF-8"));
-            write_buffer.write(write_string);
-        } catch (IOException io_exception) {
-            ret = false;
-            Log.d("SdCardFileManagerImpl", "writeFile:IOException : " + io_exception);
-        } finally {
-            if( null != write_buffer ) {
-                try {
-                    write_buffer.close();
-                    write_buffer = null;
-                } catch (IOException io_exception) {
-                    ret = false;
-                    Log.d("SdCardFileManagerImpl", "writeFile:IOException(BufferedWriter.close) : " + io_exception);
-                }
-            }
+        // create bufferedwriter.
+        write_buffer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "UTF-8"));
+        write_buffer.write(write_string);
+
+        // close buffer.
+        if( null != write_buffer ) {
+            write_buffer.close();
+            write_buffer = null;
+            file = null;
         }
-       return ret;
+    }
+
+    /**
+     * @brief Delete File.
+     *
+     * @param file_name File Name.
+     */
+    public void deleteFile(String file_name) {
+        File file = new File(this.sdCardFullPath + file_name);
+        file.delete();
+        file = null;
     }
 }
 

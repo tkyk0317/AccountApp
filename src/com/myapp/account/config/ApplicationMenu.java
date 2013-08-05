@@ -41,8 +41,6 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
     }
 
     private Activity activity = null;
-    private ExportDatabaseTable exportDatabaseTable = null;
-    private ImportDatabaseTable importDatabaseTable = null;
     private ResponseApplicationMenuInterface responseAppMenu = null;
 
     /**
@@ -50,8 +48,6 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
      */
     public ApplicationMenu(Activity activity) {
         this.activity = activity;
-        this.exportDatabaseTable = new ExportDatabaseTable(activity);
-        this.importDatabaseTable = new ImportDatabaseTable(activity);
     }
 
     /**
@@ -91,7 +87,7 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
      * @brief Move To Configuration Activity.
      */
     private void moveToConfig() {
-        Intent intent = new Intent( this.activity, AppConfigurationActivity.class);
+        Intent intent = new Intent( this.activity.getApplicationContext(), AppConfigurationActivity.class);
         this.activity.startActivity(intent);
     }
 
@@ -152,9 +148,9 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
      */
     private void parseClickEventForCSVData(int click_index) {
         if( click_index == CSVDataListIndex.INPUT_CSV_FILE_DATA.getIndex() ) {
-            this.importDatabaseTable.importData(this);
+            new ImportDatabaseTable(this.activity).importData(this);
         } else if( click_index == CSVDataListIndex.OUTPUT_CSV_FILE_DATA.getIndex() ) {
-            this.exportDatabaseTable.exportData(this);
+            new ExportDatabaseTable(this.activity).exportData(this);
         }
     }
 
@@ -201,7 +197,7 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
      * @brief Move To Add Category into Master Activity.
      */
     private void moveToAddCategory() {
-        Intent intent = new Intent( this.activity, EditAccountMasterActivity.class);
+        Intent intent = new Intent( this.activity.getApplicationContext(), EditAccountMasterActivity.class);
         this.activity.startActivity(intent);
     }
 
@@ -209,7 +205,7 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
      * @brief Move To Add User into User Table.
      */
     private void moveToUser() {
-        Intent intent = new Intent( this.activity, EditUserTableActivity.class);
+        Intent intent = new Intent( this.activity.getApplicationContext(), EditUserTableActivity.class);
         this.activity.startActivity(intent);
     }
 }

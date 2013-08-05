@@ -50,7 +50,7 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
     @Override
     protected void drawRecord(TableLayout layout, AccountTableRecord account_record) {
         // display.
-        MonthlyInfoRecord row = new MonthlyInfoRecord(activity.getApplicationContext());
+        MonthlyInfoRecord row = new MonthlyInfoRecord(activity);
         row.removeAllViews();
 
         // get item name from AccountMaster.

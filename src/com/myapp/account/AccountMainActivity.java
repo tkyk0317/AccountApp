@@ -1,6 +1,7 @@
 package com.myapp.account;
 
 import android.os.AsyncTask;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +19,6 @@ import android.widget.ImageView;
 import android.view.animation.Animation;
 import android.app.ProgressDialog;
 import android.view.animation.TranslateAnimation;
-
 import com.myapp.account.AccountLineGraphActivity;
 import com.myapp.account.AccountPieGraphActivity;
 import com.myapp.account.titlearea.TitleArea;
@@ -551,7 +551,8 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     /**
      * @brief Loading Database Class(ASync).
      */
-    private class LoadingDatabaseASync extends AsyncTask<String, Integer, Boolean> {
+    @SuppressLint("NewApi")
+	private class LoadingDatabaseASync extends AsyncTask<String, Integer, Boolean> {
         private Context context;
         private ProgressDialog progressDialog;
 
@@ -569,7 +570,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
          */
         @Override
         protected void onPreExecute() {
-            this.progressDialog = new ProgressDialog(context);
+            this.progressDialog = new ProgressDialog(this.context);
             this.progressDialog.setTitle(this.context.getText(R.string.loading_progress_dialog_title));
             this.progressDialog.setMessage(this.context.getText(R.string.loading_progress_dialog_message));
             this.progressDialog.setIndeterminate(false);
@@ -587,7 +588,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
          */
         @Override
         protected Boolean doInBackground(String... params) {
-            return new Boolean(true);
+            return Boolean.valueOf(true);
         }
 
         /**
@@ -613,7 +614,6 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
          */
         @Override
         protected void onPostExecute(Boolean result) {
-            Log.d("CCCCCCCCCCCCCCCCCCCC", "onPostExecute");
             this.progressDialog.dismiss();
             this.progressDialog = null;
         }
