@@ -1,20 +1,21 @@
 package com.myapp.account.edit_account_data;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-
-import com.myapp.account.database.DatabaseHelper;
-import com.myapp.account.database.AccountTableAccessor;
+import com.myapp.account.factory.Factory;
 
 /**
  * @brief Clear Account Data ASync Task.
  */
+@SuppressLint("NewApi")
 public class ClearAccountData extends AsyncTask<String, Integer, Boolean> {
     private Context context = null;
     private OnClearAccountDataInterface onClearAccountData = null;
 
     /**
-     * @brief Constuructor.
+     * @brief Constructor.
      *
      * @param context Context Instance.
      */
@@ -38,7 +39,7 @@ public class ClearAccountData extends AsyncTask<String, Integer, Boolean> {
      */
     @Override
     protected Boolean doInBackground(String... params) {
-        new AccountTableAccessor(new DatabaseHelper(this.context.getApplicationContext()), null).deleteAll();
+        Factory.getAccountTableAcceessor((Activity)this.context).deleteAll();
         return Boolean.valueOf(true);
     }
 

@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.myapp.account.R;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.database.DatabaseHelper;
@@ -175,7 +176,7 @@ public class AddAccountMasterDialogImpl implements OnItemSelectedListener, Accou
             this.observer = null;
             this.activity = activity;
             this.dialogView = dialog_view;
-            this.accountMasterAccessor = new AccountMasterTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+            this.accountMasterAccessor = Factory.getAccountMasterTableAccessor(activity);
         }
 
         /**

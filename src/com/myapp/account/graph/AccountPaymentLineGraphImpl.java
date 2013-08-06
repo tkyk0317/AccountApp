@@ -17,6 +17,7 @@ import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYSeriesRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 
+import com.myapp.account.factory.Factory;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountMasterTableAccessor;
@@ -99,7 +100,7 @@ public class AccountPaymentLineGraphImpl extends AbstractAccountGraph {
      */
     protected int getMaxMoney() {
         int max_money = 0;
-        AccountMasterTableAccessor masterTable = new AccountMasterTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+        AccountMasterTableAccessor masterTable = Factory.getAccountMasterTableAccessor(this.activity);
 
         for( AccountTableRecord record : this.accountRecord ) {
             AccountMasterTableRecord master_record = masterTable.getRecord(record.getCategoryId());

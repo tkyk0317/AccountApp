@@ -1,12 +1,12 @@
-package com.myapp.account.tabcontent;
+package com.myapp.account.tabcontent.infoarea;
 
 import java.util.*;
 import android.app.Activity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import com.myapp.account.factory.Factory;
 import com.myapp.account.utility.Utility;
-import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessor;
@@ -33,10 +33,9 @@ public abstract class AbstractInfoArea {
      */
     AbstractInfoArea(Activity activity) {
         this.activity = activity;
-        this.appConfig = new AppConfigurationData(this.activity);
-        DatabaseHelper db_helper = new DatabaseHelper(this.activity.getApplicationContext());
-        accountTable = new AccountTableAccessor(db_helper, this.appConfig);
-        masterTable = new AccountMasterTableAccessor(db_helper);
+        this.appConfig = Factory.getAppConfigurationData(activity);
+        this.accountTable = Factory.getAccountTableAcceessor(activity);
+        this.masterTable = Factory.getAccountMasterTableAccessor(activity);
     }
 
     /**

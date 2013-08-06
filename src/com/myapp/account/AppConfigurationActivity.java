@@ -15,7 +15,7 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 
 import com.myapp.account.R;
-import com.myapp.account.database.DatabaseHelper;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.database.UserTableAccessor;
 import com.myapp.account.database.UserTableRecord;
 import com.myapp.account.utility.Utility;
@@ -48,8 +48,8 @@ public class AppConfigurationActivity extends PreferenceActivity {
      * @brief Initialize.
      */
     private void init() {
-        this.appConfig = new AppConfigurationData(this);
-        this.userTable = new UserTableAccessor(new DatabaseHelper(this.getApplicationContext()));
+        this.appConfig = Factory.getAppConfigurationData(this);
+        this.userTable = Factory.getUserTableAccessor(this);
     }
 
     /**

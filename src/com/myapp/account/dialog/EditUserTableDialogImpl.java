@@ -16,9 +16,9 @@ import android.widget.LinearLayout;
 import android.content.DialogInterface;
 
 import com.myapp.account.R;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.observer.EventCompleteObserver;
-import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.edit_user_table.EditUserTableRecord;
 import com.myapp.account.database.UserTableAccessor;
 import com.myapp.account.database.UserTableRecord;
@@ -227,7 +227,7 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
             this.activity = activity;
             this.dialogView = dialog_view;
             this.editRecord = edit_record;
-            this.userTable = new UserTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+            this.userTable = Factory.getUserTableAccessor(activity);
         }
 
         /**
@@ -345,8 +345,8 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
             this.observer = null;
             this.activity = activity;
             this.editRecord = edit_record;
-            this.appConfig = new AppConfigurationData(this.activity);
-            this.userTable = new UserTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+            this.appConfig = Factory.getAppConfigurationData(activity);
+            this.userTable = Factory.getUserTableAccessor(activity);
         }
 
         /**
@@ -414,7 +414,7 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
          * @param user_id user_id.
          */
         private void deleteAccountData(int user_id) {
-            AccountTableAccessor account_table = new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), this.appConfig);
+            AccountTableAccessor account_table = Factory.getAccountTableAcceessor(this.activity);
             List<AccountTableRecord> account_records = account_table.getAllRecordSpecifiedUserId(this.editRecord.getPrimaryId());
 
             for( AccountTableRecord record : account_records ) {
@@ -428,7 +428,7 @@ public class EditUserTableDialogImpl implements UserTableDialogInterface, EventC
          * @param user_id specified user_id.
          */
         private void deleteEstimateData(int user_id) {
-            EstimateTableAccessor estimate_table = new EstimateTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), this.appConfig);
+            EstimateTableAccessor estimate_table = Factory.getEstimateTableAccessor(this.activity);
             List<EstimateTableRecord> estimate_records = estimate_table.getAllRecordSpecifiedUserId(this.editRecord.getPrimaryId());
 
             for( EstimateTableRecord record : estimate_records ) {

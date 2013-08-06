@@ -11,11 +11,11 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 
 import com.myapp.account.R;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.dialog.AccountDialogInterface;
 import com.myapp.account.dialog.AddAccountMasterDialogImpl;
 import com.myapp.account.dialog.EditAccountMasterDialogImpl;
 import com.myapp.account.observer.EventCompleteObserver;
-import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.edit_account_master.EditAccountMasterRecord;
@@ -80,7 +80,7 @@ public class EditAccountMasterActivity extends Activity implements OnClickListen
     private void init() {
         this.addAccountMasterDialog = new AddAccountMasterDialogImpl(this);
         this.editAccountMasterDialog = new EditAccountMasterDialogImpl(this);
-        this.accountMasterAccessor = new AccountMasterTableAccessor(new DatabaseHelper(getApplicationContext()));
+        this.accountMasterAccessor = Factory.getAccountMasterTableAccessor(this);
         this.addCategoryImage = (ImageView)findViewById(R.id.add_master_image);
         this.addCategoryImage.setImageDrawable(getResources().getDrawable(R.drawable.add_button));
         this.addCategoryImage.setId(ViewId.ADD_MASTER.getId());

@@ -1,11 +1,14 @@
 package com.myapp.account.tabcontent;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
-
 import com.myapp.account.R;
+import com.myapp.account.tabcontent.infoarea.AbstractInfoArea;
+import com.myapp.account.tabcontent.infoarea.DailyInfoAreaImpl;
+import com.myapp.account.tabcontent.infoarea.MonthInfoAreaImpl;
 import com.myapp.account.observer.ClickObserverInterface;
 
 /**
@@ -97,6 +100,7 @@ public class TabContent {
    /**
     * @brief Change TabWidget Height.
     */
+   @SuppressLint("NewApi")
    protected void changeTabHeight() {
        TabHost tab_host = (TabHost)activity.findViewById(R.id.tabhost);
        TabWidget tab_widget = tab_host.getTabWidget();

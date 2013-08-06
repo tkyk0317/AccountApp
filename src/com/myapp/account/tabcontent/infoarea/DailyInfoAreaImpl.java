@@ -1,8 +1,7 @@
-package com.myapp.account.tabcontent;
+package com.myapp.account.tabcontent.infoarea;
 
 import java.util.*;
 
-import android.util.Log;
 import android.app.Activity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -36,7 +35,7 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
      */
     @Override
     protected List<AccountTableRecord> getAccountRecord() {
-        return accountTable.getRecordWithTargetDate(displayDate);
+        return this.accountTable.getRecordWithTargetDate(displayDate);
     }
 
     /**

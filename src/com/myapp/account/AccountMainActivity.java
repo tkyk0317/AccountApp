@@ -22,6 +22,7 @@ import android.view.animation.Animation;
 import android.app.ProgressDialog;
 import android.view.animation.TranslateAnimation;
 
+import com.myapp.account.factory.Factory;
 import com.myapp.account.AccountLineGraphActivity;
 import com.myapp.account.AccountPieGraphActivity;
 import com.myapp.account.titlearea.TitleArea;
@@ -36,7 +37,7 @@ import com.myapp.account.observer.ClickObserverInterface;
 import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.edit_account_data.AccountEdit;
-import com.myapp.account.tabcontent.DailyInfoRecord;
+import com.myapp.account.tabcontent.infoarea.DailyInfoRecord;
 import com.myapp.account.response.ResponseApplicationMenuInterface;
 import com.myapp.account.edit_account_data.ClearAccountData;
 
@@ -105,7 +106,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         this.currentCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.current_flipper));
         this.nextCalendar = new AccountCalendar(this, (LinearLayout)findViewById(R.id.next_flipper));
         this.currentDate = getCurrentDate();
-        this.appConfig = new AppConfigurationData(this);
+        this.appConfig = Factory.getAppConfigurationData(this);
 
         // initialize image.
         initImage();

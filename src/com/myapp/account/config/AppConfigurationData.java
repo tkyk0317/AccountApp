@@ -8,7 +8,7 @@ import android.preference.PreferenceManager;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import com.myapp.account.database.DatabaseHelper;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.database.EstimateTableAccessor;
 import com.myapp.account.database.EstimateTableRecord;
 import com.myapp.account.database.UserTableAccessor;
@@ -41,8 +41,8 @@ public class AppConfigurationData {
     public AppConfigurationData(Activity activity) {
         this.activity = activity;
         if( null == AppConfigurationData.appConfig ) AppConfigurationData.appConfig = PreferenceManager.getDefaultSharedPreferences(this.activity);
-        this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), this);
-        this.userTable = new UserTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+        this.estimateTable = Factory.getEstimateTableAccessor(activity, this);
+        this.userTable = Factory.getUserTableAccessor(activity);
 
         // read configuration data.
         readConfigurationData();
