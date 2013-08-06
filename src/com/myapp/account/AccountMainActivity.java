@@ -1,5 +1,6 @@
 package com.myapp.account;
 
+import android.util.Log;
 import android.os.AsyncTask;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -83,7 +84,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         init();
 
         // start worker thread.
-        displayMainContent();
+        new LoadingDatabaseASync((Context)this).execute("");
     }
 
     /**
@@ -546,6 +547,94 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
 
         private ViewId(int id) { this.id = id; }
         public int getId() { return this.id; }
+    }
+
+    /**
+     * @brief Loading Database Class(ASync).
+     */
+    @SuppressLint("NewApi")
+	private class LoadingDatabaseASync extends AsyncTask<String, Integer, Boolean> {
+        private Context context = null;
+        private ProgressDialog progressDialog = null;
+        private boolean IsCalledProgressUpdate = false;
+        private static final int THREAD_SLEEP_TIME = 500;
+
+        /**
+         * @brief Constructor.
+         *
+         * @param context Context Instance.
+         */
+        public LoadingDatabaseASync(Context context) {
+            this.context = context;
+        }
+
+        /**
+         * @brief First Called from UI Thread.
+         */
+        @Override
+        protected void onPreExecute() {
+            this.progressDialog = new ProgressDialog(this.context);
+            this.progressDialog.setTitle(this.context.getText(R.string.loading_progress_dialog_title));
+            this.progressDialog.setMessage(this.context.getText(R.string.loading_progress_dialog_message));
+            this.progressDialog.setIndeterminate(false);
+            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            this.progressDialog.setCancelable(false);
+            this.progressDialog.show();
+        }
+
+        /**
+         * @brief BackGround Work.
+         *
+         * @param params String Parameters.
+         */
+        @Override
+        protected Boolean doInBackground(String... params) {
+            this.IsCalledProgressUpdate = false;
+            publishProgress(0);
+
+            // waiting until displayMainContent is end.
+            while( false == this.IsCalledProgressUpdate ) {
+                try {
+                    Thread.sleep(THREAD_SLEEP_TIME);
+                } catch (InterruptedException e) {
+                    Log.d("LoadingDatabaseASync", "InterruptedException");
+                }
+            }
+            return Boolean.valueOf(true);
+        }
+
+        /**
+         * @brief Called from Worker Thread when publishProgress called.
+         *
+         * @param values progress value.
+         */
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            // because displayMainContent is processing related to userinterface,
+            // it is treated in onProgressUpdate.
+            // UI process and Not UI Process in displayMainContent should be split.
+            ((AccountMainActivity)this.context).displayMainContent();
+            this.IsCalledProgressUpdate = true;
+        }
+
+        /**
+         * @brief Called when Cancel.
+         */
+        @Override
+        protected void onCancelled() {
+        }
+
+        /**
+         * @brief Called when Worker Thread is Complete.
+         *
+         * @param result Result Parameter.
+         */
+        @Override
+        protected void onPostExecute(Boolean result) {
+            this.progressDialog.dismiss();
+            this.progressDialog = null;
+        }
     }
 }
 
