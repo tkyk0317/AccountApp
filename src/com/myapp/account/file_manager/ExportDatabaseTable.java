@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.util.Log;
-import android.os.AsyncTask;
 
 import com.myapp.account.R;
 import com.myapp.account.config.AppConfigurationData;
@@ -19,7 +18,6 @@ import com.myapp.account.database.EstimateTableAccessor;
 import com.myapp.account.database.EstimateTableRecord;
 import com.myapp.account.database.UserTableAccessor;
 import com.myapp.account.database.UserTableRecord;
-import com.myapp.account.response.ResponseApplicationMenuInterface;
 
 /**
  * @brief  Export Table Data Class.

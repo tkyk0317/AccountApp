@@ -19,7 +19,6 @@ import com.myapp.account.database.EstimateTableAccessor;
 import com.myapp.account.database.UserTableRecord;
 import com.myapp.account.database.UserTableAccessor;
 import com.myapp.account.utility.Utility;
-import com.myapp.account.response.ResponseApplicationMenuInterface;
 
 /**
  * @brief Import Table Data Class.
