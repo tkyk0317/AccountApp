@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.widget.LinearLayout;
 import android.widget.ViewFlipper;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.view.animation.Animation;
 import android.app.ProgressDialog;
 import android.view.animation.TranslateAnimation;
@@ -37,11 +38,14 @@ import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.edit_account_data.AccountEdit;
 import com.myapp.account.tabcontent.DailyInfoRecord;
 import com.myapp.account.response.ResponseApplicationMenuInterface;
+import com.myapp.account.edit_account_data.ClearAccountData;
 
 /**
  * @brief Main Class in AccountApp Application.
  */
-public class AccountMainActivity extends Activity implements ClickObserverInterface, EventCompleteObserver, OnClickListener, ResponseApplicationMenuInterface {
+public class AccountMainActivity extends Activity implements ClickObserverInterface, EventCompleteObserver,
+                                                             OnClickListener, ResponseApplicationMenuInterface,
+                                                             ClearAccountData.OnClearAccountDataInterface {
 
     private TitleArea titleArea;
     private Summary summary;
@@ -61,6 +65,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     private ImageView lineGraphImage;
     private ImageView addAccountImage;
     private AppConfigurationData appConfig;
+    private ProgressDialog progressDialog = null;
     private static final int ANIMATION_DURATION = 300;
 
     /**
@@ -550,10 +555,34 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
     }
 
     /**
+     * @brief Notify Start Clear Data.
+     */
+    public void onStartClearData() {
+        this.progressDialog = new ProgressDialog(this);
+        this.progressDialog.setTitle(getText(R.string.clear_account_data_progress_dialog_title));
+        this.progressDialog.setMessage(getText(R.string.clear_account_data_progress_dialog_message));
+        this.progressDialog.setIndeterminate(false);
+        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        this.progressDialog.setCancelable(false);
+        this.progressDialog.show();
+    }
+
+    /**
+     * @brief Notify Finish Clear Data.
+     */
+    public void onFinishClearData() {
+        this.progressDialog.dismiss();
+        this.progressDialog = null;
+        Toast.makeText(this, getText(R.string.clear_account_data_complete).toString(), Toast.LENGTH_SHORT).show();
+        refreshDisplay();
+    }
+
+    /**
      * @brief Loading Database Class(ASync).
      */
     @SuppressLint("NewApi")
-	private class LoadingDatabaseASync extends AsyncTask<String, Integer, Boolean> {
+    static private class LoadingDatabaseASync extends AsyncTask<String, Integer, Boolean> {
         private Context context = null;
         private ProgressDialog progressDialog = null;
         private boolean IsCalledProgressUpdate = false;
