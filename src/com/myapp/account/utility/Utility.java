@@ -33,8 +33,7 @@ public class Utility {
     public static final String YEAR_OF_FIRST_DATE = "01/01";
     public static final String YEAR_OF_LAST_DATE = "12/31";
     public static final String MONTH_OF_FIRST_DAY = "01";
-    private static Calendar currentCalDate = null;
-    private static String currentDateString = null;
+    private static Calendar calDate = Calendar.getInstance(TimeZone.getDefault());
     private static SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
     private static SimpleDateFormat dateAndTimeFormat = new SimpleDateFormat(DATE_AND_TIME_FORMAT);
 
@@ -71,21 +70,6 @@ public class Utility {
     }
 
     /**
-     * @brief Convert To Date From StringDate.
-     * @param target_str converted string date(yyyy/mm/dd).
-     * @return converted Date instance.
-     */
-    public static Date convertStringDateToDate(String target_str) {
-        Date converted_date = null;
-        try {
-            converted_date = Utility.dateFormat.parse(target_str);
-        } catch(ParseException exception) {
-            Log.e("Utility", "convertStringDateToDate Exception");
-        }
-        return converted_date;
-    }
-
-    /**
      * @brief Convert Number To String.
      * @param number target number.
      * @return converted number string.
@@ -105,19 +89,7 @@ public class Utility {
      * @return Current Date(String Type).
      */
     public static String getCurrentDate() {
-        if( null == Utility.currentCalDate ) {
-            Utility.currentCalDate = Calendar.getInstance(TimeZone.getDefault());
-            Utility.currentDateString = Utility.dateFormat.format(Utility.currentCalDate.getTime());
-        }
-
-        // check diffrence.
-        Calendar cal_date = Calendar.getInstance(TimeZone.getDefault());
-        if( cal_date.compareTo(Utility.currentCalDate) != 0 ) {
-            Utility.currentDateString = null;
-            Utility.currentCalDate = cal_date;
-            Utility.currentDateString = Utility.dateFormat.format(Utility.currentCalDate.getTime());
-        }
-        return Utility.currentDateString;
+        return Utility.dateFormat.format(new Date());
     }
 
     /**
@@ -125,14 +97,13 @@ public class Utility {
      * @return Previous Date(String Type).
      */
     public static String getPreviousMonthDate(String current_date) {
-        int year = Integer.valueOf(current_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
-        int month = Integer.valueOf(current_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
-        int day = Integer.valueOf(current_date.substring(DATE_DAY_ST_POS));
+        int year = Integer.parseInt(Utility.splitYear(current_date));
+        int month = Integer.parseInt(Utility.splitMonth(current_date));
+        int day = Integer.parseInt(Utility.splitDay(current_date));
 
-        Calendar previous_date = Calendar.getInstance(TimeZone.getDefault());
-        previous_date.set(year, month - 1, day);
-        previous_date.add(Calendar.MONTH, -1);
-        return Utility.dateFormat.format(previous_date.getTime());
+        Utility.calDate.set(year, month - 1, day);
+        Utility.calDate.add(Calendar.MONTH, -1);
+        return Utility.dateFormat.format(Utility.calDate.getTime());
     }
 
     /**
@@ -140,14 +111,13 @@ public class Utility {
      * @return Next Date(String Type).
      */
     public static String getNextMonthDate(String current_date) {
-        int year = Integer.valueOf(current_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
-        int month = Integer.valueOf(current_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
-        int day = Integer.valueOf(current_date.substring(DATE_DAY_ST_POS));
+        int year = Integer.parseInt(Utility.splitYear(current_date));
+        int month = Integer.parseInt(Utility.splitMonth(current_date));
+        int day = Integer.parseInt(Utility.splitDay(current_date));
 
-        Calendar previous_date = Calendar.getInstance(TimeZone.getDefault());
-        previous_date.set(year, month - 1, day);
-        previous_date.add(Calendar.MONTH, 1);
-        return Utility.dateFormat.format(previous_date.getTime());
+        Utility.calDate.set(year, month - 1, day);
+        Utility.calDate.add(Calendar.MONTH, 1);
+        return Utility.dateFormat.format(Utility.calDate.getTime());
     }
 
     /**
@@ -155,14 +125,13 @@ public class Utility {
      * @return Previous Date(String Type).
      */
     public static String getPreviousYearDate(String current_date) {
-        int year = Integer.valueOf(current_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
-        int month = Integer.valueOf(current_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
-        int day = Integer.valueOf(current_date.substring(DATE_DAY_ST_POS));
+        int year = Integer.parseInt(Utility.splitYear(current_date));
+        int month = Integer.parseInt(Utility.splitMonth(current_date));
+        int day = Integer.parseInt(Utility.splitDay(current_date));
 
-        Calendar previous_date = Calendar.getInstance(TimeZone.getDefault());
-        previous_date.set(year, month - 1, day);
-        previous_date.add(Calendar.YEAR, -1);
-        return Utility.dateFormat.format(previous_date.getTime());
+        Utility.calDate.set(year, month - 1, day);
+        Utility.calDate.add(Calendar.YEAR, -1);
+        return Utility.dateFormat.format(Utility.calDate.getTime());
     }
 
     /**
@@ -170,14 +139,13 @@ public class Utility {
      * @return Next Date(String Type).
      */
      public static String getNextYearDate(String current_date) {
-        int year = Integer.valueOf(current_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
-        int month = Integer.valueOf(current_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
-        int day = Integer.valueOf(current_date.substring(DATE_DAY_ST_POS));
+        int year = Integer.parseInt(Utility.splitYear(current_date));
+        int month = Integer.parseInt(Utility.splitMonth(current_date));
+        int day = Integer.parseInt(Utility.splitDay(current_date));
 
-        Calendar previous_date = Calendar.getInstance(TimeZone.getDefault());
-        previous_date.set(year, month - 1, day);
-        previous_date.add(Calendar.YEAR, 1);
-        return Utility.dateFormat.format(previous_date.getTime());
+        Utility.calDate.set(year, month - 1, day);
+        Utility.calDate.add(Calendar.YEAR, 1);
+        return Utility.dateFormat.format(Utility.calDate.getTime());
     }
 
     /**
@@ -195,13 +163,12 @@ public class Utility {
      * @return First Date of Month Date(String Type).
      */
     public static String getFirstDateOfTargetMonth(String target_date) {
-        Calendar cal_date = Calendar.getInstance(TimeZone.getDefault());
-        int year = Integer.valueOf(target_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
-        int month = Integer.valueOf(target_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
+        int year = Integer.parseInt(Utility.splitYear(target_date));
+        int month = Integer.parseInt(Utility.splitMonth(target_date));
 
-        cal_date.set(year, month - 1, 1);
+        Utility.calDate.set(year, month - 1, 1);
 
-        return Utility.dateFormat.format(cal_date.getTime());
+        return Utility.dateFormat.format(Utility.calDate.getTime());
     }
 
     /**
@@ -209,20 +176,16 @@ public class Utility {
      * @param target_date Target Date of First Date(yyyy/MM/dd).
      */
     public static String getLastDateOfTargetMonth(String target_date) {
-        Calendar cal_date = Calendar.getInstance(TimeZone.getDefault());
-        int year = Integer.valueOf(target_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
-        int month = Integer.valueOf(target_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
-        int day = Integer.valueOf(target_date.substring(DATE_DAY_ST_POS));
+        int year = Integer.parseInt(Utility.splitYear(target_date));
+        int month = Integer.parseInt(Utility.splitMonth(target_date));
+        int day = Integer.parseInt(Utility.splitDay(target_date));
 
         // calculate last day of month.
-        cal_date.set(year, month - 1, day);
+        Utility.calDate.set(year, month - 1, day);
 
-        // calculate last day of month.
-        cal_date.add(Calendar.MONTH, 1);
-        cal_date.set(Calendar.DAY_OF_MONTH, 1);
-        cal_date.add(Calendar.DAY_OF_MONTH, -1);
-
-        return Utility.dateFormat.format(cal_date.getTime());
+        // calculate last day.
+        Utility.calDate.set(Calendar.DAY_OF_MONTH, Utility.calDate.getActualMaximum(Calendar.DATE));
+        return Utility.dateFormat.format(Utility.calDate.getTime());
     }
 
     /**
@@ -252,38 +215,33 @@ public class Utility {
      * @return start date.
      */
     public static String getStartDateOfMonth(String target_date, int start_day) {
-        Calendar start_date_cal = Calendar.getInstance(TimeZone.getDefault());
-        int year = Integer.valueOf(target_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
-        int month = Integer.valueOf(target_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
-        int day = Integer.valueOf(target_date.substring(DATE_DAY_ST_POS));
+        int year = Integer.parseInt(Utility.splitYear(target_date));
+        int month = Integer.parseInt(Utility.splitMonth(target_date));
+        int day = Integer.parseInt(Utility.splitDay(target_date));
 
-        start_date_cal.set(year, month - 1, day);
+        Utility.calDate.set(year, month - 1, day);
 
         // check last day of current month.
         int original_start_day = start_day;
-        String start_date = Utility.dateFormat.format(start_date_cal.getTime());
-        String last_date_of_month = getLastDateOfTargetMonth(start_date);
-        int last_day_of_month = Integer.valueOf(splitDay(last_date_of_month));
+        int last_day_of_month = Utility.calDate.getActualMaximum(Calendar.DATE);
         if( start_day > last_day_of_month ) {
             start_day = last_day_of_month;
         }
 
         // check start day and current day.
-        if( start_day > start_date_cal.get(Calendar.DAY_OF_MONTH) ) {
+        if( start_day > Utility.calDate.get(Calendar.DAY_OF_MONTH) ) {
             // recovery start day.
             start_day = original_start_day;
-            start_date_cal.add(Calendar.MONTH, -1);
+            Utility.calDate.add(Calendar.MONTH, -1);
 
             // check last day of current month again.
-            start_date = Utility.dateFormat.format(start_date_cal.getTime());
-            last_date_of_month = getLastDateOfTargetMonth(start_date);
-            last_day_of_month = Integer.valueOf(splitDay(last_date_of_month));
+            last_day_of_month = Utility.calDate.getActualMaximum(Calendar.DATE);
             if( start_day >= last_day_of_month ) {
                 start_day = last_day_of_month;
             }
         }
-        start_date_cal.set(Calendar.DAY_OF_MONTH, start_day);
-        return Utility.dateFormat.format(start_date_cal.getTime());
+        Utility.calDate.set(Calendar.DAY_OF_MONTH, start_day);
+        return Utility.dateFormat.format(Utility.calDate.getTime());
     }
 
     /**
@@ -296,27 +254,22 @@ public class Utility {
      */
     public static String getEndDateOfMonth(String current_date, int start_day) {
         String start_date = Utility.getStartDateOfMonth(current_date, start_day);
-        Calendar end_date = Calendar.getInstance(TimeZone.getDefault());
-
-        int year = Integer.valueOf(start_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
-        int month = Integer.valueOf(start_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
-        int day = Integer.valueOf(start_date.substring(DATE_DAY_ST_POS));
+        int year = Integer.parseInt(Utility.splitYear(start_date));
+        int month = Integer.parseInt(Utility.splitMonth(start_date));
+        int day = Integer.parseInt(Utility.splitDay(start_date));
 
         // calculate last day of month.
-        end_date.set(year, month - 1, day);
+        Utility.calDate.set(year, month - 1, day);
 
         // calculate estimate end date.
-        end_date.add(Calendar.MONTH, 1);
+        Utility.calDate.add(Calendar.MONTH, 1);
 
         // check start_day and calculated day.
-        String last_date = Utility.dateFormat.format(end_date.getTime());
-        last_date = getLastDateOfTargetMonth(last_date);
-        int last_day = Integer.valueOf(splitDay(last_date));
+        int last_day = Utility.calDate.getActualMaximum(Calendar.DATE);
         if( start_day - 1 < last_day ) last_day = start_day - 1;
 
-        end_date.set(Calendar.DAY_OF_MONTH, last_day);
-
-        return Utility.dateFormat.format(end_date.getTime());
+        Utility.calDate.set(Calendar.DAY_OF_MONTH, last_day);
+        return Utility.dateFormat.format(Utility.calDate.getTime());
     }
 
     /**
@@ -391,16 +344,13 @@ public class Utility {
      * @return int day of week value(Sunday is One).
      */
     public static int getDayOfWeek(String target_date) {
-        int year = Integer.valueOf(target_date.substring(DATE_YEAR_ST_POS, DATE_YEAR_ST_POS + DATE_YEAR_SIZE));
-        int month = Integer.valueOf(target_date.substring(DATE_MONTH_ST_POS, DATE_MONTH_ST_POS + DATE_MONTH_SIZE));
-        int day = Integer.valueOf(target_date.substring(DATE_DAY_ST_POS, DATE_DAY_ST_POS + DATE_DAY_SIZE));
-
-        Calendar target_cal = Calendar.getInstance(TimeZone.getDefault());
+        int year = Integer.parseInt(Utility.splitYear(target_date));
+        int month = Integer.parseInt(Utility.splitMonth(target_date));
+        int day = Integer.parseInt(Utility.splitDay(target_date));
 
         // setting target date.
-        target_cal.set(year, month - 1, day);
-
-        return target_cal.get(Calendar.DAY_OF_WEEK);
+        Utility.calDate.set(year, month - 1, day);
+        return Utility.calDate.get(Calendar.DAY_OF_WEEK);
     }
 
     /**
