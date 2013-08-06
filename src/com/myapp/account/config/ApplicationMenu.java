@@ -15,15 +15,16 @@ import com.myapp.account.EditUserTableActivity;
 import com.myapp.account.file_manager.ExportDatabaseTable;
 import com.myapp.account.file_manager.ImportDatabaseTable;
 import com.myapp.account.response.ResponseApplicationMenuInterface;
+import com.myapp.account.edit_account_data.ClearAccountData;
 
 /**
  * @brief Application Menu Class.
  */
-public class ApplicationMenu implements ResponseApplicationMenuInterface {
+public class ApplicationMenu implements ResponseApplicationMenuInterface, ClearAccountData.OnClearAccountDataInterface {
 
     // Dialog List Index for Edit Data.
     private enum EditDataListIndex {
-        ADD_CATEGORY_INDEX(0), ADD_USER_INDEX(1);
+        ADD_CATEGORY_INDEX(0), ADD_USER_INDEX(1), CLEAR_ACCOUNT_DATA_INDEX(2);
 
         private final int index;
 
@@ -98,7 +99,8 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
     private void displayEditDialog() {
         final String[] edit_menus
             = { this.activity.getText(R.string.menu_master_edit_title).toString(),
-                this.activity.getText(R.string.menu_user_edit_title).toString()};
+                this.activity.getText(R.string.menu_user_edit_title).toString(),
+                this.activity.getText(R.string.menu_clear_all_account_data).toString() };
 
         AlertDialog.Builder edit_menu_dialog = new AlertDialog.Builder(this.activity);
         edit_menu_dialog.setTitle(R.string.menu_account_data_edit_list_title);
@@ -120,7 +122,7 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
     private void displayInputOutputAccountDataDialog() {
         final String[] edit_menus
             = { this.activity.getText(R.string.menu_input_account_data_title).toString(),
-                this.activity.getText(R.string.menu_output_account_data_title).toString()};
+                this.activity.getText(R.string.menu_output_account_data_title).toString() };
 
         AlertDialog.Builder edit_menu_dialog = new AlertDialog.Builder(this.activity);
         edit_menu_dialog.setTitle(R.string.menu_input_output_account_data_title);
@@ -145,6 +147,8 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
             moveToAddCategory();
         } else if( click_index == EditDataListIndex.ADD_USER_INDEX.getIndex() ) {
             moveToUser();
+        } else if( click_index == EditDataListIndex.CLEAR_ACCOUNT_DATA_INDEX.getIndex() ) {
+            displayClearAccountDataDialog();
         }
     }
 
@@ -214,6 +218,47 @@ public class ApplicationMenu implements ResponseApplicationMenuInterface {
     private void moveToUser() {
         Intent intent = new Intent( this.activity.getApplicationContext(), EditUserTableActivity.class);
         this.activity.startActivity(intent);
+    }
+
+    /**
+     * @brief Display Clear Account Data Dialog.
+     */
+    private void displayClearAccountDataDialog() {
+        AlertDialog.Builder confirm_clear_dialog = new AlertDialog.Builder(this.activity);
+        confirm_clear_dialog.setTitle(R.string.menu_clear_all_account_data);
+        confirm_clear_dialog.setMessage(R.string.menu_clear_all_account_data_message);
+        confirm_clear_dialog.setPositiveButton(R.string.delete_confirm_yes,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new ClearAccountData(activity, ApplicationMenu.this).execute("");
+                    }
+                });
+        confirm_clear_dialog.setNegativeButton(R.string.delete_confirm_no,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        confirm_clear_dialog.setCancelable(true);
+        confirm_clear_dialog.show();
+
+        // modify dialog size.
+        Utility.modifyDialogWidthMax(confirm_clear_dialog.create());
+    }
+
+    /**
+     * @brief Notify Start Clear Data.
+     */
+    public void onStartClearData() {
+        if( null != this.activity ) ((ClearAccountData.OnClearAccountDataInterface)this.activity).onStartClearData();
+    }
+
+    /**
+     * @brief Notify Finish Clear Data.
+     */
+    public void onFinishClearData() {
+        if( null != this.activity ) ((ClearAccountData.OnClearAccountDataInterface)this.activity).onFinishClearData();
     }
 }
 

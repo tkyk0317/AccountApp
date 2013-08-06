@@ -515,6 +515,15 @@ public class AccountTableAccessor {
     }
 
     /**
+     * @brief Delete All Records.
+     *
+     * @return deleted count.
+     */
+    public int deleteAll() {
+        return this.writeDatabase.delete(TABLE_NAME, null, null);
+    }
+
+    /**
      * @brief Update Record.
      * @param record AccountTableRecord Instance.
      * @return true if update success.
