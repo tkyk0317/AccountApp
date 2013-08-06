@@ -8,8 +8,7 @@ import android.app.ProgressDialog;
 import android.util.Log;
 
 import com.myapp.account.R;
-import com.myapp.account.config.AppConfigurationData;
-import com.myapp.account.database.DatabaseHelper;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
 import com.myapp.account.database.AccountTableAccessor;
@@ -106,7 +105,7 @@ public class ExportDatabaseTable extends AbstractExportImportData {
          */
         public ExportAccountMasterTableImpl(Activity activity) {
             super(activity);
-            this.accountMaster = new AccountMasterTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
+            this.accountMaster = Factory.getAccountMasterTableAccessor(activity);
         }
 
         /**
@@ -184,8 +183,7 @@ public class ExportDatabaseTable extends AbstractExportImportData {
          */
         public ExportAccountDataTableImpl(Activity activity) {
             super(activity);
-            AppConfigurationData app_config = new AppConfigurationData(activity);
-            this.accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()), app_config);
+            this.accountTable = Factory.getAccountTableAcceessor(activity);
         }
 
         /**
@@ -264,8 +262,7 @@ public class ExportDatabaseTable extends AbstractExportImportData {
          */
         public ExportEstimateTableImpl(Activity activity) {
             super(activity);
-            AppConfigurationData app_config = new AppConfigurationData(activity);
-            this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(activity.getApplicationContext()), app_config);
+            this.estimateTable = Factory.getEstimateTableAccessor(activity);
         }
 
         /**
@@ -343,7 +340,7 @@ public class ExportDatabaseTable extends AbstractExportImportData {
          */
         public ExportUserTableImpl(Activity activity) {
             super(activity);
-            this.userTable = new UserTableAccessor(new DatabaseHelper(activity.getApplicationContext()));
+            this.userTable = Factory.getUserTableAccessor(activity);
         }
 
         /**

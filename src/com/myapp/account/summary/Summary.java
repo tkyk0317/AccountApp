@@ -8,8 +8,8 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 
 import com.myapp.account.R;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.utility.Utility;
-import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.summary.estimate.Estimate;
 import com.myapp.account.config.AppConfigurationData;
@@ -37,9 +37,9 @@ public class Summary {
      */
     public Summary(Activity activity) {
         this.activity = activity;
-        this.appConfig = new AppConfigurationData(this.activity);
-        this.estimateInfo = new Estimate(this.activity);
-        this.accountTable = new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), this.appConfig);
+        this.appConfig = Factory.getAppConfigurationData(activity);
+        this.estimateInfo = new Estimate(activity);
+        this.accountTable = Factory.getAccountTableAcceessor(activity);
      }
 
     /**

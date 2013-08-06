@@ -17,8 +17,8 @@ import android.content.DialogInterface;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.myapp.account.R;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.utility.Utility;
-import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
@@ -135,8 +135,7 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
      * @return true:enable delete false:unenable delete.
      */
     private boolean isEnableDeleteRecord() {
-        AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        AccountTableAccessor accountTable = new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), app_config);
+        AccountTableAccessor accountTable = Factory.getAccountTableAcceessor(this.activity);
         return !(accountTable.isExsitRecordAtCategoryId(this.editRecord.getPrimaryId()));
     }
 
@@ -239,7 +238,7 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
             this.activity = activity;
             this.dialogView = dialog_view;
             this.editRecord = edit_record;
-            this.accountMasterAccessor = new AccountMasterTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+            this.accountMasterAccessor = Factory.getAccountMasterTableAccessor(activity);
         }
 
         /**
@@ -382,7 +381,7 @@ public class EditAccountMasterDialogImpl implements OnItemSelectedListener, Acco
             this.observer = null;
             this.activity = activity;
             this.editRecord = edit_record;
-            this.accountMasterAccessor = new AccountMasterTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+            this.accountMasterAccessor = Factory.getAccountMasterTableAccessor(activity);
         }
 
         /**

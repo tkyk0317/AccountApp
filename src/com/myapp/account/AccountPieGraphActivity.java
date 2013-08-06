@@ -10,6 +10,7 @@ import android.widget.ViewFlipper;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
+import com.myapp.account.factory.Factory;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.graph.AbstractAccountGraph;
@@ -201,7 +202,7 @@ public class AccountPieGraphActivity extends Activity implements ClickObserverIn
      * @return
      */
     private String getStartDateOfMonth(String target_date) {
-        AppConfigurationData app_config = new AppConfigurationData(this);
+        AppConfigurationData app_config = Factory.getAppConfigurationData(this);
         return Utility.getStartDateOfMonth(target_date, app_config.getStartDay());
     }
 

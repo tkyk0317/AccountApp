@@ -21,15 +21,14 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.myapp.account.R;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.utility.Utility;
-import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
-import com.myapp.account.tabcontent.DailyInfoRecord;
+import com.myapp.account.tabcontent.infoarea.DailyInfoRecord;
 import com.myapp.account.observer.EventCompleteObserver;
-import com.myapp.account.config.AppConfigurationData;
 import com.mylib.calculator.Calculator;
 import com.mylib.calculator.observer.ClickObserverInterface;
 
@@ -57,10 +56,9 @@ public class AccountAdd implements OnItemSelectedListener, ClickObserverInterfac
      */
     public AccountAdd(Activity activity) {
         this.activity = activity;
-        AppConfigurationData app_config = new AppConfigurationData(this.activity);
-        this.accountTable = new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), app_config);
-        this.masterTable = new AccountMasterTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()) );
-        this.calculator = new Calculator(this.activity);
+        this.accountTable = Factory.getAccountTableAcceessor(activity);
+        this.masterTable = Factory.getAccountMasterTableAccessor(activity);
+        this.calculator = new Calculator(activity);
         this.calculator.attachObserver(this);
     }
 

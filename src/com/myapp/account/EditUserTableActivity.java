@@ -11,8 +11,8 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 
 import com.myapp.account.R;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.observer.EventCompleteObserver;
-import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.UserTableAccessor;
 import com.myapp.account.database.UserTableRecord;
 import com.myapp.account.edit_user_table.EditUserTableRecord;
@@ -77,7 +77,7 @@ public class EditUserTableActivity extends Activity implements OnClickListener, 
      * @brief Initialize Class.
      */
     private void init() {
-        this.userTable = new UserTableAccessor(new DatabaseHelper(this.getApplicationContext()));
+        this.userTable = Factory.getUserTableAccessor(this);
         this.addUserImage = (ImageView)findViewById(R.id.add_user_image);
         this.addUserImage.setImageDrawable(getResources().getDrawable(R.drawable.add_button));
         this.addUserImage.setId(ViewId.ADD_USER_TABLE.getId());

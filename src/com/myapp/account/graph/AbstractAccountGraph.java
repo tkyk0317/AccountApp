@@ -14,7 +14,7 @@ import android.view.MotionEvent;
 import android.view.GestureDetector.OnGestureListener;
 
 import com.myapp.account.R;
-import com.myapp.account.database.DatabaseHelper;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessor;
@@ -60,12 +60,12 @@ public abstract class AbstractAccountGraph implements OnGestureListener, View.On
 	public AbstractAccountGraph(Activity activity, LinearLayout layout) {
         this.activity = activity;
         this.chartArea = layout;
-        this.appConfig = new AppConfigurationData(this.activity);
-        this.accountTable= new AccountTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()), this.appConfig);
-        this.masterTable= new AccountMasterTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+        this.appConfig = Factory.getAppConfigurationData(activity);
+        this.accountTable= Factory.getAccountTableAcceessor(activity);
+        this.masterTable= Factory.getAccountMasterTableAccessor(activity);
         this.categorySeries = new CategorySeries(null);
         this.renderer = new DefaultRenderer();
-        this.gestureDetector = new GestureDetector(this.activity.getApplicationContext(), this);
+        this.gestureDetector = new GestureDetector(activity.getApplicationContext(), this);
 
         // create color array.
         createColors();

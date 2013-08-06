@@ -8,10 +8,10 @@ import android.widget.LinearLayout;
 import android.view.MotionEvent;
 
 import com.myapp.account.R;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.observer.ClickObserverInterface;
-import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 
@@ -40,8 +40,8 @@ public class AccountCalendar implements ClickObserverInterface {
     public AccountCalendar(Activity activity, LinearLayout layout) {
         this.activity = activity;
         this.layout = layout;
-        this.appConfig = new AppConfigurationData(this.activity);
-        this.accountTableAccessor = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()), this.appConfig);
+        this.appConfig = Factory.getAppConfigurationData(activity);
+        this.accountTableAccessor = Factory.getAccountTableAcceessor(activity);
         getCalendarItems();
     }
 

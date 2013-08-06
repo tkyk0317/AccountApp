@@ -1,4 +1,4 @@
-package com.myapp.account.tabcontent;
+package com.myapp.account.tabcontent.infoarea;
 
 import java.util.*;
 import android.app.Activity;

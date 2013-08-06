@@ -9,8 +9,8 @@ import android.graphics.Color;
 import android.app.AlertDialog;
 
 import com.myapp.account.R;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.utility.Utility;
-import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.EstimateTableAccessor;
 import com.myapp.account.database.EstimateTableRecord;
 import com.myapp.account.database.AccountTableAccessor;
@@ -36,9 +36,9 @@ public class Estimate {
      */
     public Estimate(Activity activity) {
         this.activity = activity;
-        this.appConfig= new AppConfigurationData(this.activity);
-        this.estimateTable = new EstimateTableAccessor(new DatabaseHelper(activity.getApplicationContext()), this.appConfig);
-        this.accountTable = new AccountTableAccessor(new DatabaseHelper(activity.getApplicationContext()), this.appConfig);
+        this.appConfig = Factory.getAppConfigurationData(activity);
+        this.estimateTable = Factory.getEstimateTableAccessor(activity);
+        this.accountTable = Factory.getAccountTableAcceessor(activity);
     }
 
     /**

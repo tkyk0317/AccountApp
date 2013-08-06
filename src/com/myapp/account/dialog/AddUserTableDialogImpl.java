@@ -12,9 +12,9 @@ import android.widget.Toast;
 import android.widget.EditText;
 
 import com.myapp.account.R;
+import com.myapp.account.factory.Factory;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.observer.EventCompleteObserver;
-import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.edit_user_table.EditUserTableRecord;
 import com.myapp.account.database.UserTableAccessor;
 import com.myapp.account.database.UserTableRecord;
@@ -154,7 +154,7 @@ public class AddUserTableDialogImpl implements UserTableDialogInterface, EventCo
             this.observer = null;
             this.activity = activity;
             this.dialogView = dialog_view;
-            this.userTable = new UserTableAccessor(new DatabaseHelper(this.activity.getApplicationContext()));
+            this.userTable = Factory.getUserTableAccessor(activity);
         }
 
         /**

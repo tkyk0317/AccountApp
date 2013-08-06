@@ -16,7 +16,7 @@ import android.content.DialogInterface;
 import com.myapp.account.R;
 import com.myapp.account.utility.Utility;
 import com.myapp.account.database.AccountTableRecord;
-import com.myapp.account.tabcontent.DailyInfoRecord;
+import com.myapp.account.tabcontent.infoarea.DailyInfoRecord;
 import com.myapp.account.observer.EventCompleteObserver;
 
 /**
