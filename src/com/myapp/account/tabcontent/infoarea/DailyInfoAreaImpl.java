@@ -1,6 +1,8 @@
-package com.myapp.account.infoarea;
+package com.myapp.account.tabcontent;
 
 import java.util.*;
+
+import android.util.Log;
 import android.app.Activity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -18,6 +20,8 @@ import com.myapp.account.database.AccountMasterTableRecord;
 public class DailyInfoAreaImpl extends AbstractInfoArea {
 
     protected static final int DISPLAY_MAX_LINE = 1;
+    protected List<AccountMasterTableRecord> masterRecord = null;
+    protected List<DailyInfoRecord> dailyRecord = null;
 
     /**
      * @brief Constructor.
@@ -36,7 +40,32 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
     }
 
     /**
+     * @brief Appear the Daily Information Area.
+     */
+    public void appear(String display_date) {
+        this.displayDate = display_date;
+
+        // get info from database.
+        List<AccountTableRecord> account_record = getAccountRecord();
+        TableLayout item_table = getTableLayout();
+
+        // remove child item.
+        item_table.removeAllViews();
+
+        // get master record.
+        this.masterRecord = this.masterTable.getAllRecord();
+
+        // item loop.
+        for( AccountTableRecord record : account_record ) {
+            drawRecord(item_table, record);
+        }
+        // delete list.
+        this.masterRecord = null;
+    }
+
+    /**
      * @brief Get Table Layout instance.
+     *
      * @return TableRayout Instance.
      */
     @Override
@@ -46,18 +75,19 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
 
     /**
      * @brief Draw Item from AccountTable.
+     *
      * @param layout TableLayout instance.
      * @param account_record AccountTable Record(Displayed Item).
      */
     @Override
     protected void drawRecord(TableLayout layout, AccountTableRecord account_record) {
         // set long click event listener.
-        DailyInfoRecord row = new DailyInfoRecord(activity);
+        DailyInfoRecord row = new DailyInfoRecord(this.activity);
         row.removeAllViews();
 
         // get item name from AccountMaster.
         int master_id = account_record.getCategoryId();
-        AccountMasterTableRecord account_master_record = masterTable.getRecord(master_id);
+        AccountMasterTableRecord account_master_record = getMasterRecord(master_id);
 
         row.setAccountDate(account_record.getInsertDate());
         row.setCategoryName(account_master_record.getName());
@@ -92,6 +122,23 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
 
         // display AccountTable.
         layout.addView(row);
+    }
+
+    /**
+     * @brief Get Master Table Record.
+     *
+     * @param id key id.
+     *
+     * @return AccountMasterTableRecord.
+     */
+    protected AccountMasterTableRecord getMasterRecord(int id) {
+        for( AccountMasterTableRecord record : this.masterRecord ) {
+            if( id == record.getId() ) {
+                return record;
+            }
+        }
+        // bad case.
+        return new AccountMasterTableRecord();
     }
 
     /**

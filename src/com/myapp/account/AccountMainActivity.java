@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.view.animation.Animation;
 import android.app.ProgressDialog;
 import android.view.animation.TranslateAnimation;
+
 import com.myapp.account.AccountLineGraphActivity;
 import com.myapp.account.AccountPieGraphActivity;
 import com.myapp.account.titlearea.TitleArea;
@@ -33,7 +34,7 @@ import com.myapp.account.observer.ClickObserverInterface;
 import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.edit_account_data.AccountAdd;
 import com.myapp.account.edit_account_data.AccountEdit;
-import com.myapp.account.infoarea.DailyInfoRecord;
+import com.myapp.account.tabcontent.DailyInfoRecord;
 import com.myapp.account.response.ResponseApplicationMenuInterface;
 
 /**
@@ -83,7 +84,6 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
 
         // start worker thread.
         displayMainContent();
-        //new LoadingDatabaseASync((Context)this).execute("");
     }
 
     /**
@@ -546,77 +546,6 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
 
         private ViewId(int id) { this.id = id; }
         public int getId() { return this.id; }
-    }
-
-    /**
-     * @brief Loading Database Class(ASync).
-     */
-    @SuppressLint("NewApi")
-	private class LoadingDatabaseASync extends AsyncTask<String, Integer, Boolean> {
-        private Context context;
-        private ProgressDialog progressDialog;
-
-        /**
-         * @brief Constructor.
-         *
-         * @param context Context Instance.
-         */
-        public LoadingDatabaseASync(Context context) {
-            this.context = context;
-        }
-
-        /**
-         * @brief First Called from UI Thread.
-         */
-        @Override
-        protected void onPreExecute() {
-            this.progressDialog = new ProgressDialog(this.context);
-            this.progressDialog.setTitle(this.context.getText(R.string.loading_progress_dialog_title));
-            this.progressDialog.setMessage(this.context.getText(R.string.loading_progress_dialog_message));
-            this.progressDialog.setIndeterminate(false);
-            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            this.progressDialog.setCancelable(false);
-            this.progressDialog.show();
-            ((AccountMainActivity)this.context).displayMainContent();
-        }
-
-        /**
-         * @brief BackGround Work.
-         *
-         * @param params String Parameters.
-         */
-        @Override
-        protected Boolean doInBackground(String... params) {
-            return Boolean.valueOf(true);
-        }
-
-        /**
-         * @brief Called from Worker Thread when publishProgress called.
-         *
-         * @param values progress value.
-         */
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-        }
-
-        /**
-         * @brief Called when Cancel.
-         */
-        @Override
-        protected void onCancelled() {
-        }
-
-        /**
-         * @brief Called when Worker Thread is Complete.
-         *
-         * @param result Result Parameter.
-         */
-        @Override
-        protected void onPostExecute(Boolean result) {
-            this.progressDialog.dismiss();
-            this.progressDialog = null;
-        }
     }
 }
 

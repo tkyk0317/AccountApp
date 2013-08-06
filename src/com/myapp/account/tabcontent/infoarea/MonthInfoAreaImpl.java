@@ -1,4 +1,4 @@
-package com.myapp.account.infoarea;
+package com.myapp.account.tabcontent;
 
 import java.util.*;
 import android.app.Activity;
@@ -42,6 +42,7 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
 
     /**
      * @brief Draw Item from AccountTable.
+     *
      * @param layout TableLayout instance.
      * @param account_record AccountTable Record(Displayed Item).
      */

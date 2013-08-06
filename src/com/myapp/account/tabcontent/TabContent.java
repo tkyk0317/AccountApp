@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
+
 import com.myapp.account.R;
-import com.myapp.account.infoarea.AbstractInfoArea;
-import com.myapp.account.infoarea.DailyInfoAreaImpl;
-import com.myapp.account.infoarea.MonthInfoAreaImpl;
 import com.myapp.account.observer.ClickObserverInterface;
 
 /**

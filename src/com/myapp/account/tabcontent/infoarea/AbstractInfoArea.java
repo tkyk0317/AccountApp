@@ -1,4 +1,4 @@
-package com.myapp.account.infoarea;
+package com.myapp.account.tabcontent;
 
 import java.util.*;
 import android.app.Activity;
@@ -61,9 +61,8 @@ public abstract class AbstractInfoArea {
         item_table.removeAllViews();
 
         // item loop.
-        for( int i = 0 ; i < account_record.size() ; i++ ) {
-            // draw.
-            drawRecord(item_table, account_record.get(i) );
+        for( AccountTableRecord record : account_record ) {
+            drawRecord(item_table, record);
         }
     }
 
@@ -99,6 +98,7 @@ public abstract class AbstractInfoArea {
 
     /**
      * @brief Draw Item from AccountTable.
+     *
      * @param layout TableLayout instance.
      * @param account_record AccountTable Record(Displayed Item).
      */

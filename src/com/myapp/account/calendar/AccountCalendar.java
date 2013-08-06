@@ -13,6 +13,7 @@ import com.myapp.account.config.AppConfigurationData;
 import com.myapp.account.observer.ClickObserverInterface;
 import com.myapp.account.database.DatabaseHelper;
 import com.myapp.account.database.AccountTableAccessor;
+import com.myapp.account.database.AccountTableRecord;
 
 /**
  * @brief Account Calendar Class.
@@ -27,6 +28,7 @@ public class AccountCalendar implements ClickObserverInterface {
     private AppConfigurationData appConfig = null;
     private String appearDate = null;
     private AccountTableAccessor accountTableAccessor = null;
+    private List<AccountTableRecord> accountTableRecord = null;
     private String firstDateOfMonth = null;
     private String lastDateOfMonth = null;
     private static final int CALENDAR_DAY_OF_WEEK_NUM = 7;
@@ -137,6 +139,9 @@ public class AccountCalendar implements ClickObserverInterface {
         int st_pos = getStartPosition();
         int end_pos = getEndPosition();
 
+        // get account table record.
+        this.accountTableRecord = this.accountTableAccessor.getRecord(this.firstDateOfMonth, this.lastDateOfMonth);
+
         // Create Calendar.
         for( int row = 0 ; row < CALENDAR_ROW_NUM ; ++row ) {
             for( int week = 0 ; week < CALENDAR_DAY_OF_WEEK_NUM ; ++week ) {
@@ -157,6 +162,9 @@ public class AccountCalendar implements ClickObserverInterface {
                 }
             }
         }
+        // delete list.
+        this.accountTableRecord.clear();
+        this.accountTableRecord = null;
     }
 
     /**
@@ -196,8 +204,11 @@ public class AccountCalendar implements ClickObserverInterface {
      * @param date Calendar Date.
      */
     private void setCheckImageAtCell(AccountCalendarCell cell, String date) {
-        if( this.accountTableAccessor.isExsitRecordAtTargetDate(date) ) {
-            cell.setCheckedImage(true);
+        for( AccountTableRecord record : this.accountTableRecord ) {
+            if( true == date.equals(record.getInsertDate()) ) {
+                cell.setCheckedImage(true);
+                break;
+            }
         }
     }
 

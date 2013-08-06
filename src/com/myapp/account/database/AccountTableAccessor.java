@@ -160,6 +160,30 @@ public class AccountTableAccessor {
     }
 
     /**
+     * @brief Get Record with Target Date.
+     * @param target_date String Target Date.
+     * @return AccountTableRecord at Current Date.
+     */
+    public List<AccountTableRecord> getRecord(String start_date, String end_date)
+    {
+        Cursor cursor = readDatabase.query(TABLE_NAME, null, "insert_date>=? and insert_date<=? and user_id=?",
+                                           new String[]{start_date, end_date, String.valueOf(this.appConfig.getTargetUserNameId())},
+                                           null, null, "category_id", null);
+
+        cursor.moveToFirst();
+        int record_count = cursor.getCount();
+        List<AccountTableRecord> record_list = new ArrayList<AccountTableRecord>(record_count+1);
+
+        for( int i = 0 ; i < record_count ; i++ ) {
+            record_list.add( new AccountTableRecord() );
+            record_list.get(i).set(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return record_list;
+    }
+
+    /**
      * @brief Check Exist Record at CategoryId.
      *
      * @param category_id Category Id.

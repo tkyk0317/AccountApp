@@ -27,7 +27,7 @@ import com.myapp.account.database.AccountTableAccessor;
 import com.myapp.account.database.AccountTableRecord;
 import com.myapp.account.database.AccountMasterTableAccessor;
 import com.myapp.account.database.AccountMasterTableRecord;
-import com.myapp.account.infoarea.DailyInfoRecord;
+import com.myapp.account.tabcontent.DailyInfoRecord;
 import com.myapp.account.observer.EventCompleteObserver;
 import com.myapp.account.config.AppConfigurationData;
 import com.mylib.calculator.Calculator;

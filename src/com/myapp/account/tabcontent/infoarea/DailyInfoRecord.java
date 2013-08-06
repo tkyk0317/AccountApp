@@ -1,4 +1,4 @@
-package com.myapp.account.infoarea;
+package com.myapp.account.tabcontent;
 
 import android.widget.TableRow;
 import android.content.Context;
