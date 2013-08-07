@@ -45,17 +45,6 @@ public class TabContent {
         // daily/month tab.
         createDailyTab(tab_host);
         createMonthlyTab(tab_host);
-
-        // TabChangedEvent.
-        tab_host.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String tab_id) {
-                if( tab_id == DAILY_TAB_ID ) {
-                } else if( tab_id == MONTHLY_TAB_ID ) {
-                } else {
-                }
-            }
-        });
     }
 
     /**
