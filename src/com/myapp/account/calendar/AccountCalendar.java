@@ -53,24 +53,10 @@ public class AccountCalendar implements ClickObserverInterface {
         this.firstDateOfMonth = Utility.getFirstDateOfTargetMonth(this.appearDate);
         this.lastDateOfMonth = Utility.getLastDateOfTargetMonth(this.appearDate);
 
-        clearCalendarItems();
         createCalendar();
         setStartDayMarker();
         setUnderlineToCurrentDay();
         focusCurrentDate();
-    }
-
-    /**
-     * @brief Clear Calendar Items.
-     */
-    private void clearCalendarItems() {
-        for( AccountCalendarCell cell : this.calendarCells ) {
-            cell.setDate(0, 0, 0, 0, null);
-            cell.setText("");
-            cell.setCheckedImage(false);
-            cell.clearImage();
-            cell.setUnderline(false);
-        }
     }
 
     /**
@@ -148,6 +134,9 @@ public class AccountCalendar implements ClickObserverInterface {
                 AccountCalendarCell cell = this.calendarCells.get(row * CALENDAR_DAY_OF_WEEK_NUM + week );
                 cell.attachObserver(this);
 
+                // clear calendar item.
+                clearCalendarItems(cell);
+
                 if( row * CALENDAR_DAY_OF_WEEK_NUM + week >= st_pos && row * CALENDAR_DAY_OF_WEEK_NUM + week <= end_pos ) {
                     String date = Utility.createDateFormat(year, month, day);
                     int day_of_week = Utility.getDayOfWeek(date);
@@ -165,6 +154,19 @@ public class AccountCalendar implements ClickObserverInterface {
         // delete list.
         this.accountTableRecord.clear();
         this.accountTableRecord = null;
+    }
+
+    /**
+     * @brief Clear Calendar Items.
+     *
+     * @param cell AccountCalendarCell Instance.
+     */
+    private void clearCalendarItems(AccountCalendarCell cell) {
+        cell.setDate(0, 0, 0, 0, null);
+        cell.setText("");
+        cell.setCheckedImage(false);
+        cell.clearImage();
+        cell.setUnderline(false);
     }
 
     /**
