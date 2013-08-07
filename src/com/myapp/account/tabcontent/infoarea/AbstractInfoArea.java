@@ -25,6 +25,7 @@ public abstract class AbstractInfoArea {
     protected ClickObserverInterface observer = null;
     protected TableRow currentRow = null;
     protected AppConfigurationData appConfig = null;
+    protected TableLayout tableLayout = null;
     protected static int TEXT_SIZE = 15;
     protected static final String MONEY_SPACE = " ";
 
@@ -36,6 +37,7 @@ public abstract class AbstractInfoArea {
         this.appConfig = Factory.getAppConfigurationData(activity);
         this.accountTable = Factory.getAccountTableAcceessor(activity);
         this.masterTable = Factory.getAccountMasterTableAccessor(activity);
+        this.tableLayout = getTableLayout();
     }
 
     /**
@@ -54,14 +56,13 @@ public abstract class AbstractInfoArea {
 
         // get info from database.
         List<AccountTableRecord> account_record = getAccountRecord();
-        TableLayout item_table = getTableLayout();
 
         // remove child item.
-        item_table.removeAllViews();
+        this.tableLayout.removeAllViews();
 
         // item loop.
         for( AccountTableRecord record : account_record ) {
-            drawRecord(item_table, record);
+            drawRecord(this.tableLayout, record);
         }
     }
 

@@ -30,6 +30,16 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
     }
 
     /**
+     * @brief Get Table Layout instance.
+     *
+     * @return TableRayout Instance.
+     */
+    @Override
+    protected TableLayout getTableLayout() {
+        return (TableLayout) this.activity.findViewById(R.id.daily_item_table);
+    }
+
+    /**
      * @brief Get AccountTable Record.
      * @return AccounTable record List.
      */
@@ -46,30 +56,19 @@ public class DailyInfoAreaImpl extends AbstractInfoArea {
 
         // get info from database.
         List<AccountTableRecord> account_record = getAccountRecord();
-        TableLayout item_table = getTableLayout();
 
         // remove child item.
-        item_table.removeAllViews();
+        this.tableLayout.removeAllViews();
 
         // get master record.
         this.masterRecord = this.masterTable.getAllRecord();
 
         // item loop.
         for( AccountTableRecord record : account_record ) {
-            drawRecord(item_table, record);
+            drawRecord(this.tableLayout, record);
         }
         // delete list.
         this.masterRecord = null;
-    }
-
-    /**
-     * @brief Get Table Layout instance.
-     *
-     * @return TableRayout Instance.
-     */
-    @Override
-    protected TableLayout getTableLayout() {
-        return (TableLayout) activity.findViewById(R.id.daily_item_table);
     }
 
     /**

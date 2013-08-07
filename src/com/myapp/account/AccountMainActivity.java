@@ -345,7 +345,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
         }
         this.currentDate = cell.getDate();
         this.titleArea.appear(this.currentDate);
-        this.tabContent.appear(this.currentDate);
+        this.tabContent.appearDailyInfo(this.currentDate);
     }
 
     /**

@@ -63,6 +63,5 @@ public class MonthInfoAreaImpl extends AbstractInfoArea {
 
         layout.addView(row);
     }
-
 }
 

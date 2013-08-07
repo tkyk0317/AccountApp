@@ -73,7 +73,17 @@ public class TabContent {
         changeTabHeight();
         infoDailyArea.appear(display_date);
         infoMonthArea.appear(display_date);
-     }
+    }
+
+    /**
+     * @brief Appear Daily Info in TabContent.
+     *
+     * @param display_date Display Date.
+     */
+    public void appearDailyInfo(String display_date) {
+        changeTabHeight();
+        infoDailyArea.appear(display_date);
+    }
 
    /**
     * @brief Create Daily Tab.
