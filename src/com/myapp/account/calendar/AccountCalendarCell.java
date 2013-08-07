@@ -12,9 +12,9 @@ import android.os.Build;
 import android.text.TextPaint;
 import android.view.View;
 import android.view.Gravity;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.GestureDetector.OnGestureListener;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.widget.RelativeLayout;
@@ -25,7 +25,7 @@ import com.myapp.account.observer.ClickObserverInterface;
 /**
  * @brief Account Calendar Cell Class.
  */
-public class AccountCalendarCell implements OnGestureListener, View.OnTouchListener {
+public class AccountCalendarCell extends SimpleOnGestureListener implements View.OnTouchListener {
 
     private Activity activity = null;
     private LinearLayout layout = null;
@@ -35,8 +35,8 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
     private TextView textView = null;
     private int dayOfWeek = 0;
     private String date = null;
-    private ClickObserverInterface observer = null;
     private GestureDetector gestureDetector = null;
+    private ClickObserverInterface observer = null;
     private static final int IMAGE_WIDTH = 12;
     private static final int IMAGE_HEIGHT = 18;
     private static final int TEXT_ONLY_HEIGHT = IMAGE_HEIGHT * 2;
@@ -45,11 +45,10 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
      * @brief Constructor.
      */
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
-	public AccountCalendarCell(LinearLayout layout, Activity activity) {
+    public AccountCalendarCell(LinearLayout layout, Activity activity) {
         this.layout = layout;
         this.layout.setClickable(false);
         this.activity = activity;
-
         this.textView = new TextView(this.activity.getApplicationContext());
         this.layout.addView(this.textView);
         this.textView.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
@@ -218,9 +217,6 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
                                                                         LinearLayout.LayoutParams.WRAP_CONTENT));
     }
 
-    // Getter.
-    public String getDate() { return this.date; }
-
     /**
      * @brief OnTouchEvent.
      * @return true:handle the event false:not handle the event.
@@ -232,12 +228,15 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
         return true;
     }
 
+    // Getter.
+    public String getDate() { return this.date; }
+
     /**
-     * @brief Down Click Event.
+     * @brief Single Tap Event.
      * @return true:handle the event false:not handle the event.
      */
     @Override
-    public boolean onDown(MotionEvent e) {
+    public boolean onSingleTapConfirmed(MotionEvent e) {
         if( null != this.observer ) this.observer.notifyClick(this);
         return true;
     }
@@ -251,16 +250,6 @@ public class AccountCalendarCell implements OnGestureListener, View.OnTouchListe
         if( null != this.observer ) this.observer.notifyOnFling(this, e1, e2, velocityX, velocityY);
         return true;
     }
-
-    // not support module.
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float x, float y) { return true; }
-    @Override
-    public void onShowPress(MotionEvent e) {}
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) { return false; }
-    @Override
-    public void onLongPress(MotionEvent e) {}
 
     /**
      * @brief Image ID Class.
