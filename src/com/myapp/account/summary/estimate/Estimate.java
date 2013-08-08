@@ -26,6 +26,7 @@ public class Estimate {
     private EstimateTableRecord estimateRecord = null;
     private AccountTableAccessor accountTable = null;
     private String currentDate = null;
+    private String estimateTargetDate = null;
     private AppConfigurationData appConfig = null;
     private TableRow estimateTableRow = null;
     private static boolean isAlertFlag = false;
@@ -60,6 +61,9 @@ public class Estimate {
     public void appear(String target_date) {
         if( isEstimate() ) {
             this.currentDate = target_date;
+            this.estimateTargetDate = getEstimateTargetDate(this.currentDate);
+
+            // check alert message.
             if( true == isTargetDate(this.currentDate) &&
                 false == isEnableEstimateMoney() &&
                 true == equalsCurrentDateAndTargetDate() ) {
@@ -120,7 +124,7 @@ public class Estimate {
     */
     private boolean equalsCurrentDateAndTargetDate() {
         String current_year_month = Utility.splitYearAndMonth(getCurrentDate());
-        String target_year_month = Utility.splitYearAndMonth(getEstimateTargetDate(this.currentDate));
+        String target_year_month = Utility.splitYearAndMonth(this.estimateTargetDate);
 
         if( true == current_year_month.equals(target_year_month) ) {
             return true;
@@ -132,7 +136,7 @@ public class Estimate {
      * @brief Display Estimate.
      */
     private void displayEstimate() {
-        String estimate_target_date = getEstimateTargetDate(this.currentDate);
+        String estimate_target_date = getEstimateTargetDate(this.estimateTargetDate);
         this.estimateRecord = this.estimateTable.getRecordAtTargetDate(Utility.splitYearAndMonth(estimate_target_date));
 
         // clear all views.
