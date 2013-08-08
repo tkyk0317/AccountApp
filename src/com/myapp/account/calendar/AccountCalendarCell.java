@@ -42,7 +42,7 @@ public class AccountCalendarCell extends SimpleOnGestureListener implements View
     private ClickObserverInterface observer = null;
     private static final int IMAGE_WIDTH = 12;
     private static final int IMAGE_HEIGHT = 18;
-    private static final int TEXT_ONLY_HEIGHT = IMAGE_HEIGHT * 2;
+    public static final int TEXT_ONLY_HEIGHT = IMAGE_HEIGHT * 2;
 
     /**
      * @brief Constructor.
@@ -168,6 +168,15 @@ public class AccountCalendarCell extends SimpleOnGestureListener implements View
     }
 
     /**
+     * @brief Set Text Height.
+     *
+     * @param heigh text height size.
+     */
+    public void setTextHeight(int height) {
+        this.textView.setHeight(height);
+    }
+
+    /**
      * @brief Clear Image.
      */
     public void clearImage() {
@@ -188,9 +197,6 @@ public class AccountCalendarCell extends SimpleOnGestureListener implements View
      * @param is_checked Specified Check Status.
      */
     public void setCheckedImage(boolean is_checked) {
-        // set text only size.
-        this.textView.setHeight(TEXT_ONLY_HEIGHT);
-
         if( is_checked ) {
             // create linear layout for image view.
             createLinearLayoutForImageView();

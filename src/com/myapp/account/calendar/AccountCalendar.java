@@ -145,6 +145,7 @@ public class AccountCalendar implements ClickObserverInterface {
                 if( current_pos >= st_pos && current_pos <= end_pos ) {
 
                     // setting calendar cell.
+                    cell.setTextHeight(AccountCalendarCell.TEXT_ONLY_HEIGHT);
                     cell.setText(String.valueOf(day));
                     cell.setDate(year, month, day++, Utility.getDayOfWeekByCalendarPos(current_pos));
                     cell.setClickable(true);
@@ -152,6 +153,8 @@ public class AccountCalendar implements ClickObserverInterface {
                     // set checked image.
                     if( false == setCheckImageAtCell(cell) ) cell.clearImage();
                 } else {
+                    cell.setTextHeight(AccountCalendarCell.TEXT_ONLY_HEIGHT);
+                    cell.setClickable(false);
                     clearCalendarText(cell);
                     cell.clearImage();
                 }
