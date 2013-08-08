@@ -138,10 +138,10 @@ public class AccountCalendar implements ClickObserverInterface {
         // Create Calendar.
         for( int row = 0 ; row < CALENDAR_ROW_NUM ; ++row ) {
             for( int week = 0 ; week < CALENDAR_DAY_OF_WEEK_NUM ; ++week ) {
-                AccountCalendarCell cell = this.calendarCells.get(row * CALENDAR_DAY_OF_WEEK_NUM + week );
+                int current_pos = row * CALENDAR_DAY_OF_WEEK_NUM + week;
+                AccountCalendarCell cell = this.calendarCells.get(current_pos);
                 cell.attachObserver(this);
 
-                int current_pos = row * CALENDAR_DAY_OF_WEEK_NUM + week;
                 if( current_pos >= st_pos && current_pos <= end_pos ) {
 
                     // setting calendar cell.
