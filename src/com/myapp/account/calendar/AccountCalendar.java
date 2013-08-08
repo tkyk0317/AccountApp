@@ -150,8 +150,8 @@ public class AccountCalendar implements ClickObserverInterface {
                     cell.setDate(year, month, day++, Utility.getDayOfWeekByCalendarPos(current_pos));
                     cell.setClickable(true);
 
-                    // set checked image.
-                    if( false == setCheckImageAtCell(cell) ) cell.clearImage();
+                    // check exsit record.
+                    setCheckedImage(cell);
                 } else {
                     cell.setTextHeight(AccountCalendarCell.TEXT_ONLY_HEIGHT);
                     cell.setClickable(false);
@@ -209,26 +209,37 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-     * @brief Set Checked Image at Calendar Cell.
+     * @brief Set Checked Image.
      *
      * @param cell AccountCalendarCell Instance.
-     *
-     * @return boolean true:set image false:not set image.
      */
-    private boolean setCheckImageAtCell(AccountCalendarCell cell) {
-        boolean is_checked_image = false;
-        String date = cell.getDate();
+    private void setCheckedImage(AccountCalendarCell cell) {
+        if( false == isExistRecord(cell.getDate()) ) {
+            cell.clearImage();
+        } else {
+            cell.setCheckedImage();
+        }
+    }
+
+    /**
+     * @brief Check Exist Record.
+     *
+     * @param date Check Date.
+     *
+     * @return true:exist record false:not exist record.
+     */
+    private boolean isExistRecord(String date) {
+        boolean is_exist = false;
 
         // check exsit record.
         for( AccountTableRecord record : this.accountTableRecord ) {
             if( true == date.equals(record.getInsertDate()) ) {
-                cell.setCheckedImage(true);
-                is_checked_image = true;
+                is_exist = true;
                 break;
             }
         }
-        return is_checked_image;
-    }
+        return is_exist;
+     }
 
     /**
       * @brief Focus Current Date.

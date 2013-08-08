@@ -194,30 +194,27 @@ public class AccountCalendarCell extends SimpleOnGestureListener implements View
 
     /**
      * @brief Set Checked Image.
-     * @param is_checked Specified Check Status.
      */
-    public void setCheckedImage(boolean is_checked) {
-        if( is_checked ) {
-            // create linear layout for image view.
-            createLinearLayoutForImageView();
+    public void setCheckedImage() {
+        // create linear layout for image view.
+        createLinearLayoutForImageView();
 
-            Resources resources = this.activity.getResources();
-            Drawable check_image = resources.getDrawable(R.drawable.circle_red);
+        Resources resources = this.activity.getResources();
+        Drawable check_image = resources.getDrawable(R.drawable.circle_red);
 
-            // create view image.
-            this.exsitRecordImage = new ImageView(this.activity.getApplicationContext());
-            this.exsitRecordImage.setId(ImageId.EXSIT_ACCOUNT_DATA_IMAGE.getId());
-            this.exsitRecordImage.setImageDrawable(check_image);
-            this.exsitRecordImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        // create view image.
+        this.exsitRecordImage = new ImageView(this.activity.getApplicationContext());
+        this.exsitRecordImage.setId(ImageId.EXSIT_ACCOUNT_DATA_IMAGE.getId());
+        this.exsitRecordImage.setImageDrawable(check_image);
+        this.exsitRecordImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
-            // add view.
-            RelativeLayout.LayoutParams layout_params = new RelativeLayout.LayoutParams(IMAGE_WIDTH, IMAGE_HEIGHT);
-            layout_params.addRule(RelativeLayout.CENTER_HORIZONTAL, ImageId.RELATIVE_LAYOUT.getId());
-            this.image_layout.addView(this.exsitRecordImage, layout_params);
+        // add view.
+        RelativeLayout.LayoutParams layout_params = new RelativeLayout.LayoutParams(IMAGE_WIDTH, IMAGE_HEIGHT);
+        layout_params.addRule(RelativeLayout.CENTER_HORIZONTAL, ImageId.RELATIVE_LAYOUT.getId());
+        this.image_layout.addView(this.exsitRecordImage, layout_params);
 
-            // change text height.
-            this.textView.setHeight(IMAGE_HEIGHT);
-        }
+        // change text height.
+        this.textView.setHeight(IMAGE_HEIGHT);
     }
 
     /**
