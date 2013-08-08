@@ -72,12 +72,19 @@
         android:paddingTop="2dp"
         />
     <LinearLayout
-        android:id="@+id/summary_account_data_info"
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        >
+        <TextView
+            android:id="@+id/user_name_and_period"
+            android:textSize="15px"
+            android:height="20px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
