@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.widget.RelativeLayout;
 
 import com.myapp.account.R;
+import com.myapp.account.utility.Utility;
 import com.myapp.account.observer.ClickObserverInterface;
 
 /**
@@ -33,8 +34,10 @@ public class AccountCalendarCell extends SimpleOnGestureListener implements View
     private ImageView startMarkerImage = null;
     private ImageView exsitRecordImage = null;
     private TextView textView = null;
+    private int year = 0;
+    private int month = 0;
+    private int day = 0;
     private int dayOfWeek = 0;
-    private String date = null;
     private GestureDetector gestureDetector = null;
     private ClickObserverInterface observer = null;
     private static final int IMAGE_WIDTH = 12;
@@ -72,11 +75,12 @@ public class AccountCalendarCell extends SimpleOnGestureListener implements View
      * @param int month.
      * @param int day.
      * @param int day of week.
-     * @param String date.
      */
-    public void setDate(int year, int month, int day, int day_of_week, String date) {
+    public void setDate(int year, int month, int day, int day_of_week) {
         this.dayOfWeek = day_of_week;
-        this.date = date;
+        this.year = year;
+        this.month = month;
+        this.day = day;
 
         // set holiday color.
         setHolidayColor();
@@ -168,8 +172,14 @@ public class AccountCalendarCell extends SimpleOnGestureListener implements View
      */
     public void clearImage() {
         if( null != this.image_layout ) this.image_layout.removeAllViews();
-        this.startMarkerImage = null;
         this.exsitRecordImage = null;
+    }
+
+    /**
+     * @brief Clear Start Marker.
+     */
+    public void clearStartMarker() {
+        this.startMarkerImage = null;
     }
 
     /**
@@ -229,7 +239,9 @@ public class AccountCalendarCell extends SimpleOnGestureListener implements View
     }
 
     // Getter.
-    public String getDate() { return this.date; }
+    public String getDate() {
+        return Utility.createDateFormat(this.year, this.month, this.day);
+    }
 
     /**
      * @brief Single Tap Event.

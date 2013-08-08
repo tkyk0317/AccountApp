@@ -31,6 +31,8 @@ public class AccountCalendar implements ClickObserverInterface {
     private List<AccountTableRecord> accountTableRecord = null;
     private String firstDateOfMonth = null;
     private String lastDateOfMonth = null;
+    private AccountCalendarCell startMarkerCell = null;
+    private AccountCalendarCell underLineCell = null;
     private static final int CALENDAR_DAY_OF_WEEK_NUM = 7;
     private static final int CALENDAR_ROW_NUM = 6;
 
@@ -134,20 +136,19 @@ public class AccountCalendar implements ClickObserverInterface {
                 AccountCalendarCell cell = this.calendarCells.get(row * CALENDAR_DAY_OF_WEEK_NUM + week );
                 cell.attachObserver(this);
 
-                // clear calendar item.
-                clearCalendarItems(cell);
-
-                if( row * CALENDAR_DAY_OF_WEEK_NUM + week >= st_pos && row * CALENDAR_DAY_OF_WEEK_NUM + week <= end_pos ) {
-                    String date = Utility.createDateFormat(year, month, day);
-                    int day_of_week = Utility.getDayOfWeek(date);
+                int current_pos = row * CALENDAR_DAY_OF_WEEK_NUM + week;
+                if( current_pos >= st_pos && current_pos <= end_pos ) {
 
                     // setting calendar cell.
                     cell.setText(String.valueOf(day));
-                    cell.setDate(year, month, day++, day_of_week, date);
+                    cell.setDate(year, month, day++, Utility.getDayOfWeekByCalendarPos(current_pos));
                     cell.setClickable(true);
 
                     // set checked image.
-                    setCheckImageAtCell(cell, date);
+                    if( false == setCheckImageAtCell(cell) ) cell.clearImage();
+                } else {
+                    clearCalendarText(cell);
+                    cell.clearImage();
                 }
             }
         }
@@ -157,16 +158,13 @@ public class AccountCalendar implements ClickObserverInterface {
     }
 
     /**
-     * @brief Clear Calendar Items.
+     * @brief Clear Account Calendar Cell Text.
      *
      * @param cell AccountCalendarCell Instance.
      */
-    private void clearCalendarItems(AccountCalendarCell cell) {
-        cell.setDate(0, 0, 0, 0, null);
+    private void clearCalendarText(AccountCalendarCell cell) {
+        cell.setDate(0, 0, 0, 0);
         cell.setText("");
-        cell.setCheckedImage(false);
-        cell.clearImage();
-        cell.setUnderline(false);
     }
 
     /**
@@ -181,6 +179,7 @@ public class AccountCalendar implements ClickObserverInterface {
 
         // set marker.
         this.calendarCells.get(start_position + start_day - 1).setStartDayMarker();
+        this.startMarkerCell = this.calendarCells.get(start_position + start_day - 1);
     }
 
     /**
@@ -197,21 +196,30 @@ public class AccountCalendar implements ClickObserverInterface {
 
             // set marker to current day.
             this.calendarCells.get(current_day + start_position - 1).setUnderline(true);
+            this.underLineCell = this.calendarCells.get(current_day + start_position - 1);
         }
     }
 
     /**
      * @brief Set Checked Image at Calendar Cell.
+     *
      * @param cell AccountCalendarCell Instance.
-     * @param date Calendar Date.
+     *
+     * @return boolean true:set image false:not set image.
      */
-    private void setCheckImageAtCell(AccountCalendarCell cell, String date) {
+    private boolean setCheckImageAtCell(AccountCalendarCell cell) {
+        boolean is_checked_image = false;
+        String date = cell.getDate();
+
+        // check exsit record.
         for( AccountTableRecord record : this.accountTableRecord ) {
             if( true == date.equals(record.getInsertDate()) ) {
                 cell.setCheckedImage(true);
+                is_checked_image = true;
                 break;
             }
         }
+        return is_checked_image;
     }
 
     /**
@@ -271,6 +279,11 @@ public class AccountCalendar implements ClickObserverInterface {
     @Override
     public void notifyOnFling(Object event, MotionEvent motion_start, MotionEvent motion_end, float velocityX, float velocityY) {
         if( null != this.observer ) {
+            // clear start marker and underline.
+            if( null != this.startMarkerCell ) this.startMarkerCell.clearStartMarker();
+            if( null != this.underLineCell ) this.underLineCell.setUnderline(false);
+
+            // notify onFilng.
             this.observer.notifyOnFling(this, motion_start, motion_end, velocityX, velocityY);
             focusCurrentDate();
         }

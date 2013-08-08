@@ -33,6 +33,14 @@ public class Utility {
     public static final String YEAR_OF_FIRST_DATE = "01/01";
     public static final String YEAR_OF_LAST_DATE = "12/31";
     public static final String MONTH_OF_FIRST_DAY = "01";
+    private static final int DAY_OF_WEEK_DIVIDED_NUM = 7;
+    private static final int DAY_OF_WEEK_SUNDAY_POS = 0;
+    private static final int DAY_OF_WEEK_MONDAY_POS = 1;
+    private static final int DAY_OF_WEEK_TUESDAY_POS = 2;
+    private static final int DAY_OF_WEEK_WEDNESDAY_POS = 3;
+    private static final int DAY_OF_WEEK_THURSDAY_POS = 4;
+    private static final int DAY_OF_WEEK_FRIDAY_POS = 5;
+    private static final int DAY_OF_WEEK_SATURDAY_POS = 6;
     private static Calendar calDate = Calendar.getInstance(TimeZone.getDefault());
     private static SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
     private static SimpleDateFormat dateAndTimeFormat = new SimpleDateFormat(DATE_AND_TIME_FORMAT);
@@ -351,6 +359,25 @@ public class Utility {
         // setting target date.
         Utility.calDate.set(year, month - 1, day);
         return Utility.calDate.get(Calendar.DAY_OF_WEEK);
+    }
+
+    /**
+     * @brief Get Day of Week by Calendar Position.
+     *
+     * @param pos Calendar Position.
+     *
+     * @return Day of Week.
+     */
+    public static int getDayOfWeekByCalendarPos(int pos) {
+        int day_of_week = Calendar.SUNDAY;
+
+        if( DAY_OF_WEEK_MONDAY_POS == pos % DAY_OF_WEEK_DIVIDED_NUM ) return day_of_week = Calendar.MONDAY;
+        if( DAY_OF_WEEK_TUESDAY_POS == pos % DAY_OF_WEEK_DIVIDED_NUM ) return day_of_week = Calendar.TUESDAY;
+        if( DAY_OF_WEEK_WEDNESDAY_POS == pos % DAY_OF_WEEK_DIVIDED_NUM ) return day_of_week = Calendar.WEDNESDAY;
+        if( DAY_OF_WEEK_THURSDAY_POS == pos % DAY_OF_WEEK_DIVIDED_NUM ) return day_of_week = Calendar.THURSDAY;
+        if( DAY_OF_WEEK_FRIDAY_POS == pos % DAY_OF_WEEK_DIVIDED_NUM ) return day_of_week = Calendar.FRIDAY;
+        if( DAY_OF_WEEK_SATURDAY_POS == pos % DAY_OF_WEEK_DIVIDED_NUM ) return day_of_week = Calendar.SATURDAY;
+        return day_of_week;
     }
 
     /**
