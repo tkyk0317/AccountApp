@@ -1,10 +1,7 @@
 package com.myapp.account.summary;
 
 import android.app.Activity;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
-import android.view.Gravity;
 import android.widget.LinearLayout;
 
 import com.myapp.account.R;

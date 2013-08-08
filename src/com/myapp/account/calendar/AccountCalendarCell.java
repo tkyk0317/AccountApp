@@ -179,6 +179,7 @@ public class AccountCalendarCell extends SimpleOnGestureListener implements View
      * @brief Clear Start Marker.
      */
     public void clearStartMarker() {
+        if( null != this.image_layout ) this.image_layout.removeView(this.startMarkerImage);
         this.startMarkerImage = null;
     }
 

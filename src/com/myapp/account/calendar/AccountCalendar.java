@@ -55,6 +55,11 @@ public class AccountCalendar implements ClickObserverInterface {
         this.firstDateOfMonth = Utility.getFirstDateOfTargetMonth(this.appearDate);
         this.lastDateOfMonth = Utility.getLastDateOfTargetMonth(this.appearDate);
 
+        // clear start marker and underline.
+        if( null != this.startMarkerCell ) this.startMarkerCell.clearStartMarker();
+        if( null != this.underLineCell ) this.underLineCell.setUnderline(false);
+
+        // create calnedar.
         createCalendar();
         setStartDayMarker();
         setUnderlineToCurrentDay();
@@ -279,13 +284,8 @@ public class AccountCalendar implements ClickObserverInterface {
     @Override
     public void notifyOnFling(Object event, MotionEvent motion_start, MotionEvent motion_end, float velocityX, float velocityY) {
         if( null != this.observer ) {
-            // clear start marker and underline.
-            if( null != this.startMarkerCell ) this.startMarkerCell.clearStartMarker();
-            if( null != this.underLineCell ) this.underLineCell.setUnderline(false);
-
             // notify onFilng.
             this.observer.notifyOnFling(this, motion_start, motion_end, velocityX, velocityY);
-            focusCurrentDate();
         }
     }
 
@@ -307,5 +307,4 @@ public class AccountCalendar implements ClickObserverInterface {
     public void notifyLongClick(Object event) {
     }
 }
-
 

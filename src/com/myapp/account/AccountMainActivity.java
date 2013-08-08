@@ -1,6 +1,5 @@
 package com.myapp.account;
 
-import android.os.Debug;
 import android.util.Log;
 import android.os.AsyncTask;
 import android.annotation.SuppressLint;
@@ -13,7 +12,6 @@ import android.view.View.OnClickListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.os.Bundle;
-import android.widget.TableLayout;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 import android.widget.ViewFlipper;
@@ -182,13 +180,11 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * @brief Display Main Content.
      */
     public void displayMainContent() {
-        Debug.startMethodTracing("AccountApp");
         this.summary.appear(this.currentDate);
         this.titleArea.appear(this.currentDate);
         this.tabContent.appear(this.currentDate);
         this.currentCalendar.appear(this.currentDate);
         this.currentCalendarIndex = CalendarIndex.CURRENT_ID;
-        Debug.stopMethodTracing();
     }
 
     /**
