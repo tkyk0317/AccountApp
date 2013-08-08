@@ -27,6 +27,7 @@ public class Estimate {
     private AccountTableAccessor accountTable = null;
     private String currentDate = null;
     private AppConfigurationData appConfig = null;
+    private TableRow estimateTableRow = null;
     private static boolean isAlertFlag = false;
     private static final int TEXT_FONT_SIZE = 15;
 
@@ -39,6 +40,17 @@ public class Estimate {
         this.appConfig = Factory.getAppConfigurationData(activity);
         this.estimateTable = Factory.getEstimateTableAccessor(activity);
         this.accountTable = Factory.getAccountTableAcceessor(activity);
+    }
+
+    /**
+     * @brief Clear View.
+     */
+    public void clearView() {
+        if( null != this.estimateTableRow ) {
+            TableLayout summary_table = (TableLayout)activity.findViewById(R.id.summary_table);
+            summary_table.removeView(this.estimateTableRow);
+            this.estimateTableRow = null;
+        }
     }
 
     /**
@@ -125,13 +137,13 @@ public class Estimate {
 
         // clear all views.
         TableLayout summary_table = (TableLayout)activity.findViewById(R.id.summary_table);
+        this.estimateTableRow = new TableRow(activity.getApplicationContext());
 
-        TableRow table_row = new TableRow(activity.getApplicationContext());
-        insertEstimateMoneyIntoTableRow(table_row);
-        insertRestEstimateMoneyIntoTableRow(table_row);
+        insertEstimateMoneyIntoTableRow(this.estimateTableRow);
+        insertRestEstimateMoneyIntoTableRow(this.estimateTableRow);
 
         // Create Table.
-        summary_table.addView(table_row);
+        summary_table.addView(this.estimateTableRow);
     }
 
     /**
@@ -250,4 +262,3 @@ public class Estimate {
         return Utility.getCurrentDate();
     }
 }
-

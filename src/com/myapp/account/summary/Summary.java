@@ -43,6 +43,13 @@ public class Summary {
      }
 
     /**
+     * @brief Clear View.
+     */
+    public void clearView() {
+        this.estimateInfo.clearView();
+    }
+
+    /**
       * @brief Appear the Summary.
       * @param target_date specify displaied target date(yyyy/mm/dd).
       */
@@ -116,54 +123,34 @@ public class Summary {
      * @brief Create Summary Infomation.
      */
     private void createSummaryInfo() {
-        TableRow table_row = new TableRow(this.activity.getApplicationContext());
-        insertIncomeIntoTableRow(table_row);
-        insertPaymentIntoTableRow(table_row);
-
-        // Create Table.
-        TableLayout summary_table = (TableLayout)this.activity.findViewById(R.id.summary_table);
-        summary_table.addView(table_row);
+        insertIncomeInfo();
+        insertPaymentInfo();
     }
 
      /**
-     * @brief Insert Income TableRow.
+     * @brief Insert Income Info.
      */
-    private void insertIncomeIntoTableRow(TableRow table_row) {
-        TextView income_label = new TextView(this.activity.getApplicationContext());
-        TextView income_value = new TextView(this.activity.getApplicationContext());
+    private void insertIncomeInfo() {
+        TextView income_label = (TextView)this.activity.findViewById(R.id.total_income_label);
+        TextView income_value = (TextView)this.activity.findViewById(R.id.total_income_value);
 
         int total = getIncomeTotalMoney();
 
         income_value.setText(String.format("%,d", total) + this.activity.getText(R.string.money_unit).toString());
         income_label.setText(this.activity.getText(R.string.income_label));
-        income_label.setTextSize(TEXT_FONT_SIZE);
-        income_value.setTextSize(TEXT_FONT_SIZE);
-        income_label.setGravity(Gravity.RIGHT);
-        income_value.setGravity(Gravity.RIGHT);
-
-        // insert table row.
-        table_row.addView(income_label);
-        table_row.addView(income_value);
     }
 
     /**
-     * @brief Insert Payment into TableRow.
+     * @brief Insert Payment Info.
      */
-    private void insertPaymentIntoTableRow(TableRow table_row) {
-        TextView payment_label = new TextView(this.activity.getApplicationContext());
-        TextView payment_value = new TextView(this.activity.getApplicationContext());
+    private void insertPaymentInfo() {
+        TextView payment_label = (TextView)this.activity.findViewById(R.id.total_payment_label);
+        TextView payment_value = (TextView)this.activity.findViewById(R.id.total_payment_value);
 
         int total = getPaymentTotalMoney();
 
         payment_value.setText(String.format("%,d", total) + this.activity.getText(R.string.money_unit).toString());
         payment_label.setText(this.activity.getText(R.string.payment_label));
-        payment_label.setTextSize(TEXT_FONT_SIZE);
-        payment_value.setTextSize(TEXT_FONT_SIZE);
-        payment_label.setGravity(Gravity.RIGHT);
-        payment_value.setGravity(Gravity.RIGHT);
-
-        table_row.addView(payment_label);
-        table_row.addView(payment_value);
     }
 
     /**

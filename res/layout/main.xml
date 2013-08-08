@@ -84,12 +84,47 @@
         android:layout_height="wrap_content"
         android:paddingBottom="3dp"
         >
-        <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <TableLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/summary_table"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:stretchColumns="0,1,2,3"
             >
+            <TableRow>
+                <TextView
+                    android:id="@+id/total_income_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15px"
+                    android:gravity="right"
+                    android:text=""
+                    />
+                <TextView
+                    android:id="@+id/total_income_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15px"
+                    android:gravity="right"
+                    android:text=""
+                    />
+                <TextView
+                    android:id="@+id/total_payment_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15px"
+                    android:gravity="right"
+                    android:text=""
+                    />
+                <TextView
+                    android:id="@+id/total_payment_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15px"
+                    android:gravity="right"
+                    android:text=""
+                    />
+            </TableRow>
         </TableLayout>
     </LinearLayout>
     <ViewFlipper android:id="@+id/calendar_flipper"

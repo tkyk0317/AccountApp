@@ -3,7 +3,6 @@ package com.myapp.account.utility;
 import java.util.*;
 import java.text.*;
 
-import android.util.Log;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.view.WindowManager.LayoutParams;
@@ -34,7 +33,6 @@ public class Utility {
     public static final String YEAR_OF_LAST_DATE = "12/31";
     public static final String MONTH_OF_FIRST_DAY = "01";
     private static final int DAY_OF_WEEK_DIVIDED_NUM = 7;
-    private static final int DAY_OF_WEEK_SUNDAY_POS = 0;
     private static final int DAY_OF_WEEK_MONDAY_POS = 1;
     private static final int DAY_OF_WEEK_TUESDAY_POS = 2;
     private static final int DAY_OF_WEEK_WEDNESDAY_POS = 3;

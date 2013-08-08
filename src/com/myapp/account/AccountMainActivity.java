@@ -1,5 +1,6 @@
 package com.myapp.account;
 
+import android.os.Debug;
 import android.util.Log;
 import android.os.AsyncTask;
 import android.annotation.SuppressLint;
@@ -160,8 +161,7 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * @brief Clear Summary Views.
      */
     private void clearSummaryViews() {
-        TableLayout summary_estimate_area = (TableLayout)findViewById(R.id.summary_table);
-        summary_estimate_area.removeAllViews();
+        this.summary.clearView();
     }
 
     /**
@@ -182,11 +182,13 @@ public class AccountMainActivity extends Activity implements ClickObserverInterf
      * @brief Display Main Content.
      */
     public void displayMainContent() {
+        Debug.startMethodTracing("AccountApp");
         this.summary.appear(this.currentDate);
         this.titleArea.appear(this.currentDate);
         this.tabContent.appear(this.currentDate);
         this.currentCalendar.appear(this.currentDate);
         this.currentCalendarIndex = CalendarIndex.CURRENT_ID;
+        Debug.stopMethodTracing();
     }
 
     /**
